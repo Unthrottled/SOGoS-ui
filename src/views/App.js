@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import './App.css';
+import {connect} from "react-redux";
+import PropTypes from 'prop-types';
 
 class App extends Component {
+  static propTypes = {
+    isLoggedIn: PropTypes.bool.isRequired,
+  };
+
   render() {
+    const {isLoggedIn} = this.props;
     return (
       <div className="App">
         <header className="App-header">
@@ -19,10 +26,19 @@ class App extends Component {
           >
             Learn React
           </a>
+          { isLoggedIn && <button>Logout</button>}
         </header>
       </div>
     );
   }
 }
+const mapStateToProps = state =>{
+  const {security} = state;
+  const {isLoggedIn} = security;
 
-export default App;
+  return {
+    isLoggedIn
+  }
+};
+
+export default connect(mapStateToProps)(App);
