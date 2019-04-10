@@ -1,7 +1,5 @@
 import {combineReducers} from "redux";
-
-const LOGIN: 'LOGIN' = 'LOGIN';
-const LOGOFF: 'LOGOFF' = 'LOGOFF';
+import {LOGIN, LOGOFF} from "../actions";
 
 const INITIAL_SECURITY_STATE = {
   isLoggedIn: true, // the backend does all of the security, less having to worry about tokens and shit like that
