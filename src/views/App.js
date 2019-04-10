@@ -3,29 +3,26 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
+import {wheresWaldo} from "../actions";
 
 class App extends Component {
   static propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
+    fullName: PropTypes.string.isRequired,
   };
 
+  componentDidMount(): void {
+    const {dispatch: dispetch} = this.props;
+    dispetch(wheresWaldo());
+  }
+
   render() {
-    const {isLoggedIn} = this.props;
+    const {isLoggedIn, fullName} = this.props;
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h3> Welcome {fullName}!</h3>
           { isLoggedIn && <button>Logout</button>}
         </header>
       </div>
@@ -33,11 +30,14 @@ class App extends Component {
   }
 }
 const mapStateToProps = state =>{
-  const {security} = state;
+  const {security, user} = state;
   const {isLoggedIn} = security;
+  const {information} = user;
+  const {fullName} = information;
 
   return {
-    isLoggedIn
+    isLoggedIn,
+    fullName
   }
 };
 
