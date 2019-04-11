@@ -3,7 +3,7 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {wheresWaldo} from "../actions";
+import {logout, wheresWaldo} from "../actions";
 
 class App extends Component {
   static propTypes = {
@@ -16,6 +16,11 @@ class App extends Component {
     dispetch(wheresWaldo());
   }
 
+  logout(): void {
+    const { dispatch: dispetch } = this.props;
+    dispetch(logout())
+  }
+
   render() {
     const {isLoggedIn, fullName} = this.props;
     return (
@@ -23,7 +28,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h3> Welcome {fullName}!</h3>
-          { isLoggedIn && <button>Logout</button>}
+          { isLoggedIn && <button onClick={()=>this.logout()}>Logout</button>}
         </header>
       </div>
     );
