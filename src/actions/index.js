@@ -1,10 +1,12 @@
 import axios from "axios";
 
-export const LOGIN: 'LOGIN' = 'LOGIN';
+export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
 export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
+export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_USER: 'REQUESTED_USER' = 'REQUESTED_USER';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
+export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' = 'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
 
@@ -14,6 +16,10 @@ export const requestUser = () => ({
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
+});
+
+export const requestLogon = () => ({
+  type: REQUESTED_LOGON,
 });
 
 export type User = {
@@ -43,6 +49,15 @@ export const createLoggedOffAction = () => ({
   type: LOGGED_OFF,
 });
 
+export const createFailureToLogOnAction = (error) => ({
+  type: FAILED_LOGGING_ON,
+  payload: error
+});
+
+export const createLoggedOnAction = () => ({
+  type: LOGGED_ON,
+});
+
 const fetchUser = () => dispetch => {
   dispetch(requestUser());
   return axios.get('./api/user')
@@ -53,10 +68,15 @@ const fetchUser = () => dispetch => {
 };
 
 const logoutUser = () => dispetch => {
-  dispetch(requestLogoff());
+  dispetch(requestLogoff()); // todo: clean all the states an that stuff
   return axios.post('./logout')
     .then(()=> dispetch(createLoggedOffAction()))
     .catch(error => dispetch(createFailureToLogOffAction(error)));
+};
+
+const loginUser = () => dispetch => {
+  dispetch(requestLogon());
+  window.location.reload();// hax: The backend will send a redirect which will send you to the authorization server.
 };
 
 const shouldFindWaldo = (state) => {
@@ -70,3 +90,5 @@ export const wheresWaldo = () => (dispetch, getState) =>{
 };
 
 export const logout = () => dispetch => dispetch(logoutUser());
+
+export const login = () => dispetch => dispetch(loginUser());

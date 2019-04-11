@@ -1,5 +1,5 @@
 import {combineReducers} from "redux";
-import {LOGIN, LOGGED_OFF, RECEIVED_USER} from "../actions";
+import {LOGGED_ON, LOGGED_OFF, RECEIVED_USER} from "../actions";
 import type {User} from "../actions";
 
 const INITIAL_SECURITY_STATE = {
@@ -21,14 +21,14 @@ const INITIAL_USER_STATE : UserState = {
 
 const security = (state = INITIAL_SECURITY_STATE, action) => {
   switch (action.type) {
-    case LOGIN :
+    case LOGGED_ON :
       return {
         ...state,
         isLoggedIn: true
       };
     case LOGGED_OFF :
       return {
-        ...state,
+        ...INITIAL_SECURITY_STATE,
         isLoggedIn: false
       };
     default:
@@ -46,6 +46,9 @@ const user = (state = INITIAL_USER_STATE, action) => {
           ...action.payload
         }
       };
+    case LOGGED_OFF: {
+      return INITIAL_USER_STATE
+    }
     default:
       return state
   }
