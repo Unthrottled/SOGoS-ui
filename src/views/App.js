@@ -3,7 +3,8 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {login, logout, wheresWaldo} from "../actions";
+import {login, logout} from "../actions";
+import {wheresWaldo} from "../actions/UserActions";
 
 class App extends Component {
   static propTypes = {
