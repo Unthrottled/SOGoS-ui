@@ -46,7 +46,7 @@ export const createLoggedOffAction = () => ({
 const fetchUser = () => dispetch => {
   dispetch(requestUser());
   return axios.get('./api/user')
-    .then(response => response.json())
+    .then(response => response.data)
     .then(user => dispetch(receivedUser(user)))
     .catch(error => dispetch(failedToGetUser(error)))
 
