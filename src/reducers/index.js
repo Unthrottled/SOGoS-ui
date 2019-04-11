@@ -1,30 +1,9 @@
 import {combineReducers} from "redux";
-import {LOGGED_ON, LOGGED_OFF} from "../actions";
 import userReducer from './UserReducer';
-
-const INITIAL_SECURITY_STATE = {
-  isLoggedIn: true, // the backend does all of the security, less having to worry about tokens and shit like that
-};
-
-const security = (state = INITIAL_SECURITY_STATE, action) => {
-  switch (action.type) {
-    case LOGGED_ON :
-      return {
-        ...state,
-        isLoggedIn: true
-      };
-    case LOGGED_OFF :
-      return {
-        ...INITIAL_SECURITY_STATE,
-        isLoggedIn: false
-      };
-    default:
-      return state
-  }
-};
+import securityReducer from './SecurityReducer';
 
 const rootReducer = combineReducers({
-  security,
+  security: securityReducer,
   user: userReducer
 });
 
