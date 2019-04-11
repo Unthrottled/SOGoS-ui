@@ -1,4 +1,4 @@
-import {LOGGED_ON, LOGGED_OFF} from "../actions";
+import {LOGGED_ON, LOGGED_OFF} from "../actions/SecurityActions";
 
 export type SecurityState = {
   isLoggedIn: boolean,

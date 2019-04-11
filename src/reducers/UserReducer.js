@@ -1,6 +1,5 @@
-import {RECEIVED_USER} from "../actions/UserActions";
-import {LOGGED_OFF} from "../actions";
-import type {User} from "../actions";
+import {RECEIVED_USER, User} from "../actions/UserActions";
+import {LOGGED_OFF} from "../actions/SecurityActions";
 
 export type UserState = {
   information: User
