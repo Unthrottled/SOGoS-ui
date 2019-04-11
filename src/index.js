@@ -3,15 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './views/App';
 import * as serviceWorker from './serviceWorker';
-import rootReducer from './reducers';
-import {applyMiddleware, createStore} from "redux";
-import thunk from "redux-thunk";
 import {Provider} from "react-redux";
+import {fetchApplicationConfiguration} from "./config/Configuration";
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk)
-);
+const { store } = fetchApplicationConfiguration();
 
 ReactDOM.render(
   <Provider store={store}>
