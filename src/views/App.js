@@ -3,7 +3,8 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {checkSecurity, login, logout} from "../actions/SecurityActions";
+import {login, logout} from "../actions/SecurityActions";
+import {appInitialized} from "../actions/ApplicationLifecycleActions";
 
 class App extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class App extends Component {
 
   componentDidMount(): void {
     const {dispatch: dispetch} = this.props;
-    dispetch(checkSecurity());
+    dispetch(appInitialized());
   }
 
   logout(): void {
