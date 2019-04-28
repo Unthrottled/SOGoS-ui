@@ -1,4 +1,6 @@
 import axios from "axios";
+import { AuthorizationServiceConfiguration } from "@openid/appauth";
+
 
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' = 'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
@@ -29,7 +31,11 @@ export const failedToGetUser = (error) => ({
 
 const fetchUser = () => dispetch => {
   dispetch(requestUser());
-  return axios.get('./api/user')
+  return AuthorizationServiceConfiguration.fetchFromIssuer("http://localhost:8080/auth/realms/master")
+    .then(response => {
+      console.log(response)
+       return axios.get('./api/user');
+    })
     .then(response => response.data)
     .then(user => dispetch(receivedUser(user)))
     .catch(error => dispetch(failedToGetUser(error)))
