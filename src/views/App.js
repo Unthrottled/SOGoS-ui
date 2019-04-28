@@ -3,8 +3,7 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {login, logout} from "../actions/SecurityActions";
-import {wheresWaldo} from "../actions/UserActions";
+import {checkSecurity, login, logout} from "../actions/SecurityActions";
 
 class App extends Component {
   static propTypes = {
@@ -14,7 +13,7 @@ class App extends Component {
 
   componentDidMount(): void {
     const {dispatch: dispetch} = this.props;
-    dispetch(wheresWaldo());
+    dispetch(checkSecurity());
   }
 
   logout(): void {

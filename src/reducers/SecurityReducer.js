@@ -5,7 +5,7 @@ export type SecurityState = {
 };
 
 const INITIAL_SECURITY_STATE: SecurityState = {
-  isLoggedIn: true, // the backend does all of the security, less having to worry about tokens and shit like that
+  isLoggedIn: false,
 };
 
 const securityReducer = (state = INITIAL_SECURITY_STATE, action) => {

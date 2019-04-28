@@ -6,9 +6,14 @@ export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
 export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
+export const REQUESTED_SECURITY_UPDATE: 'REQUESTED_SECURITY_UPDATE' = 'REQUESTED_SECURITY_UPDATE';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
+});
+
+export const requestSecurityUpdate = () => ({
+  type: REQUESTED_SECURITY_UPDATE,
 });
 
 export const requestLogon = () => ({
@@ -42,8 +47,12 @@ const logoutUser = () => dispetch => {
 
 const loginUser = () => dispetch => {
   dispetch(requestLogon());
-  window.location.reload();// hax: The backend will send a redirect which will send you to the authorization server.
 };
+
+export const checkSecurity = () => dispetch => {
+  dispetch(requestSecurityUpdate());
+};
+
 
 export const logout = () => dispetch => dispetch(logoutUser());
 

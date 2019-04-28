@@ -1,2 +1,7 @@
+- OAuth
+
+- Redux Persist
+    - Make sure that tokens are secure and valid
+
 post actions to the backend
     - post logoff action/login actions
