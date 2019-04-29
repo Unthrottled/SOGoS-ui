@@ -3,7 +3,7 @@ import {fetchOAuthConfigurations, REQUESTED_OAUTH_CONFIGURATION} from "../action
 
 
 function* securityRequestSaga() {
-  yield put(fetchOAuthConfigurations())
+  yield put(fetchOAuthConfigurations()) //todo: handle failures.
 }
 
 function* listenToConfigurationEvent(){
