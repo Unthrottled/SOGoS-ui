@@ -7,7 +7,7 @@ import {persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
-const fetchMiddleware = (sagaMiddleware) =>{
+const fetchMiddleware = (sagaMiddleware) => {
   const commonMiddleware = [thunk, sagaMiddleware];
   if (process.env.NODE_ENV === 'development') {
     const reactoTron = require('./ReactotronConfiguration').default;
