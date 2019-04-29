@@ -3,6 +3,9 @@ import rootReducer from "../reducers";
 import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from '../sagas';
+import {persistReducer, persistStore} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 const fetchMiddleware = (sagaMiddleware) =>{
   const commonMiddleware = [thunk, sagaMiddleware];
@@ -14,14 +17,24 @@ const fetchMiddleware = (sagaMiddleware) =>{
 };
 
 export const fetchApplicationConfiguration = () =>{
+  const persistConfig = {
+    key: 'root',
+    storage,
+    stateReconciler: autoMergeLevel2,
+    whitelist: ['security'],
+  };
+
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
-    rootReducer,
+    persistReducer(persistConfig, rootReducer),
     fetchMiddleware(sagaMiddleware)
   );
   sagaMiddleware.run(rootSaga);
 
+  const persistor = persistStore(store);
+
   return {
-    store
+    store,
+    persistor
   }
 };
