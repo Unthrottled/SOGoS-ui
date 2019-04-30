@@ -4,8 +4,8 @@ import {RECEIVED_OAUTH_CONFIGURATION, requestOAuthConfigurations} from "../actio
 import {needsToLogIn, needsToRefreshToken} from "../security/OAuth";
 import {
   AuthorizationNotifier,
-  AuthorizationRequest,
-  RedirectRequestHandler
+  AuthorizationRequest, BaseTokenRequestHandler, GRANT_TYPE_AUTHORIZATION_CODE,
+  RedirectRequestHandler, TokenRequest
 } from "@openid/appauth";
 import { NodeCrypto } from '@openid/appauth/built/node_support/';
 
@@ -27,10 +27,25 @@ function* oauthInitializationSaga(oauthConfig){
       console.log('Authorization request complete ', request, response, error);
       if (response) {
         const code = response.code;
+        const codeVerifier = request.internal && request.internal.code_verifier;
+        const tokenRequest = new TokenRequest({
+          client_id: "sogos-app",
+          redirect_uri: 'http://localhost:3000',
+          grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
+          code,
+          refresh_token: undefined,
+          extras: {
+            code_verifier : codeVerifier
+          }
+        });
+        new BaseTokenRequestHandler().performTokenRequest(oauthConfig, tokenRequest)
+          .then(response =>{
+            console.log(`Got this shit`, response);
+          })
       }
     });
     authorizationHandler.completeAuthorizationRequestIfPossible()
-      .then(result => {
+      .then(() => {
         if(window.location.search.indexOf('state') < 0){
           const scope = 'openid profile email';
           const authorizationRequest = new AuthorizationRequest({
