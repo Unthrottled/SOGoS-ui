@@ -1,0 +1,1 @@
+AppAuth-JS uses hash instead of search (you got to change that).

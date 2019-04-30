@@ -7,6 +7,7 @@ import {
   AuthorizationRequest,
   RedirectRequestHandler
 } from "@openid/appauth";
+import { NodeCrypto } from '@openid/appauth/built/node_support/';
 
 function* securityRequestSaga() {
   // Make sure that credentials are up to date
@@ -28,16 +29,19 @@ function* oauthInitializationSaga(oauthConfig){
         const code = response.code;
       }
     });
-    const scope = 'openid profile email';
-    const authorizationRequest = new AuthorizationRequest({
-      client_id: 'sogos-app',
-      redirect_uri: 'http://localhost:3000',
-      scope,
-      response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
-    });
-    // authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
-
-
+    authorizationHandler.completeAuthorizationRequestIfPossible()
+      .then(result => {
+        if(window.location.search.indexOf('state') < 0){
+          const scope = 'openid profile email';
+          const authorizationRequest = new AuthorizationRequest({
+            client_id: 'sogos-app',
+            redirect_uri: 'http://localhost:3000',
+            scope,
+            response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
+          }, new NodeCrypto());
+          authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
+        }
+      })
   } else if(needsToRefreshToken(securityState)){
 
   }
