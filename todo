@@ -5,3 +5,7 @@
 
 post actions to the backend
     - post logoff action/login actions
+
+- Root Error handling on sagas
+
+- Tests
