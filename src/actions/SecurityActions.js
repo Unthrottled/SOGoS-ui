@@ -1,4 +1,5 @@
 import axios from "axios";
+import {TokenResponse} from "@openid/appauth";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
@@ -6,6 +7,7 @@ export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
 export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
+export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
@@ -18,6 +20,11 @@ export const requestLogon = () => ({
 export const createFailureToLogOffAction = (error) => ({
   type: FAILED_LOGGING_OFF,
   payload: error
+});
+
+export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
+  type: RECEIVED_TOKENS,
+  payload: tokenResponse
 });
 
 export const createLoggedOffAction = () => ({

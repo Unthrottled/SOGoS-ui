@@ -1,4 +1,4 @@
-import {call, fork, select} from 'redux-saga/effects'
+import {call, fork, select, put} from 'redux-saga/effects'
 import {
   AuthorizationNotifier,
   AuthorizationRequest,
@@ -9,6 +9,7 @@ import {
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {needsToLogIn, needsToRefreshToken} from "../../security/OAuth";
+import {createTokenReceptionEvent} from "../../actions/SecurityActions";
 
 function listenToRedirectionResponse(notifier) {
   return new Promise(((resolve, reject) => {
@@ -42,7 +43,7 @@ function* listenToRedirect(notifier, oauthConfig) {
     });
 
     const tokenResponse = yield call(() => new BaseTokenRequestHandler().performTokenRequest(oauthConfig, tokenRequest));
-    console.log(tokenResponse)
+    yield put(createTokenReceptionEvent(tokenResponse));
   } catch (e) {
 
   }
@@ -72,7 +73,7 @@ function* performLogin(oauthConfig) {
 function* oauthInitializationSaga(oauthConfig) {
   const {securityState} = yield select();
   if (needsToLogIn(securityState)) {
-    yield performLogin(oauthConfig);
+    yield performLogin(oauthConfig, securityState);
   } else if (needsToRefreshToken(securityState)) {
 
   }

@@ -1,7 +1,18 @@
-import {LOGGED_ON, LOGGED_OFF} from "../actions/SecurityActions";
+import {LOGGED_ON, LOGGED_OFF, RECEIVED_TOKENS} from "../actions/SecurityActions";
+import {tokenReceptionReducer} from "./security/TokenReducers";
+
+export type TokenInformation = {
+  expiresAt: number, //epoch second
+  issuedAt: number, //epoch second
+}
 
 export type SecurityState = {
   isLoggedIn: boolean,
+  accessToken: string,
+  accessTokenInformation: TokenInformation,
+  refreshToken: string,
+  refreshTokenInformation: TokenInformation,
+  idToken: string
 };
 
 const INITIAL_SECURITY_STATE: SecurityState = {
@@ -20,6 +31,8 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action) => {
         ...INITIAL_SECURITY_STATE,
         isLoggedIn: false
       };
+    case RECEIVED_TOKENS:
+      return tokenReceptionReducer(state, action.payload)
     default:
       return state
   }
