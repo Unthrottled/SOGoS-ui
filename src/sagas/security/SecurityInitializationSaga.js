@@ -1,7 +1,8 @@
-import {call, fork, select, put} from 'redux-saga/effects'
+import {call, put, select} from 'redux-saga/effects'
 import {
   AuthorizationNotifier,
   AuthorizationRequest,
+  AuthorizationRequestResponse,
   BaseTokenRequestHandler,
   GRANT_TYPE_AUTHORIZATION_CODE,
   RedirectRequestHandler,
@@ -11,24 +12,8 @@ import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {needsToLogIn, needsToRefreshToken} from "../../security/OAuth";
 import {createTokenReceptionEvent} from "../../actions/SecurityActions";
 
-function listenToRedirectionResponse(notifier) {
-  return new Promise(((resolve, reject) => {
-    notifier.setAuthorizationListener((request, response, error) => {
-      if (error || !request) {
-        reject(error)
-      } else {
-        resolve({
-          request,
-          response
-        })
-      }
-    });
-  }));
-}
-
-function* listenToRedirect(notifier, oauthConfig) {
+function* getThatTokenYo(request, response, oauthConfig) {
   try {
-    const {request, response} = yield call(() => listenToRedirectionResponse(notifier));
     const code = response.code;
     const codeVerifier = request.internal && request.internal.code_verifier;
 
@@ -53,9 +38,9 @@ function* performLogin(oauthConfig) {
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
   authorizationHandler.setAuthorizationNotifier(notifier);
-  yield fork(listenToRedirect, notifier, oauthConfig);
-  yield call(() => authorizationHandler.completeAuthorizationRequestIfPossible());
-  if (window.location.search.indexOf('state') < 0) {
+  const authorizationResult: AuthorizationRequestResponse =
+    yield call(() => authorizationHandler.completeAuthorizationRequest());
+  if (!authorizationResult) {
     const scope = 'openid profile email';
     const authorizationRequest = new AuthorizationRequest({
       client_id: 'sogos-app',
@@ -65,7 +50,8 @@ function* performLogin(oauthConfig) {
     }, new NodeCrypto());
     authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
   } else {
-    //clean up route
+    const {request, response} = authorizationResult;
+    yield getThatTokenYo(request, response, oauthConfig)
   }
 }
 
