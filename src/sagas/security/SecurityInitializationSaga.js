@@ -4,13 +4,22 @@ import {
   AuthorizationRequest,
   AuthorizationRequestResponse,
   BaseTokenRequestHandler,
-  GRANT_TYPE_AUTHORIZATION_CODE,
+  GRANT_TYPE_AUTHORIZATION_CODE, GRANT_TYPE_REFRESH_TOKEN,
   RedirectRequestHandler,
-  TokenRequest
+  TokenRequest, TokenRequestHandler
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
-import {needsToLogIn, needsToRefreshToken} from "../../security/OAuth";
+import {canRefreshToken, needsToLogIn} from "../../security/OAuth";
 import {createTokenReceptionEvent} from "../../actions/SecurityActions";
+import type {SecurityState} from "../../reducers/SecurityReducer";
+
+
+const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
+
+function* getNewTokens(oauthConfig, tokenRequest) {
+  const tokenResponse = yield call(() => tokenHandler.performTokenRequest(oauthConfig, tokenRequest));
+  yield put(createTokenReceptionEvent(tokenResponse));
+}
 
 function* getThatTokenYo(request, response, oauthConfig) {
   try {
@@ -27,8 +36,7 @@ function* getThatTokenYo(request, response, oauthConfig) {
       }
     });
 
-    const tokenResponse = yield call(() => new BaseTokenRequestHandler().performTokenRequest(oauthConfig, tokenRequest));
-    yield put(createTokenReceptionEvent(tokenResponse));
+    yield getNewTokens(oauthConfig, tokenRequest);
   } catch (e) {
 
   }
@@ -52,16 +60,26 @@ function* performLogin(oauthConfig) {
   } else {
     const {request, response} = authorizationResult;
     yield getThatTokenYo(request, response, oauthConfig)
+    // todo: clean up route
   }
 }
 
+function* refreshTokenSaga(oauthConfig, securityState: SecurityState){
+  const refreshTokenRequest = new TokenRequest({
+    client_id: 'sogos-app',
+    redirect_uri: 'http://localhost:3000',
+    grant_type: GRANT_TYPE_REFRESH_TOKEN,
+    refresh_token: securityState.refreshToken
+  });
+  yield getNewTokens(oauthConfig, refreshTokenRequest);
+}
 
 function* oauthInitializationSaga(oauthConfig) {
-  const {securityState} = yield select();
-  if (needsToLogIn(securityState)) {
-    yield performLogin(oauthConfig, securityState);
-  } else if (needsToRefreshToken(securityState)) {
-
+  const {security} = yield select();
+  if(canRefreshToken(security)) {
+    yield refreshTokenSaga(oauthConfig, security);
+  } else if (needsToLogIn(security)) {
+    yield performLogin(oauthConfig, security);
   }
 }
 
