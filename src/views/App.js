@@ -29,7 +29,7 @@ class App extends Component {
 
   render() {
     const {isLoggedIn, fullName} = this.props;
-    return (
+    return isLoggedIn ? (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -40,7 +40,7 @@ class App extends Component {
           }
         </header>
       </div>
-    );
+    ): null;
   }
 }
 const mapStateToProps = state =>{
