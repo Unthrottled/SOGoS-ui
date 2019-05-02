@@ -7,7 +7,7 @@ export const needsToLogIn = (securityState: SecurityState) => {
 };
 
 export const canRefreshToken = (securityState: SecurityState) => {
-  return !isAccessTokenValid(securityState);
+  return !isAccessTokenValid(securityState) && securityState && securityState.refreshToken;
 };
 
 export const needsToRefreshToken = (securityState: SecurityState) => {
