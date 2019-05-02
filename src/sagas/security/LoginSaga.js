@@ -44,6 +44,16 @@ const getError = (error, queryParams): AuthorizationError =>{
   }
 };
 
+const cleanUpURI = ()=>{
+  const uri = window.location.toString();
+  const queryParamStart = uri.indexOf("?");
+  if(queryParamStart){
+    const clean_uri = uri.substring(0, queryParamStart);
+    console.log(clean_uri)
+    window.history.replaceState({}, document.title, clean_uri);
+  }
+};
+
 const completeRequest = (storageBackend, handle) =>
   storageBackend.getItem(authorizationRequestKey(handle))
     .then(authorizationRequest => JSON.parse(authorizationRequest))
@@ -70,7 +80,11 @@ const completeRequest = (storageBackend, handle) =>
 
 const completeAuthorizationRequest= (authorizationHandler: RedirectRequestHandler) =>
   authorizationHandler.storageBackend.getItem(AUTHORIZATION_REQUEST_HANDLE_KEY)
-    .then(handle => handle ? completeRequest(authorizationHandler.storageBackend, handle): null);
+    .then(handle => handle ? completeRequest(authorizationHandler.storageBackend, handle): null)
+    .then(result =>{
+      cleanUpURI();
+      return result;
+    });
 
 function* loginSaga({payload: oauthConfig}) {
   const notifier = new AuthorizationNotifier();
@@ -91,7 +105,6 @@ function* loginSaga({payload: oauthConfig}) {
     const {request, response} = authorizationResult;
     yield getThatTokenYo(request, response, oauthConfig);
     yield put(createLoggedOnAction());
-    // todo: clean up route
   }
 
 }
