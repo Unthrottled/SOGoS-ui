@@ -30,12 +30,12 @@ function* loginSaga({payload: oauthConfig}) {
     authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
   } else {
     const {request, response} = authorizationResult;
-    yield getThatTokenYo(request, response, oauthConfig);
+    yield exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig);
     yield put(createLoggedOnAction());
   }
 }
 
-function* getThatTokenYo(request, response, oauthConfig) {
+function* exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig) {
   try {
     const code = response.code;
     const codeVerifier = request.internal && request.internal.code_verifier;
