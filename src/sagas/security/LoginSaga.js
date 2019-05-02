@@ -1,7 +1,8 @@
 import {
+  AuthorizationError,
   AuthorizationNotifier,
   AuthorizationRequest,
-  AuthorizationRequestResponse, GRANT_TYPE_AUTHORIZATION_CODE,
+  AuthorizationRequestResponse, AuthorizationResponse, BasicQueryStringUtils, GRANT_TYPE_AUTHORIZATION_CODE,
   RedirectRequestHandler, TokenRequest
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
@@ -9,12 +10,74 @@ import {createLoggedOnAction} from "../../actions/SecurityActions";
 import {call, put} from 'redux-saga/effects'
 import {getNewTokens} from "./SecurityInitializationSaga";
 
+const AUTHORIZATION_REQUEST_HANDLE_KEY = 'appauth_current_authorization_request';
+
+const authorizationServiceConfigurationKey =
+  (handle: string) => `${handle}_appauth_authorization_service_configuration`;
+
+const authorizationRequestKey =
+  (handle: string) => `${handle}_appauth_authorization_request`;
+
+const queryStringBitch = new BasicQueryStringUtils();
+
+const getResponse = (error, queryParams): AuthorizationResponse =>{
+  if(error){
+    return null
+  } else {
+    return new AuthorizationResponse({
+      code: queryParams['code'],
+      state: queryParams['state']
+    })
+  }
+};
+
+const getError = (error, queryParams): AuthorizationError =>{
+  if(error){
+    return new AuthorizationError({
+      error: error,
+      error_description: queryParams['error_description'],
+      error_uri: queryParams['error_uri'],
+      state: queryParams['state'],
+    })
+  } else {
+    return null;
+  }
+};
+
+const completeRequest = (storageBackend, handle) =>
+  storageBackend.getItem(authorizationRequestKey(handle))
+    .then(authorizationRequest => JSON.parse(authorizationRequest))
+    .then(authorizationRequest => new AuthorizationRequest(authorizationRequest))
+    .then(authorizationRequest => {
+      const location = window.location;
+      const queryParams = queryStringBitch.parse(location, false);//all that work to change this stupid line......Thanks Obama.
+      const error: string|undefined = queryParams['error'];
+      const shouldNotify = queryParams['state'] === authorizationRequest.state;
+      if(shouldNotify){
+        return Promise.all([
+            storageBackend.removeItem(AUTHORIZATION_REQUEST_HANDLE_KEY),
+            storageBackend.removeItem(authorizationRequestKey(handle)),
+            storageBackend.removeItem(authorizationServiceConfigurationKey(handle))
+          ]).then(()=>({
+          request: authorizationRequest,
+          response: getResponse(error, queryParams),
+          error: getError(error, queryParams),
+        }))
+      } else {
+        return Promise.resolve(null);
+      }
+    });
+
+const completeAuthorizationRequest= (authorizationHandler: RedirectRequestHandler) =>
+  authorizationHandler.storageBackend.getItem(AUTHORIZATION_REQUEST_HANDLE_KEY)
+    .then(handle => handle ? completeRequest(authorizationHandler.storageBackend, handle): null);
+
 function* loginSaga({payload: oauthConfig}) {
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
   authorizationHandler.setAuthorizationNotifier(notifier);
   const authorizationResult: AuthorizationRequestResponse =
-    yield call(() => authorizationHandler.completeAuthorizationRequest());
+    yield call(() => completeAuthorizationRequest(authorizationHandler));
   if (!authorizationResult) {
     const scope = 'openid profile email';
     const authorizationRequest = new AuthorizationRequest({
@@ -55,4 +118,4 @@ function* getThatTokenYo(request, response, oauthConfig) {
 }
 
 
-export default loginSaga
+export default loginSaga;

@@ -11,10 +11,6 @@ export function* getNewTokens(oauthConfig, tokenRequest) {
   yield put(createTokenReceptionEvent(tokenResponse));
 }
 
-function* performLogin(oauthConfig) {
-
-}
-
 function* refreshTokenSaga(oauthConfig, securityState: SecurityState) {
   const refreshTokenRequest = new TokenRequest({
     client_id: 'sogos-app',
