@@ -1,4 +1,5 @@
 - OAuth
+    - refresh token expiration
 
 - Redux Persist
     - Make sure that tokens are secure and valid
