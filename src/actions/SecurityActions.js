@@ -7,10 +7,21 @@ export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
 export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
+export const REQUESTED_ACCESS_TOKEN: 'REQUESTED_ACCESS_TOKEN' = 'REQUESTED_ACCESS_TOKEN';
+export const FOUND_ACCESS_TOKEN: 'FOUND_ACCESS_TOKEN' = 'FOUND_ACCESS_TOKEN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
+});
+
+export const requestAccessToken = () => ({
+  type: REQUESTED_ACCESS_TOKEN,
+});
+
+export const foundAccessToken = accessToken => ({
+  type: FOUND_ACCESS_TOKEN,
+  payload: accessToken,
 });
 
 export const requestLogon = (oauthConfig) => ({
