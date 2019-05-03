@@ -10,6 +10,7 @@ export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
 export const REQUESTED_ACCESS_TOKEN: 'REQUESTED_ACCESS_TOKEN' = 'REQUESTED_ACCESS_TOKEN';
 export const FOUND_ACCESS_TOKEN: 'FOUND_ACCESS_TOKEN' = 'FOUND_ACCESS_TOKEN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
+export const INITIALIZED_SECURITY: 'INITIALIZED_SECURITY' = 'INITIALIZED_SECURITY';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
@@ -37,6 +38,10 @@ export const createFailureToLogOffAction = (error) => ({
 export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
   type: RECEIVED_TOKENS,
   payload: tokenResponse
+});
+
+export const createSecurityInitalizedEvent = () => ({
+  type: INITIALIZED_SECURITY,
 });
 
 export const createLoggedOffAction = () => ({

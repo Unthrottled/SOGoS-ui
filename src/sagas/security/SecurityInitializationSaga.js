@@ -1,7 +1,7 @@
 import {call, put, select} from 'redux-saga/effects'
 import {BaseTokenRequestHandler, TokenRequestHandler} from "@openid/appauth";
 import {canRefreshToken, needsToLogIn} from "../../security/OAuth";
-import {createTokenReceptionEvent, requestLogon} from "../../actions/SecurityActions";
+import {createSecurityInitalizedEvent, createTokenReceptionEvent, requestLogon} from "../../actions/SecurityActions";
 import {refreshTokenSaga} from "./RefreshTokenSaga";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
@@ -18,6 +18,7 @@ function* oauthInitializationSaga(oauthConfig) {
   } else if (needsToLogIn(security)) {
     yield put(requestLogon(oauthConfig));
   }
+  yield put(createSecurityInitalizedEvent());
 }
 
 export default oauthInitializationSaga;
