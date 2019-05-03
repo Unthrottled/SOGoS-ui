@@ -13,7 +13,6 @@ import {getNewTokens} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 
-
 function* loginSaga() {
   const oauthConfig = yield oAuthConfigurationSaga();
   const notifier = new AuthorizationNotifier();
