@@ -1,12 +1,11 @@
-import {all, takeEvery} from 'redux-saga/effects'
+import {all, takeEvery, put } from 'redux-saga/effects'
 import {LOGGED_ON} from "../actions/SecurityActions";
 import {performGet} from "./APISagas";
+import {receivedUser} from "../actions/UserActions";
 
 function* loggedInUserSaga() {
-  console.log('Finna get that user information')
-  const thing = yield performGet('./api/user');
-  console.log('oh shit i got this', thing);
-
+  const {data: user} = yield performGet('./api/user');
+  yield put(receivedUser(user));
 }
 
 function* listenToLoginEvents() {
