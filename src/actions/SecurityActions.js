@@ -1,4 +1,3 @@
-import axios from "axios";
 import {TokenResponse} from "@openid/appauth";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
@@ -44,7 +43,7 @@ export const createSecurityInitalizedEvent = () => ({
   type: INITIALIZED_SECURITY,
 });
 
-export const createLoggedOffAction = () => ({
+export const createLoggedOffEvent = () => ({
   type: LOGGED_OFF,
 });
 
@@ -59,9 +58,9 @@ export const createLoggedOnAction = () => ({
 
 const logoutUser = () => dispetch => {
   dispetch(requestLogoff()); // todo: clean all the states an that stuff
-  return axios.post('./logout')
-    .then(()=> dispetch(createLoggedOffAction()))
-    .catch(error => dispetch(createFailureToLogOffAction(error)));
+  // return axios.post('./logout')
+  //   .then(()=> dispetch(createLoggedOffEvent()))
+  //   .catch(error => dispetch(createFailureToLogOffAction(error)));
 };
 
 const loginUser = () => dispetch => {

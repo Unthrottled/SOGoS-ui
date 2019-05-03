@@ -12,5 +12,16 @@ export function* performGet(url: String, options = {headers: {}}) {
       Authorization: `Bearer ${accessToken}`,
     }
   }));
+}
 
+export function* performPost(url: String, data, options = {headers: {}}) {
+  yield put(requestAccessToken());
+  const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
+  return yield call(() => axios.post(url, data, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${accessToken}`,
+    }
+  }));
 }

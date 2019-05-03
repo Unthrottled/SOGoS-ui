@@ -10,6 +10,7 @@ class App extends Component {
   static propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     fullName: PropTypes.string.isRequired,
+    oauth: PropTypes.object.isRequired,
   };
 
   componentDidMount(): void {
@@ -28,8 +29,9 @@ class App extends Component {
   }
 
   render() {
-    const {isLoggedIn, fullName} = this.props;
-    return isLoggedIn ? (
+    const {isLoggedIn, fullName, oauth} = this.props;
+    const isAppInitialized = oauth.authorizationEndpoint;
+    return isAppInitialized ? (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -44,14 +46,16 @@ class App extends Component {
   }
 }
 const mapStateToProps = state =>{
-  const {security, user} = state;
+  const {security, user, configuration} = state;
   const {isLoggedIn} = security;
   const {information} = user;
   const {fullName} = information;
+  const { oauth } = configuration;
 
   return {
     isLoggedIn,
-    fullName
+    fullName,
+    oauth
   }
 };
 
