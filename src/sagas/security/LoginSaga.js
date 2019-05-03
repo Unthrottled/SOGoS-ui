@@ -11,9 +11,11 @@ import {createLoggedOnAction} from "../../actions/SecurityActions";
 import {call, put} from 'redux-saga/effects'
 import {getNewTokens} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";
+import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 
 
-function* loginSaga({payload: oauthConfig}) {
+function* loginSaga() {
+  const oauthConfig = yield oAuthConfigurationSaga();
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
   authorizationHandler.setAuthorizationNotifier(notifier);
