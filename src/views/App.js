@@ -4,7 +4,7 @@ import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import {login, logout} from "../events/SecurityActions";
-import {appInitialized} from "../events/ApplicationLifecycleActions";
+import {appInitialized} from "../events/ApplicationLifecycleEvents";
 
 class App extends Component {
   static propTypes = {

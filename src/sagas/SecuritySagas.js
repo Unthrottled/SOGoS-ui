@@ -1,5 +1,5 @@
 import {all, fork, takeEvery} from 'redux-saga/effects'
-import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleActions";
+import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
 import oauthInitializationSaga from './security/SecurityInitializationSaga';
 import {REQUESTED_ACCESS_TOKEN, REQUESTED_LOGOFF, REQUESTED_LOGON} from "../events/SecurityActions";
 import loginSaga from "./security/LoginSaga";
