@@ -3,7 +3,7 @@ import {
   fetchOAuthConfigurations, RECEIVED_OAUTH_CONFIGURATION,
   REQUESTED_OAUTH_CONFIGURATION,
   requestOAuthConfigurations
-} from "../events/ConfigurationActions";
+} from "../events/ConfigurationEvents";
 import type {OauthConfig} from "../reducers/ConfigurationReducer";
 
 // todo: this feels weird
