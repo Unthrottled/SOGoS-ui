@@ -1,4 +1,4 @@
-import {RECEIVED_USER, User} from "../events/UserActions";
+import {RECEIVED_USER, User} from "../events/UserEvents";
 import {LOGGED_OFF} from "../events/SecurityEvents";
 
 export type UserState = {

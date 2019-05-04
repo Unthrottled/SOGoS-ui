@@ -1,7 +1,7 @@
 import {all, takeEvery, put } from 'redux-saga/effects'
 import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
-import {receivedUser} from "../events/UserActions";
+import {receivedUser} from "../events/UserEvents";
 
 function* findUserSaga() {
   const {data: user} = yield performGet('./api/user');
