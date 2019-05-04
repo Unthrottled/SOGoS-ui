@@ -7,7 +7,7 @@ import {
   TokenRequest
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
-import {createLoggedOnAction} from "../../events/SecurityActions";
+import {createLoggedOnAction} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
 import {getNewTokens} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";

@@ -3,7 +3,7 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {login, logout} from "../events/SecurityActions";
+import {login, logout} from "../events/SecurityEvents";
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
 
 class App extends Component {

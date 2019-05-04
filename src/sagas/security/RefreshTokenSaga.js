@@ -1,6 +1,6 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {requestLogon} from "../../events/SecurityActions";
+import {requestLogon} from "../../events/SecurityEvents";
 import {getNewTokens} from "./SecurityInitializationSaga";
 import {put} from 'redux-saga/effects'
 

@@ -1,5 +1,5 @@
 import {select, put, fork, take} from 'redux-saga/effects';
-import {foundAccessToken, RECEIVED_TOKENS} from "../../events/SecurityActions";
+import {foundAccessToken, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 import {refreshTokenSaga} from "./RefreshTokenSaga";
