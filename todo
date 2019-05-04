@@ -1,5 +1,5 @@
 - OAuth
-    - refresh token expiration
+    - Logout should terminate SSO
 
 - Redux Persist
     - Make sure that tokens are secure and valid
