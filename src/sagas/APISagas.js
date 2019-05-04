@@ -1,4 +1,4 @@
-import {FOUND_ACCESS_TOKEN, requestAccessToken} from "../actions/SecurityActions";
+import {FOUND_ACCESS_TOKEN, requestAccessToken} from "../events/SecurityActions";
 import {call, put, take} from 'redux-saga/effects'
 import axios from "axios";
 

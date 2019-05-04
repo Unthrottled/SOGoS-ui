@@ -1,4 +1,4 @@
-import {RECEIVED_OAUTH_CONFIGURATION} from "../actions/ConfigurationActions";
+import {RECEIVED_OAUTH_CONFIGURATION} from "../events/ConfigurationActions";
 
 export type OauthConfig = {
   authorizationEndpoint: string,

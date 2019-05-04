@@ -6,7 +6,7 @@ import {
   createTokenReceptionEvent,
   LOGGED_ON,
   requestLogon
-} from "../../actions/SecurityActions";
+} from "../../events/SecurityActions";
 import {refreshTokenSaga} from "./RefreshTokenSaga";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();

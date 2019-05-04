@@ -3,8 +3,8 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {login, logout} from "../actions/SecurityActions";
-import {appInitialized} from "../actions/ApplicationLifecycleActions";
+import {login, logout} from "../events/SecurityActions";
+import {appInitialized} from "../events/ApplicationLifecycleActions";
 
 class App extends Component {
   static propTypes = {
