@@ -18,9 +18,7 @@ export const requestOAuthConfigurations = () => ({
   type: REQUESTED_OAUTH_CONFIGURATION,
 });
 
-const OpenIdUrl = 'http://localhost:8080/auth/realms/master'; // todo: get from backend
-
-export const fetchOAuthConfigurations = () => dispetch => {
+export const fetchOAuthConfigurations = (OpenIdUrl) => dispetch => {
   return AuthorizationServiceConfiguration.fetchFromIssuer(OpenIdUrl)
     .then(openIdEndpoints => dispetch(receivedOAuthConfigurations(openIdEndpoints)))
     .catch(error => dispetch(failedToGetOAuthConfigurations(error)))

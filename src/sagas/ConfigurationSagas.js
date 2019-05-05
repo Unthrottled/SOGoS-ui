@@ -1,4 +1,4 @@
-import {takeEvery, put, fork, all, take} from 'redux-saga/effects'
+import {takeEvery, put, fork, select, all, take} from 'redux-saga/effects'
 import {
   fetchOAuthConfigurations, RECEIVED_OAUTH_CONFIGURATION,
   REQUESTED_OAUTH_CONFIGURATION,
@@ -15,7 +15,9 @@ export function* oAuthConfigurationSaga(): OauthConfig {
 
 
 function* securityRequestSaga() {
-  yield put(fetchOAuthConfigurations()) //todo: handle failures.
+  const { initial } = yield select(state=> state.configuration);
+
+  yield put(fetchOAuthConfigurations(initial.openIDConnectURI)) //todo: handle failures.
 }
 
 function* listenToConfigurationEvent(){

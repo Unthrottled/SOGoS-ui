@@ -8,8 +8,15 @@ export type OauthConfig = {
   userInfoEndpoint: string,
 }
 
+export type InitialConfig = {
+  callbackURI: string,
+  clientID: string,
+  openIDConnectURI: string,
+}
+
 export type ConfigurationState = {
-  oauth: OauthConfig
+  oauth: OauthConfig,
+  initial: InitialConfig,
 }
 
 const INITIAL_CONFIGURATION_STATE : ConfigurationState = {
@@ -19,6 +26,11 @@ const INITIAL_CONFIGURATION_STATE : ConfigurationState = {
     revocationEndpoint: '',
     tokenEndpoint: '',
     userInfoEndpoint: '',
+  },
+  initial: {
+    callbackURI: 'http://localhost:3000',
+    clientID: 'sogos-app',
+    openIDConnectURI: 'http://localhost:8080/auth/realms/master',
   }
 
 };

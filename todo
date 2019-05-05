@@ -1,5 +1,5 @@
 - OAuth
-    - Logout should terminate SSO
+    - Logon should be user triggered an not automagic.
 
 - Redux Persist
     - Make sure that tokens are secure and valid
