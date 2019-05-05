@@ -8649,6 +8649,13 @@ redux-persist@^5.10.0:
   resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-5.10.0.tgz#5d8d802c5571e55924efc1c3a9b23575283be62b"
   integrity sha512-sSJAzNq7zka3qVHKce1hbvqf0Vf5DuTVm7dr4GtsqQVOexnrvbV47RWFiPxQ8fscnyiuWyD2O92DOxPl0tGCRg==
 
+redux-saga-test-engine@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/redux-saga-test-engine/-/redux-saga-test-engine-3.0.0.tgz#cc00c9c55a766d48712a522ecd7760bd1804bc39"
+  integrity sha512-TcB42I9TNSlgpJtoOJBVNasRHR+VbXIgBeOeJudlShAV9ruIljW2bIqp3GeN9Poj7jkCoRLHfF4v9oL2SyYoFA==
+  dependencies:
+    deep-equal "^1.0.1"
+
 redux-saga-test-plan@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/redux-saga-test-plan/-/redux-saga-test-plan-3.7.0.tgz#c8f513b1c6e13eef526a6b8a2e9076b6f26f5698"
