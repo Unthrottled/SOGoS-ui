@@ -1,4 +1,4 @@
-import {call, all, fork, put, select, take, takeEvery} from 'redux-saga/effects'
+import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
 import {
   createReceivedInitialConfigurationsEvent,
   createReceivedRemoteOAuthConfigurations,
@@ -27,13 +27,19 @@ function* securityRequestSaga() {
   yield put(receivedOAuthConfigurations(oauthConfig))
 }
 
+const createOauthConfigurationObject = (oauthConfig) =>
+  ({
+    ...oauthConfig,
+    toJson: () => JSON.stringify(oauthConfig),
+  });
+
 function* fetchOAuthConfiguration(): OauthConfig {
   const {oauth} = yield select(state => state.configuration);
   if (!oauth.authorizationEndpoint) {
     const {payload} = yield take(RECEIVED_REMOTE_OAUTH_CONFIGURATION);
     return payload;
   } else {
-    return oauth
+    return createOauthConfigurationObject(oauth);
   }
 }
 
@@ -61,11 +67,11 @@ function* initialConfigurationSaga() {
 
 function* oauthConfigurationSetupSaga() {
   const initialConfigurations = yield initialConfigurationFetchSaga();
-  try{
-    const openIdEndpoints = yield call(()=>
+  try {
+    const openIdEndpoints = yield call(() =>
       AuthorizationServiceConfiguration.fetchFromIssuer(initialConfigurations.openIDConnectURI));
     yield put(createReceivedRemoteOAuthConfigurations(openIdEndpoints));
-  } catch(error){
+  } catch (error) {
     yield put(failedToGetRemoteOAuthConfigurations(error));
   }
 }

@@ -1,4 +1,4 @@
-import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
+import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
 
 export type OauthConfig = {
   authorizationEndpoint: string,
@@ -19,7 +19,7 @@ export type ConfigurationState = {
   initial: InitialConfig,
 }
 
-const INITIAL_CONFIGURATION_STATE : ConfigurationState = {
+const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
   oauth: {
     authorizationEndpoint: '',
     endSessionEndpoint: '',
@@ -38,7 +38,7 @@ const INITIAL_CONFIGURATION_STATE : ConfigurationState = {
 
 const ConfigurationReducer = (state = INITIAL_CONFIGURATION_STATE, action) => {
   switch (action.type) {
-    case RECEIVED_OAUTH_CONFIGURATION :
+    case RECEIVED_REMOTE_OAUTH_CONFIGURATION :
       return {
         ...state,
         oauth: {
