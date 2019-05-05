@@ -2,7 +2,7 @@ import type {SecurityState} from "../reducers/SecurityReducer";
 import {nowInSeconds} from "@openid/appauth";
 
 
-export const needsToLogIn = (securityState: SecurityState) => {
+export const shouldCheckForAuthorizationGrant = (securityState: SecurityState) => {
   return !isAccessTokenValid(securityState);
 };
 

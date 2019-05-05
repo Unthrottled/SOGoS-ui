@@ -7,20 +7,35 @@ import {
   TokenRequest
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
-import {createLoggedOnAction} from "../../events/SecurityEvents";
+import {createCheckedAuthorizationEvent, createLoggedOnAction} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
 import {getNewTokens} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 
-function* loginSaga() {
+
+export function* authorizationGrantSaga(){
+  yield performAuthorizationGrantFlowSaga(false);
+  yield put(createCheckedAuthorizationEvent());
+}
+
+export function* loginSaga() {
+  yield performAuthorizationGrantFlowSaga(true);
+}
+
+// Thanks shitty library API design
+function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
   const oauthConfig = yield oAuthConfigurationSaga();
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
   authorizationHandler.setAuthorizationNotifier(notifier);
   const authorizationResult: AuthorizationRequestResponse =
     yield call(() => completeAuthorizationRequest(authorizationHandler));
-  if (!authorizationResult) {
+  if (authorizationResult) {
+    const {request, response} = authorizationResult;
+    yield exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig);
+    yield put(createLoggedOnAction());
+  } else if(shouldRequestLogon) {
     const scope = 'openid profile email';
     const authorizationRequest = new AuthorizationRequest({
       client_id: 'sogos-app',
@@ -29,10 +44,6 @@ function* loginSaga() {
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
     }, new NodeCrypto());
     authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
-  } else {
-    const {request, response} = authorizationResult;
-    yield exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig);
-    yield put(createLoggedOnAction());
   }
 }
 
@@ -56,6 +67,3 @@ function* exchangeAuthorizationGrantForAccessToken(request, response, oauthConfi
 
   }
 }
-
-
-export default loginSaga;

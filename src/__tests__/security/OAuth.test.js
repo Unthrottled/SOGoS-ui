@@ -1,12 +1,12 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
-import {canRefreshToken, needsToLogIn} from "../../security/OAuth";
+import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../security/OAuth";
 import {nowInSeconds} from "@openid/appauth";
 
 describe('OAuth', () => {
   describe('needsToLogin', () => {
     it('should return true when input is not present', () => {
 
-      const result = needsToLogIn();
+      const result = shouldCheckForAuthorizationGrant();
 
       expect(result).toBeTruthy()
     });
@@ -14,7 +14,7 @@ describe('OAuth', () => {
     it('should return true when access token is not present', () => {
       const securityState: SecurityState = {};
 
-      const result = needsToLogIn(securityState);
+      const result = shouldCheckForAuthorizationGrant(securityState);
 
       expect(result).toBeTruthy()
     });
@@ -26,7 +26,7 @@ describe('OAuth', () => {
         }
       };
 
-      const result = needsToLogIn(securityState);
+      const result = shouldCheckForAuthorizationGrant(securityState);
 
       expect(result).toBeTruthy()
     });
@@ -38,7 +38,7 @@ describe('OAuth', () => {
         }
       };
 
-      const result = needsToLogIn(securityState);
+      const result = shouldCheckForAuthorizationGrant(securityState);
 
       expect(result).toBeTruthy()
     });
@@ -50,7 +50,7 @@ describe('OAuth', () => {
         }
       };
 
-      const result = needsToLogIn(securityState);
+      const result = shouldCheckForAuthorizationGrant(securityState);
 
       expect(result).toBeFalsy()
     });

@@ -1,8 +1,8 @@
 - OAuth
-    - Logon should be user triggered an not automagic.
+    - Initial Login configurations should come from backend.
 
 - Redux Persist
-    - Make sure that tokens are secure and valid
+    - Make sure that tokens are secure
 
 post actions to the backend
     - post logoff action/login actions

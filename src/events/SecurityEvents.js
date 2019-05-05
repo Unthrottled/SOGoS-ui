@@ -6,6 +6,8 @@ export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
 export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
+export const REQUESTED_AUTH_CHECK: 'REQUESTED_AUTH_CHECK' = 'REQUESTED_AUTH_CHECK';
+export const CHECKED_AUTH: 'CHECKED_AUTH' = 'CHECKED_AUTH';
 export const REQUESTED_ACCESS_TOKEN: 'REQUESTED_ACCESS_TOKEN' = 'REQUESTED_ACCESS_TOKEN';
 export const FOUND_ACCESS_TOKEN: 'FOUND_ACCESS_TOKEN' = 'FOUND_ACCESS_TOKEN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
@@ -29,6 +31,11 @@ export const requestLogon = (oauthConfig) => ({
   payload: oauthConfig
 });
 
+export const requestAuthorizationGrantCheck = (oauthConfig) => ({
+  type: REQUESTED_AUTH_CHECK,
+  payload: oauthConfig
+});
+
 export const createFailureToLogOffAction = (error) => ({
   type: FAILED_LOGGING_OFF,
   payload: error
@@ -41,6 +48,10 @@ export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
 
 export const createSecurityInitalizedEvent = () => ({
   type: INITIALIZED_SECURITY,
+});
+
+export const createCheckedAuthorizationEvent = () => ({
+  type: CHECKED_AUTH,
 });
 
 export const createLoggedOffEvent = () => ({

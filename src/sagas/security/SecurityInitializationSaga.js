@@ -1,11 +1,11 @@
 import {call, put, select, take} from 'redux-saga/effects'
 import {BaseTokenRequestHandler, TokenRequestHandler} from "@openid/appauth";
-import {canRefreshToken, needsToLogIn} from "../../security/OAuth";
+import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../security/OAuth";
 import {
+  CHECKED_AUTH,
   createSecurityInitalizedEvent,
   createTokenReceptionEvent,
-  LOGGED_ON,
-  requestLogon
+  requestAuthorizationGrantCheck
 } from "../../events/SecurityEvents";
 import {refreshTokenSaga} from "./RefreshTokenSaga";
 
@@ -20,9 +20,9 @@ function* oauthInitializationSaga(oauthConfig) {
   const {security} = yield select();
   if (canRefreshToken(security)) {
     yield refreshTokenSaga(oauthConfig, security);
-  } else if (needsToLogIn(security)) {
-    yield put(requestLogon(oauthConfig)); // ask to be logged in
-    yield take(LOGGED_ON); // wait until logged in
+  } else if (shouldCheckForAuthorizationGrant(security)) {
+    yield put(requestAuthorizationGrantCheck(oauthConfig)); // ask to check if there is an authorization grant.
+    yield take(CHECKED_AUTH); // wait until checked
   }
   yield put(createSecurityInitalizedEvent());
 }

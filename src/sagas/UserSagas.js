@@ -1,5 +1,5 @@
 import {all, takeEvery, put } from 'redux-saga/effects'
-import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
+import {INITIALIZED_SECURITY, LOGGED_ON} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
 import {receivedUser} from "../events/UserEvents";
 
@@ -9,7 +9,7 @@ function* findUserSaga() {
 }
 
 function* listenToSecurityEvents() {
-  yield takeEvery(INITIALIZED_SECURITY, findUserSaga)
+  yield takeEvery(LOGGED_ON, findUserSaga)
 }
 
 export default function* rootSaga() {
