@@ -1,4 +1,4 @@
-import {RECEIVED_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
+import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
 
 export type OauthConfig = {
   authorizationEndpoint: string,
@@ -28,9 +28,9 @@ const INITIAL_CONFIGURATION_STATE : ConfigurationState = {
     userInfoEndpoint: '',
   },
   initial: {
-    callbackURI: 'http://localhost:3000',
-    clientID: 'sogos-app',
-    openIDConnectURI: 'http://localhost:8080/auth/realms/master',
+    callbackURI: '',
+    clientID: '',
+    openIDConnectURI: '',
   }
 
 };
@@ -44,6 +44,14 @@ const ConfigurationReducer = (state = INITIAL_CONFIGURATION_STATE, action) => {
         oauth: {
           ...state.oauth,
           ...action.payload
+        }
+      };
+    case RECEIVED_INITIAL_CONFIGURATION:
+      return {
+        ...state,
+        initial: {
+          ...state.initial,
+          ...action.payload,
         }
       };
     default:

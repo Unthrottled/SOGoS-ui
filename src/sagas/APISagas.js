@@ -2,7 +2,7 @@ import {FOUND_ACCESS_TOKEN, requestAccessToken} from "../events/SecurityEvents";
 import {call, put, take} from 'redux-saga/effects'
 import axios from "axios";
 
-export function* performGet(url: String, options = {headers: {}}) {
+export function* performGet<T>(url: String, options = {headers: {}}):T {
   yield put(requestAccessToken());
   const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
   return yield call(() => axios.get(url, {
@@ -14,7 +14,11 @@ export function* performGet(url: String, options = {headers: {}}) {
   }));
 }
 
-export function* performPost(url: String, data, options = {headers: {}}) {
+export function* performOpenGet<T>(url: String, options): T {
+  return yield call(() => axios.get(url, options));
+}
+
+export function* performPost<T>(url: String, data, options = {headers: {}}):T {
   yield put(requestAccessToken());
   const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
   return yield call(() => axios.post(url, data, {
