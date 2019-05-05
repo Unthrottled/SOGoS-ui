@@ -14,6 +14,7 @@ import type {OauthConfig} from "../reducers/ConfigurationReducer";
 import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
 import {performOpenGet} from "./APISagas";
 import {AuthorizationServiceConfiguration} from "@openid/appauth";
+import {createOauthConfigurationObject} from "../security/StupidShit";
 
 // todo: this feels weird
 export function* oAuthConfigurationSaga(): OauthConfig {
@@ -26,12 +27,6 @@ function* securityRequestSaga() {
   const oauthConfig = yield fetchOAuthConfiguration();
   yield put(receivedOAuthConfigurations(oauthConfig))
 }
-
-const createOauthConfigurationObject = (oauthConfig) =>
-  ({
-    ...oauthConfig,
-    toJson: () => JSON.stringify(oauthConfig),
-  });
 
 function* fetchOAuthConfiguration(): OauthConfig {
   const {oauth} = yield select(state => state.configuration);

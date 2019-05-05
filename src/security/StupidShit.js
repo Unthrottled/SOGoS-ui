@@ -80,3 +80,10 @@ export const completeAuthorizationRequest= (authorizationHandler: RedirectReques
       cleanUpURI();
       return result;
     });
+
+
+export const createOauthConfigurationObject = (oauthConfig) =>
+  ({
+    ...oauthConfig,
+    toJson: () => JSON.stringify(oauthConfig),
+  });
