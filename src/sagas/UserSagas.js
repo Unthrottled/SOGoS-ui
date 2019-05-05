@@ -1,5 +1,5 @@
 import {all, takeEvery, put } from 'redux-saga/effects'
-import {INITIALIZED_SECURITY, LOGGED_ON} from "../events/SecurityEvents";
+import {LOGGED_ON} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
 import {receivedUser} from "../events/UserEvents";
 
