@@ -1,5 +1,5 @@
 import {select, put, fork, take} from 'redux-saga/effects';
-import {foundAccessToken, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {createFoundAccessTokenEvent, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 import {refreshTokenSaga} from "./RefreshTokenSaga";
@@ -7,7 +7,7 @@ import {TokenResponse} from "@openid/appauth";
 
 export function* accessTokenSaga() {
   const accessToken = yield getOrRefreshAccessToken();
-  yield put(foundAccessToken(accessToken));
+  yield put(createFoundAccessTokenEvent(accessToken));
 }
 
 function* getOrRefreshAccessToken(){

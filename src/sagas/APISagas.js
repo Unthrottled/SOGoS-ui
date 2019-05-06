@@ -1,17 +1,17 @@
-import {FOUND_ACCESS_TOKEN, requestAccessToken} from "../events/SecurityEvents";
+import {FOUND_ACCESS_TOKEN, createRequestAccessTokenEvent} from "../events/SecurityEvents";
 import {call, put, take} from 'redux-saga/effects'
 import axios from "axios";
 
 export function* performGet<T>(url: String, options = {headers: {}}):T {
-  yield put(requestAccessToken());
+  yield put(createRequestAccessTokenEvent());
   const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
-  return yield call(() => axios.get(url, {
+  return yield call(axios.get,url, {
     ...options,
     headers: {
       ...options.headers,
       Authorization: `Bearer ${accessToken}`,
     }
-  }));
+  });
 }
 
 export function* performOpenGet<T>(url: String, options): T {
@@ -19,7 +19,7 @@ export function* performOpenGet<T>(url: String, options): T {
 }
 
 export function* performPost<T>(url: String, data, options = {headers: {}}):T {
-  yield put(requestAccessToken());
+  yield put(createRequestAccessTokenEvent());
   const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
   return yield call(() => axios.post(url, data, {
     ...options,

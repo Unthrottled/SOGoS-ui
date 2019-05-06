@@ -17,11 +17,11 @@ export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
 });
 
-export const requestAccessToken = () => ({
+export const createRequestAccessTokenEvent = () => ({
   type: REQUESTED_ACCESS_TOKEN,
 });
 
-export const foundAccessToken = accessToken => ({
+export const createFoundAccessTokenEvent = accessToken => ({
   type: FOUND_ACCESS_TOKEN,
   payload: accessToken,
 });

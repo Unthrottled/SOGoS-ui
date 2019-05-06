@@ -17,6 +17,9 @@ describe('User Sagas', () => {
       it('should generate a failed to fetch user event', (result) => {
         expect(result).toEqual(put(createFailedToGetUserEvent(new Error('YA DUN MESSED UP A-A-RON'))))
       });
+      it('should then complete', (result) => {
+        expect(result).toBeUndefined();
+      });
     });
 
     describe('when all is just', () => {
@@ -33,6 +36,9 @@ describe('User Sagas', () => {
         expect(result).toEqual(put(createReceivedUserEvent({
           'I AM': 'BECOME DEATH',
         })))
+      });
+      it('should then complete', (result) => {
+        expect(result).toBeUndefined();
       });
     });
   });
