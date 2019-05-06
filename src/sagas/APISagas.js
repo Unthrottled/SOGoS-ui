@@ -21,11 +21,11 @@ export function* performOpenGet<T>(url: String, options): T {
 export function* performPost<T>(url: String, data, options = {headers: {}}):T {
   yield put(createRequestAccessTokenEvent());
   const {payload: accessToken} = yield take(FOUND_ACCESS_TOKEN);
-  return yield call(() => axios.post(url, data, {
+  return yield call(axios.post, url, data, {
     ...options,
     headers: {
       ...options.headers,
       Authorization: `Bearer ${accessToken}`,
     }
-  }));
+  });
 }
