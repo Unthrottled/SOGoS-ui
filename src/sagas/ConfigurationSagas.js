@@ -1,12 +1,13 @@
 import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
 import {
+  createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent,
   createReceivedRemoteOAuthConfigurations,
   failedToGetRemoteOAuthConfigurations,
   RECEIVED_INITIAL_CONFIGURATION,
   RECEIVED_OAUTH_CONFIGURATION,
   RECEIVED_REMOTE_OAUTH_CONFIGURATION,
-  receivedOAuthConfigurations,
+  receivedOAuthConfigurations, REQUESTED_INITIAL_CONFIGURATION,
   REQUESTED_OAUTH_CONFIGURATION,
   requestOAuthConfigurations
 } from "../events/ConfigurationEvents";
@@ -76,9 +77,19 @@ function* listenToApplicationEvents() {
   yield takeEvery(INITIALIZED_APPLICATION, initialConfigurationSaga)
 }
 
+function* initialConfigurationResponseSaga(){
+  const initialConfigurations = yield initialConfigurationFetchSaga();
+  yield put(createFoundInitialConfigurationsEvent(initialConfigurations));
+}
+
+function* listenToConfigurationRequestEvents(){
+  yield takeEvery(REQUESTED_INITIAL_CONFIGURATION, initialConfigurationResponseSaga)
+}
+
 export default function* rootSaga() {
   yield all([
     listenToApplicationEvents(),
     fork(oauthConfigurationSetupSaga),
+    listenToConfigurationRequestEvents(),
   ])
 }

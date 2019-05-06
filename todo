@@ -1,5 +1,4 @@
 - OAuth
-    - Initial Login configurations should come from backend.
 
 - Redux Persist
     - Make sure that tokens are secure

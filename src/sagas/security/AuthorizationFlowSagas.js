@@ -12,6 +12,8 @@ import {call, put} from 'redux-saga/effects'
 import {getNewTokens} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
+import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
+import {take} from "redux-saga-test-plan/matchers";
 
 
 export function* authorizationGrantSaga(){
@@ -37,9 +39,11 @@ function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
     yield put(createLoggedOnAction());
   } else if(shouldRequestLogon) {
     const scope = 'openid profile email';
+    yield put(createRequestForInitialConfigurations());
+    const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
     const authorizationRequest = new AuthorizationRequest({
-      client_id: 'sogos-app',
-      redirect_uri: 'http://localhost:3000',
+      client_id: initialConfigurations.clientID,
+      redirect_uri: initialConfigurations.callbackURI,
       scope,
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
     }, new NodeCrypto());
@@ -52,9 +56,11 @@ function* exchangeAuthorizationGrantForAccessToken(request, response, oauthConfi
     const code = response.code;
     const codeVerifier = request.internal && request.internal.code_verifier;
 
+    yield put(createRequestForInitialConfigurations());
+    const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
     const tokenRequest = new TokenRequest({
-      client_id: "sogos-app",
-      redirect_uri: 'http://localhost:3000',
+      client_id: initialConfigurations.clientID,
+      redirect_uri: initialConfigurations.callbackURI,
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
       code,
       extras: {
