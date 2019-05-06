@@ -36,7 +36,6 @@
     "reactotron-react-js": "^3.0.1",
     "reactotron-redux": "^3.1.0",
     "redux-saga-test-engine": "^3.0.0",
-    "redux-saga-test-plan": "^3.7.0",
     "redux-saga-testing": "^1.0.5"
   },
   "proxy": "http://localhost:8888"

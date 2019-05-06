@@ -10,12 +10,12 @@ export type User = {
   email: string,
 }
 
-export const receivedUser = (user: User) => ({
+export const createReceivedUserEvent = (user: User) => ({
   type: RECEIVED_USER,
   payload: user
 });
 
-export const failedToGetUser = (error) => ({
+export const createFailedToGetUserEvent = (error) => ({
   type: FAILED_REQUESTED_USER,
   payload: error
 });

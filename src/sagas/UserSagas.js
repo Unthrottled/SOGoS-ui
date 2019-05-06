@@ -1,11 +1,15 @@
 import {all, takeEvery, put } from 'redux-saga/effects'
 import {LOGGED_ON} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
-import {receivedUser} from "../events/UserEvents";
+import {createReceivedUserEvent, createFailedToGetUserEvent} from "../events/UserEvents";
 
-function* findUserSaga() {
-  const {data: user} = yield performGet('./api/user');
-  yield put(receivedUser(user)); // found waldo.
+export function* findUserSaga() {
+  try {
+    const {data: user} = yield performGet('./api/user');
+    yield put(createReceivedUserEvent(user)); // found waldo.
+  } catch (e) {
+    yield put(createFailedToGetUserEvent(e));
+  }
 }
 
 function* listenToSecurityEvents() {
