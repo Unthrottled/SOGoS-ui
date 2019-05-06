@@ -14,8 +14,25 @@ describe('User Sagas', () => {
         expect(result instanceof performGet).toBeTruthy();
         return new Error('YA DUN MESSED UP A-A-RON');
       });
-      it('should do something', (result) => {
+      it('should generate a failed to fetch user event', (result) => {
         expect(result).toEqual(put(createFailedToGetUserEvent(new Error('YA DUN MESSED UP A-A-RON'))))
+      });
+    });
+
+    describe('when all is just', () => {
+      const it = sagaHelper(findUserSaga());
+      it('should perform a authenticated API response', (result) => {
+        expect(result instanceof performGet).toBeTruthy();
+        return {
+          data: {
+            'I AM': 'BECOME DEATH'
+          },
+        };
+      });
+      it('should respond with a found user event', (result) => {
+        expect(result).toEqual(put(createReceivedUserEvent({
+          'I AM': 'BECOME DEATH',
+        })))
       });
     });
   });
