@@ -3,7 +3,7 @@ import {BaseTokenRequestHandler, TokenRequestHandler} from "@openid/appauth";
 import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../security/OAuth";
 import {
   CHECKED_AUTH,
-  createSecurityInitalizedEvent,
+  createSecurityInitializedEvent,
   createTokenReceptionEvent,
   requestAuthorizationGrantCheck
 } from "../../events/SecurityEvents";
@@ -24,7 +24,7 @@ function* oauthInitializationSaga(oauthConfig) {
     yield put(requestAuthorizationGrantCheck(oauthConfig)); // ask to check if there is an authorization grant.
     yield take(CHECKED_AUTH); // wait until checked
   }
-  yield put(createSecurityInitalizedEvent());
+  yield put(createSecurityInitializedEvent());
 }
 
 export default oauthInitializationSaga;

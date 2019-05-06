@@ -46,7 +46,7 @@ export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
   payload: tokenResponse
 });
 
-export const createSecurityInitalizedEvent = () => ({
+export const createSecurityInitializedEvent = () => ({
   type: INITIALIZED_SECURITY,
 });
 
@@ -67,18 +67,6 @@ export const createLoggedOnAction = () => ({
   type: LOGGED_ON,
 });
 
-const logoutUser = () => dispetch => {
-  dispetch(requestLogoff()); // todo: clean all the states an that stuff
-  // return axios.post('./logout')
-  //   .then(()=> dispetch(createLoggedOffEvent()))
-  //   .catch(error => dispetch(createFailureToLogOffAction(error)));
-};
+export const logout = () => dispetch => dispetch(requestLogoff());
 
-const loginUser = () => dispetch => {
-  dispetch(requestLogon());
-};
-
-
-export const logout = () => dispetch => dispetch(logoutUser());
-
-export const login = () => dispetch => dispetch(loginUser());
+export const login = () => dispetch => dispetch(requestLogon());

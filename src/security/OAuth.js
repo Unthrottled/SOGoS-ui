@@ -10,10 +10,6 @@ export const canRefreshToken = (securityState: SecurityState) => {
   return !isAccessTokenValid(securityState) && securityState && securityState.refreshToken;
 };
 
-export const needsToRefreshToken = (securityState: SecurityState) => {
-  return true;
-};
-
 export const isAccessTokenValid = (securityState: SecurityState) => {
   return securityState && securityState.accessTokenInformation &&
     securityState.accessTokenInformation.expiresAt > nowInSeconds()
