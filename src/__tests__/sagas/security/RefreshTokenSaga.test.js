@@ -9,11 +9,14 @@ import {
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
 import {fetchTokenSaga} from "../../../sagas/security/SecurityInitializationSaga";
+import {createRequestLogonEvent, createTokenFailureEvent} from "../../../events/SecurityEvents";
 
 describe('Refresh TokenSagas', () => {
   describe('refreshTokenSaga', () => {
     describe('when tokens can be fetched', () => {
-      const it = sagaHelper(refreshTokenSaga({},{}));
+      const it = sagaHelper(refreshTokenSaga({
+        revocationEndpoint: 'http://logthefuckout.com'
+      },{}));
       it('should ask for a constructed refresh token request', sagaEffect => {
         expect(sagaEffect instanceof refreshTokenRequestSaga).toBeTruthy();
         return new TokenRequest({});
@@ -26,7 +29,32 @@ describe('Refresh TokenSagas', () => {
       });
     });
     describe('when tokens cannot be fetched', () => {
-
+      const it = sagaHelper(refreshTokenSaga({
+        revocationEndpoint: 'http://logthefuckout.com'
+      },{}));
+      it('should ask for a constructed refresh token request', sagaEffect => {
+        expect(sagaEffect instanceof refreshTokenRequestSaga).toBeTruthy();
+        return new TokenRequest({
+          client_id: 'COOL CLIENT'
+        });
+      });
+      it('should attempt to fetch token', sagaEffect => {
+        expect(sagaEffect instanceof fetchTokenSaga);
+        return new Error(`SHIT'S BROKE, YO`);
+      });
+      it('should handle error and request logoff', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createRequestLogonEvent({
+          revocationEndpoint: 'http://logthefuckout.com'
+        })))
+      });
+      it('should then let you know that it failed to get a token', sagaEffect => {
+          expect(sagaEffect).toEqual(put(createTokenFailureEvent(new TokenRequest({
+            client_id: 'COOL CLIENT'
+          }))));
+      });
+      it('should then complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
     });
   });
 
