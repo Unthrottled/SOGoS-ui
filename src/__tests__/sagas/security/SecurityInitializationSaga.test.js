@@ -66,17 +66,42 @@ describe('Security Initialization Sagas', () => {
       });
     });
     describe('when the token can be refreshed and authorization grant should be checked', () => {
+      canRefreshToken.mockReturnValueOnce(true);
+      shouldCheckForAuthorizationGrant.mockReturnValueOnce(true);
       const it = sagaHelper(oauthInitializationSaga({
         revocationEndpoint: 'http://logthefuckout.com',
       }));
+      it('should select global state', sagaEffect => {
+        expect(sagaEffect).toEqual(select());
+        return {
+          security: {}
+        }
+      });
+      it('should then realize that the token can be refreshed', sagaEffect => {
+        expect(sagaEffect instanceof refreshTokenSaga).toBeTruthy();
+      });
+      it('should then broadcast that it completed initialization', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createSecurityInitializedEvent()));
+      });
       it('should complete', (result) => {
         expect(result).toBeUndefined();
       });
     });
     describe('when security is all up to date', () => {
+      canRefreshToken.mockReturnValueOnce(false);
+      shouldCheckForAuthorizationGrant.mockReturnValueOnce(false);
       const it = sagaHelper(oauthInitializationSaga({
         revocationEndpoint: 'http://logthefuckout.com',
       }));
+      it('should select global state', sagaEffect => {
+        expect(sagaEffect).toEqual(select());
+        return {
+          security: {}
+        }
+      });
+      it('should then realize that security is all up to date and broadcast that it completed initialization', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createSecurityInitializedEvent()));
+      });
       it('should complete', (result) => {
         expect(result).toBeUndefined();
       });
