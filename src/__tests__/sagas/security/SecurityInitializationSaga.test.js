@@ -11,13 +11,13 @@ import {
 jest.mock('../../../security/OAuth', ()=>({
   canRefreshToken: jest.fn(),
   shouldCheckForAuthorizationGrant: jest.fn(),
-}))
+}));
 
 describe('Security Initialization Sagas', () => {
   describe('oauthInitializationSaga', () => {
     describe('when the authorization grant should be checked', () => {
       canRefreshToken.mockReturnValueOnce(false);
-      canRefreshToken.mockReturnValueOnce(true);
+      shouldCheckForAuthorizationGrant.mockReturnValueOnce(true);
       const it = sagaHelper(oauthInitializationSaga({
         revocationEndpoint: 'http://logthefuckout.com',
       }));
