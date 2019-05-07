@@ -1,12 +1,12 @@
 import sagaHelper from "redux-saga-testing";
-import {performGet, performPost} from "../../../sagas/APISagas";
+import {performGet, performPost} from "../../sagas/APISagas";
 import {
   createFoundAccessTokenEvent,
   createRequestAccessTokenEvent,
   FOUND_ACCESS_TOKEN
-} from "../../../events/SecurityEvents";
+} from "../../events/SecurityEvents";
 import {put, take, call} from 'redux-saga/effects';
-import axios from 'axios';
+import axios from 'axios/index';
 
 describe('API Sagas', () => {
 
@@ -106,6 +106,7 @@ describe('API Sagas', () => {
         expect(result).toBeUndefined();
       });
     });
+
     describe('when supplied options', () => {
       const it = sagaHelper(performPost('http://localhost/api/onions', {
         'I AM': 'BECOME DEATH',
