@@ -1,6 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {put, take} from 'redux-saga/effects';
-import {refreshTokenRequestSaga} from "../../../sagas/security/RefreshTokenSaga";
+import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSaga";
 import type {InitialConfig} from "../../../reducers/ConfigurationReducer";
 import {
   createFoundInitialConfigurationsEvent,
@@ -8,8 +8,28 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
+import {fetchTokenSaga} from "../../../sagas/security/SecurityInitializationSaga";
 
 describe('Refresh TokenSagas', () => {
+  describe('refreshTokenSaga', () => {
+    describe('when tokens can be fetched', () => {
+      const it = sagaHelper(refreshTokenSaga({},{}));
+      it('should ask for a constructed refresh token request', sagaEffect => {
+        expect(sagaEffect instanceof refreshTokenRequestSaga).toBeTruthy();
+        return new TokenRequest({});
+      });
+      it('should attempt to fetch token', sagaEffect => {
+        expect(sagaEffect instanceof fetchTokenSaga)
+      });
+      it('should then complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when tokens cannot be fetched', () => {
+
+    });
+  });
+
   describe('refreshTokenRequestSaga', () => {
     describe('when initial configuration can be found', () => {
       const it = sagaHelper(refreshTokenRequestSaga({
