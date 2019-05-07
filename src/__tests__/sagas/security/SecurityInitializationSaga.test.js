@@ -7,6 +7,7 @@ import {
   createSecurityInitializedEvent,
   requestAuthorizationGrantCheck
 } from "../../../events/SecurityEvents";
+import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 
 jest.mock('../../../security/OAuth', ()=>({
   canRefreshToken: jest.fn(),
@@ -43,9 +44,23 @@ describe('Security Initialization Sagas', () => {
       });
     });
     describe('when the token can be refreshed', () => {
+      canRefreshToken.mockReturnValueOnce(true);
+      shouldCheckForAuthorizationGrant.mockReturnValueOnce(false);
       const it = sagaHelper(oauthInitializationSaga({
         revocationEndpoint: 'http://logthefuckout.com',
       }));
+      it('should select global state', sagaEffect => {
+        expect(sagaEffect).toEqual(select());
+        return {
+          security: {}
+        }
+      });
+      it('should then realize that the token can be refreshed', sagaEffect => {
+        expect(sagaEffect instanceof refreshTokenSaga).toBeTruthy();
+      });
+      it('should then broadcast that it completed initialization', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createSecurityInitializedEvent()));
+      });
       it('should complete', (result) => {
         expect(result).toBeUndefined();
       });
