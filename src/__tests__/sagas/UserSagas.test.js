@@ -1,4 +1,3 @@
-// import {testSaga} from "redux-saga-test-plan";
 import {findUserSaga, requestUserSaga} from "../../sagas/UserSagas";
 import {createFailedToGetUserEvent, createReceivedUserEvent} from "../../events/UserEvents";
 import sagaHelper from 'redux-saga-testing'

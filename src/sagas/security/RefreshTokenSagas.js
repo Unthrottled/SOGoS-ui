@@ -6,7 +6,7 @@ import {put, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OauthConfig} from "../../reducers/ConfigurationReducer";
 
-export function* refreshTokenSagas(oauthConfig: OauthConfig, securityState: SecurityState) {
+export function* refreshTokenSaga(oauthConfig: OauthConfig, securityState: SecurityState) {
   const refreshTokenRequest: TokenRequest = yield refreshTokenRequestSaga(securityState);
   try {
     yield fetchTokenSaga(oauthConfig, refreshTokenRequest)
