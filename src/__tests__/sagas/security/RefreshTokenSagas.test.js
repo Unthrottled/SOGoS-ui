@@ -7,8 +7,8 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {fetchTokenSaga} from "../../../sagas/security/SecurityInitializationSaga";
 import {createRequestLogonEvent, createTokenFailureEvent} from "../../../events/SecurityEvents";
+import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
 
 describe('Refresh TokenSagas', () => {
   describe('refreshTokenSaga', () => {

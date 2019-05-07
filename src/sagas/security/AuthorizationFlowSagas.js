@@ -9,11 +9,11 @@ import {
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {createCheckedAuthorizationEvent, createLoggedOnAction} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
-import {fetchTokenSaga} from "./SecurityInitializationSaga";
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {take} from "redux-saga-test-plan/matchers";
+import {fetchTokenSaga} from "./TokenSagas";
 
 
 export function* authorizationGrantSaga(){

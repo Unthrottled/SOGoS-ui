@@ -1,10 +1,10 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
 import {createRequestLogonEvent, createTokenFailureEvent} from "../../events/SecurityEvents";
-import {fetchTokenSaga} from "./SecurityInitializationSaga";
 import {put, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OauthConfig} from "../../reducers/ConfigurationReducer";
+import {fetchTokenSaga} from "./TokenSagas";
 
 export function* refreshTokenSaga(oauthConfig: OauthConfig, securityState: SecurityState) {
   const refreshTokenRequest: TokenRequest = yield refreshTokenRequestSaga(securityState);
