@@ -9,4 +9,6 @@ const rootReducer = combineReducers({
   configuration: configurationReducer
 });
 
+export const selectSecurityState = globalState =>globalState.security;
+
 export default rootReducer;
