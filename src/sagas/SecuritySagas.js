@@ -8,7 +8,7 @@ import {
   REQUESTED_LOGON
 } from "../events/SecurityEvents";
 import {authorizationGrantSaga, loginSaga} from "./security/AuthorizationFlowSagas";
-import {accessTokenSaga} from "./security/AccessTokenSaga";
+import {accessTokenSagas} from "./security/AccessTokenSagas";
 import {oAuthConfigurationSaga} from "./ConfigurationSagas";
 import logoutSaga from "./security/LogoutSaga";
 
@@ -22,7 +22,7 @@ function* listenToStartupEvent() {
 }
 
 function* listenToAccessTokenRequestEvents() {
-  yield takeEvery(REQUESTED_ACCESS_TOKEN, accessTokenSaga)
+  yield takeEvery(REQUESTED_ACCESS_TOKEN, accessTokenSagas)
 }
 
 function* listenToAppLifecycleEvents() {

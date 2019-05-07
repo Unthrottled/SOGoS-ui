@@ -5,7 +5,7 @@ import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 import {refreshTokenSagas} from "./RefreshTokenSagas";
 import {TokenResponse} from "@openid/appauth";
 
-export function* accessTokenSaga() {
+export function* accessTokenSagas() {
   const accessToken = yield getOrRefreshAccessToken();
   yield put(createFoundAccessTokenEvent(accessToken));
 }
