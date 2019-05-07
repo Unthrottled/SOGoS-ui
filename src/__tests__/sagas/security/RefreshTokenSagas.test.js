@@ -1,6 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {put, take} from 'redux-saga/effects';
-import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSaga";
+import {refreshTokenRequestSaga, refreshTokenSagas} from "../../../sagas/security/RefreshTokenSagas";
 import type {InitialConfig} from "../../../reducers/ConfigurationReducer";
 import {
   createFoundInitialConfigurationsEvent,
@@ -12,9 +12,9 @@ import {fetchTokenSaga} from "../../../sagas/security/SecurityInitializationSaga
 import {createRequestLogonEvent, createTokenFailureEvent} from "../../../events/SecurityEvents";
 
 describe('Refresh TokenSagas', () => {
-  describe('refreshTokenSaga', () => {
+  describe('refreshTokenSagas', () => {
     describe('when tokens can be fetched', () => {
-      const it = sagaHelper(refreshTokenSaga({
+      const it = sagaHelper(refreshTokenSagas({
         revocationEndpoint: 'http://logthefuckout.com'
       },{}));
       it('should ask for a constructed refresh token request', sagaEffect => {
@@ -29,7 +29,7 @@ describe('Refresh TokenSagas', () => {
       });
     });
     describe('when tokens cannot be fetched', () => {
-      const it = sagaHelper(refreshTokenSaga({
+      const it = sagaHelper(refreshTokenSagas({
         revocationEndpoint: 'http://logthefuckout.com'
       },{}));
       it('should ask for a constructed refresh token request', sagaEffect => {

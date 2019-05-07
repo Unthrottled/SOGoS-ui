@@ -1,4 +1,4 @@
-- OAuth
+- Fetch user on refresh?
 
 - Redux Persist
     - Make sure that tokens are secure
