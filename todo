@@ -9,3 +9,5 @@ post actions to the backend
 - Root Error handling on sagas
 
 - Tests
+
+- Offline mode

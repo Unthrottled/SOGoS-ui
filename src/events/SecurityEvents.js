@@ -1,4 +1,4 @@
-import {TokenResponse} from "@openid/appauth";
+import {TokenRequest, TokenResponse} from "@openid/appauth";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
@@ -26,7 +26,7 @@ export const createFoundAccessTokenEvent = accessToken => ({
   payload: accessToken,
 });
 
-export const requestLogon = (oauthConfig) => ({
+export const createRequestLogonEvent = (oauthConfig) => ({
   type: REQUESTED_LOGON,
   payload: oauthConfig
 });
@@ -44,6 +44,11 @@ export const createFailureToLogOffAction = (error) => ({
 export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
   type: RECEIVED_TOKENS,
   payload: tokenResponse
+});
+
+export const createTokenFailureEvent = (tokenRequest: TokenRequest) => ({
+  type: RECEIVED_TOKENS,
+  payload: tokenRequest,
 });
 
 export const createSecurityInitializedEvent = () => ({
@@ -69,4 +74,4 @@ export const createLoggedOnAction = () => ({
 
 export const logout = () => dispetch => dispetch(requestLogoff());
 
-export const login = () => dispetch => dispetch(requestLogon());
+export const login = () => dispetch => dispetch(createRequestLogonEvent());

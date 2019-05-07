@@ -1,24 +1,29 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {requestLogon} from "../../events/SecurityEvents";
-import {getNewTokens} from "./SecurityInitializationSaga";
-import {put} from 'redux-saga/effects'
+import {createRequestLogonEvent, createTokenFailureEvent} from "../../events/SecurityEvents";
+import {fetchTokenSaga} from "./SecurityInitializationSaga";
+import {put, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
-import {take} from "redux-saga-test-plan/matchers";
+import type {OauthConfig} from "../../reducers/ConfigurationReducer";
 
-export function* refreshTokenSaga(oauthConfig, securityState: SecurityState) {
+export function* refreshTokenSaga(oauthConfig: OauthConfig, securityState: SecurityState) {
+  const refreshTokenRequest: TokenRequest = yield refreshTokenRequestSaga(securityState);
+  try {
+    yield fetchTokenSaga(oauthConfig, refreshTokenRequest)
+  } catch (e) {
+    // todo: handle offline
+    yield put(createRequestLogonEvent(oauthConfig));// credentials are not good, just logon again please
+    yield put(createTokenFailureEvent(refreshTokenRequest));
+  }
+}
+
+export function* refreshTokenRequestSaga(securityState: SecurityState): TokenRequest{
   yield put(createRequestForInitialConfigurations());
   const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
-  const refreshTokenRequest = new TokenRequest({
+  return new TokenRequest({
     client_id: initialConfigurations.clientID,
     redirect_uri: initialConfigurations.callbackURI,
     grant_type: GRANT_TYPE_REFRESH_TOKEN,
     refresh_token: securityState.refreshToken
   });
-  try {
-    yield getNewTokens(oauthConfig, refreshTokenRequest)
-  } catch (e) {
-    // todo: handle offline
-    yield put(requestLogon(oauthConfig)) // credentials are not good, just logon again please
-  }
 }

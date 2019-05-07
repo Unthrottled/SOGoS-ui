@@ -11,7 +11,7 @@ import {refreshTokenSaga} from "./RefreshTokenSaga";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
 
-export function* getNewTokens(oauthConfig, tokenRequest) {
+export function* fetchTokenSaga(oauthConfig, tokenRequest) {
   const tokenResponse = yield call(() => tokenHandler.performTokenRequest(oauthConfig, tokenRequest));
   yield put(createTokenReceptionEvent(tokenResponse));
 }
