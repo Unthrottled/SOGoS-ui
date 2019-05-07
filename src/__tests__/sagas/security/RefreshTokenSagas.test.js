@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {put, take} from 'redux-saga/effects';
+import {put, take, race} from 'redux-saga/effects';
 import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,
@@ -7,7 +7,12 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {createRequestLogonEvent, createTokenFailureEvent} from "../../../events/SecurityEvents";
+import {
+  createRequestLogonEvent,
+  createTokenFailureEvent,
+  FAILED_TO_RECEIVE_TOKEN,
+  RECEIVED_TOKENS
+} from "../../../events/SecurityEvents";
 import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
 
 describe('Refresh TokenSagas', () => {
@@ -22,6 +27,15 @@ describe('Refresh TokenSagas', () => {
       });
       it('should attempt to fetch token', sagaEffect => {
         expect(sagaEffect instanceof fetchTokenSaga)
+      });
+      it('should listen for a response', sagaEffect => {
+        expect(sagaEffect).toEqual(race({
+          successResponse: take(RECEIVED_TOKENS),
+          failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
+        }));
+        return {
+          successResponse: 'It worked, yo',
+        }
       });
       it('should then complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
@@ -39,17 +53,20 @@ describe('Refresh TokenSagas', () => {
       });
       it('should attempt to fetch token', sagaEffect => {
         expect(sagaEffect instanceof fetchTokenSaga);
-        return new Error(`SHIT'S BROKE, YO`);
+      });
+      it('should listen for a response', sagaEffect => {
+        expect(sagaEffect).toEqual(race({
+          successResponse: take(RECEIVED_TOKENS),
+          failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
+        }));
+        return {
+          failureResponse: `SHIT'S BROKE YO`,
+        }
       });
       it('should handle error and request logoff', sagaEffect => {
         expect(sagaEffect).toEqual(put(createRequestLogonEvent({
           revocationEndpoint: 'http://logthefuckout.com'
         })))
-      });
-      it('should then let you know that it failed to get a token', sagaEffect => {
-          expect(sagaEffect).toEqual(put(createTokenFailureEvent(new TokenRequest({
-            client_id: 'COOL CLIENT'
-          }))));
       });
       it('should then complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();

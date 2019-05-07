@@ -12,6 +12,7 @@ export const CHECKED_AUTH: 'CHECKED_AUTH' = 'CHECKED_AUTH';
 export const REQUESTED_ACCESS_TOKEN: 'REQUESTED_ACCESS_TOKEN' = 'REQUESTED_ACCESS_TOKEN';
 export const FOUND_ACCESS_TOKEN: 'FOUND_ACCESS_TOKEN' = 'FOUND_ACCESS_TOKEN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
+export const FAILED_TO_RECEIVE_TOKEN: 'FAILED_TO_RECEIVE_TOKEN' = 'FAILED_TO_RECEIVE_TOKEN';
 export const INITIALIZED_SECURITY: 'INITIALIZED_SECURITY' = 'INITIALIZED_SECURITY';
 
 export const requestLogoff = () => ({
@@ -47,9 +48,14 @@ export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
   payload: tokenResponse
 });
 
-export const createTokenFailureEvent = (tokenRequest: TokenRequest) => ({
-  type: RECEIVED_TOKENS,
-  payload: tokenRequest,
+export type TokenFailurePayload = {
+  tokenRequest: TokenRequest,
+  error: any,
+}
+
+export const createTokenFailureEvent = (tokenFailurePayload: TokenFailurePayload) => ({
+  type: FAILED_TO_RECEIVE_TOKEN,
+  payload: tokenFailurePayload,
 });
 
 export const createSecurityInitializedEvent = () => ({
