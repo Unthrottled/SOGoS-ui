@@ -8,7 +8,7 @@ export function* securityRequestSaga() {
   yield put(receivedOAuthConfigurations(oauthConfig))
 }
 
-function* fetchOAuthConfiguration(): OauthConfig {
+export function* fetchOAuthConfiguration(): OauthConfig {
   const {oauth} = yield select(state => state.configuration);
   if (!oauth.authorizationEndpoint) {
     const {payload} = yield take(RECEIVED_REMOTE_OAUTH_CONFIGURATION);
