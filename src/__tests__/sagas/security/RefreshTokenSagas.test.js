@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {put, take, race} from 'redux-saga/effects';
+import {put, race, take} from 'redux-saga/effects';
 import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,
@@ -7,12 +7,7 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {
-  createRequestLogonEvent,
-  createTokenFailureEvent,
-  FAILED_TO_RECEIVE_TOKEN,
-  RECEIVED_TOKENS
-} from "../../../events/SecurityEvents";
+import {createRequestLogonEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
 import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
 
 describe('Refresh TokenSagas', () => {

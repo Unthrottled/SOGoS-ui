@@ -1,4 +1,4 @@
-import {LOGGED_ON, LOGGED_OFF, RECEIVED_TOKENS} from "../events/SecurityEvents";
+import {LOGGED_OFF, LOGGED_ON, RECEIVED_TOKENS} from "../events/SecurityEvents";
 import {tokenReceptionReducer} from "./security/TokenReducers";
 
 export type TokenInformation = {

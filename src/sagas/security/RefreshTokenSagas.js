@@ -1,12 +1,7 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {
-  createRequestLogonEvent,
-  createTokenFailureEvent,
-  FAILED_TO_RECEIVE_TOKEN,
-  RECEIVED_TOKENS
-} from "../../events/SecurityEvents";
-import {put, take, race} from 'redux-saga/effects'
+import {createRequestLogonEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {put, race, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OauthConfig} from "../../reducers/ConfigurationReducer";
 import {fetchTokenSaga} from "./TokenSagas";

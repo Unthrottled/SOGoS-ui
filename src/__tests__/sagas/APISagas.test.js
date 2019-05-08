@@ -5,7 +5,7 @@ import {
   createRequestAccessTokenEvent,
   FOUND_ACCESS_TOKEN
 } from "../../events/SecurityEvents";
-import {put, take, call} from 'redux-saga/effects';
+import {call, put, take} from 'redux-saga/effects';
 import axios from 'axios/index';
 
 describe('API Sagas', () => {
