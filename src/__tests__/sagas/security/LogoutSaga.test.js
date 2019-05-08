@@ -1,5 +1,14 @@
 describe('Logout Saga', () => {
-  it('should Logout, duh', () => {
-    expect(true).toBeTruthy();
+  describe('logoutSaga', () => {
+    describe('when authenticated to Keycloak', () => {
+      it('should ', () => {
+        
+      });
+    });
+    describe('when authenticated to Google', () => {
+      it('should ', () => {
+        
+      });
+    });
   });
 });
