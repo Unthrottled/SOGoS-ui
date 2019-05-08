@@ -1,7 +1,7 @@
 import {createLoggedOffEvent} from "../../events/SecurityEvents";
 import {put, select} from 'redux-saga/effects';
-import {oAuthConfigurationSaga} from "../ConfigurationSagas";
 import type {InitialConfig} from "../../reducers/ConfigurationReducer";
+import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
 function* constructRedirectURI(endSessionEndpoint): string {
   const { initial } = yield select(state => state.configuration);

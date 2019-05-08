@@ -9,8 +9,8 @@ import {
 } from "../events/SecurityEvents";
 import {authorizationGrantSaga, loginSaga} from "./security/AuthorizationFlowSagas";
 import {accessTokenSagas} from "./security/AccessTokenSagas";
-import {oAuthConfigurationSaga} from "./ConfigurationSagas";
 import logoutSaga from "./security/LogoutSaga";
+import {oAuthConfigurationSaga} from "./configuration/ConfigurationConvienenceSagas";
 
 function* securityRequestSaga() {
   const oauthConfig = yield oAuthConfigurationSaga();

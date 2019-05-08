@@ -1,3 +1,6 @@
+- Token request failure
+    - Fetch again
+
 - Redux Persist
     - Make sure that tokens are secure
 

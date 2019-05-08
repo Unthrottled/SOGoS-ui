@@ -15,7 +15,7 @@ export function* performGet<T>(url: String, options = {headers: {}}):T {
 }
 
 export function* performOpenGet<T>(url: String, options): T {
-  return yield call(() => axios.get(url, options));
+  return yield call(axios.get, url, options);
 }
 
 export function* performPost<T>(url: String, data, options = {headers: {}}):T {
