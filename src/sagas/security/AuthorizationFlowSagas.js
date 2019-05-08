@@ -32,7 +32,7 @@ function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
   const authorizationHandler = new RedirectRequestHandler();
   authorizationHandler.setAuthorizationNotifier(notifier);
   const authorizationResult: AuthorizationRequestResponse =
-    yield call(() => completeAuthorizationRequest(authorizationHandler));
+    yield call(completeAuthorizationRequest, authorizationHandler);
   if (authorizationResult) {
     const {request, response} = authorizationResult;
     yield exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig);

@@ -10,8 +10,8 @@ import {initialConfigurationFetchSaga} from "./InitialConfigurationSagas";
 export function* authorizationServiceConfigurationSaga() {
   const initialConfigurations = yield initialConfigurationFetchSaga();
   try {
-    const openIdEndpoints = yield call(() =>
-      AuthorizationServiceConfiguration.fetchFromIssuer(initialConfigurations.openIDConnectURI));
+    const openIdEndpoints = yield call(AuthorizationServiceConfiguration.fetchFromIssuer,
+      initialConfigurations.openIDConnectURI);
     yield put(createReceivedRemoteOAuthConfigurations(openIdEndpoints));
   } catch (error) {
     yield put(failedToGetRemoteOAuthConfigurations(error));
