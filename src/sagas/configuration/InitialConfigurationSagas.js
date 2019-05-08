@@ -4,6 +4,7 @@ import {
   createReceivedInitialConfigurationsEvent, RECEIVED_INITIAL_CONFIGURATION
 } from "../../events/ConfigurationEvents";
 import {put, select, take} from 'redux-saga/effects'
+import {selectConfigurationState} from "../../reducers";
 
 /**
  * Gets the configurations from the backend to know what authorization server to talk to.
@@ -18,7 +19,7 @@ export function* initialConfigurationSaga() {
 }
 
 export function* initialConfigurationFetchSaga() {
-  const {initial} = yield select(state => state.configuration);
+  const {initial} = yield select(selectConfigurationState);
   if (!initial.callbackURI) {
     const {payload: backendConfigurations} = yield take(RECEIVED_INITIAL_CONFIGURATION);
     return backendConfigurations;

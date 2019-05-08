@@ -1,15 +1,12 @@
 import sagaHelper from 'redux-saga-testing';
-import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
-import {fetchOAuthConfiguration, securityRequestSaga} from "../../../sagas/configuration/OAuthConfigurationSagas";
+import {put, select, take} from 'redux-saga/effects'
 import {
   createFoundInitialConfigurationsEvent,
-  createReceivedRemoteOAuthConfigurations,
-  RECEIVED_REMOTE_OAUTH_CONFIGURATION,
-  receivedOAuthConfigurations
+  createReceivedInitialConfigurationsEvent,
+  RECEIVED_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {selectConfigurationState} from "../../../reducers";
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
-import {createOauthConfigurationObject} from "../../../security/StupidShit";
 import {
   initialConfigurationFetchSaga,
   initialConfigurationResponseSaga
@@ -29,6 +26,48 @@ describe('Initial Configuration Sagas', () => {
         expect(sagaEffect).toEqual(put(createFoundInitialConfigurationsEvent({
           'I AM': 'BECOME DEATH',
         })))
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+  });
+  describe('initialConfigurationFetchSaga', () => {
+    describe('when it is the first time getting configurations', () => {
+      const it = sagaHelper(initialConfigurationFetchSaga());
+      it('should fetch configuration state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectConfigurationState));
+        return INITIAL_CONFIGURATION_STATE;
+      });
+      it('should wait patiently for remote configurations', sagaEffect => {
+        expect(sagaEffect).toEqual(take(RECEIVED_INITIAL_CONFIGURATION));
+        return createReceivedInitialConfigurationsEvent({
+          'HEY': 'MONIKA'
+        });
+      });
+      it('should return configuration', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          'HEY': 'MONIKA',
+        });
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+    describe('when it is not the first time getting configurations', () => {
+      const it = sagaHelper(initialConfigurationFetchSaga());
+      it('should fetch configuration state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectConfigurationState));
+        return {
+          initial: {
+            callbackURI: 'http://holla@yaboi.io'
+          }
+        };
+      });
+      it('should use what was stored in state', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          callbackURI: 'http://holla@yaboi.io'
+        });
       });
       it('should complete', (result) => {
         expect(result).toBeUndefined();
