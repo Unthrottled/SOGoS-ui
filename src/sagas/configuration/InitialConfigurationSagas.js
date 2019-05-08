@@ -26,7 +26,6 @@ export function* initialConfigurationFetchSaga() {
   return initial
 }
 
-
 export function* initialConfigurationResponseSaga(){
   const initialConfigurations = yield initialConfigurationFetchSaga();
   yield put(createFoundInitialConfigurationsEvent(initialConfigurations));
