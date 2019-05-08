@@ -19,7 +19,7 @@ export type ConfigurationState = {
   initial: InitialConfig,
 }
 
-const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
+export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
   oauth: {
     authorizationEndpoint: '',
     endSessionEndpoint: '',
