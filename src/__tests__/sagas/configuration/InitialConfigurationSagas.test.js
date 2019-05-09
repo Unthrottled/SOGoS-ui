@@ -1,5 +1,5 @@
 import sagaHelper from 'redux-saga-testing';
-import {put, select, take, call} from 'redux-saga/effects'
+import {call, put, select, take} from 'redux-saga/effects'
 import {
   createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent,

@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {put, race, take, call} from 'redux-saga/effects';
+import {call, put, race, take} from 'redux-saga/effects';
 import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,

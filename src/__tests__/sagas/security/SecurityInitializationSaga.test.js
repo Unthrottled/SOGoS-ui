@@ -1,6 +1,6 @@
 import oauthInitializationSaga from "../../../sagas/security/SecurityInitializationSaga";
 import sagaHelper from "redux-saga-testing";
-import {put, call, select, take} from 'redux-saga/effects';
+import {call, put, select, take} from 'redux-saga/effects';
 import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../../security/OAuth";
 import {
   CHECKED_AUTH,

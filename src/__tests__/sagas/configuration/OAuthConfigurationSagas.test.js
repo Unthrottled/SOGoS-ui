@@ -1,10 +1,10 @@
 import sagaHelper from 'redux-saga-testing';
-import {put, select, take, call} from 'redux-saga/effects'
+import {call, put, select, take} from 'redux-saga/effects'
 import {fetchOAuthConfiguration, securityRequestSaga} from "../../../sagas/configuration/OAuthConfigurationSagas";
 import {
+  createReceivedOAuthConfigurations,
   createReceivedRemoteOAuthConfigurations,
-  RECEIVED_REMOTE_OAUTH_CONFIGURATION,
-  createReceivedOAuthConfigurations
+  RECEIVED_REMOTE_OAUTH_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {selectConfigurationState} from "../../../reducers";
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
