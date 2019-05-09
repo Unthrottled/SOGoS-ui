@@ -1,9 +1,10 @@
 import {performOpenGet} from "../APISagas";
 import {
+  createFailedToGetInitialConfigurationsEvent,
   createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent, RECEIVED_INITIAL_CONFIGURATION
 } from "../../events/ConfigurationEvents";
-import {put, select, take} from 'redux-saga/effects'
+import {put, select, take, call} from 'redux-saga/effects'
 import {selectConfigurationState} from "../../reducers";
 
 /**
@@ -11,10 +12,10 @@ import {selectConfigurationState} from "../../reducers";
  */
 export function* initialConfigurationSaga() {
   try {
-    const {data} = yield performOpenGet('./configurations');
-    yield put(createReceivedInitialConfigurationsEvent(data));// save in state from now on.
+    const {data} = yield call(performOpenGet, './configurations');
+    yield put(createReceivedInitialConfigurationsEvent(data));
   } catch (e) {
-
+    yield put(createFailedToGetInitialConfigurationsEvent(e));
   }
 }
 

@@ -1,19 +1,63 @@
 import sagaHelper from "redux-saga-testing";
-import {select, call, put, take} from 'redux-saga/effects';
-import axios from 'axios/index';
+import {call, put, select, take} from 'redux-saga/effects';
 import {
   initialConfigurationFetchSaga,
-  initialConfigurationResponseSaga
+  initialConfigurationResponseSaga,
+  initialConfigurationSaga
 } from "../../../sagas/configuration/InitialConfigurationSagas";
 import {
-  createFoundInitialConfigurationsEvent, createReceivedInitialConfigurationsEvent,
+  createFailedToGetInitialConfigurationsEvent,
+  createFoundInitialConfigurationsEvent,
+  createReceivedInitialConfigurationsEvent,
   RECEIVED_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {selectConfigurationState} from "../../../reducers";
+import type {ConfigurationState, InitialConfig} from "../../../reducers/ConfigurationReducer";
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
-import type {ConfigurationState} from "../../../reducers/ConfigurationReducer";
+import {performOpenGet} from "../../../sagas/APISagas";
 
 describe('Initial Configuration Sagas', () => {
+  describe('initialConfigurationSaga', () => {
+    describe('when able to successfully make a request', () => {
+      const it = sagaHelper(initialConfigurationSaga());
+      it('should perform the correct request', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performOpenGet, './configurations'));
+        const initialConfig: InitialConfig = {
+          callbackURI: 'http://hollaatyaboi.io',
+        };
+        return {
+          data: {
+            ...initialConfig,
+          },
+        };
+      });
+      it('should dispatch the correct event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createReceivedInitialConfigurationsEvent({
+          callbackURI: 'http://hollaatyaboi.io'
+        })));
+        return createReceivedInitialConfigurationsEvent({
+          'I HAVE NO IDEA': 'WHAT I AM DOING'
+        })
+      });
+      it('should then be complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when not able to successfully make a request', () => {
+      const it = sagaHelper(initialConfigurationSaga());
+      it('should perform the correct request', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performOpenGet, './configurations'));
+        return new Error(`SHIT'S BROKE, YO.`);
+      });
+      it('should dispatch the correct event', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          put(createFailedToGetInitialConfigurationsEvent(new Error(`SHIT'S BROKE, YO.`))));
+      });
+      it('should then be complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
   describe('initialConfigurationFetchSaga', () => {
     describe('when it is the first time asking for configurations', () => {
       const it = sagaHelper(initialConfigurationFetchSaga());
