@@ -108,7 +108,7 @@ describe('Initial Configuration Sagas', () => {
     describe('when initial configuration is requested', () => {
       const it = sagaHelper(initialConfigurationResponseSaga());
       it('should fetch initial configuration', (result) => {
-        expect(result instanceof initialConfigurationFetchSaga).toBeTruthy();
+        expect(result).toEqual(call(initialConfigurationFetchSaga));
         return {
           'IMMA': 'BEE'
         }
