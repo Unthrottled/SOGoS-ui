@@ -1,13 +1,65 @@
 import sagaHelper from "redux-saga-testing";
-import {call, put, take} from 'redux-saga/effects';
+import {select, call, put, take} from 'redux-saga/effects';
 import axios from 'axios/index';
 import {
   initialConfigurationFetchSaga,
   initialConfigurationResponseSaga
 } from "../../../sagas/configuration/InitialConfigurationSagas";
-import {createFoundInitialConfigurationsEvent} from "../../../events/ConfigurationEvents";
+import {
+  createFoundInitialConfigurationsEvent, createReceivedInitialConfigurationsEvent,
+  RECEIVED_INITIAL_CONFIGURATION
+} from "../../../events/ConfigurationEvents";
+import {selectConfigurationState} from "../../../reducers";
+import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
+import type {ConfigurationState} from "../../../reducers/ConfigurationReducer";
 
 describe('Initial Configuration Sagas', () => {
+  describe('initialConfigurationFetchSaga', () => {
+    describe('when it is the first time asking for configurations', () => {
+      const it = sagaHelper(initialConfigurationFetchSaga());
+      it('should select configuration from state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectConfigurationState));
+        return INITIAL_CONFIGURATION_STATE;
+      });
+      it('should wait patiently for the initial configuration to be fetched', sagaEffect => {
+        expect(sagaEffect).toEqual(take(RECEIVED_INITIAL_CONFIGURATION));
+        return createReceivedInitialConfigurationsEvent({
+          'I HAVE NO IDEA': 'WHAT I AM DOING'
+        })
+      });
+      it('should return the initial configuration', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          'I HAVE NO IDEA': 'WHAT I AM DOING'
+        });
+      });
+      it('should then be complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when it is not the first time asking for configurations', () => {
+      const it = sagaHelper(initialConfigurationFetchSaga());
+      it('should select configuration from state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectConfigurationState));
+        const configurationState: ConfigurationState = {
+          initial: {
+            openIDConnectURI: 'http://getthatsecurity.yo',
+            callbackURI: 'http://getyousum.io',
+          }
+        };
+        return configurationState;
+      });
+      it('should return the initial configuration from state when callback URI is present', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          openIDConnectURI: 'http://getthatsecurity.yo',
+          callbackURI: 'http://getyousum.io',
+        });
+      });
+      it('should then be complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+
   describe('initialConfigurationResponseSaga', () => {
     describe('when initial configuration is requested', () => {
       const it = sagaHelper(initialConfigurationResponseSaga());
