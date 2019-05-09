@@ -1,4 +1,4 @@
-import {put, select, take} from 'redux-saga/effects'
+import {put, select, take, call} from 'redux-saga/effects'
 import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../security/OAuth";
 import {
   CHECKED_AUTH,
@@ -11,7 +11,7 @@ import type {OauthConfig} from "../../reducers/ConfigurationReducer";
 function* oauthInitializationSaga(oauthConfig: OauthConfig) {
   const {security} = yield select();
   if (canRefreshToken(security)) {
-    yield refreshTokenSaga(oauthConfig, security);
+    yield call(refreshTokenSaga,oauthConfig, security);
   } else if (shouldCheckForAuthorizationGrant(security)) {
     yield put(requestAuthorizationGrantCheck(oauthConfig)); // ask to check if there is an authorization grant.
     yield take(CHECKED_AUTH); // wait until checked

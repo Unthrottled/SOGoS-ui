@@ -1,6 +1,6 @@
 import oauthInitializationSaga from "../../../sagas/security/SecurityInitializationSaga";
 import sagaHelper from "redux-saga-testing";
-import {put, select, take} from 'redux-saga/effects';
+import {put, call, select, take} from 'redux-saga/effects';
 import {canRefreshToken, shouldCheckForAuthorizationGrant} from "../../../security/OAuth";
 import {
   CHECKED_AUTH,
@@ -52,11 +52,17 @@ describe('Security Initialization Sagas', () => {
       it('should select global state', sagaEffect => {
         expect(sagaEffect).toEqual(select());
         return {
-          security: {}
+          security: {
+            accessToken: 'gib the resources b0ss',
+          }
         }
       });
       it('should then realize that the token can be refreshed', sagaEffect => {
-        expect(sagaEffect instanceof refreshTokenSaga).toBeTruthy();
+        expect(sagaEffect).toEqual(call(refreshTokenSaga, {
+          revocationEndpoint: 'http://logthefuckout.com'
+        }, {
+          accessToken: 'gib the resources b0ss',
+        }));
       });
       it('should then broadcast that it completed initialization', sagaEffect => {
         expect(sagaEffect).toEqual(put(createSecurityInitializedEvent()));
@@ -74,11 +80,17 @@ describe('Security Initialization Sagas', () => {
       it('should select global state', sagaEffect => {
         expect(sagaEffect).toEqual(select());
         return {
-          security: {}
+          security: {
+            accessToken: 'gib the resources b0ss',
+          }
         }
       });
       it('should then realize that the token can be refreshed', sagaEffect => {
-        expect(sagaEffect instanceof refreshTokenSaga).toBeTruthy();
+        expect(sagaEffect).toEqual(call(refreshTokenSaga, {
+          revocationEndpoint: 'http://logthefuckout.com',
+        }, {
+          accessToken: 'gib the resources b0ss',
+        }));
       });
       it('should then broadcast that it completed initialization', sagaEffect => {
         expect(sagaEffect).toEqual(put(createSecurityInitializedEvent()));
