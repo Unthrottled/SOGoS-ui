@@ -22,10 +22,16 @@ describe('Refresh TokenSagas', () => {
         expect(sagaEffect).toEqual(call(refreshTokenRequestSaga, {
           accessToken: 'GIB ME THE RESOURCES',
         }));
-        return new TokenRequest({});
+        return new TokenRequest({
+          grant_type: 'yo butt'
+        });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect instanceof fetchTokenSaga)
+        expect(sagaEffect).toEqual(call(fetchTokenSaga, {
+          revocationEndpoint: 'http://logthefuckout.com'
+        },new TokenRequest({
+          grant_type: 'yo butt'
+        })));
       });
       it('should listen for a response', sagaEffect => {
         expect(sagaEffect).toEqual(race({
@@ -55,7 +61,11 @@ describe('Refresh TokenSagas', () => {
         });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect instanceof fetchTokenSaga);
+        expect(sagaEffect).toEqual(call(fetchTokenSaga,{
+          revocationEndpoint: 'http://logthefuckout.com'
+        },new TokenRequest({
+          client_id: 'COOL CLIENT'
+        })));
       });
       it('should listen for a response', sagaEffect => {
         expect(sagaEffect).toEqual(race({
