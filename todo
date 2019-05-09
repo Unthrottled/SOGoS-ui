@@ -3,6 +3,8 @@
 
 - Configuration request failure
 
+- Authorization Configuration request failure
+
 - Redux Persist
     - Make sure that tokens are secure
 

@@ -9,7 +9,7 @@ export const RECEIVED_REMOTE_OAUTH_CONFIGURATION: 'RECEIVED_REMOTE_OAUTH_CONFIGU
 export const FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION: 'FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION' = 'FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION';
 export const RECEIVED_INITIAL_CONFIGURATION: 'RECEIVED_INITIAL_CONFIGURATION' = 'RECEIVED_INITIAL_CONFIGURATION';
 
-export const failedToGetRemoteOAuthConfigurations = () => ({
+export const createFailedToGetRemoteOAuthConfigurationsEvent = () => ({
   type: FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION,
 });
 
@@ -18,7 +18,7 @@ export const createReceivedOAuthConfigurations = (oauthConfig: OAuthConfig) => (
   payload: oauthConfig
 });
 
-export const createReceivedRemoteOAuthConfigurations = (oauthConfig) => ({
+export const createReceivedRemoteOAuthConfigurations = (oauthConfig: OAuthConfig) => ({
   type: RECEIVED_REMOTE_OAUTH_CONFIGURATION,
   payload: oauthConfig
 });
