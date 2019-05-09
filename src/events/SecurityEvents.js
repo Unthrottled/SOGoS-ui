@@ -1,5 +1,5 @@
 import {TokenRequest, TokenResponse} from "@openid/appauth";
-import type {OauthConfig} from "../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../reducers/ConfigurationReducer";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
@@ -33,7 +33,7 @@ export const createRequestLogonEvent = (oauthConfig) => ({
   payload: oauthConfig
 });
 
-export const requestAuthorizationGrantCheck = (oauthConfig: OauthConfig) => ({
+export const requestAuthorizationGrantCheck = (oauthConfig: OAuthConfig) => ({
   type: REQUESTED_AUTH_CHECK,
   payload: oauthConfig
 });

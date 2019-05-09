@@ -1,6 +1,6 @@
 import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
 
-export type OauthConfig = {
+export type OAuthConfig = {
   authorizationEndpoint: string,
   endSessionEndpoint: string,
   revocationEndpoint: string,
@@ -15,7 +15,7 @@ export type InitialConfig = {
 }
 
 export type ConfigurationState = {
-  oauth: OauthConfig,
+  oauth: OAuthConfig,
   initial: InitialConfig,
 }
 

@@ -1,4 +1,4 @@
-import type {InitialConfig} from "../reducers/ConfigurationReducer";
+import type {InitialConfig, OAuthConfig} from "../reducers/ConfigurationReducer";
 
 export const REQUESTED_OAUTH_CONFIGURATION: 'REQUESTED_OAUTH_CONFIGURATION' = 'REQUESTED_OAUTH_CONFIGURATION';
 export const REQUESTED_INITIAL_CONFIGURATION: 'REQUESTED_INITIAL_CONFIGURATION' = 'REQUESTED_INITIAL_CONFIGURATION';
@@ -13,7 +13,7 @@ export const failedToGetRemoteOAuthConfigurations = () => ({
   type: FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION,
 });
 
-export const receivedOAuthConfigurations = (oauthConfig) => ({
+export const createReceivedOAuthConfigurations = (oauthConfig: OAuthConfig) => ({
   type: RECEIVED_OAUTH_CONFIGURATION,
   payload: oauthConfig
 });

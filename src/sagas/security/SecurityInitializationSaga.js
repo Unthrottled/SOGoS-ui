@@ -6,9 +6,9 @@ import {
   requestAuthorizationGrantCheck
 } from "../../events/SecurityEvents";
 import {refreshTokenSaga} from "./RefreshTokenSagas";
-import type {OauthConfig} from "../../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 
-function* oauthInitializationSaga(oauthConfig: OauthConfig) {
+function* oauthInitializationSaga(oauthConfig: OAuthConfig) {
   const {security} = yield select();
   if (canRefreshToken(security)) {
     yield call(refreshTokenSaga,oauthConfig, security);

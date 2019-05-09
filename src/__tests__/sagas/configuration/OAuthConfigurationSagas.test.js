@@ -4,7 +4,7 @@ import {fetchOAuthConfiguration, securityRequestSaga} from "../../../sagas/confi
 import {
   createReceivedRemoteOAuthConfigurations,
   RECEIVED_REMOTE_OAUTH_CONFIGURATION,
-  receivedOAuthConfigurations
+  createReceivedOAuthConfigurations
 } from "../../../events/ConfigurationEvents";
 import {selectConfigurationState} from "../../../reducers";
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
@@ -21,7 +21,7 @@ describe('OAuth Configuration Sagas', () => {
         }
       });
       it('should create a completion event', sagaEffect => {
-        expect(sagaEffect).toEqual(put(receivedOAuthConfigurations({
+        expect(sagaEffect).toEqual(put(createReceivedOAuthConfigurations({
           'I AM': 'BECOME DEATH',
         })))
       });
