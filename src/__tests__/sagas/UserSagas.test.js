@@ -2,7 +2,7 @@ import {findUserSaga, requestUserSaga} from "../../sagas/UserSagas";
 import {createFailedToGetUserEvent, createReceivedUserEvent} from "../../events/UserEvents";
 import sagaHelper from 'redux-saga-testing'
 import {performGet} from "../../sagas/APISagas";
-import {put, select} from 'redux-saga/effects'
+import {call, put, select} from 'redux-saga/effects';
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {selectSecurityState} from "../../reducers";
 
@@ -33,7 +33,7 @@ describe('User Sagas', () => {
         return securityState;
       });
       it('should then request user', sagaEffect => {
-        expect(sagaEffect instanceof requestUserSaga).toBeTruthy();
+        expect(sagaEffect).toEqual(call(requestUserSaga));
       });
       it('should then complete', (result) => {
         expect(result).toBeUndefined();
@@ -44,7 +44,7 @@ describe('User Sagas', () => {
     describe('when an error occurs', () => {
       const it = sagaHelper(requestUserSaga());
       it('should perform a authenticated API response', (result) => {
-        expect(result instanceof performGet).toBeTruthy();
+        expect(result).toEqual(call(performGet, './api/user'));
         return new Error('YA DUN MESSED UP A-A-RON');
       });
       it('should generate a failed to fetch user event', (result) => {
@@ -58,7 +58,7 @@ describe('User Sagas', () => {
     describe('when all is just', () => {
       const it = sagaHelper(requestUserSaga());
       it('should perform a authenticated API response', (result) => {
-        expect(result instanceof performGet).toBeTruthy();
+        expect(result).toEqual(call(performGet, './api/user'));
         return {
           data: {
             'I AM': 'BECOME DEATH'

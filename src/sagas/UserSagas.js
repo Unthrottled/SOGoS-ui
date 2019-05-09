@@ -1,4 +1,4 @@
-import {all, put, select, takeEvery} from 'redux-saga/effects'
+import { call, all, put, select, takeEvery} from 'redux-saga/effects'
 import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
 import {createFailedToGetUserEvent, createReceivedUserEvent} from "../events/UserEvents";
@@ -7,12 +7,12 @@ import {selectSecurityState} from "../reducers";
 export function* findUserSaga() {
   const { isLoggedIn } = yield select(selectSecurityState);
   if(isLoggedIn){
-    yield requestUserSaga();
+    yield call(requestUserSaga);
   }
 }
 export function* requestUserSaga(){
   try {
-    const {data: user} = yield performGet('./api/user');
+    const {data: user} = yield call(performGet,'./api/user');
     yield put(createReceivedUserEvent(user)); // found waldo.
   } catch (e) {
     yield put(createFailedToGetUserEvent(e));
