@@ -6,6 +6,7 @@ import {
 } from "@openid/appauth";
 import {createTokenFailureEvent, createTokenReceptionEvent} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
+import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
 
@@ -18,8 +19,7 @@ export const requestToken = (oauthConfig: AuthorizationServiceConfiguration, tok
  * @param tokenRequest
  * @returns
  */
-export function* fetchTokenSaga(oauthConfig, tokenRequest) {
-
+export function* fetchTokenSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest) {
   try {
     const tokenResponse = yield call(requestToken, oauthConfig, tokenRequest);
     yield put(createTokenReceptionEvent(tokenResponse));

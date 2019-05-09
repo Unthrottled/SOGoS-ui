@@ -16,6 +16,7 @@ import type {ConfigurationState, InitialConfig} from "../../../reducers/Configur
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
 import {performOpenGet} from "../../../sagas/APISagas";
 
+// todo: I am confused
 describe('Initial Configuration Sagas', () => {
   describe('initialConfigurationSaga', () => {
     describe('when able to successfully make a request', () => {
