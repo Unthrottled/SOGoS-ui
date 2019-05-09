@@ -1,5 +1,5 @@
 import sagaHelper from 'redux-saga-testing';
-import {put, select, take} from 'redux-saga/effects'
+import {put, select, take, call} from 'redux-saga/effects'
 import {
   createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent,
@@ -17,7 +17,7 @@ describe('Initial Configuration Sagas', () => {
     describe('when a request for initial Configurations is made', () => {
       const it = sagaHelper(initialConfigurationResponseSaga());
       it('should fetch initial Configurations', sagaEffect => {
-        expect(sagaEffect instanceof initialConfigurationFetchSaga).toBeTruthy();
+        expect(sagaEffect).toEqual(call(initialConfigurationFetchSaga));
         return {
           'I AM': 'BECOME DEATH',
         }

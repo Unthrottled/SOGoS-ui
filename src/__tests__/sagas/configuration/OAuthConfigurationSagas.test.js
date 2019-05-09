@@ -1,5 +1,5 @@
 import sagaHelper from 'redux-saga-testing';
-import {put, select, take} from 'redux-saga/effects'
+import {put, select, take, call} from 'redux-saga/effects'
 import {fetchOAuthConfiguration, securityRequestSaga} from "../../../sagas/configuration/OAuthConfigurationSagas";
 import {
   createReceivedRemoteOAuthConfigurations,
@@ -15,7 +15,7 @@ describe('OAuth Configuration Sagas', () => {
     describe('when a request for OAuth Configurations is made', () => {
       const it = sagaHelper(securityRequestSaga());
       it('should fetch OAuth Configurations', sagaEffect => {
-        expect(sagaEffect instanceof fetchOAuthConfiguration).toBeTruthy();
+        expect(sagaEffect).toEqual(call(fetchOAuthConfiguration));
         return {
           'I AM': 'BECOME DEATH',
         }

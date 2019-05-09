@@ -1,11 +1,11 @@
-import {put, select, take} from 'redux-saga/effects'
+import {put, select, take, call} from 'redux-saga/effects'
 import {RECEIVED_REMOTE_OAUTH_CONFIGURATION, receivedOAuthConfigurations} from "../../events/ConfigurationEvents";
 import type {OauthConfig} from "../../reducers/ConfigurationReducer";
 import {createOauthConfigurationObject} from "../../security/StupidShit";
 import {selectConfigurationState} from "../../reducers";
 
 export function* securityRequestSaga() {
-  const oauthConfig = yield fetchOAuthConfiguration();
+  const oauthConfig = yield call(fetchOAuthConfiguration);
   yield put(receivedOAuthConfigurations(oauthConfig))
 }
 
