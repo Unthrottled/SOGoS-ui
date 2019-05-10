@@ -2,7 +2,7 @@ import {call, select} from 'redux-saga/effects';
 import type {InitialConfig} from "../../reducers/ConfigurationReducer";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
-function* constructRedirectURI(endSessionEndpoint): string {
+export function* constructRedirectURI(endSessionEndpoint): string {
   const {initial} = yield select(state => state.configuration);
   return `${endSessionEndpoint}?${getRedirectParameter(initial)}`;
 }
@@ -28,8 +28,14 @@ export function logoffPreFlightSaga() {
   // do stuff
 }
 
+export function pushRedirect(href: string) {
+  document.location.href = href;
+  return Promise.resolve();
+}
+
 export default function* logoutSaga() {
   yield call(logoffPreFlightSaga);
   const {endSessionEndpoint} = yield call(oAuthConfigurationSaga);
-  document.location.href = yield call(constructRedirectURI, endSessionEndpoint);
+  const href = yield call(constructRedirectURI, endSessionEndpoint);
+  yield call(pushRedirect, href);
 }
