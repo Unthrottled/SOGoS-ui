@@ -9,12 +9,18 @@ import {
   loginSaga,
   performAuthorizationGrantFlowSaga
 } from "../../../sagas/security/AuthorizationFlowSagas";
+import {createCheckedAuthorizationEvent} from "../../../events/SecurityEvents";
 
 describe('Authorization Flow Sagas', () => {
   describe('authorizationGrantSaga', () => {
     describe('when called', () => {
       const it = sagaHelper(authorizationGrantSaga());
-
+      it('should perform non-login authorization grant check', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performAuthorizationGrantFlowSaga, false));
+      });
+      it('should broadcast completeness', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createCheckedAuthorizationEvent()));
+      });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
       });
@@ -23,7 +29,9 @@ describe('Authorization Flow Sagas', () => {
   describe('loginSaga', () => {
     describe('when called', () => {
       const it = sagaHelper(loginSaga());
-
+      it('should perform non-login authorization grant check', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performAuthorizationGrantFlowSaga, true));
+      });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
       });
