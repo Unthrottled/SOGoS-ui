@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {performGet, performPost} from "../../sagas/APISagas";
+import {performGet, performOpenGet, performPost} from "../../sagas/APISagas";
 import {
   createFoundAccessTokenEvent,
   createRequestAccessTokenEvent,
@@ -9,6 +9,32 @@ import {call, put, take} from 'redux-saga/effects';
 import axios from 'axios/index';
 
 describe('API Sagas', () => {
+
+  describe('performOpenGet', () => {
+    describe('when called', () => {
+      const it = sagaHelper(performOpenGet('http://open/api', {
+        'I AM': 'BECOME DEATH',
+        headers: {
+          'Ayy': 'Lmao',
+          'Authorization': 'Basic Bitch',
+          'Just': 'Monika',
+        }
+      }));
+      it('should call the correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(axios.get, 'http://open/api', {
+          'I AM': 'BECOME DEATH',
+          headers: {
+            'Ayy': 'Lmao',
+            'Authorization': 'Basic Bitch',
+            'Just': 'Monika',
+          }
+        }))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
 
   describe('performGet', () => {
     describe('when not supplied options', () => {
