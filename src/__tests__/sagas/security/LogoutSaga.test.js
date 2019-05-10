@@ -33,6 +33,33 @@ describe('Logout Saga', () => {
         expect(sagaEffect).toBeUndefined();
       });
     });
+    describe('when authenticated to Google', () => {
+      const it = sagaHelper(constructRedirectURI());
+      it('should ask for OAuth Configurations', sagaEffect => {
+        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+        const oauthConfiguration: OAuthConfig = {
+          endSessionEndpoint: 'http://google.com/log/the/fuck/out',
+        };
+        return oauthConfiguration;
+      });
+      it('should ask for configuration state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectConfigurationState));
+        const configurationState: ConfigurationState = {
+          initial: {
+            provider: 'GOOGLE',
+            callbackURI: 'https://lemons.io',
+          }
+        };
+        return configurationState;
+      });
+      it('should return expected constructed uri', sagaEffect => {
+        expect(sagaEffect).toEqual('http://google.com/log/the/fuck/out?continue=https://appengine.google.com/_ah/logout?continue=https://lemons.io');
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+
   });
 
   describe('logoutSaga', () => {
