@@ -1,10 +1,9 @@
-import {createLoggedOffEvent} from "../../events/SecurityEvents";
-import {put, select} from 'redux-saga/effects';
+import {call, select} from 'redux-saga/effects';
 import type {InitialConfig} from "../../reducers/ConfigurationReducer";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
 function* constructRedirectURI(endSessionEndpoint): string {
-  const { initial } = yield select(state => state.configuration);
+  const {initial} = yield select(state => state.configuration);
   return `${endSessionEndpoint}?${getRedirectParameter(initial)}`;
 }
 
@@ -14,27 +13,23 @@ const getRedirectParameter = (initialConfig: InitialConfig): string => {
 };
 
 const getQueryParameter = (initialConfig: InitialConfig): string => {
-  if(isKeycloak(initialConfig)){
+  if (isKeycloak(initialConfig)) {
     return 'redirect_uri'
-  } else if(isGoogle(initialConfig)){
-    return 'continue=https://appengine.google.com/_ah/logout?continue'
   } else {
-    // todo: never return null.....
-    throw new TypeError('I have not figured out to handle this well....');
+    return 'continue=https://appengine.google.com/_ah/logout?continue'
   }
 };
 
 const isKeycloak = (initialConfiguration: InitialConfig): boolean => {
-  return true;
+  return initialConfiguration && initialConfiguration.provider === 'KEYCLOAK';
 };
 
-const isGoogle = (initialConfiguration: InitialConfig): boolean => {
-  return false;
-};
+export function logoffPreFlightSaga() {
+  // do stuff
+}
 
 export default function* logoutSaga() {
-  yield put(createLoggedOffEvent());
-  const { endSessionEndpoint }= yield oAuthConfigurationSaga();
-  const constructedRedirectURI = yield constructRedirectURI(endSessionEndpoint);
-  document.location.href = constructedRedirectURI;
+  yield call(logoffPreFlightSaga);
+  const {endSessionEndpoint} = yield call(oAuthConfigurationSaga);
+  document.location.href = yield call(constructRedirectURI, endSessionEndpoint);
 }

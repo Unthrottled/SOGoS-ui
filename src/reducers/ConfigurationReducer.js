@@ -12,6 +12,7 @@ export type InitialConfig = {
   callbackURI: string,
   clientID: string,
   openIDConnectURI: string,
+  provider: string,
 }
 
 export type ConfigurationState = {
@@ -31,6 +32,7 @@ export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
     callbackURI: '',
     clientID: '',
     openIDConnectURI: '',
+    provider: '',
   }
 
 };

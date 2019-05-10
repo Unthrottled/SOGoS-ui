@@ -38,11 +38,6 @@ export const requestAuthorizationGrantCheck = (oauthConfig: OAuthConfig) => ({
   payload: oauthConfig
 });
 
-export const createFailureToLogOffAction = (error) => ({
-  type: FAILED_LOGGING_OFF,
-  payload: error
-});
-
 export const createTokenReceptionEvent = (tokenResponse: TokenResponse) => ({
   type: RECEIVED_TOKENS,
   payload: tokenResponse
@@ -64,10 +59,6 @@ export const createSecurityInitializedEvent = () => ({
 
 export const createCheckedAuthorizationEvent = () => ({
   type: CHECKED_AUTH,
-});
-
-export const createLoggedOffEvent = () => ({
-  type: LOGGED_OFF,
 });
 
 export const createFailureToLogOnAction = (error) => ({
