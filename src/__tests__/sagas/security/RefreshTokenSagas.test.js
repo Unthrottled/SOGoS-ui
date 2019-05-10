@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {call, put, race, take} from 'redux-saga/effects';
+import {call, fork, put, race, take} from 'redux-saga/effects';
 import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,
@@ -15,7 +15,7 @@ describe('Refresh TokenSagas', () => {
     describe('when tokens can be fetched', () => {
       const it = sagaHelper(refreshTokenSaga({
         revocationEndpoint: 'http://logthefuckout.com'
-      },{
+      }, {
         accessToken: 'GIB ME THE RESOURCES'
       }));
       it('should ask for a constructed refresh token request', sagaEffect => {
@@ -27,9 +27,9 @@ describe('Refresh TokenSagas', () => {
         });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect).toEqual(call(fetchTokenSaga, {
+        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
           revocationEndpoint: 'http://logthefuckout.com'
-        },new TokenRequest({
+        }, new TokenRequest({
           grant_type: 'yo butt'
         })));
       });
@@ -49,7 +49,7 @@ describe('Refresh TokenSagas', () => {
     describe('when tokens cannot be fetched', () => {
       const it = sagaHelper(refreshTokenSaga({
         revocationEndpoint: 'http://logthefuckout.com'
-      },{
+      }, {
         accessToken: 'GIB THE RESOURCES b0SS'
       }));
       it('should ask for a constructed refresh token request', sagaEffect => {
@@ -61,9 +61,9 @@ describe('Refresh TokenSagas', () => {
         });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect).toEqual(call(fetchTokenSaga,{
+        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
           revocationEndpoint: 'http://logthefuckout.com'
-        },new TokenRequest({
+        }, new TokenRequest({
           client_id: 'COOL CLIENT'
         })));
       });

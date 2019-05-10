@@ -1,7 +1,8 @@
-import {call, select} from 'redux-saga/effects';
+import {call, put, select} from 'redux-saga/effects';
 import type {InitialConfig} from "../../reducers/ConfigurationReducer";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {selectConfigurationState} from "../../reducers";
+import {createLoggedOffEvent} from "../../events/SecurityEvents";
 
 export function* constructRedirectURI(): string {
   const {endSessionEndpoint} = yield call(oAuthConfigurationSaga);
@@ -26,8 +27,10 @@ const isKeycloak = (initialConfiguration: InitialConfig): boolean => {
   return initialConfiguration && initialConfiguration.provider === 'KEYCLOAK';
 };
 
-export function logoffPreFlightSaga() {
+export function* logoffPreFlightSaga() {
   // do stuff
+
+  yield put(createLoggedOffEvent());// wipe state
 }
 
 export function pushRedirect(href: string) {

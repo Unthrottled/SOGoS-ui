@@ -61,6 +61,10 @@ export const createCheckedAuthorizationEvent = () => ({
   type: CHECKED_AUTH,
 });
 
+export const createLoggedOffEvent = () => ({
+  type: LOGGED_OFF,
+});
+
 export const createFailureToLogOnAction = (error) => ({
   type: FAILED_LOGGING_ON,
   payload: error
