@@ -1,15 +1,18 @@
 import sagaHelper from 'redux-saga-testing';
-import {call, put, select} from 'redux-saga/effects';
-import logoutSaga, {constructRedirectURI, logoffPreFlightSaga, pushRedirect} from "../../../sagas/security/LogoutSaga";
-import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
-import type {ConfigurationState, OAuthConfig} from "../../../reducers/ConfigurationReducer";
-import {selectConfigurationState} from "../../../reducers";
+import {call, put, take} from 'redux-saga/effects';
 import {
-  authorizationGrantSaga, constructAuthorizationCodeGrantRequest, exchangeAuthorizationGrantForAccessToken,
+  authorizationGrantSaga,
+  constructAuthorizationCodeGrantRequest,
+  exchangeAuthorizationGrantForAccessToken,
   loginSaga,
   performAuthorizationGrantFlowSaga
 } from "../../../sagas/security/AuthorizationFlowSagas";
 import {createCheckedAuthorizationEvent} from "../../../events/SecurityEvents";
+import {
+  createReceivedInitialConfigurationsEvent,
+  createRequestForInitialConfigurations,
+  FOUND_INITIAL_CONFIGURATION
+} from "../../../events/ConfigurationEvents";
 
 describe('Authorization Flow Sagas', () => {
   describe('authorizationGrantSaga', () => {
@@ -54,7 +57,7 @@ describe('Authorization Flow Sagas', () => {
       });
     });
   });
-  describe('constructAuthorizationCodeGrantRequest', () => {
+  describe('exchangeAuthorizationGrantForAccessToken', () => {
     describe('when given stuff', () => {
       const it = sagaHelper(exchangeAuthorizationGrantForAccessToken({
         'stupid': 'shit'
@@ -77,13 +80,59 @@ describe('Authorization Flow Sagas', () => {
       }, {
         code: 'CATS',
       }));
-
+      it('should ask for initial configurations', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createRequestForInitialConfigurations()));
+      });
+      it('should wait patiently for the response', sagaEffect => {
+        expect(sagaEffect).toEqual(take(FOUND_INITIAL_CONFIGURATION));
+        return createReceivedInitialConfigurationsEvent({
+          callbackURI: 'https://potato.io',
+          clientID: 'cool-client',
+        })
+      });
+      it('should return the expected request', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          "clientId": "cool-client",
+          "code": "CATS",
+          "extras": {"code_verifier": "STUPID SHIT"},
+          "grantType": "authorization_code",
+          "redirectUri": "https://potato.io",
+          "refreshToken": undefined
+        })
+      });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
       });
     });
     describe('when given no code', () => {
-
+      const it = sagaHelper(constructAuthorizationCodeGrantRequest({
+        no: 'code'
+      }, {
+        code: 'CATS',
+      }));
+      it('should ask for initial configurations', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createRequestForInitialConfigurations()));
+      });
+      it('should wait patiently for the response', sagaEffect => {
+        expect(sagaEffect).toEqual(take(FOUND_INITIAL_CONFIGURATION));
+        return createReceivedInitialConfigurationsEvent({
+          callbackURI: 'https://potato.io',
+          clientID: 'cool-client',
+        })
+      });
+      it('should return the expected request', sagaEffect => {
+        expect(sagaEffect).toEqual({
+          "clientId": "cool-client",
+          "code": "CATS",
+          "extras": {"code_verifier": undefined},
+          "grantType": "authorization_code",
+          "redirectUri": "https://potato.io",
+          "refreshToken": undefined
+        })
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
     });
   });
 });

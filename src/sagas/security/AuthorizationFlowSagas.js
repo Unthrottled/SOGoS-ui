@@ -53,7 +53,6 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
 export function* constructAuthorizationCodeGrantRequest(request, response): TokenRequest {
   const code = response.code;
   const codeVerifier = request.internal && request.internal.code_verifier;
-
   yield put(createRequestForInitialConfigurations());
   const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
   return new TokenRequest({
