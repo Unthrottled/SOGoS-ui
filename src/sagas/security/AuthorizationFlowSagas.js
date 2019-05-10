@@ -8,25 +8,23 @@ import {
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {createCheckedAuthorizationEvent, createLoggedOnAction} from "../../events/SecurityEvents";
-import {call, put} from 'redux-saga/effects'
+import {take, call, put} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
-import {take} from "redux-saga-test-plan/matchers";
 import {fetchTokenSaga} from "./TokenSagas";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
-
-export function* authorizationGrantSaga(){
-  yield performAuthorizationGrantFlowSaga(false);
+export function* authorizationGrantSaga() {
+  yield call(performAuthorizationGrantFlowSaga, false);
   yield put(createCheckedAuthorizationEvent());
 }
 
 export function* loginSaga() {
-  yield performAuthorizationGrantFlowSaga(true);
+  yield call(performAuthorizationGrantFlowSaga, true);
 }
 
 // Thanks shitty library API design
-function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
+export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
   const oauthConfig = yield oAuthConfigurationSaga();
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
@@ -35,9 +33,10 @@ function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
     yield call(completeAuthorizationRequest, authorizationHandler);
   if (authorizationResult) {
     const {request, response} = authorizationResult;
-    yield exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig);
+    const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
+    yield exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig);
     yield put(createLoggedOnAction());
-  } else if(shouldRequestLogon) {
+  } else if (shouldRequestLogon) {
     const scope = 'openid profile email';
     yield put(createRequestForInitialConfigurations());
     const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
@@ -51,23 +50,25 @@ function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
   }
 }
 
-function* exchangeAuthorizationGrantForAccessToken(request, response, oauthConfig) {
+export function* constructAuthorizationCodeGrantRequest(request, response): TokenRequest {
+  const code = response.code;
+  const codeVerifier = request.internal && request.internal.code_verifier;
+
+  yield put(createRequestForInitialConfigurations());
+  const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
+  return new TokenRequest({
+    client_id: initialConfigurations.clientID,
+    redirect_uri: initialConfigurations.callbackURI,
+    grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
+    code,
+    extras: {
+      code_verifier: codeVerifier
+    }
+  });
+}
+
+export function* exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig) {
   try {
-    const code = response.code;
-    const codeVerifier = request.internal && request.internal.code_verifier;
-
-    yield put(createRequestForInitialConfigurations());
-    const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
-    const tokenRequest = new TokenRequest({
-      client_id: initialConfigurations.clientID,
-      redirect_uri: initialConfigurations.callbackURI,
-      grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
-      code,
-      extras: {
-        code_verifier: codeVerifier
-      }
-    });
-
     yield fetchTokenSaga(oauthConfig, tokenRequest);
   } catch (e) {
 
