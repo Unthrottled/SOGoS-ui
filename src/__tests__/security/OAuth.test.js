@@ -21,9 +21,7 @@ describe('OAuth', () => {
 
     it('should return true when access token information is not present', () => {
       const securityState: SecurityState = {
-        accessTokenInformation: {
-
-        }
+        accessTokenInformation: {}
       };
 
       const result = shouldCheckForAuthorizationGrant(securityState);
@@ -73,9 +71,7 @@ describe('OAuth', () => {
 
     it('should return false when access token information is not present', () => {
       const securityState: SecurityState = {
-        accessTokenInformation: {
-
-        }
+        accessTokenInformation: {}
       };
 
       const result = canRefreshToken(securityState);
@@ -108,9 +104,7 @@ describe('OAuth', () => {
     it('should return true when access token information is not present, and refresh token is present', () => {
       const securityState: SecurityState = {
         refreshToken: 'I AM REFRESH TOKEN',
-        accessTokenInformation: {
-
-        }
+        accessTokenInformation: {}
       };
 
       const result = canRefreshToken(securityState);

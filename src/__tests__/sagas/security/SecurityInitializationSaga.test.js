@@ -9,7 +9,7 @@ import {
 } from "../../../events/SecurityEvents";
 import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 
-jest.mock('../../../security/OAuth', ()=>({
+jest.mock('../../../security/OAuth', () => ({
   canRefreshToken: jest.fn(),
   shouldCheckForAuthorizationGrant: jest.fn(),
 }));

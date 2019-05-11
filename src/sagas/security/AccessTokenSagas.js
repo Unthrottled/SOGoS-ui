@@ -4,21 +4,20 @@ import {canRefreshToken} from "../../security/OAuth";
 import {refreshTokenSaga} from "./RefreshTokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
-// todo: do not respond with undefined token
 export function* accessTokenSagas() {
   const accessToken = yield call(getOrRefreshAccessToken);
   if (accessToken) {
     yield put(createFoundAccessTokenEvent(accessToken));
   } else {
-    // try again?
+    // todo: activate offline mode.
   }
 }
 
 export function* getOrRefreshAccessToken() {
   const {security} = yield select();
   if (canRefreshToken(security)) {
-    const oAuthConfiguration = yield call(oauthConfigurationSaga);
-    yield fork(refreshTokenSaga, oAuthConfiguration, security);
+    const oauthConfiguration = yield call(oauthConfigurationSaga);
+    yield fork(refreshTokenSaga, oauthConfiguration, security);
     return yield call(awaitToken);
   } else {
     return security.accessToken

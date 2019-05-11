@@ -7,13 +7,14 @@ import {
   RECEIVED_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {selectConfigurationState} from "../../../reducers";
+import type {ConfigurationState, InitialConfig} from "../../../reducers/ConfigurationReducer";
 import {INITIAL_CONFIGURATION_STATE} from "../../../reducers/ConfigurationReducer";
 import {
   initialConfigurationFetchSaga,
-  initialConfigurationResponseSaga, initialConfigurationSaga
+  initialConfigurationResponseSaga,
+  initialConfigurationSaga
 } from "../../../sagas/configuration/InitialConfigurationSagas";
 import {performOpenGet} from "../../../sagas/APISagas";
-import type {ConfigurationState, InitialConfig} from "../../../reducers/ConfigurationReducer";
 
 
 describe('Also Initial Configuration Sagas', () => {

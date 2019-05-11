@@ -1,15 +1,17 @@
 import sagaHelper from 'redux-saga-testing';
-import {call, race, fork, put, take} from 'redux-saga/effects';
+import {call, fork, put, race, take} from 'redux-saga/effects';
 import {
   authorizationGrantSaga,
   constructAuthorizationCodeGrantRequest,
   constructAuthorizationRequestHandler,
   exchangeAuthorizationGrantForAccessToken,
   loginSaga,
-  performAuthorizationGrantFlowSaga, performAuthorizationRequest
+  performAuthorizationGrantFlowSaga,
+  performAuthorizationRequest
 } from "../../../sagas/security/AuthorizationFlowSagas";
 import {
-  createCheckedAuthorizationEvent, createLoggedOnAction,
+  createCheckedAuthorizationEvent,
+  createLoggedOnAction,
   FAILED_TO_RECEIVE_TOKEN,
   RECEIVED_TOKENS
 } from "../../../events/SecurityEvents";

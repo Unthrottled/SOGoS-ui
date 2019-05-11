@@ -49,7 +49,7 @@ describe('API Sagas', () => {
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.get,
           'http://localhost/api/onions', {
-            headers:{
+            headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO'
             },
           }));
@@ -82,7 +82,7 @@ describe('API Sagas', () => {
         expect(result).toEqual(call(axios.get,
           'http://localhost/api/onions', {
             slip: 'knot',
-            headers:{
+            headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
               'X-QUICK-SCOPE': 'L337',
             },
@@ -118,7 +118,7 @@ describe('API Sagas', () => {
             'I AM': 'BECOME DEATH',
           },
           {
-            headers:{
+            headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
             },
           }));
@@ -158,7 +158,7 @@ describe('API Sagas', () => {
           },
           {
             standby: 'for titan fall',
-            headers:{
+            headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
               'X-QUICK-SCOPE': 'L337',
             },

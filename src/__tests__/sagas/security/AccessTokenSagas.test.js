@@ -1,5 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {select, call, race, put ,fork, take} from 'redux-saga/effects';
+import {call, fork, race, select, take} from 'redux-saga/effects';
 import {awaitToken, getOrRefreshAccessToken} from "../../../sagas/security/AccessTokenSagas";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
@@ -108,25 +108,25 @@ describe('Access Token Sagas', () => {
   });
   describe('getOrRefreshAccessToken', () => {
     describe('when token can be refreshed', () => {
-        const it = sagaHelper(getOrRefreshAccessToken());
-        it('should request security state', sagaEffect => {
-          expect(sagaEffect).toEqual(select());
-          return {
-            security: {
-              refreshToken: 'OH YEAH!',
-            }
+      const it = sagaHelper(getOrRefreshAccessToken());
+      it('should request security state', sagaEffect => {
+        expect(sagaEffect).toEqual(select());
+        return {
+          security: {
+            refreshToken: 'OH YEAH!',
           }
-        });
+        }
+      });
       it('should request OAuth configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oauthConfigurationSaga))
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
         return 'peaches';
       });
       it('should spawn a refresh token worker', sagaEffect => {
-          expect(sagaEffect).toEqual(fork(refreshTokenSaga, 'peaches', {
-              refreshToken: 'OH YEAH!',
-            }
-          ));
-        });
+        expect(sagaEffect).toEqual(fork(refreshTokenSaga, 'peaches', {
+            refreshToken: 'OH YEAH!',
+          }
+        ));
+      });
       it('should await token', sagaEffect => {
         expect(sagaEffect).toEqual(call(awaitToken));
         return 'i am token'
@@ -135,8 +135,8 @@ describe('Access Token Sagas', () => {
         expect(sagaEffect).toEqual('i am token');
       });
       it('should complete', sagaEffect => {
-          expect(sagaEffect).toBeUndefined();
-        });
+        expect(sagaEffect).toBeUndefined();
+      });
     });
     describe('when token cannot be refreshed', () => {
       describe('when token is in state', () => {

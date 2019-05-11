@@ -1,5 +1,5 @@
 import sagaHelper from 'redux-saga-testing';
-import {call, put, select} from 'redux-saga/effects';
+import {call, select} from 'redux-saga/effects';
 import logoutSaga, {constructRedirectURI, logoffPreFlightSaga, pushRedirect} from "../../../sagas/security/LogoutSaga";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import type {ConfigurationState, OAuthConfig} from "../../../reducers/ConfigurationReducer";
@@ -89,15 +89,13 @@ describe('Logout Saga', () => {
       const it = sagaHelper(constructRedirectURI());
       it('should ask for OAuth Configurations', sagaEffect => {
         expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
-        const oauthConfiguration: OAuthConfig = {
-        };
+        const oauthConfiguration: OAuthConfig = {};
         return oauthConfiguration;
       });
       it('should ask for configuration state', sagaEffect => {
         expect(sagaEffect).toEqual(select(selectConfigurationState));
         const configurationState: ConfigurationState = {
-          initial: {
-          }
+          initial: {}
         };
         return configurationState;
       });
