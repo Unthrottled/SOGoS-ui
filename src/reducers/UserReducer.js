@@ -1,5 +1,6 @@
 import {RECEIVED_USER, User} from "../events/UserEvents";
 import {LOGGED_OFF} from "../events/SecurityEvents";
+import {Action} from "redux";
 
 export type UserState = {
   information: User
@@ -15,7 +16,7 @@ const INITIAL_USER_STATE : UserState = {
 };
 
 
-const userReducer = (state = INITIAL_USER_STATE, action) => {
+const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
   switch (action.type) {
     case RECEIVED_USER :
       return {
