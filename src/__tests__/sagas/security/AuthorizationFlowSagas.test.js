@@ -138,17 +138,72 @@ describe('Authorization Flow Sagas', () => {
         });
       });
     });
-    describe('when told not to redirect', () => {
+    describe('when told to not redirect', () => {
       describe('and authorization code is present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
-
+        it('should attempt to complete authorization code flow', sagaEffect => {
+          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          const oauthConfig: OAuthConfig = {
+            revocationEndpoint: 'https://gtfo.io',
+          };
+          return oauthConfig;
+        });
+        it('should request an Authorization Request Handler', sagaEffect => {
+          expect(sagaEffect).toEqual(call(constructAuthorizationRequestHandler));
+          return 'steve';
+        });
+        it('should attempt to complete the authorization request', sagaEffect => {
+          expect(sagaEffect).toEqual(call(completeAuthorizationRequest, 'steve'));
+          const authorizationResult: AuthorizationRequestResponse = {
+            request: {
+              clientId: 'cool-client'
+            }, response: {
+              code: 'CATS',
+            }
+          };
+          return authorizationResult;
+        });
+        it('should then construct an authorization grant request', sagaEffect => {
+          expect(sagaEffect).toEqual(call(constructAuthorizationCodeGrantRequest, {
+            clientId: 'cool-client',
+          }, {
+            code: 'CATS'
+          }));
+          const tokenRequest: TokenRequest = {
+            clientId: 'cucumber',
+            redirectUri: 'https://help',
+          };
+          return tokenRequest;
+        });
+        it('should exchange grant for access token an the such', sagaEffect => {
+          expect(sagaEffect).toEqual(call(exchangeAuthorizationGrantForAccessToken, {
+            clientId: 'cucumber',
+            redirectUri: 'https://help',
+          }, {
+            revocationEndpoint: 'https://gtfo.io',
+          }))
+        });
         it('should complete', sagaEffect => {
           expect(sagaEffect).toBeUndefined();
         });
       });
       describe('and authorization code is not present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
-
+        it('should attempt to complete authorization code flow', sagaEffect => {
+          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          const oauthConfig: OAuthConfig = {
+            revocationEndpoint: 'https://gtfo.io',
+          };
+          return oauthConfig;
+        });
+        it('should request an Authorization Request Handler', sagaEffect => {
+          expect(sagaEffect).toEqual(call(constructAuthorizationRequestHandler));
+          return 'steve';
+        });
+        it('should attempt to complete the authorization request', sagaEffect => {
+          expect(sagaEffect).toEqual(call(completeAuthorizationRequest, 'steve'));
+          return undefined;//no authorization request
+        });
         it('should complete', sagaEffect => {
           expect(sagaEffect).toBeUndefined();
         });
