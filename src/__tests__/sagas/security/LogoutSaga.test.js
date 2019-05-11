@@ -1,7 +1,7 @@
 import sagaHelper from 'redux-saga-testing';
 import {call, put, select} from 'redux-saga/effects';
 import logoutSaga, {constructRedirectURI, logoffPreFlightSaga, pushRedirect} from "../../../sagas/security/LogoutSaga";
-import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import type {ConfigurationState, OAuthConfig} from "../../../reducers/ConfigurationReducer";
 import {selectConfigurationState} from "../../../reducers";
 
@@ -10,7 +10,7 @@ describe('Logout Saga', () => {
     describe('when authenticated to Keycloak', () => {
       const it = sagaHelper(constructRedirectURI());
       it('should ask for OAuth Configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
         const oauthConfiguration: OAuthConfig = {
           endSessionEndpoint: 'http://logthefuckout.com',
         };
@@ -36,7 +36,7 @@ describe('Logout Saga', () => {
     describe('when authenticated to Google', () => {
       const it = sagaHelper(constructRedirectURI());
       it('should ask for OAuth Configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
         const oauthConfiguration: OAuthConfig = {
           endSessionEndpoint: 'http://google.com/log/the/fuck/out',
         };
@@ -62,7 +62,7 @@ describe('Logout Saga', () => {
     describe('when authenticated to Potato', () => {
       const it = sagaHelper(constructRedirectURI());
       it('should ask for OAuth Configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
         const oauthConfiguration: OAuthConfig = {
           endSessionEndpoint: 'http://potato.io/log/the/fuck/out',
         };
@@ -88,7 +88,7 @@ describe('Logout Saga', () => {
     describe('when authenticated to Nothing', () => {
       const it = sagaHelper(constructRedirectURI());
       it('should ask for OAuth Configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
         const oauthConfiguration: OAuthConfig = {
         };
         return oauthConfiguration;

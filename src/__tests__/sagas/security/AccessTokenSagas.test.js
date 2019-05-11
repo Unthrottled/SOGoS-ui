@@ -1,7 +1,7 @@
 import sagaHelper from "redux-saga-testing";
 import {select, call, race, put ,fork, take} from 'redux-saga/effects';
 import {awaitToken, getOrRefreshAccessToken} from "../../../sagas/security/AccessTokenSagas";
-import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
 
@@ -118,7 +118,7 @@ describe('Access Token Sagas', () => {
           }
         });
       it('should request OAuth configurations', sagaEffect => {
-        expect(sagaEffect).toEqual(call(oAuthConfigurationSaga))
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga))
         return 'peaches';
       });
       it('should spawn a refresh token worker', sagaEffect => {

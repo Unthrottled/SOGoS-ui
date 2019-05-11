@@ -10,10 +10,10 @@ import {
 import {authorizationGrantSaga, loginSaga} from "./security/AuthorizationFlowSagas";
 import {accessTokenSagas} from "./security/AccessTokenSagas";
 import logoutSaga from "./security/LogoutSaga";
-import {oAuthConfigurationSaga} from "./configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "./configuration/ConfigurationConvienenceSagas";
 
 function* securityRequestSaga() {
-  const oauthConfig = yield oAuthConfigurationSaga();
+  const oauthConfig = yield oauthConfigurationSaga();
   yield oauthInitializationSaga(oauthConfig);// Log user in or refresh tokens
 }
 

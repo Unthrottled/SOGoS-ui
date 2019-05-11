@@ -1,11 +1,11 @@
 import {call, put, select} from 'redux-saga/effects';
 import type {InitialConfig} from "../../reducers/ConfigurationReducer";
-import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {selectConfigurationState} from "../../reducers";
 import {createLoggedOffEvent} from "../../events/SecurityEvents";
 
 export function* constructRedirectURI(): string {
-  const {endSessionEndpoint} = yield call(oAuthConfigurationSaga);
+  const {endSessionEndpoint} = yield call(oauthConfigurationSaga);
   const {initial} = yield select(selectConfigurationState);
   return `${endSessionEndpoint}?${getRedirectParameter(initial)}`;
 }

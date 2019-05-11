@@ -18,7 +18,7 @@ import {call, fork, put, race, take} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenSaga} from "./TokenSagas";
-import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 
 export function* authorizationGrantSaga() {
@@ -42,7 +42,7 @@ export function performAuthorizationRequest(authorizationHandler: AuthorizationR
 
 // Thanks shitty library API design
 export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
-  const oauthConfig = yield call(oAuthConfigurationSaga);
+  const oauthConfig = yield call(oauthConfigurationSaga);
   const authorizationHandler: AuthorizationRequestHandler =
     yield call(constructAuthorizationRequestHandler);
   const authorizationResult: AuthorizationRequestResponse =

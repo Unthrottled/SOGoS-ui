@@ -5,12 +5,12 @@ import {
   RECEIVED_OAUTH_CONFIGURATION,
   requestOAuthConfigurations
 } from "../../../events/ConfigurationEvents";
-import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 
 describe('Configuration Convenience Sagas', () => {
-  describe('oAuthConfigurationSaga', () => {
+  describe('oauthConfigurationSaga', () => {
     describe('when requesting configuration', () => {
-      const it = sagaHelper(oAuthConfigurationSaga());
+      const it = sagaHelper(oauthConfigurationSaga());
       it('should request OAuth configurations', sagaEffect => {
         expect(sagaEffect).toEqual(put(requestOAuthConfigurations()));
       });

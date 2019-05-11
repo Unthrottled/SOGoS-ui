@@ -21,7 +21,7 @@ import {
 } from "../../../events/ConfigurationEvents";
 import {completeAuthorizationRequest} from "../../../security/StupidShit";
 import {AuthorizationRequest, AuthorizationRequestResponse} from "@openid/appauth";
-import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
+import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../../reducers/ConfigurationReducer";
 import {NodeCrypto} from "@openid/appauth/built/node_support";
 import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
@@ -58,7 +58,7 @@ describe('Authorization Flow Sagas', () => {
       describe('and authorization code is present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(true));
         it('should attempt to complete authorization code flow', sagaEffect => {
-          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
           const oauthConfig: OAuthConfig = {
             revocationEndpoint: 'https://gtfo.io',
           };
@@ -106,7 +106,7 @@ describe('Authorization Flow Sagas', () => {
       describe('and authorization code is not present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(true));
         it('should attempt to complete authorization code flow', sagaEffect => {
-          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
           const oauthConfig: OAuthConfig = {
             revocationEndpoint: 'https://gtfo.io',
           };
@@ -147,7 +147,7 @@ describe('Authorization Flow Sagas', () => {
       describe('and authorization code is present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
         it('should attempt to complete authorization code flow', sagaEffect => {
-          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
           const oauthConfig: OAuthConfig = {
             revocationEndpoint: 'https://gtfo.io',
           };
@@ -195,7 +195,7 @@ describe('Authorization Flow Sagas', () => {
       describe('and authorization code is not present', () => {
         const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
         it('should attempt to complete authorization code flow', sagaEffect => {
-          expect(sagaEffect).toEqual(call(oAuthConfigurationSaga));
+          expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
           const oauthConfig: OAuthConfig = {
             revocationEndpoint: 'https://gtfo.io',
           };
