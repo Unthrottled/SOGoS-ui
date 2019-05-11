@@ -1,5 +1,6 @@
 import {LOGGED_OFF, LOGGED_ON, RECEIVED_TOKENS} from "../events/SecurityEvents";
 import {tokenReceptionReducer} from "./security/TokenReducers";
+import {Action} from "redux";
 
 export type TokenInformation = {
   expiresAt: number, //epoch second
@@ -19,7 +20,7 @@ const INITIAL_SECURITY_STATE: SecurityState = {
   isLoggedIn: false,
 };
 
-const securityReducer = (state = INITIAL_SECURITY_STATE, action) => {
+const securityReducer = (state = INITIAL_SECURITY_STATE, action: Action) => {
   switch (action.type) {
     case LOGGED_ON :
       return {
