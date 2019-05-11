@@ -1,6 +1,7 @@
 import {
   AuthorizationNotifier,
   AuthorizationRequest,
+  AuthorizationRequestHandler,
   AuthorizationRequestResponse,
   GRANT_TYPE_AUTHORIZATION_CODE,
   RedirectRequestHandler,
@@ -18,6 +19,7 @@ import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenSaga} from "./TokenSagas";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
+import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);
@@ -28,14 +30,24 @@ export function* loginSaga() {
   yield call(performAuthorizationGrantFlowSaga, true);
 }
 
-// Thanks shitty library API design
-export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
-  const oauthConfig = yield oAuthConfigurationSaga();
+export function constructAuthorizationRequestHandler(): Promise<AuthorizationRequestHandler> {
   const notifier = new AuthorizationNotifier();
   const authorizationHandler = new RedirectRequestHandler();
-  authorizationHandler.setAuthorizationNotifier(notifier);
+  return Promise.resolve(authorizationHandler.setAuthorizationNotifier(notifier));
+}
+
+export function performAuthorizationRequest(authorizationHandler: AuthorizationRequestHandler, oauthConfig: OAuthConfig, authorizationRequest: AuthorizationRequest): Promise<void> {
+  return Promise.resolve(authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest));
+}
+
+// Thanks shitty library API design
+export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) {
+  const oauthConfig = yield call(oAuthConfigurationSaga);
+  const authorizationHandler: AuthorizationRequestHandler =
+    yield call(constructAuthorizationRequestHandler);
   const authorizationResult: AuthorizationRequestResponse =
     yield call(completeAuthorizationRequest, authorizationHandler);
+  //todo: handle errors
   if (authorizationResult) {
     const {request, response} = authorizationResult;
     const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
@@ -50,7 +62,7 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
       scope,
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
     }, new NodeCrypto());
-    authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest);
+    yield call(performAuthorizationRequest, authorizationHandler, oauthConfig, authorizationRequest);
   }
 }
 
