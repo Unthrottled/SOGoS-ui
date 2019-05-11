@@ -31,6 +31,7 @@ export function* awaitToken(): string {
     tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
   });
 
+  console.log(tokenReception);
   if(tokenReception){
     return tokenReception.accessToken
   } else {
