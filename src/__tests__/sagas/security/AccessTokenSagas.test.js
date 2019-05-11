@@ -1,8 +1,9 @@
 import sagaHelper from "redux-saga-testing";
-import {select, call, put ,fork, take} from 'redux-saga/effects';
+import {select, call, race, put ,fork, take} from 'redux-saga/effects';
 import {awaitToken, getOrRefreshAccessToken} from "../../../sagas/security/AccessTokenSagas";
 import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
+import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
 
 describe('Access Token Sagas', () => {
   describe('accessTokenSagas', () => {
@@ -13,10 +14,96 @@ describe('Access Token Sagas', () => {
   });
   describe('awaitToken', () => {
     describe('when token was received', () => {
-      
+      describe('and token is in right object', () => {
+        const it = sagaHelper(awaitToken());
+        it('should await token responses', sagaEffect => {
+          expect(sagaEffect).toEqual(race({
+            tokenReception: take(RECEIVED_TOKENS),
+            tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+          }));
+          return {
+            tokenReception: {
+              payload: {
+                accessToken: 'PRINGLES'
+              }
+            }
+          };
+        });
+        it('should return access token', sagaEffect => {
+          expect(sagaEffect).toEqual('PRINGLES');
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
+      describe('and token is in incorrect object', () => {
+        const it = sagaHelper(awaitToken());
+        it('should await token responses', sagaEffect => {
+          expect(sagaEffect).toEqual(race({
+            tokenReception: take(RECEIVED_TOKENS),
+            tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+          }));
+          return {
+            tokenReception: {
+              pineapples: {
+                accessToken: 'PRINGLES'
+              }
+            }
+          };
+        });
+        it('should return nothing :(', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
     });
     describe('when token was failed to be recovered', () => {
-
+      describe('and token is in correct object', () => {
+        const it = sagaHelper(awaitToken());
+        it('should await token responses', sagaEffect => {
+          expect(sagaEffect).toEqual(race({
+            tokenReception: take(RECEIVED_TOKENS),
+            tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+          }));
+          return {
+            tokenFailure: {
+              payload: {
+                accessToken: 'PRINGLES'
+              }
+            }
+          };
+        });
+        it('should return nothing :(', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
+      describe('and token is in incorrect object', () => {
+        const it = sagaHelper(awaitToken());
+        it('should await token responses', sagaEffect => {
+          expect(sagaEffect).toEqual(race({
+            tokenReception: take(RECEIVED_TOKENS),
+            tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+          }));
+          return {
+            tokenFailure: {
+              pineapples: {
+                accessToken: 'PRINGLES'
+              }
+            }
+          };
+        });
+        it('should return nothing :(', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
     });
   });
   describe('getOrRefreshAccessToken', () => {
