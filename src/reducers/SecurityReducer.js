@@ -29,7 +29,6 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action) => {
     case LOGGED_OFF :
       return {
         ...INITIAL_SECURITY_STATE,
-        isLoggedIn: false
       };
     case RECEIVED_TOKENS:
       return tokenReceptionReducer(state, action.payload);
