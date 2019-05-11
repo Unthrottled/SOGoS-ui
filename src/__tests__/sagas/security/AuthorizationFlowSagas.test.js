@@ -1,5 +1,5 @@
 import sagaHelper from 'redux-saga-testing';
-import {call, put, take} from 'redux-saga/effects';
+import {call, race, fork, put, take} from 'redux-saga/effects';
 import {
   authorizationGrantSaga,
   constructAuthorizationCodeGrantRequest,
@@ -8,7 +8,11 @@ import {
   loginSaga,
   performAuthorizationGrantFlowSaga, performAuthorizationRequest
 } from "../../../sagas/security/AuthorizationFlowSagas";
-import {createCheckedAuthorizationEvent} from "../../../events/SecurityEvents";
+import {
+  createCheckedAuthorizationEvent, createLoggedOnAction,
+  FAILED_TO_RECEIVE_TOKEN,
+  RECEIVED_TOKENS
+} from "../../../events/SecurityEvents";
 import {
   createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent,
@@ -20,6 +24,7 @@ import {AuthorizationRequest, AuthorizationRequestResponse} from "@openid/appaut
 import {oAuthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../../reducers/ConfigurationReducer";
 import {NodeCrypto} from "@openid/appauth/built/node_support";
+import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
 
 describe('Authorization Flow Sagas', () => {
   describe('authorizationGrantSaga', () => {
@@ -211,18 +216,61 @@ describe('Authorization Flow Sagas', () => {
     });
   });
   describe('exchangeAuthorizationGrantForAccessToken', () => {
-    describe('when given stuff', () => {
+    describe('when token reception succeeds', () => {
       const it = sagaHelper(exchangeAuthorizationGrantForAccessToken({
         'stupid': 'shit'
       }, {
         oauth: 'config'
       }));
-
+      it('should kick off token fetching promise', sagaEffect => {
+        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+          oauth: 'config'
+        }, {
+          'stupid': 'shit'
+        }))
+      });
+      it('should listen for token failure and success events', sagaEffect => {
+        expect(sagaEffect).toEqual(race({
+          tokenReception: take(RECEIVED_TOKENS),
+          tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+        }));
+        return {
+          tokenReception: 'GOOD BRAH'
+        };
+      });
+      it('should dispatch logged in event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createLoggedOnAction()))
+      });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
       });
     });
-
+    describe('when token reception fails', () => {
+      const it = sagaHelper(exchangeAuthorizationGrantForAccessToken({
+        'stupid': 'shit'
+      }, {
+        oauth: 'config'
+      }));
+      it('should kick off token fetching promise', sagaEffect => {
+        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+          oauth: 'config'
+        }, {
+          'stupid': 'shit'
+        }))
+      });
+      it('should listen for token failure and success events', sagaEffect => {
+        expect(sagaEffect).toEqual(race({
+          tokenReception: take(RECEIVED_TOKENS),
+          tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+        }));
+        return {
+          tokenFailure: `SHIT'S BROKE, YO`
+        };
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
   });
   describe('constructAuthorizationCodeGrantRequest', () => {
     describe('when given code', () => {
