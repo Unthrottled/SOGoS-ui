@@ -1,25 +1,39 @@
-import {fork, put, select, take} from 'redux-saga/effects';
-import {createFoundAccessTokenEvent, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {fork, put, race, select, take, call} from 'redux-saga/effects';
+import {createFoundAccessTokenEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
 import {refreshTokenSaga} from "./RefreshTokenSagas";
-import {TokenResponse} from "@openid/appauth";
 import {oAuthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
 // todo: do not respond with undefined token
 export function* accessTokenSagas() {
-  const accessToken = yield getOrRefreshAccessToken();
-  yield put(createFoundAccessTokenEvent(accessToken));
+  const accessToken = yield call(getOrRefreshAccessToken);
+  if(accessToken){
+    yield put(createFoundAccessTokenEvent(accessToken));
+  } else {
+    // try again?
+  }
 }
 
-function* getOrRefreshAccessToken(){
+export function* getOrRefreshAccessToken(){
   const { security } = yield select();
-  if(canRefreshToken(security)){
-    const oAuthConfiguration = yield oAuthConfigurationSaga();
+  if(canRefreshToken(security)) {
+    const oAuthConfiguration = yield call(oAuthConfigurationSaga);
     yield fork(refreshTokenSaga, oAuthConfiguration, security);
-    // todo: handle sad case of not able to get token
-    const tokenResponse: TokenResponse = take(RECEIVED_TOKENS); // hurray new token!
-    return tokenResponse.accessToken;
+    return yield call(awaitToken);
   } else {
     return security.accessToken
+  }
+}
+
+export function* awaitToken(): string {
+  const {tokenReception} = yield race({
+    tokenReception: take(RECEIVED_TOKENS),
+    tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+  });
+
+  if(tokenReception){
+    return tokenReception.accessToken
+  } else {
+    return null; // :(
   }
 }
