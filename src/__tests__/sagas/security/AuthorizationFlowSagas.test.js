@@ -43,17 +43,35 @@ describe('Authorization Flow Sagas', () => {
   });
   describe('performAuthorizationGrantFlowSaga', () => {
     describe('when told to redirect', () => {
-      const it = sagaHelper(performAuthorizationGrantFlowSaga(true));
+      describe('and authorization code is present', () => {
+        const it = sagaHelper(performAuthorizationGrantFlowSaga(true));
 
-      it('should complete', sagaEffect => {
-        expect(sagaEffect).toBeUndefined();
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
+      describe('and authorization code is not present', () => {
+        const it = sagaHelper(performAuthorizationGrantFlowSaga(true));
+
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
       });
     });
     describe('when told not to redirect', () => {
-      const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
+      describe('and authorization code is present', () => {
+        const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
 
-      it('should complete', sagaEffect => {
-        expect(sagaEffect).toBeUndefined();
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
+      });
+      describe('and authorization code is not present', () => {
+        const it = sagaHelper(performAuthorizationGrantFlowSaga(false));
+
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined();
+        });
       });
     });
   });

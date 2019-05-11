@@ -7,8 +7,13 @@ import {
   TokenRequest
 } from "@openid/appauth";
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
-import {createCheckedAuthorizationEvent, createLoggedOnAction} from "../../events/SecurityEvents";
-import {take, call, put} from 'redux-saga/effects'
+import {
+  createCheckedAuthorizationEvent,
+  createLoggedOnAction,
+  FAILED_TO_RECEIVE_TOKEN,
+  RECEIVED_TOKENS
+} from "../../events/SecurityEvents";
+import {call, fork, put, race, take} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenSaga} from "./TokenSagas";
@@ -34,8 +39,7 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
   if (authorizationResult) {
     const {request, response} = authorizationResult;
     const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
-    yield exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig);
-    yield put(createLoggedOnAction());
+    yield call(exchangeAuthorizationGrantForAccessToken, tokenRequest, oauthConfig);
   } else if (shouldRequestLogon) {
     const scope = 'openid profile email';
     yield put(createRequestForInitialConfigurations());
@@ -67,9 +71,13 @@ export function* constructAuthorizationCodeGrantRequest(request, response): Toke
 }
 
 export function* exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig) {
-  try {
-    yield fetchTokenSaga(oauthConfig, tokenRequest);
-  } catch (e) {
-
+  yield fork(fetchTokenSaga, oauthConfig, tokenRequest);
+  const {tokenReception} = yield race({
+    tokenReception: take(RECEIVED_TOKENS),
+    tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
+  });
+  // todo: handle token failure at another level
+  if (tokenReception) {
+    yield put(createLoggedOnAction());
   }
 }
