@@ -1,21 +1,18 @@
-- Token request failure
-    - Fetch again
-
-- Configuration request failure
-
-- Authorization Configuration request failure
-
-- Redux Persist
-    - Make sure that tokens are secure
-
 - Initial Loading Screen
     - When refresh token is expired prompt to login again (no automatic request please).
 
 post actions to the backend
     - post logoff action/login actions
 
-- Root Error handling on sagas
 
-- Tests
+Sad Path
+----
+- Failures:
+    - Token request
+    - Initial Configuration request
+    - Authorization Configuration request failure
 
 - Offline mode
+
+- Redux Persist
+    - Make sure that tokens are secure
