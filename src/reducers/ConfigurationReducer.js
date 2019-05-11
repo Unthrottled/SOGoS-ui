@@ -1,4 +1,5 @@
 import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
+import {Action} from "redux";
 
 export type OAuthConfig = {
   authorizationEndpoint: string,
@@ -34,11 +35,10 @@ export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
     openIDConnectURI: '',
     provider: '',
   }
-
 };
 
 
-const ConfigurationReducer = (state = INITIAL_CONFIGURATION_STATE, action) => {
+export const configurationReducer = (state: ConfigurationState = INITIAL_CONFIGURATION_STATE, action: Action) => {
   switch (action.type) {
     case RECEIVED_REMOTE_OAUTH_CONFIGURATION :
       return {
@@ -61,4 +61,4 @@ const ConfigurationReducer = (state = INITIAL_CONFIGURATION_STATE, action) => {
   }
 };
 
-export default ConfigurationReducer;
+export default configurationReducer;
