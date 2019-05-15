@@ -12,7 +12,8 @@ describe('User Reducer', () => {
         firstName: 'Smitty',
         lastName: 'Werbenjagermangensen',
         email: '',
-        fullName: 'Smitty Werbenjagermangensen'
+        fullName: 'Smitty Werbenjagermangensen',
+        guid: '',
       }
 
     })
@@ -38,6 +39,7 @@ describe('User Reducer', () => {
         firstName: 'Silly',
         lastName: 'Socks',
         email: 'eat@pant.io',
+        guid: 'the best guid',
       }
     }, {
       type: RECEIVED_USER,
@@ -51,6 +53,7 @@ describe('User Reducer', () => {
         firstName: 'Silly',
         lastName: 'Socks',
         email: 'scoopy@doo.io',
+        guid: 'the best guid',
       }
     })
   });
@@ -61,6 +64,7 @@ describe('User Reducer', () => {
         firstName: 'Silly',
         lastName: 'Socks',
         email: 'eat@pant.io',
+        guid: 'the best guid',
       }
     }, {
       type: LOGGED_OFF,
@@ -70,7 +74,8 @@ describe('User Reducer', () => {
         firstName: 'Smitty',
         lastName: 'Werbenjagermangensen',
         email: '',
-        fullName: 'Smitty Werbenjagermangensen'
+        fullName: 'Smitty Werbenjagermangensen',
+        guid: '',
       }
     })
   });

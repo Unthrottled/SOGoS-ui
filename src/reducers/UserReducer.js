@@ -11,7 +11,8 @@ const INITIAL_USER_STATE : UserState = {
     firstName: 'Smitty',
     lastName: 'Werbenjagermangensen',
     email: '',
-    fullName: 'Smitty Werbenjagermangensen'
+    fullName: 'Smitty Werbenjagermangensen',
+    guid: '',
   }
 };
 
