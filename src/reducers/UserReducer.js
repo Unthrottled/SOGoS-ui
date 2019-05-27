@@ -13,6 +13,7 @@ const INITIAL_USER_STATE : UserState = {
     email: '',
     fullName: 'Smitty Werbenjagermangensen',
     guid: '',
+    verificationKey: '',
   }
 };
 
