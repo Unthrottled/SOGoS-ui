@@ -24,7 +24,7 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
         ...state,
         information: {
           ...state.information,
-          ...action.payload.information
+        ...action.payload.information
         }
       };
     case LOGGED_OFF: {
