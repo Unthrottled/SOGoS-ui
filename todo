@@ -4,6 +4,10 @@
 post actions to the backend
     - post logoff action/login actions
 
+- Offline mode
+
+- Redux Persist
+    - Make sure that tokens are secure
 
 Sad Path
 ----
@@ -12,7 +16,6 @@ Sad Path
     - Initial Configuration request
     - Authorization Configuration request failure
 
-- Offline mode
 
-- Redux Persist
-    - Make sure that tokens are secure
+Tech Debt:
+-----
