@@ -9,7 +9,6 @@ export type User = {
   lastName: string,
   email: string,
   guid: string,
-  verificationKey: string,
 }
 
 export const createReceivedUserEvent = (user: User) => ({

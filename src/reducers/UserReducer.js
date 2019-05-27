@@ -3,7 +3,7 @@ import {LOGGED_OFF} from "../events/SecurityEvents";
 import {Action} from "redux";
 
 export type UserState = {
-  information: User
+  information: User,
 }
 
 const INITIAL_USER_STATE : UserState = {
@@ -13,7 +13,6 @@ const INITIAL_USER_STATE : UserState = {
     email: '',
     fullName: 'Smitty Werbenjagermangensen',
     guid: '',
-    verificationKey: '',
   }
 };
 
@@ -25,7 +24,7 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
         ...state,
         information: {
           ...state.information,
-          ...action.payload
+          ...action.payload.information
         }
       };
     case LOGGED_OFF: {
