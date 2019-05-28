@@ -9,6 +9,8 @@ post actions to the backend
 - Redux Persist
     - Make sure that tokens are secure
 
+- Enable manual sync of data?
+
 Sad Path
 ----
 - Failures:
