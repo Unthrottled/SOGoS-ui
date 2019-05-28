@@ -3,8 +3,9 @@ import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import {login, logout} from "../events/SecurityEvents";
+import {login } from "../events/SecurityEvents";
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
+import LoggedIn from "./LoggedIn";
 
 class App extends Component {
   static propTypes = {
@@ -18,26 +19,20 @@ class App extends Component {
     dispetch(appInitialized());
   }
 
-  logout(): void {
-    const { dispatch: dispetch } = this.props;
-    dispetch(logout())
-  }
-
   login(): void {
     const { dispatch: dispetch } = this.props;
     dispetch(login())
   }
 
   render() {
-    const {isLoggedIn, fullName, oauth} = this.props;
+    const {isLoggedIn, oauth} = this.props;
     const isAppInitialized = oauth.authorizationEndpoint;
     return isAppInitialized ? (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h3> Welcome {fullName}!</h3>
           { isLoggedIn ?
-            <button onClick={()=>this.logout()}>Logout</button> :
+             <LoggedIn/>:
             <button onClick={()=>this.login()}>Login</button>
           }
         </header>
