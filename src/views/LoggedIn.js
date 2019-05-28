@@ -18,10 +18,10 @@ class LoggedIn extends React.Component {
   }
 
   render() {
-    const {fullName} = this.state;
+    const {fullName} = this.props;
     return (
       <div>
-        <h3> Welcome {fullName}!</h3>
+        <h3>What's up {fullName}?</h3>
         <button onClick={this.startActivity}>Start Activity</button>
         There's a ninja with huge boobs over there.
         <button onClick={() => this.logout()}>Logout</button>
@@ -33,16 +33,9 @@ class LoggedIn extends React.Component {
 LoggedIn.propTypes = {};
 
 const mapStateToProps = state => {
-  const {security, user, configuration} = state;
-  const {isLoggedIn} = security;
-  const {information} = user;
-  const {fullName} = information;
-  const {oauth} = configuration;
-
+  const {user: {information: {fullName}}} = state;
   return {
-    isLoggedIn,
     fullName,
-    oauth
   }
 };
 
