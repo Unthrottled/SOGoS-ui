@@ -73,7 +73,3 @@ export const createFailureToLogOnAction = (error) => ({
 export const createLoggedOnAction = () => ({
   type: LOGGED_ON,
 });
-
-export const logout = () => dispetch => dispetch(requestLogoff());
-
-export const login = () => dispetch => dispetch(createRequestLogonEvent());

@@ -1,6 +1,6 @@
 import React from "react";
-import {login} from "../events/SecurityEvents";
 import {connect} from "react-redux";
+import {login} from "../actions/SecurityActions";
 
 class LoggedOut extends React.Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class LoggedOut extends React.Component {
 
   login(): void {
     const {dispatch: dispetch} = this.props;
-    dispetch(login())
+    dispetch(login());
   }
 
   render() {
