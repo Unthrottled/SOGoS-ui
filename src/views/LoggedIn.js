@@ -9,7 +9,7 @@ class LoggedIn extends React.Component {
   }
 
   startActivity(): void {
-    console.log('funna bust a nut');
+    console.log('finna bust a nut');
   }
 
   logout(): void {

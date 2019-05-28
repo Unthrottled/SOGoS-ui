@@ -10,7 +10,6 @@ import LoggedOut from "./LoggedOut";
 class App extends Component {
   static propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
-    fullName: PropTypes.string.isRequired,
     oauth: PropTypes.object.isRequired,
   };
 
@@ -26,7 +25,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo"/>
-          { isLoggedIn ? <LoggedIn/> : <LoggedOut/> }
+          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
         </header>
       </div>
     ) : null;
@@ -34,15 +33,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  const {security, user, configuration} = state;
-  const {isLoggedIn} = security;
-  const {information} = user;
-  const {fullName} = information;
-  const {oauth} = configuration;
-
+  const {security: {isLoggedIn}, configuration: {oauth}} = state;
   return {
     isLoggedIn,
-    fullName,
     oauth
   }
 };
