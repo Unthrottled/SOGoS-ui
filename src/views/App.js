@@ -34,7 +34,6 @@ class App extends Component {
     return isAppInitialized ? (
       <div className="App">
         <header className="App-header">
-          <div>Shit on a dick</div>
           <img src={logo} className="App-logo" alt="logo" />
           <h3> Welcome {fullName}!</h3>
           { isLoggedIn ?
