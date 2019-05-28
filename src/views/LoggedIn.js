@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {logout} from "../actions/SecurityActions";
+import {startActivity} from "../actions/ActivityActions";
 
 class LoggedIn extends React.Component {
   constructor(props) {
@@ -9,7 +10,10 @@ class LoggedIn extends React.Component {
   }
 
   startActivity(): void {
-    console.log('finna bust a nut');
+    const {dispatch: dispetch} = this.props;
+    dispetch(startActivity({
+      antecedenceTime: new Date().getTime()
+    }));
   }
 
   logout(): void {
@@ -22,7 +26,7 @@ class LoggedIn extends React.Component {
     return (
       <div>
         <h3>What's up {fullName}?</h3>
-        <button onClick={this.startActivity}>Start Activity</button>
+        <button onClick={()=>this.startActivity()}>Start Activity</button>
         There's a ninja with huge boobs over there.
         <button onClick={() => this.logout()}>Logout</button>
       </div>
