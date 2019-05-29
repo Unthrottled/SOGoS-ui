@@ -6,20 +6,9 @@ import {withStyles} from "@material-ui/core/styles";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import SaveIcon from '@material-ui/icons/Save';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Timer from '@material-ui/icons/AvTimer';
 
 
-const actions = [
-  {icon: <FileCopyIcon/>, name: 'Copy'},
-  {icon: <SaveIcon/>, name: 'Save'},
-  {icon: <PrintIcon/>, name: 'Print'},
-  {icon: <ShareIcon/>, name: 'Share'},
-  {icon: <DeleteIcon/>, name: 'Delete'},
-];
 
 class LoggedIn extends React.Component {
   constructor(props) {
@@ -28,6 +17,10 @@ class LoggedIn extends React.Component {
       open: false
     };
   }
+
+  actions = [
+    {icon: <Timer/>, name: 'Start Task', perform: ()=>this.startActivity()},
+  ];
 
   startActivity(): void {
     const {dispatch: dispetch} = this.props;
@@ -51,13 +44,10 @@ class LoggedIn extends React.Component {
     this.setState({open: false});
   };
 
-  handleOpen = () => {
-    this.setState({open: true});
-  };
-
   render() {
     const {fullName, classes} = this.props;
     const {open} = this.state;
+    const {actions} = this;
 
     return (
       <div>
@@ -70,18 +60,21 @@ class LoggedIn extends React.Component {
           onClick={this.handleClick}
           onClose={this.handleClose}
           open={open}
+          direction={"right"}
         >
           {actions.map(action => (
             <SpeedDialAction
               key={action.name}
               icon={action.icon}
               tooltipTitle={action.name}
-              onClick={this.handleClick}
+              onClick={()=>{
+                this.handleClick();
+                action.perform();
+              }}
               title={""}
               children={<div/>}/>
           ))}
         </SpeedDial>
-        <button onClick={() => this.startActivity()}>Start Activity</button>
         There's a ninja with huge boobs over there.
         <button onClick={() => this.logout()}>Logout</button>
       </div>
