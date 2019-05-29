@@ -3,6 +3,7 @@ import type {InitialConfig} from "../../reducers/ConfigurationReducer";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {selectConfigurationState} from "../../reducers";
 import {createLoggedOffEvent} from "../../events/SecurityEvents";
+import {activityLogoutSaga} from "../ActivitySagas";
 
 export function* constructRedirectURI(): string {
   const {endSessionEndpoint} = yield call(oauthConfigurationSaga);
@@ -29,7 +30,7 @@ const isKeycloak = (initialConfiguration: InitialConfig): boolean => {
 
 export function* logoffPreFlightSaga() {
   // do stuff
-
+  yield call(activityLogoutSaga);
   yield put(createLoggedOffEvent());// wipe state
 }
 

@@ -5,6 +5,7 @@ import {
   createRegisteredStartEvent,
   STARTED_ACTIVITY
 } from "../events/ActivityEvents";
+import {LOGGED_ON} from "../events/SecurityEvents";
 
 export function* startActivitySaga({payload: activity}) {
   try {
@@ -19,8 +20,21 @@ export function* startActivitySaga({payload: activity}) {
   }
 }
 
+export function* activityLogonSaga() {
+  yield put({
+    type: 'REGISTERED_LOGON',
+  })
+}
+
+export function* activityLogoutSaga() {
+  yield put({
+    type: 'REGISTERED_LOGOUT',
+  })
+}
+
 function* listenToActivityEvents() {
-  yield takeEvery(STARTED_ACTIVITY, startActivitySaga)
+  yield takeEvery(STARTED_ACTIVITY, startActivitySaga);
+  yield takeEvery(LOGGED_ON, activityLogonSaga);
 }
 
 export default function* rootSaga() {
