@@ -4,6 +4,9 @@ export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_ST
 
 export type Activity = {
   antecedenceTime: number,
+  content: {
+    id: string
+  },
 };
 
 export const createStartedActivityEvent = (activity: Activity) => ({

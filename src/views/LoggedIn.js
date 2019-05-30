@@ -7,6 +7,7 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import Timer from '@material-ui/icons/AvTimer';
+import uuid from 'uuid/v4';
 
 
 
@@ -25,7 +26,10 @@ class LoggedIn extends React.Component {
   startActivity(): void {
     const {dispatch: dispetch} = this.props;
     dispetch(startActivity({
-      antecedenceTime: new Date().getTime()
+      antecedenceTime: new Date().getTime(),
+      content: {
+        id: uuid()
+      }
     }));
   }
 

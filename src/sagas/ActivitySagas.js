@@ -9,7 +9,7 @@ import {LOGGED_ON} from "../events/SecurityEvents";
 
 export function* startActivitySaga({payload: activity}) {
   try {
-    yield call(performPost, './api/activity/start', activity);
+    yield call(performPost, './api/activity', activity);
     yield put(createRegisteredStartEvent(activity));
   } catch (error) {
     // todo: handle registry failures.
