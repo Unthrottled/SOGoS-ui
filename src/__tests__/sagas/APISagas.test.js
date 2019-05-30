@@ -5,7 +5,7 @@ import {
   createRequestAccessTokenEvent,
   FOUND_ACCESS_TOKEN
 } from "../../events/SecurityEvents";
-import {call, put, take} from 'redux-saga/effects';
+import {call, put, take, select} from 'redux-saga/effects';
 import axios from 'axios/index';
 
 describe('API Sagas', () => {
@@ -46,11 +46,26 @@ describe('API Sagas', () => {
         expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
         return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
       });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {
+              guid: "i am user guid"
+            }
+          },
+          security: {
+            verificationKey: "Key of verification"
+          }
+        };
+      });
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.get,
           'http://localhost/api/onions', {
             headers: {
-              Authorization: 'Bearer I AM ACCESS TOKEN, YO'
+              Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+              "User-Identifier": "i am user guid",
+              "Verification": "Key of verification"
             },
           }));
         return 'One response from the backend'
@@ -78,6 +93,19 @@ describe('API Sagas', () => {
         expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
         return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
       });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {
+              guid: "i am user guid"
+            }
+          },
+          security: {
+            verificationKey: "Key of verification"
+          }
+        };
+      });
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.get,
           'http://localhost/api/onions', {
@@ -85,6 +113,8 @@ describe('API Sagas', () => {
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
               'X-QUICK-SCOPE': 'L337',
+              "User-Identifier": "i am user guid",
+              "Verification": "Key of verification"
             },
           }));
         return 'One response from the backend'
@@ -111,6 +141,19 @@ describe('API Sagas', () => {
         expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
         return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
       });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {
+              guid: "i am user guid"
+            }
+          },
+          security: {
+            verificationKey: "Key of verification"
+          }
+        };
+      });
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.post,
           'http://localhost/api/onions',
@@ -120,6 +163,8 @@ describe('API Sagas', () => {
           {
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+              "User-Identifier": "i am user guid",
+              Verification: "Key of verification"
             },
           }));
         return 'One response from the backend'
@@ -150,6 +195,19 @@ describe('API Sagas', () => {
         expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
         return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
       });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {
+              guid: "i am user guid"
+            }
+          },
+          security: {
+            verificationKey: "Key of verification"
+          }
+        };
+      });
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.post,
           'http://localhost/api/onions',
@@ -161,6 +219,8 @@ describe('API Sagas', () => {
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
               'X-QUICK-SCOPE': 'L337',
+              "User-Identifier": "i am user guid",
+              "Verification": "Key of verification"
             },
           }));
         return 'One response from the backend'
