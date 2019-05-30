@@ -44,7 +44,9 @@ describe('User Reducer', () => {
     }, {
       type: RECEIVED_USER,
       payload: {
-        email: 'scoopy@doo.io',
+        information: {
+          email: 'scoopy@doo.io',
+        },
       }
     });
     expect(userState).toEqual({
