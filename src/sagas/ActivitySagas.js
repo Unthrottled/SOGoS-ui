@@ -1,11 +1,13 @@
-import {all, call, put, takeEvery} from 'redux-saga/effects'
+import {all, call, put, takeEvery, fork} from 'redux-saga/effects'
 import {performPost} from "./APISagas";
 import {
   createFailureToRegisterStartEvent,
-  createRegisteredStartEvent,
+  createRegisteredStartEvent, createStartedActivityEvent,
   STARTED_ACTIVITY
 } from "../events/ActivityEvents";
 import {LOGGED_ON} from "../events/SecurityEvents";
+import uuid from 'uuid/v4';
+import {RECEIVED_USER} from "../events/UserEvents";
 
 export function* startActivitySaga({payload: activity}) {
   try {
@@ -21,20 +23,34 @@ export function* startActivitySaga({payload: activity}) {
 }
 
 export function* activityLogonSaga() {
-  yield put({
-    type: 'REGISTERED_LOGON',
-  })
+  const [a , b] = yield all([
+    LOGGED_ON,
+    RECEIVED_USER,
+  ]);
+  
+  console.log(a,b);
+  yield startActivitySaga(createStartedActivityEvent({
+    antecedenceTime: new Date().getTime(),
+    content: {
+      name: "LOGGED_ON",
+      id: uuid()
+    }
+  }));
 }
 
 export function* activityLogoutSaga() {
-  yield put({
-    type: 'REGISTERED_LOGOUT',
-  })
+  yield startActivitySaga(createStartedActivityEvent({
+    antecedenceTime: new Date().getTime(),
+    content: {
+      name: "LOGGED_ON",
+      id: uuid()
+    }
+  }))
 }
 
 function* listenToActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, startActivitySaga);
-  yield takeEvery(LOGGED_ON, activityLogonSaga);
+  yield fork(activityLogonSaga);
 }
 
 export default function* rootSaga() {
