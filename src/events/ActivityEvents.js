@@ -2,17 +2,22 @@ export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
 export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 
+export type ActivityContent = {
+  id: string,
+  name: string,
+}
+
 export type Activity = {
   antecedenceTime: number,
-  content: {
-    id: string,
-    name: string,
-  },
+  content: ActivityContent,
 };
 
-export const createStartedActivityEvent = (activity: Activity) => ({
+export const createStartedActivityEvent = (content: ActivityContent) => ({
   type: STARTED_ACTIVITY,
-  payload: activity
+  payload: {
+    antecedenceTime: new Date().getTime(),
+    content
+  }
 });
 
 export const createRegisteredStartEvent = (activity: Activity) => ({

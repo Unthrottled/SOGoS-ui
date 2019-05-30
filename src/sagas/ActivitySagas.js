@@ -28,21 +28,15 @@ export function* activityLogonSaga() {
     take(RECEIVED_USER),
   ]);
   yield startActivitySaga(createStartedActivityEvent({
-    antecedenceTime: new Date().getTime(),
-    content: {
-      name: "LOGGED_ON",
-      id: uuid()
-    }
+    name: "LOGGED_ON",
+    uuid: uuid(),
   }));
 }
 
 export function* activityLogoutSaga() {
   yield startActivitySaga(createStartedActivityEvent({
-    antecedenceTime: new Date().getTime(),
-    content: {
-      name: "LOGGED_ON",
-      id: uuid()
-    }
+    name: "LOGGED_OFF",
+    uuid: uuid()
   }))
 }
 

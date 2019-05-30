@@ -26,10 +26,8 @@ class LoggedIn extends React.Component {
   startActivity(): void {
     const {dispatch: dispetch} = this.props;
     dispetch(startActivity({
-      antecedenceTime: new Date().getTime(),
-      content: {
-        id: uuid()
-      }
+      name: "SOME_ACTIVITY",
+      uuid: uuid(),
     }));
   }
 
