@@ -1,4 +1,4 @@
-import {all, call, put, takeEvery, fork} from 'redux-saga/effects'
+import {all, call, put, takeEvery, fork, take} from 'redux-saga/effects'
 import {performPost} from "./APISagas";
 import {
   createFailureToRegisterStartEvent,
@@ -23,12 +23,10 @@ export function* startActivitySaga({payload: activity}) {
 }
 
 export function* activityLogonSaga() {
-  const [a , b] = yield all([
-    LOGGED_ON,
-    RECEIVED_USER,
+  yield all([
+    take(LOGGED_ON),
+    take(RECEIVED_USER),
   ]);
-  
-  console.log(a,b);
   yield startActivitySaga(createStartedActivityEvent({
     antecedenceTime: new Date().getTime(),
     content: {
