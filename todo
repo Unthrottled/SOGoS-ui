@@ -1,8 +1,6 @@
 - Initial Loading Screen
     - When refresh token is expired prompt to login again (no automatic request please).
 
-post actions to the backend
-    - post logoff action/login actions
 
 - Offline mode
 
