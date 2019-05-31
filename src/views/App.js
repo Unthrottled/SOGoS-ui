@@ -23,10 +23,8 @@ class App extends Component {
     const isAppInitialized = oauth.authorizationEndpoint;
     return isAppInitialized ? (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo"/>
-          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
-        </header>
+        <img src={logo} className="App-logo" alt="logo"/>
+        {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
       </div>
     ) : null;
   }

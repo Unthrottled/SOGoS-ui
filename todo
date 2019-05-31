@@ -1,7 +1,6 @@
 - Initial Loading Screen
     - When refresh token is expired prompt to login again (no automatic request please).
 
-
 - Offline mode
 
 - Redux Persist
