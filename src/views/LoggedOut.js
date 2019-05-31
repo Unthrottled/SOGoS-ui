@@ -8,7 +8,10 @@ function LoggedOut({dispatch: dispetch}) {
   };
   return (
     <div>
-      <h3>Hey it looks like you need to login!</h3>
+      <h3 style={{
+        margin: 0,
+        padding: '1.17em',
+      }}>Hey it looks like you need to login!</h3>
       <button onClick={() => logUserIn()}>Login</button>
     </div>
   );
