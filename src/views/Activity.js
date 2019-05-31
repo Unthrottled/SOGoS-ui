@@ -13,13 +13,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
   },
   speedDial: {
-    position: 'absolute',
+    position: 'relative',
     top: theme.spacing(1),
     left: theme.spacing(1),
     margin: theme.spacing(1),
   },
 }));
-
 
 const Activity = ({dispatch: dispetch}) => {
   const classes = useStyles();

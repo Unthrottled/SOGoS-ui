@@ -17,8 +17,8 @@ function App({isLoggedIn, oauth, dispatch: dispetch}) {
     <div className="App">
       <MenuAppBar/>
       <div className={"Content"}>
-        <img src={logo} className="App-logo" alt="logo"/>
         {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
+        <img src={logo} className="App-logo" alt="logo"/>
       </div>
     </div>
   ) : <div/>;
