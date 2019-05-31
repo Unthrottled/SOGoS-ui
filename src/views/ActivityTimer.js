@@ -1,5 +1,6 @@
 import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import Collapse from "@material-ui/core/Collapse";
 import {connect} from "react-redux";
 
 const useStyles = makeStyles(theme =>({
@@ -16,9 +17,12 @@ const useStyles = makeStyles(theme =>({
 
 const ActivityTimer = ({shouldTime}) => {
   const classes = useStyles();
-  return shouldTime ? (<div className={classes.bar}>
-    Hey!
-  </div>) : null;
+  return (
+    <Collapse in={shouldTime} timeout={2000}>
+      <div className={classes.bar}>
+        Hey!
+      </div>
+    </Collapse>) ;
 };
 
 const mapStateToProps = state =>{
@@ -26,6 +30,6 @@ const mapStateToProps = state =>{
   return{
     shouldTime
   }
-}
+};
 
 export default connect(mapStateToProps)(ActivityTimer);
