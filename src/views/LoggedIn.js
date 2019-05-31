@@ -1,18 +1,13 @@
 import React from "react";
 import {connect} from "react-redux";
-import {logout} from "../actions/SecurityActions";
 import Activity from "./Activity";
 
-const LoggedIn = ({fullName, dispatch: dispetch}) => {
-  const logUserOut = (): void => {
-    dispetch(logout());
-  };
+const LoggedIn = ({fullName}) => {
   return (
     <div>
       <Activity/>
       <h3>What's up {fullName}?</h3>
       There's a ninja with huge boobs over there.
-      <button onClick={() => logUserOut()}>Logout</button>
     </div>
   );
 };

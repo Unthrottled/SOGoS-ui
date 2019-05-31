@@ -8,6 +8,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import {connect} from "react-redux";
+import {logout} from "../actions/SecurityActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MenuAppBar = () => {
+const MenuAppBar = ({dispatch: dispetch}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -32,6 +34,10 @@ const MenuAppBar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const logUserOut = (): void => {
+    dispetch(logout());
   };
 
   return (
@@ -67,7 +73,10 @@ const MenuAppBar = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={()=>{
+                handleClose();
+                logUserOut();
+              }}>Logout</MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -76,4 +85,4 @@ const MenuAppBar = () => {
   );
 };
 
-export default MenuAppBar;
+export default connect()(MenuAppBar);
