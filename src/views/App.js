@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
+import MenuAppBar from "./MenuAppBar";
 
 class App extends Component {
   static propTypes = {
@@ -23,6 +24,7 @@ class App extends Component {
     const isAppInitialized = oauth.authorizationEndpoint;
     return isAppInitialized ? (
       <div className="App">
+        <MenuAppBar/>
         <img src={logo} className="App-logo" alt="logo"/>
         {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
       </div>
