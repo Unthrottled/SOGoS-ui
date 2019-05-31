@@ -1,37 +1,27 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
-import PropTypes from 'prop-types';
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
 import MenuAppBar from "./MenuAppBar";
 
-class App extends Component {
-  static propTypes = {
-    isLoggedIn: PropTypes.bool.isRequired,
-    oauth: PropTypes.object.isRequired,
-  };
-
-  componentDidMount(): void {
-    const {dispatch: dispetch} = this.props;
+function App({isLoggedIn, oauth, dispatch: dispetch}) {
+  const isAppInitialized = oauth.authorizationEndpoint;
+  const [mounted] = useState(true);
+  useEffect(() => {
     dispetch(appInitialized());
-  }
-
-  render() {
-    const {isLoggedIn, oauth} = this.props;
-    const isAppInitialized = oauth.authorizationEndpoint;
-    return isAppInitialized ? (
-      <div className="App">
-        <MenuAppBar/>
-        <div className={"Content"}>
-          <img src={logo} className="App-logo" alt="logo"/>
-          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
-        </div>
+  }, [mounted]);
+  return isAppInitialized ? (
+    <div className="App">
+      <MenuAppBar/>
+      <div className={"Content"}>
+        <img src={logo} className="App-logo" alt="logo"/>
+        {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
       </div>
-    ) : null;
-  }
+    </div>
+  ) : <div/>;
 }
 
 const mapStateToProps = state => {
