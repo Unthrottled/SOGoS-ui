@@ -1,5 +1,6 @@
 import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles(theme =>({
   bar: {
@@ -13,11 +14,18 @@ const useStyles = makeStyles(theme =>({
   }
 }));
 
-const ActivityTimer = () => {
+const ActivityTimer = ({shouldTime}) => {
   const classes = useStyles();
-  return (<div className={classes.bar}>
+  return shouldTime ? (<div className={classes.bar}>
     Hey!
-  </div>)
+  </div>) : null;
 };
 
-export default ActivityTimer
+const mapStateToProps = state =>{
+  const {activity: {shouldTime}} = state;
+  return{
+    shouldTime
+  }
+}
+
+export default connect(mapStateToProps)(ActivityTimer);

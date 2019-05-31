@@ -2,11 +2,13 @@ import {combineReducers} from "redux";
 import userReducer from './UserReducer';
 import securityReducer from './SecurityReducer';
 import configurationReducer from './ConfigurationReducer';
+import activityReducer from './ActivityReducer';
 
 const rootReducer = combineReducers({
   security: securityReducer,
   user: userReducer,
-  configuration: configurationReducer
+  configuration: configurationReducer,
+  activity: activityReducer,
 });
 
 export const selectSecurityState = globalState =>globalState.security;
