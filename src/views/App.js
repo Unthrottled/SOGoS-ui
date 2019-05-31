@@ -25,8 +25,10 @@ class App extends Component {
     return isAppInitialized ? (
       <div className="App">
         <MenuAppBar/>
-        <img src={logo} className="App-logo" alt="logo"/>
-        {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
+        <div className={"Content"}>
+          <img src={logo} className="App-logo" alt="logo"/>
+          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
+        </div>
       </div>
     ) : null;
   }
