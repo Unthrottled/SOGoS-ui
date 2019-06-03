@@ -2,10 +2,11 @@ import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
 import Slide from "@material-ui/core/Slide";
+import Timer from "./Timer";
 
 const useStyles = makeStyles(theme =>({
-  bar: {
-    position: 'absolute',
+  timer: {
+    position: 'fixed',
     bottom: 0,
     textAlign: 'center',
     width: '100%',
@@ -18,9 +19,9 @@ const useStyles = makeStyles(theme =>({
 const ActivityTimer = ({shouldTime}) => {
   const classes = useStyles();
   return (
-    <Slide direction={"up"} in={shouldTime}  mountOnEnter unmountOnExit>
-      <div className={classes.bar}>
-        Hey!
+    <Slide direction={"up"} in={shouldTime} >
+      <div className={classes.timer}>
+        <Timer startTimeInSeconds={3590}/>
       </div>
     </Slide>) ;
 };
