@@ -1,5 +1,6 @@
 export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
 export const STARTED_TIMED_ACTIVITY = 'STARTED_TIMED_ACTIVITY';
+export const RESUMED_TIMED_ACTIVITY = 'RESUMED_TIMED_ACTIVITY';
 export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 
@@ -27,6 +28,11 @@ export const createStartedTimedActivityEvent = (content: ActivityContent) => ({
     antecedenceTime: new Date().getTime(),
     content
   }
+});
+
+export const createResumedStartedTimedActivityEvent = (activity: Activity) => ({
+  type: RESUMED_TIMED_ACTIVITY,
+  payload: activity
 });
 
 export const createRegisteredStartEvent = (activity: Activity) => ({

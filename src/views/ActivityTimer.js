@@ -16,20 +16,23 @@ const useStyles = makeStyles(theme =>({
   }
 }));
 
-const ActivityTimer = ({shouldTime}) => {
+const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime)/1000);
+
+const ActivityTimer = ({shouldTime, antecedenceTime}) => {
   const classes = useStyles();
-  return (
+  return shouldTime ? (
     <Slide direction={"up"} in={shouldTime} >
       <div className={classes.timer}>
-        <Timer  />
+        <Timer startTimeInSeconds={getTime(antecedenceTime)} />
       </div>
-    </Slide>) ;
+    </Slide>) : null;
 };
 
 const mapStateToProps = state =>{
-  const {activity: {shouldTime}} = state;
+  const {activity: {shouldTime, currentActivity : {antecedenceTime}}} = state;
   return{
-    shouldTime
+    shouldTime,
+    antecedenceTime,
   }
 };
 
