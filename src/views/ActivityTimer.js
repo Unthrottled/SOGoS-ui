@@ -1,7 +1,7 @@
 import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Collapse from "@material-ui/core/Collapse";
 import {connect} from "react-redux";
+import Slide from "@material-ui/core/Slide";
 
 const useStyles = makeStyles(theme =>({
   bar: {
@@ -18,11 +18,11 @@ const useStyles = makeStyles(theme =>({
 const ActivityTimer = ({shouldTime}) => {
   const classes = useStyles();
   return (
-    <Collapse in={shouldTime} timeout={2000}>
+    <Slide direction={"up"} in={shouldTime}  mountOnEnter unmountOnExit>
       <div className={classes.bar}>
         Hey!
       </div>
-    </Collapse>) ;
+    </Slide>) ;
 };
 
 const mapStateToProps = state =>{
