@@ -7,12 +7,16 @@ function getDisplayTime(hours, minutes, seconds) {
   return `${displayHours}${displayMinutes}${displaySeconds}`;
 }
 
-const Timer = ({startTimeInSeconds}) => {
+const Timer = ({startTimeInSeconds, countDown, onComplete}) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
-    setTimeout(() => {
-      setTimeElapsed(timeElapsed + 1)
-    }, 1000);
+    if(timeElapsed < 1 && countDown){
+      onComplete && onComplete();
+    } else {
+      setTimeout(() => {
+        setTimeElapsed(timeElapsed + (countDown ? -1 : 1))
+      }, 1000);
+    }
   });
   const hours = Math.floor(timeElapsed / 3600);
   const remainingTimeForMinutes = timeElapsed - (hours * 3600);

@@ -21,7 +21,7 @@ const ActivityTimer = ({shouldTime}) => {
   return (
     <Slide direction={"up"} in={shouldTime} >
       <div className={classes.timer}>
-        <Timer startTimeInSeconds={3590}/>
+        <Timer  />
       </div>
     </Slide>) ;
 };
