@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import Slide from "@material-ui/core/Slide";
 import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 const useStyles = makeStyles(theme => ({
   timer: {
