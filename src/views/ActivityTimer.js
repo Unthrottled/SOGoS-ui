@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import Slide from "@material-ui/core/Slide";
 import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
+import {startNonTimedActivity} from "../actions/ActivityActions";
+import uuid from "uuid/v4";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -28,7 +30,10 @@ const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenc
 const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch}) => {
   const classes = useStyles();
   const stopActivity = () =>{
-    console.log('finna bust a nut');
+    dispetch(startNonTimedActivity({
+      name: 'RECOVERY',
+      id: uuid(),
+    }))
   };
   return shouldTime ? (
     <Slide direction={"up"} in={shouldTime}>

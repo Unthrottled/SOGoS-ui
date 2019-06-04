@@ -1,10 +1,21 @@
 import type {ActivityContent} from "../events/ActivityEvents";
-import {createStartedActivityEvent, createStartedTimedActivityEvent} from "../events/ActivityEvents";
+import {
+  createStartedActivityEvent,
+  createStartedNonTimedActivityEvent,
+  createStartedTimedActivityEvent
+} from "../events/ActivityEvents";
 
 
 export const
-  startActivity = (activityContent: ActivityContent) =>
+  startTimedActivity = (activityContent: ActivityContent) =>
     dispetch => {
-      dispetch(createStartedActivityEvent(activityContent));
-      dispetch(createStartedTimedActivityEvent(activityContent));
+      dispetch(createStartedActivityEvent(activityContent)); // to the backend event
+      dispetch(createStartedTimedActivityEvent(activityContent)); // internal event
+    };
+
+export const
+  startNonTimedActivity = (activityContent: ActivityContent) =>
+    dispetch => {
+      dispetch(createStartedActivityEvent(activityContent)); // to the backend event
+      dispetch(createStartedNonTimedActivityEvent(activityContent)); // internal event
     };

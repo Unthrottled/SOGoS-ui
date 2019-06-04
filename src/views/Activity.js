@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import Timer from '@material-ui/icons/AvTimer';
 import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
-import {startActivity} from "../actions/ActivityActions";
+import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +25,7 @@ const Activity = ({dispatch: dispetch}) => {
   const [open, setOpen] = useState(false);
 
   const commenceActivity = () => {
-    dispetch(startActivity({
+    dispetch(startTimedActivity({
       name: "SOME_ACTIVITY",
       uuid: uuid(),
     }));
