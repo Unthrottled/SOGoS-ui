@@ -3,7 +3,7 @@ import type {InitialConfig} from "../../reducers/ConfigurationReducer";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {selectConfigurationState} from "../../reducers";
 import {createLoggedOffEvent} from "../../events/SecurityEvents";
-import {activityLogoutSaga} from "../ActivitySagas";
+import {activityLogoutSaga} from "../activity/LogoutActivitySaga";
 
 export function* constructRedirectURI(): string {
   const {endSessionEndpoint} = yield call(oauthConfigurationSaga);
