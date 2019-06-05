@@ -10,12 +10,16 @@ function getDisplayTime(hours, minutes, seconds) {
 const Timer = ({startTimeInSeconds, countDown, onComplete}) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
+    let timeout;
     if(timeElapsed < 1 && countDown){
       onComplete && onComplete();
     } else {
-      setTimeout(() => {
+       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed + (countDown ? -1 : 1))
       }, 1000);
+    }
+    return ()=>{
+        clearTimeout(timeout)
     }
   });
   const hours = Math.floor(timeElapsed / 3600);
