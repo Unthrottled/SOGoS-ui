@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Activity = ({dispatch: dispetch}) => {
+const ActivityHub = ({dispatch: dispetch}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -67,4 +67,4 @@ const Activity = ({dispatch: dispetch}) => {
   );
 };
 
-export default connect()(Activity);
+export default connect()(ActivityHub);

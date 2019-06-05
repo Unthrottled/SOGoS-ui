@@ -7,19 +7,25 @@ function getDisplayTime(hours, minutes, seconds) {
   return `${displayHours}${displayMinutes}${displaySeconds}`;
 }
 
-const Timer = ({startTimeInSeconds, countDown, onComplete}) => {
+const Timer = ({startTimeInSeconds, activityId, countDown, onComplete}) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
+  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
   useEffect(() => {
     let timeout;
-    if(timeElapsed < 1 && countDown){
+    if (timeElapsed < 1 && countDown) {
       onComplete && onComplete();
     } else {
-       timeout = setTimeout(() => {
-        setTimeElapsed(timeElapsed + (countDown ? -1 : 1))
+      timeout = setTimeout(() => {
+        const activityTheSame = rememberedActivity === activityId;
+        const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
+        setTimeElapsed(timeToIncrement + (countDown ? -1 : 1));
+        if (!activityTheSame) {
+          setRememberedActivity(activityId);
+        }
       }, 1000);
     }
-    return ()=>{
-        clearTimeout(timeout)
+    return () => {
+      clearTimeout(timeout)
     }
   });
   const hours = Math.floor(timeElapsed / 3600);

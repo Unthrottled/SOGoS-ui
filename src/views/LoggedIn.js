@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import Activity from "./Activity";
+import Activity from "./ActivityHub";
 import MenuAppBar from "./MenuAppBar";
 import ActivityTimer from "./ActivityTimer";
 

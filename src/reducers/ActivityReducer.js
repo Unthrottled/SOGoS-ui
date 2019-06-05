@@ -14,7 +14,9 @@ export type ActivityState = {
 
 const INITIAL_ACTIVITY_STATE: ActivityState = {
   shouldTime: false,
-  currentActivity: {},
+  currentActivity: {
+    content:{}
+  },
 };
 
 

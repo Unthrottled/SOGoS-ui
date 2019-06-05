@@ -26,9 +26,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime) / 1000);
+const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 
-const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch}) => {
+const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch, activityId}) => {
   const classes = useStyles();
   const stopActivity = () =>{
     dispetch(startNonTimedActivity({
@@ -41,7 +41,7 @@ const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch}) => {
     <Slide direction={"up"} in={shouldTime}>
       <div className={classes.timer}>
         <div style={{flexGrow: 1, textAlign: "center"}}>
-          <Timer startTimeInSeconds={getTime(antecedenceTime)}/>
+          <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
         </div>
         <div onClick={stopActivity} className={classes.close}>
           <Close/>
@@ -51,10 +51,11 @@ const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch}) => {
 };
 
 const mapStateToProps = state => {
-  const {activity: {shouldTime, currentActivity: {antecedenceTime}}} = state;
+  const {activity: {shouldTime, currentActivity: {antecedenceTime, content: {uuid}}}} = state;
   return {
     shouldTime,
     antecedenceTime,
+    activityId: uuid
   }
 };
 
