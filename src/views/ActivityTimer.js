@@ -6,6 +6,7 @@ import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
+import {ActivityType} from "../events/ActivityEvents";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -32,6 +33,7 @@ const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch}) => {
   const stopActivity = () =>{
     dispetch(startNonTimedActivity({
       name: 'RECOVERY',
+      type: ActivityType.ACTIVE,
       id: uuid(),
     }))
   };

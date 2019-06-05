@@ -11,6 +11,17 @@ export type ActivityContent = {
   name: string,
 }
 
+export const ActivityType = {
+  ACTIVE: 'ACTIVE',
+  PASSIVE: 'PASSIVE',
+};
+
+export const ActivityTimedType = {
+  NONE: 'NONE',
+  TIMER: 'TIMER',
+  STOP_WATCH: 'STOP_WATCH',
+};
+
 export type Activity = {
   antecedenceTime: number,
   content: ActivityContent,
@@ -36,7 +47,8 @@ export const createStartedNonTimedActivityEvent = (content: ActivityContent) => 
   type: STARTED_NON_TIMED_ACTIVITY,
   payload: {
     antecedenceTime: new Date().getTime(),
-    content
+    content,
+    timedType: ActivityTimedType.NONE,
   }
 });
 
