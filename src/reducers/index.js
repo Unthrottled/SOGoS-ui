@@ -15,4 +15,6 @@ export const selectSecurityState = globalState =>globalState.security;
 
 export const selectConfigurationState = globalState =>globalState.configuration;
 
+export const selectActivityState = globalState =>globalState.activity;
+
 export default rootReducer;

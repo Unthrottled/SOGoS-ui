@@ -27,6 +27,7 @@ export type Activity = {
   content: ActivityContent,
 };
 
+
 export const createStartedActivityEvent = (content: ActivityContent) => ({
   type: STARTED_ACTIVITY,
   payload: {
