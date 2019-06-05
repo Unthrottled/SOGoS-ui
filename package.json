@@ -42,5 +42,8 @@
     "redux-saga-test-engine": "^3.0.0",
     "redux-saga-testing": "^1.0.5"
   },
+  "resolutions": {
+    "ws": "^3.3.1"
+  },
   "proxy": "http://localhost:8888"
 }
