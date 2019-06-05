@@ -7,6 +7,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
+import {ActivityTimedType, ActivityType} from "../events/ActivityEvents";
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
@@ -27,6 +28,8 @@ const Activity = ({dispatch: dispetch}) => {
   const commenceActivity = () => {
     dispetch(startTimedActivity({
       name: "SOME_ACTIVITY",
+      type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.STOP_WATCH,
       uuid: uuid(),
     }));
   };
