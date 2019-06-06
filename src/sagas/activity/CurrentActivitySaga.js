@@ -14,7 +14,7 @@ import {selectActivityState} from "../../reducers";
 const getActivityContent = activity => activity.content || {};
 const getTimedType = activity => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 const getActivityType = activity => getActivityContent(activity).type || ActivityType.PASSIVE;
-const getId = activity => getActivityContent(activity).uuid;
+const getId = activity => getActivityContent(activity).id;
 
 const activitiesEqual = (currentActivity, activity) => {
   const activityOneId = getId(currentActivity);
