@@ -10,7 +10,6 @@ const LoggedIn = ({fullName}) => {
       <MenuAppBar/>
       <Activity/>
       <h3>What's up {fullName}?</h3>
-      There's a ninja with huge boobs over there.
       <ActivityTimer/>
     </div>
   );

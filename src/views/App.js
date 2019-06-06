@@ -7,14 +7,15 @@ import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
-import {green, grey} from "@material-ui/core/colors";
+import {green, teal} from "@material-ui/core/colors";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
-    primary: grey,
+    primary: teal,
     secondary: green,
   }
 }));
+
 function App({isLoggedIn, oauth, dispatch: dispetch}) {
   const isAppInitialized = oauth.authorizationEndpoint;
   const [mounted] = useState(true);
