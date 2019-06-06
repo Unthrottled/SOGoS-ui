@@ -48,7 +48,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
             <MenuIcon/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Photos
+            SOGoS
           </Typography>
           <div>
             <IconButton

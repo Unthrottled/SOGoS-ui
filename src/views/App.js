@@ -5,7 +5,16 @@ import {connect} from "react-redux";
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
+import {ThemeProvider} from '@material-ui/styles'
+import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
+import {green, grey} from "@material-ui/core/colors";
 
+const theme = responsiveFontSizes(createMuiTheme({
+  palette: {
+    primary: grey,
+    secondary: green,
+  }
+}));
 function App({isLoggedIn, oauth, dispatch: dispetch}) {
   const isAppInitialized = oauth.authorizationEndpoint;
   const [mounted] = useState(true);
@@ -13,12 +22,14 @@ function App({isLoggedIn, oauth, dispatch: dispetch}) {
     dispetch(appInitialized());
   }, [mounted]);
   return isAppInitialized ? (
-    <div className="App">
-      <div className={"Content"}>
-        {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
-        <img src={logo} className="App-logo" alt="logo"/>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <div className={"Content"}>
+          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
+          <img src={logo} className="App-logo" alt="logo"/>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   ) : <div/>;
 }
 
