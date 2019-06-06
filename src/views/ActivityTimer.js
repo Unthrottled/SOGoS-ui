@@ -4,9 +4,9 @@ import {connect} from "react-redux";
 import Slide from "@material-ui/core/Slide";
 import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
-import {startNonTimedActivity} from "../actions/ActivityActions";
+import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
-import {ActivityType} from "../events/ActivityEvents";
+import {ActivityTimedType, ActivityType} from "../events/ActivityEvents";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -27,21 +27,42 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
+const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
-const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch, activityId}) => {
+const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
   const classes = useStyles();
-  const stopActivity = () =>{
+  const {antecedenceTime, content: {uuid: activityId, timedType, duration}} = currentActivity;
+
+  const stopActivity = () => {
     dispetch(startNonTimedActivity({
       name: 'RECOVERY',
       type: ActivityType.ACTIVE,
       id: uuid(),
     }))
   };
+  const startTimedRecovery = ()=>{
+    dispetch(startTimedActivity({
+      name: 'RECOVERY',
+      type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.TIMER,
+      duration: 60000,
+      uuid: uuid(),
+    }));
+  };
+
+  const isTimer = timedType === ActivityTimedType.TIMER;
   return shouldTime ? (
     <Slide direction={"up"} in={shouldTime}>
       <div className={classes.timer}>
         <div style={{flexGrow: 1, textAlign: "center"}}>
-          <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
+          {
+            isTimer ?
+              <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
+                     onComplete={startTimedRecovery}
+                     countDown
+                     activityId={activityId}/> :
+              <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
+          }
         </div>
         <div onClick={stopActivity} className={classes.close}>
           <Close/>
@@ -51,11 +72,10 @@ const ActivityTimer = ({shouldTime, antecedenceTime, dispatch: dispetch, activit
 };
 
 const mapStateToProps = state => {
-  const {activity: {shouldTime, currentActivity: {antecedenceTime, content: {uuid}}}} = state;
+  const {activity: {shouldTime, currentActivity}} = state;
   return {
     shouldTime,
-    antecedenceTime,
-    activityId: uuid
+    currentActivity,
   }
 };
 

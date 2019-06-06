@@ -3,7 +3,11 @@
 - Count-Down Activity
 
 - Initial Loading Screen
-    - When refresh token is expired prompt to login again (no automatic request please).
+
+- When refresh token is expired prompt to login again (no automatic request please).
+    - Do not refresh on polling.
+
+- What happens on logout?
 
 - Offline mode
 

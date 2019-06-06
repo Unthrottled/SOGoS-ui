@@ -2,7 +2,8 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import React, {useState} from "react";
-import Timer from '@material-ui/icons/AvTimer';
+import StopWatch from '@material-ui/icons/AvTimer';
+import Timer from '@material-ui/icons/Timer';
 import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
@@ -25,20 +26,28 @@ const ActivityHub = ({dispatch: dispetch}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const commenceActivity = () => {
+  const commenceActivity = () =>
     dispetch(startTimedActivity({
       name: "SOME_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.STOP_WATCH,
       uuid: uuid(),
     }));
-  };
-  const handleClick = () => {
-    setOpen(!open)
-  };
+
+  const commenceTimedActivity = () =>
+    dispetch(startTimedActivity({
+      name: "SOME_TIMED_ACTIVITY",
+      type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.TIMER,
+      duration: 6000,
+      uuid: uuid(),
+    }));
+
+  const handleClick = () => setOpen(!open);
 
   const actions = [
-    {icon: <Timer/>, name: 'Start Task', perform: () => commenceActivity()},
+    {icon: <Timer/>, name: 'Start Timed Task', perform: () => commenceTimedActivity()},
+    {icon: <StopWatch/>, name: 'Start Task', perform: () => commenceActivity()},
   ];
 
   return (

@@ -10,13 +10,13 @@ function getDisplayTime(hours, minutes, seconds) {
 const Timer = ({startTimeInSeconds, activityId, countDown, onComplete}) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
+  const activityTheSame = rememberedActivity === activityId;
   useEffect(() => {
     let timeout;
-    if (timeElapsed < 1 && countDown) {
+    if (timeElapsed < 1 && countDown && activityTheSame) {
       onComplete && onComplete();
     } else {
       timeout = setTimeout(() => {
-        const activityTheSame = rememberedActivity === activityId;
         const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
         setTimeElapsed(timeToIncrement + (countDown ? -1 : 1));
         if (!activityTheSame) {
