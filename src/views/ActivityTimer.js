@@ -29,9 +29,9 @@ const useStyles = makeStyles(theme => ({
 const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
-const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
+const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch: dispetch}) => {
   const classes = useStyles();
-  const {antecedenceTime, content: {uuid: activityId, timedType, duration}} = currentActivity;
+  const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
 
   const stopActivity = () => {
     dispetch(startNonTimedActivity({
@@ -40,14 +40,21 @@ const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
       id: uuid(),
     }))
   };
-  const startTimedRecovery = () => {
-    dispetch(startTimedActivity({
-      name: 'RECOVERY',
-      type: ActivityType.ACTIVE,
-      timedType: ActivityTimedType.TIMER,
-      duration: 60000,
-      uuid: uuid(),
-    }));
+  const startRecoveryOrResume = () => {
+    if(name === 'RECOVERY'){
+      dispetch(startTimedActivity({
+        ...previousActivity.content,
+        uuid: uuid(),
+      }));
+    } else {
+      dispetch(startTimedActivity({
+        name: 'RECOVERY',
+        type: ActivityType.ACTIVE,
+        timedType: ActivityTimedType.TIMER,
+        duration: 6000,
+        uuid: uuid(),
+      }));
+    }
   };
 
   const isTimer = timedType === ActivityTimedType.TIMER;
@@ -58,7 +65,7 @@ const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
           {
             isTimer ?
               <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
-                     onComplete={startTimedRecovery}
+                     onComplete={startRecoveryOrResume}
                      countDown
                      activityId={activityId}/> :
               <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
@@ -72,10 +79,11 @@ const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
 };
 
 const mapStateToProps = state => {
-  const {activity: {shouldTime, currentActivity}} = state;
+  const {activity: {shouldTime, currentActivity, previousActivity}} = state;
   return {
     shouldTime,
     currentActivity,
+    previousActivity
   }
 };
 
