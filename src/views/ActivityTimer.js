@@ -40,7 +40,7 @@ const ActivityTimer = ({shouldTime, currentActivity, dispatch: dispetch}) => {
       id: uuid(),
     }))
   };
-  const startTimedRecovery = ()=>{
+  const startTimedRecovery = () => {
     dispetch(startTimedActivity({
       name: 'RECOVERY',
       type: ActivityType.ACTIVE,

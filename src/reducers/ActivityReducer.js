@@ -10,11 +10,15 @@ import type {Activity} from "../events/ActivityEvents";
 export type ActivityState = {
   shouldTime: boolean,
   currentActivity: Activity,
+  previousActivity: Activity,
 }
 
 const INITIAL_ACTIVITY_STATE: ActivityState = {
   shouldTime: false,
   currentActivity: {
+    content:{}
+  },
+  previousActivity: {
     content:{}
   },
 };
@@ -27,6 +31,7 @@ const userReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Acti
       return {
         ...state,
         shouldTime: true,
+        previousActivity: state.currentActivity,
         currentActivity: action.payload
       };
     case STARTED_NON_TIMED_ACTIVITY:
@@ -34,6 +39,7 @@ const userReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Acti
       return {
         ...state,
         shouldTime: false,
+        previousActivity: state.currentActivity,
         currentActivity: action.payload,
       };
     default:
