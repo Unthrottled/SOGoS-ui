@@ -1,5 +1,6 @@
-import {all, call, take, fork} from 'redux-saga/effects'
+import {put, all, call, take, fork} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
+import {createFoundWifiEvent, createLostWifiEvent} from "../events/NetworkEvents";
 
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
@@ -16,8 +17,8 @@ function* onlineSaga() {
   const onlineEventChannel = yield call(createOnlineChannel);
   try{
     while (true){
-      const onlineStatus = yield take(onlineEventChannel);
-      console.log('online status: ', onlineStatus);
+      yield take(onlineEventChannel);
+      yield put(createFoundWifiEvent());
     }
   } catch (e) {
     console.log('shit broke in online saga', e);
@@ -28,8 +29,8 @@ function* offLineSaga() {
   const onlineEventChannel = yield call(createOfflineChannel);
   try{
     while (true){
-      const onlineStatus = yield take(onlineEventChannel);
-      console.log('offline status: ', onlineStatus);
+      yield take(onlineEventChannel);
+      yield put(createLostWifiEvent());
     }
   } catch (e) {
     //todo: re-establish channel.
@@ -37,10 +38,18 @@ function* offLineSaga() {
   }
 }
 
+function* initialNetworkStateSaga(){
+  if(navigator.onLine){
+    yield put(createFoundWifiEvent());
+  } else {
+    yield put(createLostWifiEvent())
+  }
+}
+
 function* listenToNetworkEvents() {
+  yield fork(initialNetworkStateSaga);
   yield fork(onlineSaga);
   yield fork(offLineSaga);
-
 }
 
 export default function* rootSaga() {
