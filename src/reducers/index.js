@@ -3,12 +3,14 @@ import userReducer from './UserReducer';
 import securityReducer from './SecurityReducer';
 import configurationReducer from './ConfigurationReducer';
 import activityReducer from './ActivityReducer';
+import networkReducer from './NetworkReducer';
 
 const rootReducer = combineReducers({
   security: securityReducer,
   user: userReducer,
   configuration: configurationReducer,
   activity: activityReducer,
+  network: networkReducer,
 });
 
 export const selectSecurityState = globalState =>globalState.security;
