@@ -11,6 +11,7 @@ import Menu from '@material-ui/core/Menu';
 import {connect} from "react-redux";
 import {logout} from "../actions/SecurityActions";
 import OfflineMode from "./OfflineMode";
+import InstallApplication from "./InstallApplication";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,6 +53,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
           <Typography variant="h6" className={classes.title}>
             SOGoS
           </Typography>
+          <InstallApplication />
           <div>
             <IconButton
               aria-owns={open ? 'menu-appbar' : undefined}

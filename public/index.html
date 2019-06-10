@@ -24,7 +24,7 @@
     <script>
       //Hook up Install Event
       window.addEventListener('beforeinstallprompt', (event) => {
-        global.sogosInstallPrompt = event;
+        window.sogosInstallPrompt = event;
       });
     </script>
   </head>
