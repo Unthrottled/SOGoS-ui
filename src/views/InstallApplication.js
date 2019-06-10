@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import GetApp from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -13,12 +13,15 @@ const useStyles = makeStyles(theme => ({
 
 const InstallApplication = () => {
   const classes = useStyles();
-  //todo: component did mount
-  const {sogosInstallPrompt} = window;
+  const [componentDidMount] = useState('didMount');
+  const [installPrompt, setInstallPromptState] = useState(null);
+  useEffect(()=>{
+    window.addEventListener('beforeinstallprompt', (event) => setInstallPromptState(event));
+  }, [componentDidMount]);
 
   const installApplication = () => {
-    sogosInstallPrompt.prompt();
-    sogosInstallPrompt.userChoice
+    installPrompt.prompt();
+    installPrompt.userChoice
       .then(choice => {
         console.log(choice);
         if (choice.outcome === 'accepted') {
@@ -29,7 +32,7 @@ const InstallApplication = () => {
       });
   };
 
-  return sogosInstallPrompt ? (
+  return installPrompt ? (
     <Tooltip title={'Install SOGoS!'} onClick={installApplication}>
       <IconButton aria-label={'ayy lemon'} id={'download-button'} className={classes.download}>
         <GetApp/>
