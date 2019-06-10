@@ -1,6 +1,6 @@
 import {select, put, all, call, take, fork} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
-import {createFoundWifiEvent, createLostWifiEvent} from "../events/NetworkEvents";
+import {createFoundWifiEvent, createLostWifiEvent, FOUND_WIFI} from "../events/NetworkEvents";
 import {selectNetworkState} from "../reducers";
 
 export const createOnlineChannel = () => createNetworkChannel('online');
@@ -42,6 +42,13 @@ function* offLineSaga() {
 export function* isOnline() {
   const {isOnline} = yield select(selectNetworkState);
   return isOnline
+}
+
+export function* waitForWifi() {
+  const {isOnline} = yield select(selectNetworkState);
+  if (!isOnline) {
+    yield take(FOUND_WIFI);
+  }
 }
 
 function* initialNetworkStateSaga(){
