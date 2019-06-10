@@ -24,7 +24,7 @@
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-offline": "http-server ./build"
+    "start-offline": "http-server -P http://localhost:8888 ./build"
   },
   "eslintConfig": {
     "extends": "react-app"
