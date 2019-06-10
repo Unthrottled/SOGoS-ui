@@ -12,6 +12,7 @@ import {connect} from "react-redux";
 import {logout} from "../actions/SecurityActions";
 import OfflineMode from "./OfflineMode";
 import InstallApplication from "./InstallApplication";
+import UpdateApplication from "./UpdateApplication";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,6 +54,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
           <Typography variant="h6" className={classes.title}>
             SOGoS
           </Typography>
+          <UpdateApplication/>
           <InstallApplication />
           <div>
             <IconButton

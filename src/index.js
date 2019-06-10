@@ -19,15 +19,12 @@ ReactDOM.render(
 );
 
 const renderRefreshUI = registration =>{
-  const refreshButton = document.createElement('button');
-  refreshButton.textContent = 'Update Yo';
-  refreshButton.className = 'update-button';
-  refreshButton.addEventListener('click',()=>{
-    refreshButton.disabled = true;
-    registration.waiting.postMessage('things?')
+  window.addEventListener('sogosUpdateAvailable', (event)=>{
+    console.log('finna bust a nut', event);
   });
-
-  document.getElementById('root').appendChild(refreshButton)
+  window.dispatchEvent(new CustomEvent('sogosUpdateAvailable', {
+    detail: registration
+  }));
 };
 
 if(process.env.NODE_ENV === 'production'){
