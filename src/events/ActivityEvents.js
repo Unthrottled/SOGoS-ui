@@ -9,7 +9,7 @@ export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 
 export type ActivityContent = {
-  id: string,
+  uuid: string,
   name: string,
 }
 

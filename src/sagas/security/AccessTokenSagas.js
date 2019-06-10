@@ -1,5 +1,5 @@
-import {call, fork, put, race, select, take} from 'redux-saga/effects';
-import {createFoundAccessTokenEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {call, fork, race, select, take} from 'redux-saga/effects';
+import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
 import {refreshTokenSaga} from "./RefreshTokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
@@ -7,9 +7,9 @@ import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceS
 export function* accessTokenSagas() {
   const accessToken = yield call(getOrRefreshAccessToken);
   if (accessToken) {
-    yield put(createFoundAccessTokenEvent(accessToken));
+    return accessToken;
   } else {
-    // todo: activate offline mode.
+    // todo: ask user to sign in again.
   }
 }
 

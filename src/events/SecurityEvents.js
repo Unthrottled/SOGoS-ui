@@ -3,7 +3,6 @@ import type {OAuthConfig} from "../reducers/ConfigurationReducer";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
-export const FAILED_LOGGING_OFF: 'FAILED_LOGGING_OFF' = 'FAILED_LOGGING_OFF';
 export const FAILED_LOGGING_ON: 'FAILED_LOGGING_ON' = 'FAILED_LOGGING_ON';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
@@ -21,11 +20,6 @@ export const requestLogoff = () => ({
 
 export const createRequestAccessTokenEvent = () => ({
   type: REQUESTED_ACCESS_TOKEN,
-});
-
-export const createFoundAccessTokenEvent = accessToken => ({
-  type: FOUND_ACCESS_TOKEN,
-  payload: accessToken,
 });
 
 export const createRequestLogonEvent = (oauthConfig) => ({

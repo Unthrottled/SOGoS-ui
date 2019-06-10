@@ -14,7 +14,7 @@ import {selectActivityState} from "../../reducers";
 const getActivityContent = activity => activity.content || {};
 const getTimedType = activity => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 const getActivityType = activity => getActivityContent(activity).type || ActivityType.PASSIVE;
-const getId = activity => getActivityContent(activity).id;
+const getId = activity => getActivityContent(activity).uuid;
 
 const activitiesEqual = (currentActivity, activity) => {
   const activityOneId = getId(currentActivity);
@@ -44,8 +44,8 @@ function* updateCurrentActivity() {
 
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
-  // while (true) {
+  while (true) {
     yield updateCurrentActivity();
-    // yield delay(1000);
-  // }
+    yield delay(1000);
+  }
 }

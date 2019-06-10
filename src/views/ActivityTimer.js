@@ -37,7 +37,7 @@ const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch:
     dispetch(startNonTimedActivity({
       name: 'RECOVERY',
       type: ActivityType.ACTIVE,
-      id: uuid(),
+      uuid: uuid(),
     }))
   };
   const startRecoveryOrResume = () => {
