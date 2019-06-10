@@ -28,6 +28,7 @@ export function* activityUploadSaga(activity) {
       error,
       activity
     }));
+    yield activityCacheSaga(activity);
   }
 }
 
