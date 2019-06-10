@@ -6,7 +6,7 @@ import {
   RECEIVED_INITIAL_CONFIGURATION
 } from "../../events/ConfigurationEvents";
 import {call, put, select, take} from 'redux-saga/effects'
-import {selectConfigurationState, selectNetworkState} from "../../reducers";
+import {selectConfigurationState} from "../../reducers";
 import {waitForWifi} from "../NetworkSagas";
 
 /**

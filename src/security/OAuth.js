@@ -12,5 +12,5 @@ export const canRefreshToken = (securityState: SecurityState) => {
 
 export const isAccessTokenValid = (securityState: SecurityState) => {
   return securityState && securityState.accessTokenInformation &&
-    securityState.accessTokenInformation.expiresAt > nowInSeconds()
+    securityState.accessTokenInformation.expiresAt - 5 >= nowInSeconds()
 };
