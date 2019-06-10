@@ -9,7 +9,6 @@ export function* activitySyncSaga() {
       yield call(performPost, './api/activity/bulk', cache[guid]);
       yield put(createSyncedActivitiesEvent(guid))
     } catch (e) {
-      console.warn(e);
       // todo: handle non-sychage
     }
   }

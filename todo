@@ -1,7 +1,5 @@
 - Offline mode
     - If not logged in
-    - Halt polling
-    - Cache and sync activities
     - Offline Mode visible.
 
 - Initial Loading Screen
@@ -17,6 +15,8 @@
     - Make sure that tokens are secure
 
 - Enable manual sync of data?
+
+- Refresh token not working 100%
 
 Sad Path
 ----

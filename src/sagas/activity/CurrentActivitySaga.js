@@ -7,7 +7,8 @@ import {
 } from "../../events/ActivityEvents";
 import {call, delay, put, select, take} from 'redux-saga/effects'
 import {RECEIVED_USER} from "../../events/UserEvents";
-import {selectActivityState} from "../../reducers";
+import {selectActivityState, selectNetworkState} from "../../reducers";
+import {FOUND_WIFI} from "../../events/NetworkEvents";
 
 
 //todo: wrap activity in Activity function that has methods like deez.
@@ -42,10 +43,19 @@ function* updateCurrentActivity() {
   }
 }
 
+export function* delayWork() {
+  const{isOnline} = yield select(selectNetworkState);
+  if(isOnline){
+    yield delay(1000);
+  } else {
+    yield take(FOUND_WIFI);
+  }
+}
+
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
   while (true) {
     yield updateCurrentActivity();
-    yield delay(1000);
+    yield delayWork();
   }
 }

@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {connect} from "react-redux";
 import {logout} from "../actions/SecurityActions";
+import OfflineMode from "./OfflineMode";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,6 +48,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon/>
           </IconButton>
+          <OfflineMode/>
           <Typography variant="h6" className={classes.title}>
             SOGoS
           </Typography>
