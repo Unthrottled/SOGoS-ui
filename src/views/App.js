@@ -19,13 +19,12 @@ const theme = responsiveFontSizes(createMuiTheme({
   }
 }));
 
-function App({isLoggedIn, oauth, dispatch: dispetch}) {
-  const isAppInitialized = oauth.authorizationEndpoint;
+function App({isLoggedIn, dispatch: dispetch}) {
   const [mounted] = useState(true);
   useEffect(() => {
     dispetch(appInitialized());
   }, [mounted]);
-  return isAppInitialized ? (
+  return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className={"Content"}>
@@ -34,7 +33,7 @@ function App({isLoggedIn, oauth, dispatch: dispetch}) {
         </div>
       </div>
     </ThemeProvider>
-  ) : <div/>;
+  );
 }
 
 const mapStateToProps = state => {
