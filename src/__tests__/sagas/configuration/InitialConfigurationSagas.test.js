@@ -15,12 +15,16 @@ import {
   initialConfigurationSaga
 } from "../../../sagas/configuration/InitialConfigurationSagas";
 import {performOpenGet} from "../../../sagas/APISagas";
+import {waitForWifi} from "../../../sagas/NetworkSagas";
 
 
 describe('Also Initial Configuration Sagas', () => {
   describe('initialConfigurationSaga', () => {
     describe('when able to successfully make a request', () => {
       const it = sagaHelper(initialConfigurationSaga());
+      it('should wait for wifi', sagaEffect => {
+        expect(sagaEffect).toEqual(call(waitForWifi))
+      });
       it('should perform the correct request', sagaEffect => {
         expect(sagaEffect).toEqual(call(performOpenGet, './configurations'));
         const initialConfig: InitialConfig = {
@@ -34,7 +38,7 @@ describe('Also Initial Configuration Sagas', () => {
       });
       it('should dispatch the correct event', sagaEffect => {
         expect(sagaEffect).toEqual(put(createReceivedInitialConfigurationsEvent({
-          callbackURI: 'http://hollaatyaboi.io'
+          callbackURI: 'http://localhost'
         })));
         return createReceivedInitialConfigurationsEvent({
           'I HAVE NO IDEA': 'WHAT I AM DOING'
@@ -46,6 +50,9 @@ describe('Also Initial Configuration Sagas', () => {
     });
     describe('when not able to successfully make a request', () => {
       const it = sagaHelper(initialConfigurationSaga());
+      it('should wait for wifi', sagaEffect => {
+        expect(sagaEffect).toEqual(call(waitForWifi))
+      });
       it('should perform the correct request', sagaEffect => {
         expect(sagaEffect).toEqual(call(performOpenGet, './configurations'));
         return new Error(`SHIT'S BROKE, YO.`);

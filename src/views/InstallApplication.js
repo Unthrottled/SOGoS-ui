@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
 
 const InstallApplication = () => {
   const classes = useStyles();
+  //todo: component did mount
   const {sogosInstallPrompt} = window;
 
   const installApplication = () => {
