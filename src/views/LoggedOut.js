@@ -1,3 +1,4 @@
+import CloudOff from '@material-ui/icons/CloudOff';
 import React from "react";
 import {connect} from "react-redux";
 import {login} from "../actions/SecurityActions";
@@ -19,12 +20,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function LoggedOut({dispatch: dispetch}) {
+function LoggedOut({dispatch: dispetch, isOnline}) {
   const {root, label} = useStyles();
   const logUserIn = (): void => {
     dispetch(login());
   };
-  return (
+  return isOnline ? (
     <div>
       <h3 style={{
         margin: 0,
@@ -37,7 +38,24 @@ function LoggedOut({dispatch: dispetch}) {
         }}
         onClick={() => logUserIn()}>Take me to Log In!</Button>
     </div>
+  ) : (
+    <div>
+      <CloudOff style={{
+        fontSize: '10rem'
+      }}/>
+      <h3 style={{
+        margin: 0,
+        padding: '1.17em',
+      }}>Hey, You need wifi before you can log in!</h3>
+      <div>After that, you are free to use the app offline :)</div>
+    </div>
   );
 }
 
-export default connect()(LoggedOut);
+const mapStateToProps = state => {
+  const {network: {isOnline}} = state;
+  return {
+    isOnline,
+  }
+};
+export default connect(mapStateToProps)(LoggedOut);

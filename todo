@@ -1,6 +1,5 @@
 - Offline mode
     - If not logged in
-    - Offline Mode visible.
 
 - Initial Loading Screen
 
@@ -24,6 +23,11 @@ Sad Path
     - Token request
     - Initial Configuration request
     - Authorization Configuration request failure
+
+
+Needs UX:
+    - Offline Mode
+    - Login
 
 
 Tech Debt:
