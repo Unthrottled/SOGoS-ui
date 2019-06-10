@@ -1,3 +1,9 @@
+- Offline mode
+    - If not logged in
+    - Halt polling
+    - Cache and sync activities
+    - Offline Mode visible.
+
 - Initial Loading Screen
 
 - When refresh token is expired prompt to login again (no automatic request please).
@@ -6,8 +12,6 @@
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
 - What happens on logout?
-
-- Offline mode
 
 - Redux Persist
     - Make sure that tokens are secure
