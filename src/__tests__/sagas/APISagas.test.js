@@ -5,8 +5,9 @@ import {
   createRequestAccessTokenEvent,
   FOUND_ACCESS_TOKEN
 } from "../../events/SecurityEvents";
-import {call, put, take, select} from 'redux-saga/effects';
+import {call, take, select} from 'redux-saga/effects';
 import axios from 'axios/index';
+import {accessTokenSagas} from "../../sagas/security/AccessTokenSagas";
 
 describe('API Sagas', () => {
 
@@ -40,11 +41,8 @@ describe('API Sagas', () => {
     describe('when not supplied options', () => {
       const it = sagaHelper(performGet('http://localhost/api/onions'));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());
@@ -81,11 +79,8 @@ describe('API Sagas', () => {
     describe('when not supplied options and state is empty', () => {
       const it = sagaHelper(performGet('http://localhost/api/onions'));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());
@@ -124,11 +119,8 @@ describe('API Sagas', () => {
         }
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());
@@ -172,11 +164,8 @@ describe('API Sagas', () => {
         'I AM': 'BECOME DEATH',
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());
@@ -219,11 +208,8 @@ describe('API Sagas', () => {
         'I AM': 'BECOME DEATH',
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());
@@ -268,11 +254,8 @@ describe('API Sagas', () => {
         }
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(put(createRequestAccessTokenEvent()))
-      });
-      it('should then listen for a response', (result) => {
-        expect(result).toEqual(take(FOUND_ACCESS_TOKEN));
-        return createFoundAccessTokenEvent('I AM ACCESS TOKEN, YO');
+        expect(result).toEqual(call(accessTokenSagas));
+        return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
         expect(result).toEqual(select());

@@ -22,7 +22,6 @@ export function* performOpenGet<T>(url: String, options): T {
 }
 
 export function* performPost<T>(url: String, data, options = {headers: {}}): T {
-  yield put(createRequestAccessTokenEvent());
   const accessToken = yield call(accessTokenSagas);
   const {user: {information: {guid}}, security: {verificationKey}} = yield select();
   return yield call(axios.post, url, data, {
