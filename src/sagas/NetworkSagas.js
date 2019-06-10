@@ -1,6 +1,7 @@
-import {put, all, call, take, fork} from 'redux-saga/effects'
+import {select, put, all, call, take, fork} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
 import {createFoundWifiEvent, createLostWifiEvent} from "../events/NetworkEvents";
+import {selectNetworkState} from "../reducers";
 
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
@@ -36,6 +37,11 @@ function* offLineSaga() {
     //todo: re-establish channel.
     console.log('shit broke in offline saga', e);
   }
+}
+
+export function* isOnline() {
+  const {isOnline} = yield select(selectNetworkState);
+  return isOnline
 }
 
 function* initialNetworkStateSaga(){

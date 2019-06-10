@@ -44,8 +44,8 @@ function* updateCurrentActivity() {
 
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
-  while (true) {
+  // while (true) {
     yield updateCurrentActivity();
-    yield delay(1000);
-  }
+    // yield delay(1000);
+  // }
 }

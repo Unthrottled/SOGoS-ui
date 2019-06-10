@@ -19,4 +19,8 @@ export const selectConfigurationState = globalState =>globalState.configuration;
 
 export const selectActivityState = globalState =>globalState.activity;
 
+export const selectNetworkState = globalState =>globalState.network;
+
+export const selectUserState = globalState =>globalState.user;
+
 export default rootReducer;

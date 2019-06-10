@@ -1,4 +1,5 @@
 export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
+export const CACHED_ACTIVITY = 'CACHED_ACTIVITY';
 export const STARTED_TIMED_ACTIVITY = 'STARTED_TIMED_ACTIVITY';
 export const STARTED_NON_TIMED_ACTIVITY = 'STARTED_NON_TIMED_ACTIVITY';
 export const RESUMED_TIMED_ACTIVITY = 'RESUMED_TIMED_ACTIVITY';
@@ -25,6 +26,11 @@ export const ActivityTimedType = {
 export type Activity = {
   antecedenceTime: number,
   content: ActivityContent,
+};
+
+export type ActivityCacheEvent = {
+  activity: Activity,
+  userGUID: string,
 };
 
 
@@ -60,6 +66,11 @@ export const createResumedStartedTimedActivityEvent = (activity: Activity) => ({
 
 export const createResumedStartedNonTimedActivityEvent = (activity: Activity) => ({
   type: RESUMED_NON_TIMED_ACTIVITY,
+  payload: activity
+});
+
+export const createCachedActivityEvent = (activity: ActivityCacheEvent) => ({
+  type: CACHED_ACTIVITY,
   payload: activity
 });
 

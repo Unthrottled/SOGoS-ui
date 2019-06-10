@@ -21,7 +21,7 @@ export const fetchApplicationConfiguration = () =>{
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
-    whitelist: ['security', 'user'],
+    whitelist: ['security', 'user', 'activity'],
   };
 
   const sagaMiddleware = createSagaMiddleware();
