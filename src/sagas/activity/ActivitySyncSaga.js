@@ -1,6 +1,14 @@
-import {select} from 'redux-saga/effects'
+import {select, call} from 'redux-saga/effects'
+import {performPost} from "../APISagas";
 
 export function* activitySyncSaga() {
-  const {user, activity} = yield select();
-  console.log('finna bust a nut', user, activity);
+  const {user:{information:{guid}}, activity :{cache}} = yield select();
+  if(guid && cache[guid]){
+    try{
+      yield call(performPost, './api/bulk', cache[guid]);
+    } catch (e) {
+      console.warn(e);
+      // todo: handle non-sychage
+    }
+  }
 }
