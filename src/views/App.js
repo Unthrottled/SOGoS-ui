@@ -11,7 +11,10 @@ import {green, cyan} from "@material-ui/core/colors";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
-    primary: cyan,
+    primary: {
+      ...cyan,
+      alertColor: '#f9ff75',
+    },
     secondary: green,
   }
 }));

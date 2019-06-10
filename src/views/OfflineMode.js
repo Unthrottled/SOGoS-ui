@@ -2,12 +2,19 @@ import {connect} from "react-redux";
 import React from "react";
 import Zoom from '@material-ui/core/Zoom';
 import CloudOff from '@material-ui/icons/CloudOff';
+import {makeStyles} from "@material-ui/core";
+
+const useStyles = makeStyles(theme => ({
+  offline: {
+    color: theme.palette.primary.alertColor
+  },
+}));
 
 const OfflineMode = ({isOnline}) => {
-
+  const classes = useStyles();
   return (
     <Zoom in={!isOnline}>
-      <CloudOff/>
+      <CloudOff id={'offlineIcon'} className={classes.offline}/>
     </Zoom>
   );
 };
