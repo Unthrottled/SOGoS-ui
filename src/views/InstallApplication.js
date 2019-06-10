@@ -11,10 +11,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches;
+
 const InstallApplication = () => {
   const classes = useStyles();
   const [componentDidMount] = useState('didMount');
   const [installPrompt, setInstallPromptState] = useState(null);
+  const [askedToInstall, setAskedToInstall] = useState(false);
   useEffect(()=>{
     window.addEventListener('beforeinstallprompt', (event) => setInstallPromptState(event));
   }, [componentDidMount]);
@@ -23,16 +26,19 @@ const InstallApplication = () => {
     installPrompt.prompt();
     installPrompt.userChoice
       .then(choice => {
-        console.log(choice);
         if (choice.outcome === 'accepted') {
           console.log('User accepted the A2HS prompt', choice);
         } else {
           console.log('User dismissed the A2HS prompt', choice);
         }
+        setAskedToInstall(true);
       });
   };
 
-  return installPrompt ? (
+  const hasInstallPrompt = !!installPrompt;
+  const firstTimeAsking = !askedToInstall;
+  const notInstalledAlready = !isStandalone();
+  return (hasInstallPrompt && firstTimeAsking && notInstalledAlready) ? (
     <Tooltip title={'Install SOGoS!'} onClick={installApplication}>
       <IconButton aria-label={'ayy lemon'} id={'download-button'} className={classes.download}>
         <GetApp/>
