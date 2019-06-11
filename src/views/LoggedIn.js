@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import Activity from "./ActivityHub";
 import MenuAppBar from "./MenuAppBar";
 import ActivityTimer from "./ActivityTimer";
+import SessionExpired from "./SessionExpired";
 
 const LoggedIn = ({fullName}) => {
   return (
@@ -11,6 +12,7 @@ const LoggedIn = ({fullName}) => {
       <Activity/>
       <h3>What's up {fullName}?</h3>
       <ActivityTimer/>
+      <SessionExpired/>
     </div>
   );
 };

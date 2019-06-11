@@ -1,12 +1,14 @@
 import type {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {createRequestLogonEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 import {fetchTokenSaga} from "./TokenSagas";
+import {waitForWifi} from "../NetworkSagas";
 
 export function* refreshTokenSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
+  yield call(waitForWifi);
   const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
   yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
   const {failureResponse} = yield race({
@@ -15,8 +17,7 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig, securityState: Secur
   });
 
   if (failureResponse) {
-    // todo: handle offline
-    yield put(createRequestLogonEvent(oauthConfig));// credentials are not good, just logon again please
+    yield put(createExpiredSessionEvent());// credentials are not good, just ask logon again please
   }
 }
 

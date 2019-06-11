@@ -13,6 +13,7 @@ export const FOUND_ACCESS_TOKEN: 'FOUND_ACCESS_TOKEN' = 'FOUND_ACCESS_TOKEN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
 export const FAILED_TO_RECEIVE_TOKEN: 'FAILED_TO_RECEIVE_TOKEN' = 'FAILED_TO_RECEIVE_TOKEN';
 export const INITIALIZED_SECURITY: 'INITIALIZED_SECURITY' = 'INITIALIZED_SECURITY';
+export const EXPIRED_SESSION: 'EXPIRED_SESSION' = 'EXPIRED_SESSION';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
@@ -25,6 +26,10 @@ export const createRequestAccessTokenEvent = () => ({
 export const createRequestLogonEvent = (oauthConfig) => ({
   type: REQUESTED_LOGON,
   payload: oauthConfig
+});
+
+export const createExpiredSessionEvent = () => ({
+  type: EXPIRED_SESSION,
 });
 
 export const requestAuthorizationGrantCheck = (oauthConfig: OAuthConfig) => ({
