@@ -17,7 +17,7 @@ import {
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
-import {fetchTokenSaga} from "./TokenSagas";
+import {fetchTokenSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 
@@ -83,7 +83,7 @@ export function* constructAuthorizationCodeGrantRequest(request, response): Toke
 }
 
 export function* exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig) {
-  yield fork(fetchTokenSaga, oauthConfig, tokenRequest);
+  yield fork(fetchTokenWithRefreshSaga, oauthConfig, tokenRequest);
   const {tokenReception} = yield race({
     tokenReception: take(RECEIVED_TOKENS),
     tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),

@@ -1,7 +1,7 @@
 import {call, fork, race, select, take} from 'redux-saga/effects';
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
-import {refreshTokenSaga} from "./RefreshTokenSagas";
+import {refreshTokenWithReplacementSaga, refreshTokenWithoutReplacementSaga} from "./RefreshTokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 
 export function* accessTokenSagas() {
@@ -13,7 +13,15 @@ export function* accessTokenSagas() {
   }
 }
 
-export function* getOrRefreshAccessToken() {
+export function* accessTokenWithSessionExtensionSaga() {
+  return yield call(accessTokenSagas, getOrRefreshAccessToken);
+}
+
+export function* accessTokenWithoutSessionExtensionSagas() {
+  return yield call(accessTokenSagas, getOrRefreshAccessToken);
+}
+
+export function* getOrRefreshAccessToken(refreshTokenSaga) {
   const {security} = yield select();
   if (canRefreshToken(security)) {
     const oauthConfiguration = yield call(oauthConfigurationSaga);
@@ -22,6 +30,13 @@ export function* getOrRefreshAccessToken() {
   } else {
     return security.accessToken
   }
+}
+export function* getOrRefreshAccessToken() {
+  return yield call(getOrRefreshAccessToken, refreshTokenWithReplacementSaga);
+}
+
+export function* getOrRefreshAccessToken() {
+  return yield call(getOrRefreshAccessToken, refreshTokenWithoutReplacementSaga);
 }
 
 export function* awaitToken(): string {

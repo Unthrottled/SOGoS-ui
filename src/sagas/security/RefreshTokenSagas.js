@@ -4,12 +4,14 @@ import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} fro
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
-import {fetchTokenSaga} from "./TokenSagas";
+import {fetchTokenSaga, fetchTokenNonRefreshSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {waitForWifi} from "../NetworkSagas";
 
-export function* refreshTokenSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
+export function* refreshTokenSaga(oauthConfig: OAuthConfig,
+                                  securityState: SecurityState,
+                                  refreshSaga) {
   yield call(waitForWifi);
-  const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
+  const refreshTokenRequest: TokenRequest = yield call(refreshSaga, securityState);
   yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
   const {failureResponse} = yield race({
     successResponse: take(RECEIVED_TOKENS),
@@ -19,6 +21,14 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig, securityState: Secur
   if (failureResponse) {
     yield put(createExpiredSessionEvent());// credentials are not good, just ask logon again please
   }
+}
+
+export function* refreshTokenWithoutReplacementSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
+  yield refreshTokenSaga(oauthConfig, securityState, fetchTokenNonRefreshSaga)
+}
+
+export function* refreshTokenWithReplacementSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
+  yield refreshTokenSaga(oauthConfig, securityState, fetchTokenWithRefreshSaga)
 }
 
 export function* refreshTokenRequestSaga(securityState: SecurityState): TokenRequest {
