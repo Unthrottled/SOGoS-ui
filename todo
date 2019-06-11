@@ -1,7 +1,3 @@
--PWA
-    - Handle no backend better.
-    - Cache index html expiry (for dem sweet updates)
-
 - Initial Loading Screen
 
 - When refresh token is expired prompt to login again (no automatic request please).
@@ -13,6 +9,10 @@
 
 - Redux Persist
     - Make sure that tokens are secure
+
+-PWA
+    - Cache index html expiry (for dem sweet updates)
+    - Notify user backend is not working.
 
 - Enable manual sync of data?
 

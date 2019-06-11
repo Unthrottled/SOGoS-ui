@@ -9,6 +9,7 @@ import {call, delay, put, select, take} from 'redux-saga/effects'
 import {RECEIVED_USER} from "../../events/UserEvents";
 import {selectActivityState, selectNetworkState} from "../../reducers";
 import {FOUND_WIFI} from "../../events/NetworkEvents";
+import {isOnline} from "../NetworkSagas";
 
 
 //todo: wrap activity in Activity function that has methods like deez.
@@ -31,7 +32,7 @@ function* handleNewActivity(activity) {
   return undefined;
 }
 
-function* updateCurrentActivity() {
+function* updateCurrentActivity(attempt: number = 10) {
   try {
     const {data: activity} = yield call(performGet, './api/activity/current');
     const {currentActivity} = yield select(selectActivityState);
@@ -39,7 +40,15 @@ function* updateCurrentActivity() {
       yield handleNewActivity(activity);
     }
   } catch (error) {
+    yield handleError(attempt)
+  }
+}
 
+export function* handleError(attempt:number){
+  const hasNetwork = yield isOnline();
+  if(hasNetwork){
+    yield delay(Math.pow(2, attempt) + Math.floor(Math.random() * 1000));
+    yield updateCurrentActivity(attempt < 13 ? attempt + 1 : 10)
   }
 }
 
