@@ -1,5 +1,4 @@
 -PWA
-    - Update Application
     - Handle no backend better.
     - Cache index html expiry (for dem sweet updates)
 

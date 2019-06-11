@@ -19,9 +19,6 @@ ReactDOM.render(
 );
 
 const renderRefreshUI = registration =>{
-  window.addEventListener('sogosUpdateAvailable', (event)=>{
-    console.log('finna bust a nut', event);
-  });
   window.dispatchEvent(new CustomEvent('sogosUpdateAvailable', {
     detail: registration
   }));

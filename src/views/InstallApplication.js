@@ -3,6 +3,7 @@ import GetApp from '@material-ui/icons/GetApp';
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import {makeStyles} from "@material-ui/core";
+import Zoom from "@material-ui/core/Zoom";
 
 const useStyles = makeStyles(theme => ({
   download: {
@@ -18,7 +19,7 @@ const InstallApplication = () => {
   const [componentDidMount] = useState('didMount');
   const [installPrompt, setInstallPromptState] = useState(null);
   const [askedToInstall, setAskedToInstall] = useState(false);
-  useEffect(()=>{
+  useEffect(() => {
     window.addEventListener('beforeinstallprompt', (event) => setInstallPromptState(event));
   }, [componentDidMount]);
 
@@ -38,13 +39,15 @@ const InstallApplication = () => {
   const hasInstallPrompt = !!installPrompt;
   const firstTimeAsking = !askedToInstall;
   const notInstalledAlready = !isStandalone();
-  return (hasInstallPrompt && firstTimeAsking && notInstalledAlready) ? (
-    <Tooltip title={'Install SOGoS!'} onClick={installApplication}>
-      <IconButton aria-label={'ayy lemon'} id={'download-button'} className={classes.download}>
-        <GetApp/>
-      </IconButton>
-    </Tooltip>
-  ) : null;
+  return (
+    <Zoom in={hasInstallPrompt && firstTimeAsking && notInstalledAlready}>
+      <Tooltip title={'Install SOGoS!'} onClick={installApplication}>
+        <IconButton aria-label={'ayy lemon'} id={'download-button'} className={classes.download}>
+          <GetApp/>
+        </IconButton>
+      </Tooltip>
+    </Zoom>
+  );
 };
 
 
