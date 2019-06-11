@@ -17,7 +17,7 @@ const isStandalone = () => window.matchMedia('(display-mode: standalone)').match
 const InstallApplication = () => {
   const classes = useStyles();
   const [componentDidMount] = useState('didMount');
-  const [installPrompt, setInstallPromptState] = useState(null);
+  const [installPrompt, setInstallPromptState] = useState(window.sogosInstallPrompt);
   const [askedToInstall, setAskedToInstall] = useState(false);
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (event) => setInstallPromptState(event));

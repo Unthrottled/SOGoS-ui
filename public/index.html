@@ -21,6 +21,12 @@
         crossorigin="anonymous"
         integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
         src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script>
+      //Hook up Install Event
+      window.addEventListener('beforeinstallprompt', (event) => {
+        window.sogosInstallPrompt = event;
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
