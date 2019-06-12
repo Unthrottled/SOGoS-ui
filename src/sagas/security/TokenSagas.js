@@ -34,8 +34,10 @@ export function* fetchTokenSaga(oauthConfig: OAuthConfig, tokenRequest: TokenReq
  * @returns
  */
 export function* fetchTokenWithRefreshSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest) {
-  yield call(fetchTokenSaga, oauthConfig, tokenRequest, tokenResponse => tokenResponse);
+  yield call(fetchTokenSaga, oauthConfig, tokenRequest, identityFunction);
 }
+
+export const identityFunction = tokenResponse => tokenResponse;
 
 /**
  * Attempts to fetch token from Authorization Server.
@@ -46,8 +48,10 @@ export function* fetchTokenWithRefreshSaga(oauthConfig: OAuthConfig, tokenReques
  * @returns
  */
 export function* fetchTokenWithoutSessionRefreshSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest) {
-  yield call(fetchTokenSaga, oauthConfig, tokenRequest, tokenResponse => {
-    delete tokenResponse['refreshToken'];
-    return tokenResponse;
-  });
+  yield call(fetchTokenSaga, oauthConfig, tokenRequest, refreshTokenDeleter);
 }
+
+export const refreshTokenDeleter = tokenResponse => {
+  delete tokenResponse['refreshToken'];
+  return tokenResponse;
+};
