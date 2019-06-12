@@ -26,7 +26,7 @@ import {AuthorizationRequest, AuthorizationRequestResponse} from "@openid/appaut
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../../reducers/ConfigurationReducer";
 import {NodeCrypto} from "@openid/appauth/built/node_support";
-import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
+import {fetchTokenWithRefreshSaga} from "../../../sagas/security/TokenSagas";
 
 describe('Authorization Flow Sagas', () => {
   describe('authorizationGrantSaga', () => {
@@ -225,7 +225,7 @@ describe('Authorization Flow Sagas', () => {
         oauth: 'config'
       }));
       it('should kick off token fetching promise', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+        expect(sagaEffect).toEqual(fork(fetchTokenWithRefreshSaga, {
           oauth: 'config'
         }, {
           'stupid': 'shit'
@@ -254,7 +254,7 @@ describe('Authorization Flow Sagas', () => {
         oauth: 'config'
       }));
       it('should kick off token fetching promise', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+        expect(sagaEffect).toEqual(fork(fetchTokenWithRefreshSaga, {
           oauth: 'config'
         }, {
           'stupid': 'shit'

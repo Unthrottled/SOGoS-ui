@@ -7,7 +7,7 @@ import {
   createSecurityInitializedEvent,
   requestAuthorizationGrantCheck
 } from "../../../events/SecurityEvents";
-import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
+import {refreshTokenWithReplacementSaga} from "../../../sagas/security/RefreshTokenSagas";
 
 jest.mock('../../../security/OAuth', () => ({
   canRefreshToken: jest.fn(),
@@ -58,7 +58,7 @@ describe('Security Initialization Sagas', () => {
         }
       });
       it('should then realize that the token can be refreshed', sagaEffect => {
-        expect(sagaEffect).toEqual(call(refreshTokenSaga, {
+        expect(sagaEffect).toEqual(call(refreshTokenWithReplacementSaga, {
           revocationEndpoint: 'http://logthefuckout.com'
         }, {
           accessToken: 'gib the resources b0ss',
@@ -86,7 +86,7 @@ describe('Security Initialization Sagas', () => {
         }
       });
       it('should then realize that the token can be refreshed', sagaEffect => {
-        expect(sagaEffect).toEqual(call(refreshTokenSaga, {
+        expect(sagaEffect).toEqual(call(refreshTokenWithReplacementSaga, {
           revocationEndpoint: 'http://logthefuckout.com',
         }, {
           accessToken: 'gib the resources b0ss',

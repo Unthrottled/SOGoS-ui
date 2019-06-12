@@ -72,6 +72,7 @@ describe('Security Reducer', () => {
 
       expect(securityState).toEqual({
         isLoggedIn: false,
+        isExpired: false,
       })
     });
     it('should wipe state and set logged on when not logged on', () => {
@@ -90,6 +91,7 @@ describe('Security Reducer', () => {
 
       expect(securityState).toEqual({
         isLoggedIn: false,
+        isExpired: false,
       })
     });
   });
