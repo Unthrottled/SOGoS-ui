@@ -1,8 +1,8 @@
 import sagaHelper from "redux-saga-testing";
-import {performGet, performOpenGet, performPost} from "../../sagas/APISagas";
+import {performGet, performGetWithToken, performOpenGet, performPost} from "../../sagas/APISagas";
 import {call, select} from 'redux-saga/effects';
 import axios from 'axios/index';
-import {accessTokenSagas} from "../../sagas/security/AccessTokenSagas";
+import {accessTokenSagas, accessTokenWithSessionExtensionSaga} from "../../sagas/security/AccessTokenSagas";
 
 describe('API Sagas', () => {
 
@@ -32,11 +32,11 @@ describe('API Sagas', () => {
     });
   });
 
-  describe('performGet', () => {
+  describe('performGetWithToken', () => {
     describe('when not supplied options', () => {
-      const it = sagaHelper(performGet('http://localhost/api/onions'));
+      const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {}, accessTokenWithSessionExtensionSaga));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
@@ -72,9 +72,9 @@ describe('API Sagas', () => {
       });
     });
     describe('when not supplied options and state is empty', () => {
-      const it = sagaHelper(performGet('http://localhost/api/onions'));
+      const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {}, accessTokenWithSessionExtensionSaga));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
@@ -106,15 +106,15 @@ describe('API Sagas', () => {
       });
     });
     describe('when supplied options', () => {
-      const it = sagaHelper(performGet('http://localhost/api/onions', {
+      const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {
         slip: 'knot',
         headers: {
           'Authorization': 'Basic Bitch',
           'X-QUICK-SCOPE': 'L337'
         }
-      }));
+      }, accessTokenWithSessionExtensionSaga));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
@@ -159,7 +159,7 @@ describe('API Sagas', () => {
         'I AM': 'BECOME DEATH',
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
@@ -203,7 +203,7 @@ describe('API Sagas', () => {
         'I AM': 'BECOME DEATH',
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {
@@ -249,7 +249,7 @@ describe('API Sagas', () => {
         }
       }));
       it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenSagas));
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
       });
       it('should then pick some stuff out of state', (result) => {

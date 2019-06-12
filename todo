@@ -1,6 +1,6 @@
 - Initial Loading Screen
 
-- Do not refresh on polling.
+- Do not refresh on polling. (is broke, does not refresh access Token)
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
