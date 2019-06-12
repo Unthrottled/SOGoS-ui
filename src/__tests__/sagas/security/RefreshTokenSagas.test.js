@@ -1,6 +1,10 @@
 import sagaHelper from "redux-saga-testing";
 import {call, fork, put, race, take} from 'redux-saga/effects';
-import {refreshTokenRequestSaga, refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
+import {
+  refreshTokenRequestSaga,
+  refreshTokenSaga,
+  refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga
+} from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,
   createRequestForInitialConfigurations,
@@ -13,10 +17,56 @@ import {
   FAILED_TO_RECEIVE_TOKEN,
   RECEIVED_TOKENS
 } from "../../../events/SecurityEvents";
-import {fetchTokenSaga, fetchTokenWithRefreshSaga} from "../../../sagas/security/TokenSagas";
+import {
+  fetchTokenSaga,
+  fetchTokenWithoutSessionRefreshSaga,
+  fetchTokenWithRefreshSaga
+} from "../../../sagas/security/TokenSagas";
 import {waitForWifi} from "../../../sagas/NetworkSagas";
 
 describe('Refresh TokenSagas', () => {
+  describe('refreshTokenWithoutReplacementSaga', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(refreshTokenWithoutReplacementSaga({
+        revocationEndpoint: 'http://logthefuckout.com'
+      }, {
+        accessToken: 'GIB ME THE RESOURCES'
+      }, fetchTokenWithRefreshSaga));
+      it('should delegate to correct function', sagaEffect => {
+        expect(sagaEffect).toEqual(call(refreshTokenSaga,
+          {
+            revocationEndpoint: 'http://logthefuckout.com'
+          }, {
+            accessToken: 'GIB ME THE RESOURCES'
+          }, fetchTokenWithoutSessionRefreshSaga
+        ))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('refreshTokenWithReplacementSaga', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(refreshTokenWithReplacementSaga({
+        revocationEndpoint: 'http://logthefuckout.com'
+      }, {
+        accessToken: 'GIB ME THE RESOURCES'
+      }, fetchTokenWithRefreshSaga));
+      it('should delegate to correct function', sagaEffect => {
+        expect(sagaEffect).toEqual(call(refreshTokenSaga,
+          {
+            revocationEndpoint: 'http://logthefuckout.com'
+          }, {
+            accessToken: 'GIB ME THE RESOURCES'
+          }, fetchTokenWithRefreshSaga
+        ))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
   describe('refreshTokenSaga', () => {
     describe('when tokens can be fetched', () => {
       const it = sagaHelper(refreshTokenSaga({
