@@ -7,8 +7,14 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {createRequestLogonEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
-import {fetchTokenSaga} from "../../../sagas/security/TokenSagas";
+import {
+  createExpiredSessionEvent,
+  createRequestLogonEvent,
+  FAILED_TO_RECEIVE_TOKEN,
+  RECEIVED_TOKENS
+} from "../../../events/SecurityEvents";
+import {fetchTokenSaga, fetchTokenWithRefreshSaga} from "../../../sagas/security/TokenSagas";
+import {waitForWifi} from "../../../sagas/NetworkSagas";
 
 describe('Refresh TokenSagas', () => {
   describe('refreshTokenSaga', () => {
@@ -17,7 +23,12 @@ describe('Refresh TokenSagas', () => {
         revocationEndpoint: 'http://logthefuckout.com'
       }, {
         accessToken: 'GIB ME THE RESOURCES'
-      }));
+      }, fetchTokenWithRefreshSaga));
+      it('should wait for wifi', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(waitForWifi)
+        )
+      });
       it('should ask for a constructed refresh token request', sagaEffect => {
         expect(sagaEffect).toEqual(call(refreshTokenRequestSaga, {
           accessToken: 'GIB ME THE RESOURCES',
@@ -27,7 +38,7 @@ describe('Refresh TokenSagas', () => {
         });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+        expect(sagaEffect).toEqual(fork(fetchTokenWithRefreshSaga, {
           revocationEndpoint: 'http://logthefuckout.com'
         }, new TokenRequest({
           grant_type: 'yo butt'
@@ -51,7 +62,12 @@ describe('Refresh TokenSagas', () => {
         revocationEndpoint: 'http://logthefuckout.com'
       }, {
         accessToken: 'GIB THE RESOURCES b0SS'
-      }));
+      }, fetchTokenWithRefreshSaga));
+      it('should wait for wifi', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(waitForWifi)
+        )
+      });
       it('should ask for a constructed refresh token request', sagaEffect => {
         expect(sagaEffect).toEqual(call(refreshTokenRequestSaga, {
           accessToken: 'GIB THE RESOURCES b0SS',
@@ -61,7 +77,7 @@ describe('Refresh TokenSagas', () => {
         });
       });
       it('should attempt to fetch token', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(fetchTokenSaga, {
+        expect(sagaEffect).toEqual(fork(fetchTokenWithRefreshSaga, {
           revocationEndpoint: 'http://logthefuckout.com'
         }, new TokenRequest({
           client_id: 'COOL CLIENT'
@@ -77,9 +93,7 @@ describe('Refresh TokenSagas', () => {
         }
       });
       it('should handle error and request logoff', sagaEffect => {
-        expect(sagaEffect).toEqual(put(createRequestLogonEvent({
-          revocationEndpoint: 'http://logthefuckout.com'
-        })))
+        expect(sagaEffect).toEqual(put(createExpiredSessionEvent()))
       });
       it('should then complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
