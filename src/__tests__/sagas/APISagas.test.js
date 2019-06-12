@@ -1,8 +1,17 @@
 import sagaHelper from "redux-saga-testing";
-import {performGet, performGetWithToken, performOpenGet, performPost} from "../../sagas/APISagas";
+import {
+  performGet,
+  performGetWithoutSessionExtension,
+  performGetWithToken,
+  performOpenGet,
+  performPost
+} from "../../sagas/APISagas";
 import {call, select} from 'redux-saga/effects';
 import axios from 'axios/index';
-import {accessTokenSagas, accessTokenWithSessionExtensionSaga} from "../../sagas/security/AccessTokenSagas";
+import {
+  accessTokenWithoutSessionExtensionSaga,
+  accessTokenWithSessionExtensionSaga
+} from "../../sagas/security/AccessTokenSagas";
 
 describe('API Sagas', () => {
 
@@ -25,6 +34,99 @@ describe('API Sagas', () => {
             'Just': 'Monika',
           }
         }))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+
+  describe('performGet', () => {
+    describe('when not given options', () => {
+      const it = sagaHelper(performGet('http://localhost/api/hazard/spaghetti'));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {headers: {}},
+          accessTokenWithSessionExtensionSaga));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when not given header options', () => {
+      const it = sagaHelper(performGet('http://localhost/api/hazard/spaghetti', {
+        headers: {
+          'murder': 'spagurder'
+        }
+      }));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {headers: {
+              murder: 'spagurder'
+            }},
+          accessTokenWithSessionExtensionSaga));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when not given non header options', () => {
+      const it = sagaHelper(performGet('http://localhost/api/hazard/spaghetti', {
+        danger: 'cheese'
+      }));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {danger: 'cheese'},
+          accessTokenWithSessionExtensionSaga));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('performGetWithoutSessionExtension', () => {
+    describe('when not given options', () => {
+      const it = sagaHelper(performGetWithoutSessionExtension('http://localhost/api/hazard/spaghetti'));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {headers: {}},
+          accessTokenWithoutSessionExtensionSaga));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when not given header options', () => {
+      const it = sagaHelper(performGetWithoutSessionExtension('http://localhost/api/hazard/spaghetti', {
+        headers: {
+          'murder': 'spagurder'
+        }
+      }));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {headers: {
+              murder: 'spagurder'
+            }},
+          accessTokenWithoutSessionExtensionSaga));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when not given non header options', () => {
+      const it = sagaHelper(performGetWithoutSessionExtension('http://localhost/api/hazard/spaghetti', {
+        danger: 'cheese'
+      }));
+      it('should call correct method', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performGetWithToken,
+          'http://localhost/api/hazard/spaghetti',
+          {danger: 'cheese'},
+          accessTokenWithoutSessionExtensionSaga));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
@@ -81,11 +183,9 @@ describe('API Sagas', () => {
         expect(result).toEqual(select());
         return {
           user: {
-            information: {
-            }
+            information: {}
           },
-          security: {
-          }
+          security: {}
         };
       });
       it('should then perform a get request with authentication without verification headers', (result) => {
@@ -210,11 +310,9 @@ describe('API Sagas', () => {
         expect(result).toEqual(select());
         return {
           user: {
-            information: {
-            }
+            information: {}
           },
-          security: {
-          }
+          security: {}
         };
       });
       it('should then perform a get request with authentication without verification headers', (result) => {
