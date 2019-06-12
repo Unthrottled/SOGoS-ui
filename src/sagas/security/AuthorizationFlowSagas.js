@@ -17,7 +17,7 @@ import {
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
-import {fetchTokenSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
+import {fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
 

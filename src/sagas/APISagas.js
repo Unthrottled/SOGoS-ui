@@ -1,12 +1,11 @@
 import {call, select} from 'redux-saga/effects'
 import axios from "axios";
 import {
-  accessTokenSagas,
   accessTokenWithoutSessionExtensionSaga,
   accessTokenWithSessionExtensionSaga
 } from "./security/AccessTokenSagas";
 
-function* performGetWithToken(url, options, accessTokenSaga) {
+export function* performGetWithToken(url, options, accessTokenSaga) {
   const accessToken = yield call(accessTokenSaga);
   const {user: {information: {guid}}, security: {verificationKey}} = yield select();
   return yield call(axios.get, url, {
@@ -21,11 +20,11 @@ function* performGetWithToken(url, options, accessTokenSaga) {
 }
 
 export function* performGet<T>(url: String, options = {headers: {}}): T {
-  return yield performGetWithToken(url, options, accessTokenWithSessionExtensionSaga);
+  return yield call(performGetWithToken, url, options, accessTokenWithSessionExtensionSaga);
 }
 
 export function* performGetWithoutSessionExtension<T>(url: String, options = {headers: {}}): T {
-  return yield performGetWithToken(url, options, accessTokenWithoutSessionExtensionSaga);
+  return yield call(performGetWithToken, url, options, accessTokenWithoutSessionExtensionSaga);
 }
 
 export function* performOpenGet<T>(url: String, options): T {

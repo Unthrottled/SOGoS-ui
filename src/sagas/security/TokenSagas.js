@@ -37,11 +37,10 @@ export function* fetchTokenWithRefreshSaga(oauthConfig: OAuthConfig, tokenReques
   yield call(fetchTokenSaga, oauthConfig, tokenRequest, tokenResponse => tokenResponse);
 }
 
-
 /**
  * Attempts to fetch token from Authorization Server.
  *
- * And will NOT include the new refresh token as part of state.
+ * And will ***NOT*** include the new refresh token as part of state.
  * @param oauthConfig
  * @param tokenRequest
  * @returns

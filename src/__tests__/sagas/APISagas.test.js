@@ -1,6 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {performGet, performOpenGet, performPost} from "../../sagas/APISagas";
-import {call, take, select} from 'redux-saga/effects';
+import {call, select} from 'redux-saga/effects';
 import axios from 'axios/index';
 import {accessTokenSagas} from "../../sagas/security/AccessTokenSagas";
 
