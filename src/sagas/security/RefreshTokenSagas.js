@@ -4,7 +4,7 @@ import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} fro
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
-import {fetchTokenSaga, fetchTokenNonRefreshSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
+import {fetchTokenSaga, fetchTokenWithoutSessionRefreshSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {waitForWifi} from "../NetworkSagas";
 
 export function* refreshTokenSaga(oauthConfig: OAuthConfig,
@@ -24,7 +24,7 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig,
 }
 
 export function* refreshTokenWithoutReplacementSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
-  yield refreshTokenSaga(oauthConfig, securityState, fetchTokenNonRefreshSaga)
+  yield refreshTokenSaga(oauthConfig, securityState, fetchTokenWithoutSessionRefreshSaga)
 }
 
 export function* refreshTokenWithReplacementSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {

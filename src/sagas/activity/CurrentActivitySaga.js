@@ -1,4 +1,4 @@
-import {performGet} from "../APISagas";
+import { performGetWithoutSessionExtension} from "../APISagas";
 import {
   ActivityTimedType,
   ActivityType,
@@ -34,7 +34,7 @@ function* handleNewActivity(activity) {
 
 function* updateCurrentActivity(attempt: number = 10) {
   try {
-    const {data: activity} = yield call(performGet, './api/activity/current');
+    const {data: activity} = yield call(performGetWithoutSessionExtension, './api/activity/current');
     const {currentActivity} = yield select(selectActivityState);
     if (!activitiesEqual(currentActivity, activity)) {
       yield handleNewActivity(activity);

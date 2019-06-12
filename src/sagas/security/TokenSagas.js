@@ -46,7 +46,7 @@ export function* fetchTokenWithRefreshSaga(oauthConfig: OAuthConfig, tokenReques
  * @param tokenRequest
  * @returns
  */
-export function* fetchTokenNonRefreshSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest) {
+export function* fetchTokenWithoutSessionRefreshSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest) {
   yield call(fetchTokenSaga, oauthConfig, tokenRequest, tokenResponse => {
     delete tokenResponse['refreshToken'];
     return tokenResponse;
