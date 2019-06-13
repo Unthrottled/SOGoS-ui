@@ -6,8 +6,10 @@ const getRefreshTokenInformation = refreshToken => {
   if(refreshToken){
     const decodedToken = jwtDecode(refreshToken);
     return {
-      issuedAt: decodedToken.iat,
-      expiresAt: decodedToken.exp,
+      refreshTokenInformation:{
+        issuedAt: decodedToken.iat,
+        expiresAt: decodedToken.exp,
+      }
     }
   } else {
     return {}
