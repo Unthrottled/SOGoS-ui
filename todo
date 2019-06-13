@@ -1,19 +1,12 @@
-- Initial Loading Screen
-
-- Do not refresh on polling. (is broke, does not refresh access Token)
-
-- Multi-Device Usage (Dafuq happens and who is in charge?)
-
 - What happens on logout?
-
-- Redux Persist
-    - Make sure that tokens are secure
 
 -PWA
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
 
 - Enable manual sync of data?
+
+- Multi-Device Usage (Dafuq happens and who is in charge?)
 
 Sad Path
 ----
@@ -22,6 +15,10 @@ Sad Path
     - Initial Configuration request
     - Authorization Configuration request failure
 
+Maybe:
+- Redux Persist
+    - Make sure that tokens are secure
+- Initial Loading Screen
 
 Needs UX:
     - Offline Mode
