@@ -3,7 +3,8 @@ import {call, fork, put, race, take} from 'redux-saga/effects';
 import {
   refreshTokenRequestSaga,
   refreshTokenSaga,
-  refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga
+  refreshTokenWithoutReplacementSaga,
+  refreshTokenWithReplacementSaga
 } from "../../../sagas/security/RefreshTokenSagas";
 import {
   createFoundInitialConfigurationsEvent,
@@ -11,17 +12,8 @@ import {
   FOUND_INITIAL_CONFIGURATION
 } from "../../../events/ConfigurationEvents";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
-import {
-  createExpiredSessionEvent,
-  createRequestLogonEvent,
-  FAILED_TO_RECEIVE_TOKEN,
-  RECEIVED_TOKENS
-} from "../../../events/SecurityEvents";
-import {
-  fetchTokenSaga,
-  fetchTokenWithoutSessionRefreshSaga,
-  fetchTokenWithRefreshSaga
-} from "../../../sagas/security/TokenSagas";
+import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
+import {fetchTokenWithoutSessionRefreshSaga, fetchTokenWithRefreshSaga} from "../../../sagas/security/TokenSagas";
 import {waitForWifi} from "../../../sagas/NetworkSagas";
 
 describe('Refresh TokenSagas', () => {
