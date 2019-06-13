@@ -46,11 +46,11 @@ const userReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Acti
         currentActivity: action.payload,
       };
     case CACHED_ACTIVITY: {
-      const {userGUID, activity} = action.payload;
+      const {userGUID, cachedActivity} = action.payload;
       if(state.cache[userGUID]){
-        state.cache[userGUID].push(activity)
+        state.cache[userGUID].push(cachedActivity)
       } else {
-        state.cache[userGUID] = [activity]
+        state.cache[userGUID] = [cachedActivity]
       }
       return state;
     }

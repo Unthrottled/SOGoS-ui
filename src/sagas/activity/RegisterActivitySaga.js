@@ -1,5 +1,6 @@
 import {performPost} from "../APISagas";
 import {
+  CREATE,
   createCachedActivityEvent,
   createFailureToRegisterStartEvent,
   createRegisteredStartEvent
@@ -14,7 +15,7 @@ export function* registerActivitySaga(action) {
   if (onlineStatus) {
     yield activityUploadSaga(activity);
   } else {
-    yield activityCacheSaga(activity);
+    yield activityStartCacheSaga(activity);
   }
 }
 
@@ -28,14 +29,17 @@ export function* activityUploadSaga(activity) {
       error,
       activity
     }));
-    yield activityCacheSaga(activity);
+    yield activityStartCacheSaga(activity);
   }
 }
 
-export function* activityCacheSaga(activity) {
+export function* activityStartCacheSaga(activity) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedActivityEvent({
-    activity,
+    cachedActivity: {
+      activity,
+      uploadType: CREATE,
+    },
     userGUID: guid,
   }))
 }

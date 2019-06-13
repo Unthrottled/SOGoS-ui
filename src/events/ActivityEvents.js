@@ -29,8 +29,17 @@ export type Activity = {
   content: ActivityContent,
 };
 
+export const CREATE = 'CREATE';
+export const UPDATE = 'UPDATE';
+export const DELETE = 'DELETE';
+
+export type CachedActivity = {
+  uploadType: CREATE | UPDATE | DELETE,
+  activity: Activity
+};
+
 export type ActivityCacheEvent = {
-  activity: Activity,
+  cachedActivity: CachedActivity,
   userGUID: string,
 };
 
