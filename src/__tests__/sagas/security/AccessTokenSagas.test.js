@@ -2,8 +2,9 @@ import sagaHelper from "redux-saga-testing";
 import {call, fork, race, select, take} from 'redux-saga/effects';
 import {awaitToken, getOrRefreshAccessToken} from "../../../sagas/security/AccessTokenSagas";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
-import {refreshTokenSaga} from "../../../sagas/security/RefreshTokenSagas";
+import {refreshTokenWithReplacementSaga} from "../../../sagas/security/RefreshTokenSagas";
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
+import {canRefreshEitherTokens, canRefreshToken} from "../../../security/OAuth";
 
 describe('Access Token Sagas', () => {
   describe('accessTokenSagas', () => {
@@ -108,7 +109,7 @@ describe('Access Token Sagas', () => {
   });
   describe('getOrRefreshAccessToken', () => {
     describe('when token can be refreshed', () => {
-      const it = sagaHelper(getOrRefreshAccessToken());
+      const it = sagaHelper(getOrRefreshAccessToken(refreshTokenWithReplacementSaga, canRefreshToken));
       it('should request security state', sagaEffect => {
         expect(sagaEffect).toEqual(select());
         return {
@@ -122,8 +123,37 @@ describe('Access Token Sagas', () => {
         return 'peaches';
       });
       it('should spawn a refresh token worker', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(refreshTokenSaga, 'peaches', {
+        expect(sagaEffect).toEqual(fork(refreshTokenWithReplacementSaga, 'peaches', {
             refreshToken: 'OH YEAH!',
+          }
+        ));
+      });
+      it('should await token', sagaEffect => {
+        expect(sagaEffect).toEqual(call(awaitToken));
+        return 'i am token'
+      });
+      it('should return token', sagaEffect => {
+        expect(sagaEffect).toEqual('i am token');
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when refresh token can be refreshed', () => {
+      const it = sagaHelper(getOrRefreshAccessToken(refreshTokenWithReplacementSaga, canRefreshEitherTokens));
+      it('should request security state', sagaEffect => {
+        expect(sagaEffect).toEqual(select());
+        return {
+          security: {}
+        }
+      });
+      it('should request OAuth configurations', sagaEffect => {
+        expect(sagaEffect).toEqual(call(oauthConfigurationSaga));
+        return 'peaches';
+      });
+      it('should spawn a refresh token worker', sagaEffect => {
+        expect(sagaEffect).toEqual(fork(refreshTokenWithReplacementSaga, 'peaches', {
+
           }
         ));
       });
@@ -140,7 +170,7 @@ describe('Access Token Sagas', () => {
     });
     describe('when token cannot be refreshed', () => {
       describe('when token is in state', () => {
-        const it = sagaHelper(getOrRefreshAccessToken());
+        const it = sagaHelper(getOrRefreshAccessToken(refreshTokenWithReplacementSaga, canRefreshToken));
         it('should request security state', sagaEffect => {
           expect(sagaEffect).toEqual(select());
           return {
@@ -157,7 +187,7 @@ describe('Access Token Sagas', () => {
         });
       });
       describe('when token is not in state', () => {
-        const it = sagaHelper(getOrRefreshAccessToken());
+        const it = sagaHelper(getOrRefreshAccessToken(refreshTokenWithReplacementSaga, canRefreshToken));
         it('should request security state', sagaEffect => {
           expect(sagaEffect).toEqual(select());
           return {
