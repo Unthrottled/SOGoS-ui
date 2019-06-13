@@ -1,17 +1,76 @@
 import sagaHelper from "redux-saga-testing";
 import {call, fork, race, select, take} from 'redux-saga/effects';
-import {awaitToken, getOrRefreshAccessToken} from "../../../sagas/security/AccessTokenSagas";
+import {
+  accessTokenSagas,
+  accessTokenWithoutSessionExtensionSaga,
+  accessTokenWithSessionExtensionSaga,
+  awaitToken,
+  getOrRefreshAccessToken,
+  getOrRefreshAccessTokenWithoutSessionExtension,
+  getOrRefreshAccessTokenWithSessionExtension
+} from "../../../sagas/security/AccessTokenSagas";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
-import {refreshTokenWithReplacementSaga} from "../../../sagas/security/RefreshTokenSagas";
+import {
+  refreshTokenWithoutReplacementSaga,
+  refreshTokenWithReplacementSaga
+} from "../../../sagas/security/RefreshTokenSagas";
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../../events/SecurityEvents";
 import {canRefreshEitherTokens, canRefreshToken} from "../../../security/OAuth";
 
 describe('Access Token Sagas', () => {
-  describe('accessTokenSagas', () => {
-    describe('when token was fetched', () => {
-
+  describe('accessTokenWithSessionExtension', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(accessTokenWithSessionExtensionSaga());
+      it('should delegate to the correct things', sagaEffect => {
+        expect(sagaEffect).toEqual(call(accessTokenSagas,
+          getOrRefreshAccessTokenWithSessionExtension,
+        ))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
     });
-
+  });
+  describe('accessTokenWithoutSessionExtensionSaga', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(accessTokenWithoutSessionExtensionSaga());
+      it('should delegate to the correct things', sagaEffect => {
+        expect(sagaEffect).toEqual(call(accessTokenSagas,
+          getOrRefreshAccessTokenWithoutSessionExtension,
+        ))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('getOrRefreshAccessTokenWithSessionExtension', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(getOrRefreshAccessTokenWithSessionExtension());
+      it('should delegate to the correct things', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(getOrRefreshAccessToken,
+            refreshTokenWithReplacementSaga,
+            canRefreshEitherTokens))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('getOrRefreshAccessTokenWithoutSessionExtension', () => {
+    describe('when given the good stuff', () => {
+      const it = sagaHelper(getOrRefreshAccessTokenWithoutSessionExtension());
+      it('should delegate to the correct things', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(getOrRefreshAccessToken,
+            refreshTokenWithoutReplacementSaga,
+            canRefreshToken))
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
   });
   describe('awaitToken', () => {
     describe('when token was received', () => {
@@ -152,9 +211,7 @@ describe('Access Token Sagas', () => {
         return 'peaches';
       });
       it('should spawn a refresh token worker', sagaEffect => {
-        expect(sagaEffect).toEqual(fork(refreshTokenWithReplacementSaga, 'peaches', {
-
-          }
+        expect(sagaEffect).toEqual(fork(refreshTokenWithReplacementSaga, 'peaches', {}
         ));
       });
       it('should await token', sagaEffect => {
