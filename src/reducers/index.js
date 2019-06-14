@@ -4,6 +4,7 @@ import securityReducer from './SecurityReducer';
 import configurationReducer from './ConfigurationReducer';
 import activityReducer from './ActivityReducer';
 import networkReducer from './NetworkReducer';
+import HistoryReducer from "./HistoryReducer";
 
 const rootReducer = combineReducers({
   security: securityReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   configuration: configurationReducer,
   activity: activityReducer,
   network: networkReducer,
+  history: HistoryReducer,
 });
 
 export const selectSecurityState = globalState =>globalState.security;
@@ -22,5 +24,7 @@ export const selectActivityState = globalState =>globalState.activity;
 export const selectNetworkState = globalState =>globalState.network;
 
 export const selectUserState = globalState =>globalState.user;
+
+export const selectHistoryState = globalState =>globalState.history;
 
 export default rootReducer;

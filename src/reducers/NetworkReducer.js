@@ -10,7 +10,7 @@ const INITIAL_ACTIVITY_STATE: NetworkState = {
 };
 
 
-const userReducer = (state: NetworkState = INITIAL_ACTIVITY_STATE, action: Action) => {
+const networkReducer = (state: NetworkState = INITIAL_ACTIVITY_STATE, action: Action) => {
   switch (action.type) {
     case FOUND_WIFI :
       return {
@@ -27,4 +27,4 @@ const userReducer = (state: NetworkState = INITIAL_ACTIVITY_STATE, action: Actio
   }
 };
 
-export default userReducer;
+export default networkReducer;
