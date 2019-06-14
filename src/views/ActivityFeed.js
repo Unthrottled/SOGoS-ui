@@ -4,18 +4,13 @@ import {connect} from 'react-redux';
 const ActivityFeed = ({activityFeed}) => {
   return (
     <div>
-      <ul>
-        <li>Most Recent Thing You did</li>
-        <li>Second Most Recent Thing You did</li>
-        <li>Recent Thing You did a while ago</li>
-        {
-          activityFeed.map(activity => (
-            <div>
-              {activity.antecedenceTime} {activity.name}
-            </div>
-          ))
-        }
-      </ul>
+      {
+        activityFeed.map(activity => (
+          <div key={activity.content.uuid}>
+            {new Date(activity.antecedenceTime).toISOString()} {activity.content.name}
+          </div>
+        ))
+      }
     </div>
   );
 };
