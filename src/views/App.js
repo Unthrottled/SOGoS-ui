@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import logo from '../logo.svg';
 import './App.css';
 import {connect} from "react-redux";
 import {appInitialized} from "../events/ApplicationLifecycleEvents";
@@ -29,7 +28,6 @@ function App({isLoggedIn, dispatch: dispetch}) {
       <div className="App">
         <div className={"Content"}>
           {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
-          <img src={logo} className="App-logo" alt="logo"/>
         </div>
       </div>
     </ThemeProvider>

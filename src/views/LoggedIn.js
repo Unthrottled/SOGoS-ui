@@ -4,6 +4,7 @@ import Activity from "./ActivityHub";
 import MenuAppBar from "./MenuAppBar";
 import ActivityTimer from "./ActivityTimer";
 import SessionExpired from "./SessionExpired";
+import ActivityFeed from "./ActivityFeed";
 
 const LoggedIn = ({fullName}) => {
   return (
@@ -11,6 +12,7 @@ const LoggedIn = ({fullName}) => {
       <MenuAppBar/>
       <Activity/>
       <h3>What's up {fullName}?</h3>
+      <ActivityFeed/>
       <ActivityTimer/>
       <SessionExpired/>
     </div>
