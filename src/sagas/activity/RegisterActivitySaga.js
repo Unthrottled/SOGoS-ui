@@ -1,6 +1,6 @@
 import {performPost} from "../APISagas";
 import {
-  CREATE,
+  CREATED,
   createCachedActivityEvent,
   createFailureToRegisterStartEvent,
   createRegisteredStartEvent
@@ -38,7 +38,7 @@ export function* activityStartCacheSaga(activity) {
   yield put(createCachedActivityEvent({
     cachedActivity: {
       activity,
-      uploadType: CREATE,
+      uploadType: CREATED,
     },
     userGUID: guid,
   }))

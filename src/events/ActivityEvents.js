@@ -29,12 +29,12 @@ export type Activity = {
   content: ActivityContent,
 };
 
-export const CREATE = 'CREATE';
-export const UPDATE = 'UPDATE';
-export const DELETE = 'DELETE';
+export const CREATED = 'CREATED';
+export const UPDATED = 'UPDATED';
+export const DELETED = 'DELETED';
 
 export type CachedActivity = {
-  uploadType: CREATE | UPDATE | DELETE,
+  uploadType: CREATED | UPDATED | DELETED,
   activity: Activity
 };
 

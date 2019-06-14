@@ -3,6 +3,7 @@
 -PWA
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
+    - Post application installation.
 
 - Enable manual sync of data?
 
@@ -14,6 +15,8 @@ Sad Path
     - Token request
     - Initial Configuration request
     - Authorization Configuration request failure
+- Session Expired, stop polling.
+- Redirect To login should clear token cache.
 
 Maybe:
 - Redux Persist
