@@ -16,6 +16,8 @@ Sad Path
     - Token request
     - Initial Configuration request
     - Authorization Configuration request failure
+    - History
+        - Activity fetch failure
 - Session Expired, stop polling.
 - Redirect To login should clear token cache.
 
