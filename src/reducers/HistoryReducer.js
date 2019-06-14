@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {STARTED_ACTIVITY} from "../events/ActivityEvents";
+import {RESUMED_NON_TIMED_ACTIVITY, RESUMED_TIMED_ACTIVITY, STARTED_ACTIVITY} from "../events/ActivityEvents";
 import {RECEIVED_HISTORY} from "../events/HistoryEvents";
 
 export type HistoryState = {
@@ -23,6 +23,8 @@ const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Act
       };
 
     case STARTED_ACTIVITY:
+    case RESUMED_TIMED_ACTIVITY :
+    case RESUMED_NON_TIMED_ACTIVITY :
       return {
         ...state,
         activityFeed: [
