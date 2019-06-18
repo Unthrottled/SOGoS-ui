@@ -1,12 +1,13 @@
-import {put, all, takeEvery, call} from 'redux-saga/effects'
+import {all, call, put, takeEvery} from 'redux-saga/effects'
 import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
-import {performGet} from "./APISagas";
+import {performStreamedGet} from "./APISagas";
 import {createReceivedHistoryEvent} from "../events/HistoryEvents";
 
 export function* archiveFetchSaga() {
   try {
-    const {data} = yield call(performGet, './api/history/feed');
-    yield put(createReceivedHistoryEvent([data]))
+    const data = yield call(performStreamedGet, './api/history/feed');
+    console.log(data);
+    yield put(createReceivedHistoryEvent(data))
   } catch (e) {
     //todo: handle unable to get history
     console.log('shit broked', e);
