@@ -1,5 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {
+  createHeaders,
   performGet,
   performGetWithoutSessionExtension,
   performGetWithToken,
@@ -63,9 +64,11 @@ describe('API Sagas', () => {
       it('should call correct method', sagaEffect => {
         expect(sagaEffect).toEqual(call(performGetWithToken,
           'http://localhost/api/hazard/spaghetti',
-          {headers: {
+          {
+            headers: {
               murder: 'spagurder'
-            }},
+            }
+          },
           accessTokenWithSessionExtensionSaga));
       });
       it('should complete', sagaEffect => {
@@ -109,9 +112,11 @@ describe('API Sagas', () => {
       it('should call correct method', sagaEffect => {
         expect(sagaEffect).toEqual(call(performGetWithToken,
           'http://localhost/api/hazard/spaghetti',
-          {headers: {
+          {
+            headers: {
               murder: 'spagurder'
-            }},
+            }
+          },
           accessTokenWithoutSessionExtensionSaga));
       });
       it('should complete', sagaEffect => {
@@ -134,9 +139,9 @@ describe('API Sagas', () => {
     });
   });
 
-  describe('performGetWithToken', () => {
+  describe('createHeaders', () => {
     describe('when not supplied options', () => {
-      const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {}, accessTokenWithSessionExtensionSaga));
+      const it = sagaHelper(createHeaders(accessTokenWithSessionExtensionSaga));
       it('should put in a request for a access token', (result) => {
         expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
         return 'I AM ACCESS TOKEN, YO';
@@ -152,6 +157,94 @@ describe('API Sagas', () => {
           security: {
             verificationKey: "Key of verification"
           }
+        };
+      });
+      it('should then perform a get request with authentication', (result) => {
+        expect(result).toEqual({
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
+        });
+        return 'One response from the backend'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+    describe('when not supplied options and state is empty', () => {
+      const it = sagaHelper(createHeaders(accessTokenWithSessionExtensionSaga));
+      it('should put in a request for a access token', (result) => {
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
+        return 'I AM ACCESS TOKEN, YO';
+      });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {}
+          },
+          security: {}
+        };
+      });
+      it('should then perform a get request with authentication without verification headers', (result) => {
+        expect(result).toEqual({
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+        });
+        return 'One response from the backend'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+    describe('when supplied options', () => {
+      const it = sagaHelper(createHeaders(accessTokenWithSessionExtensionSaga, {
+        slip: 'knot',
+        headers: {
+          'Authorization': 'Basic Bitch',
+          'X-QUICK-SCOPE': 'L337'
+        }
+      }));
+      it('should put in a request for a access token', (result) => {
+        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
+        return 'I AM ACCESS TOKEN, YO';
+      });
+      it('should then pick some stuff out of state', (result) => {
+        expect(result).toEqual(select());
+        return {
+          user: {
+            information: {
+              guid: "i am user guid"
+            }
+          },
+          security: {
+            verificationKey: "Key of verification"
+          }
+        };
+      });
+      it('should then perform a get request with authentication', (result) => {
+        expect(result).toEqual({
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          'X-QUICK-SCOPE': 'L337',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
+        });
+        return 'One response from the backend'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+  });
+
+  describe('performGetWithToken', () => {
+    describe('when not supplied options', () => {
+      const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {}, accessTokenWithSessionExtensionSaga));
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {}));
+        return {
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
         };
       });
       it('should then perform a get request with authentication', (result) => {
@@ -175,17 +268,10 @@ describe('API Sagas', () => {
     });
     describe('when not supplied options and state is empty', () => {
       const it = sagaHelper(performGetWithToken('http://localhost/api/onions', {}, accessTokenWithSessionExtensionSaga));
-      it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
-        return 'I AM ACCESS TOKEN, YO';
-      });
-      it('should then pick some stuff out of state', (result) => {
-        expect(result).toEqual(select());
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {}));
         return {
-          user: {
-            information: {}
-          },
-          security: {}
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
         };
       });
       it('should then perform a get request with authentication without verification headers', (result) => {
@@ -213,21 +299,19 @@ describe('API Sagas', () => {
           'X-QUICK-SCOPE': 'L337'
         }
       }, accessTokenWithSessionExtensionSaga));
-      it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
-        return 'I AM ACCESS TOKEN, YO';
-      });
-      it('should then pick some stuff out of state', (result) => {
-        expect(result).toEqual(select());
-        return {
-          user: {
-            information: {
-              guid: "i am user guid"
-            }
-          },
-          security: {
-            verificationKey: "Key of verification"
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {
+          slip: 'knot',
+          headers: {
+            'Authorization': 'Basic Bitch',
+            'X-QUICK-SCOPE': 'L337'
           }
+        }));
+        return {
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          'X-QUICK-SCOPE': 'L337',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
         };
       });
       it('should then perform a get request with authentication', (result) => {
@@ -258,21 +342,12 @@ describe('API Sagas', () => {
       const it = sagaHelper(performPost('http://localhost/api/onions', {
         'I AM': 'BECOME DEATH',
       }));
-      it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
-        return 'I AM ACCESS TOKEN, YO';
-      });
-      it('should then pick some stuff out of state', (result) => {
-        expect(result).toEqual(select());
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {headers:{}}));
         return {
-          user: {
-            information: {
-              guid: "i am user guid"
-            }
-          },
-          security: {
-            verificationKey: "Key of verification"
-          }
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
         };
       });
       it('should then perform a get request with authentication', (result) => {
@@ -302,17 +377,10 @@ describe('API Sagas', () => {
       const it = sagaHelper(performPost('http://localhost/api/onions', {
         'I AM': 'BECOME DEATH',
       }));
-      it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
-        return 'I AM ACCESS TOKEN, YO';
-      });
-      it('should then pick some stuff out of state', (result) => {
-        expect(result).toEqual(select());
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {headers:{}}));
         return {
-          user: {
-            information: {}
-          },
-          security: {}
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
         };
       });
       it('should then perform a get request with authentication without verification headers', (result) => {
@@ -346,21 +414,13 @@ describe('API Sagas', () => {
           'X-QUICK-SCOPE': 'L337'
         }
       }));
-      it('should put in a request for a access token', (result) => {
-        expect(result).toEqual(call(accessTokenWithSessionExtensionSaga));
-        return 'I AM ACCESS TOKEN, YO';
-      });
-      it('should then pick some stuff out of state', (result) => {
-        expect(result).toEqual(select());
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {"headers": {"Authorization": "Basic Bitch", "X-QUICK-SCOPE": "L337"}, "standby": "for titan fall"}));
         return {
-          user: {
-            information: {
-              guid: "i am user guid"
-            }
-          },
-          security: {
-            verificationKey: "Key of verification"
-          }
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          'X-QUICK-SCOPE': 'L337',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
         };
       });
       it('should then perform a get request with authentication', (result) => {

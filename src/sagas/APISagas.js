@@ -46,7 +46,7 @@ export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[
   }
 }
 
-function* createHeaders(accessTokenSaga, options) {
+export function* createHeaders(accessTokenSaga, options = {headers: {}}) {
   const accessToken = yield call(accessTokenSaga);
   const {user: {information: {guid}}, security: {verificationKey}} = yield select();
   return {
