@@ -21,7 +21,6 @@ export const createStreamChannel = ({url, method, headers, body}) => {
       console.log('Error streaming', error);
       statusObserver(END);
     }).on('end', () => {
-      console.log('completing');
       statusObserver(END);
     });
     return () => requestStream.abort();
@@ -40,14 +39,10 @@ export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[
   try {
     while (true) {
       const itemChunk = yield take(streamChannel);
-      if (itemChunk === END) {
-        break;
-      } else {
-        aggregate.push(itemChunk);
-      }
+      aggregate.unshift(itemChunk);
     }
   } finally {
-    return aggregate;
+    return aggregate; //dis dumb
   }
 }
 

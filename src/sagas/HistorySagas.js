@@ -1,12 +1,11 @@
 import {all, call, put, takeEvery} from 'redux-saga/effects'
-import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
 import {performStreamedGet} from "./APISagas";
 import {createReceivedHistoryEvent} from "../events/HistoryEvents";
+import {RECEIVED_USER} from "../events/UserEvents";
 
-export function* archiveFetchSaga() {
+export function* archiveFetchSaga({payload: {information: {guid}}}) {
   try {
-    const data = yield call(performStreamedGet, './api/history/feed');
-    console.log(data);
+    const data = yield call(performStreamedGet, `./api/history/${guid}/feed`);
     yield put(createReceivedHistoryEvent(data))
   } catch (e) {
     //todo: handle unable to get history
@@ -15,7 +14,7 @@ export function* archiveFetchSaga() {
 }
 
 function* listenToActivityEvents() {
-  yield takeEvery(INITIALIZED_SECURITY, archiveFetchSaga);
+  yield takeEvery(RECEIVED_USER, archiveFetchSaga);
 }
 
 export default function* HistorySagas() {
