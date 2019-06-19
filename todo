@@ -1,6 +1,8 @@
-- History does not work on logon
+- Pause Count Down Timer
 
-- What happens on logout?
+- Session expiry does not work.
+
+- History does not work on logon
 
 -PWA
     - Cache index html expiry (for dem sweet updates)
@@ -9,6 +11,8 @@
 
 - Enable manual sync of data?
     - Periodic cache sync
+
+- What happens on logout?
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
