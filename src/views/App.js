@@ -7,6 +7,8 @@ import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
 import {green, purple} from "@material-ui/core/colors";
+import {Route} from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -18,7 +20,7 @@ const theme = responsiveFontSizes(createMuiTheme({
   }
 }));
 
-function App({isLoggedIn, dispatch: dispetch}) {
+function App({dispatch: dispetch}) {
   const [mounted] = useState(true);
   useEffect(() => {
     dispetch(appInitialized());
@@ -27,19 +29,12 @@ function App({isLoggedIn, dispatch: dispetch}) {
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className={"Content"}>
-          {isLoggedIn ? <LoggedIn/> : <LoggedOut/>}
+          <PrivateRoute path={'/'} exact component={LoggedIn}/>
+          <Route path={'/login'} component={LoggedOut}/>
         </div>
       </div>
     </ThemeProvider>
   );
 }
 
-const mapStateToProps = state => {
-  const {security: {isLoggedIn}, configuration: {oauth}} = state;
-  return {
-    isLoggedIn,
-    oauth
-  }
-};
-
-export default connect(mapStateToProps)(App);
+export default connect()(App);
