@@ -1,7 +1,6 @@
+- Session expiry does not work.
+
 - History does not work on logon
-
-- What happens on logout?
-
 -PWA
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
@@ -9,6 +8,8 @@
 
 - Enable manual sync of data?
     - Periodic cache sync
+
+- What happens on logout?
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
