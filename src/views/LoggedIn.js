@@ -1,21 +1,16 @@
 import React from "react";
 import {connect} from "react-redux";
 import Activity from "./ActivityHub";
-import MenuAppBar from "./MenuAppBar";
-import ActivityTimer from "./ActivityTimer";
-import SessionExpired from "./SessionExpired";
 import ActivityFeed from "./ActivityFeed";
+import LoggedInLayout from "./LoggedInLayout";
 
 const LoggedIn = ({fullName}) => {
   return (
-    <div>
-      <MenuAppBar/>
+    <LoggedInLayout>
       <Activity/>
       <h3>What's up {fullName}?</h3>
       <ActivityFeed/>
-      <ActivityTimer/>
-      <SessionExpired/>
-    </div>
+    </LoggedInLayout>
   );
 };
 
