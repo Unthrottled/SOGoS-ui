@@ -17,11 +17,13 @@ export type SecurityState = {
   idToken: string,
   verificationKey: string,
   isExpired: boolean,
+  isInitialized: boolean,
 };
 
 const INITIAL_SECURITY_STATE: SecurityState = {
   isLoggedIn: false,
   isExpired: false,
+  isInitialized: false,
 };
 
 const securityReducer = (state = INITIAL_SECURITY_STATE, action: Action) => {
@@ -44,6 +46,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: Action) => {
       return {
         ...state,
         isExpired: false,
+        isInitialized: true,
       };
     case RECEIVED_TOKENS:
       return tokenReceptionReducer(state, action.payload);

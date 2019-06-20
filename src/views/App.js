@@ -20,12 +20,12 @@ const theme = responsiveFontSizes(createMuiTheme({
   }
 }));
 
-function App({dispatch: dispetch}) {
+function App({dispatch: dispetch, isInitialized}) {
   const [mounted] = useState(true);
   useEffect(() => {
     dispetch(appInitialized());
   }, [mounted]);
-  return (
+  return isInitialized ? (
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className={"Content"}>
@@ -34,7 +34,11 @@ function App({dispatch: dispetch}) {
         </div>
       </div>
     </ThemeProvider>
-  );
+  ) : (<div/>);
 }
 
-export default connect()(App);
+const mapStateToProps = ({security: {isInitialized}}) => ({
+  isInitialized
+});
+
+export default connect(mapStateToProps)(App);
