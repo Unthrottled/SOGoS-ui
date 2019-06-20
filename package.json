@@ -52,5 +52,5 @@
     "ws": "^3.3.1"
   },
   "proxy": "http://localhost:8888",
-  "homepage": "."
+  "homepage": "./"
 }

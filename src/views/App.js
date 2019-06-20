@@ -12,6 +12,7 @@ import PrivateRoute from "./PrivateRoute";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import StrategicDashboard from "./StrategicDashboard";
+import ObjectivesDashboard from "./ObjectivesDashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -49,6 +50,7 @@ function App({dispatch: dispetch, isInitialized}) {
               </LoggedInLayout>
             )}/>
             <Route path={'/login'} component={LoggedOut}/>
+            <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
             <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
             <PrivateRoute path={'/'} exact component={LoggedIn}/>
             <Route component={() => (<h2>404</h2>)}/>
