@@ -1,13 +1,15 @@
 import React from "react";
 import {connect} from "react-redux";
-import ActivityFeed from "./ActivityFeed";
 import LoggedInLayout from "./LoggedInLayout";
+import Typography from "@material-ui/core/Typography";
 
-const LoggedIn = ({fullName}) => {
+const StrategicDashboard = ({fullName}) => {
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
-      <ActivityFeed/>
+      <Typography>
+        Time to stratergize.
+      </Typography>
     </LoggedInLayout>
   );
 };
@@ -19,4 +21,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(LoggedIn);
+export default connect(mapStateToProps)(StrategicDashboard);
