@@ -5,7 +5,7 @@ import {RECEIVED_USER} from "../events/UserEvents";
 
 export function* archiveFetchSaga({payload: {information: {guid}}}) {
   try {
-    const data = yield call(performStreamedGet, `./api/history/${guid}/feed`);
+    const data = yield call(performStreamedGet, `/api/history/${guid}/feed`);
     yield put(createReceivedHistoryEvent(data))
   } catch (e) {
     //todo: handle unable to get history

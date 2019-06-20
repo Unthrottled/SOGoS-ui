@@ -12,7 +12,7 @@ export function* findUserSaga() {
 }
 export function* requestUserSaga(){
   try {
-    const {data: user} = yield call(performGet,'./api/user');
+    const {data: user} = yield call(performGet,'/api/user');
     yield put(createReceivedUserEvent(user)); // found waldo.
   } catch (e) {
     yield put(createFailedToGetUserEvent(e));

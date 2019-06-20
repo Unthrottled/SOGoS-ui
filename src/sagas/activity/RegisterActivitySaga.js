@@ -21,7 +21,7 @@ export function* registerActivitySaga(action) {
 
 export function* activityUploadSaga(activity) {
   try {
-    yield call(performPost, './api/activity', activity);
+    yield call(performPost, '/api/activity', activity);
     yield put(createRegisteredStartEvent(activity));
   } catch (error) {
     // todo: handle registry failures.
