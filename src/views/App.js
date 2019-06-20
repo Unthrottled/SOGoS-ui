@@ -7,7 +7,7 @@ import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
 import {green, purple} from "@material-ui/core/colors";
-import {Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 
 const theme = responsiveFontSizes(createMuiTheme({
@@ -29,8 +29,13 @@ function App({dispatch: dispetch, isInitialized}) {
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className={"Content"}>
-          <PrivateRoute path={'/'} exact component={LoggedIn}/>
-          <Route path={'/login'} component={LoggedOut}/>
+          <Switch>
+            <Route path={'/tits'} component={() => (<img alt={'shark tits'}
+                                                         src={'https://static1.e621.net/data/a3/be/a3beb6fd045222a7088e8c886b916ddb.png'}/>)}/>
+            <Route path={'/login'} component={LoggedOut}/>
+            <PrivateRoute path={'/'} exact component={LoggedIn}/>
+            <Route component={() => (<h2>404</h2>)}/>
+          </Switch>
         </div>
       </div>
     </ThemeProvider>

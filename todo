@@ -6,6 +6,8 @@
 
 - History does not work on logon
 
+- Better 404 handling
+
 -PWA
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
@@ -17,6 +19,7 @@
 - What happens on logout?
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
+
 
 Sad Path
 ----
@@ -30,6 +33,7 @@ Sad Path
 - Redirect To login should clear token cache.
 
 Maybe:
+----
 - Redux Persist
     - Make sure that tokens are secure
 - Initial Loading Screen
