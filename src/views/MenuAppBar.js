@@ -13,6 +13,7 @@ import {logout} from "../actions/SecurityActions";
 import OfflineMode from "./OfflineMode";
 import InstallApplication from "./InstallApplication";
 import UpdateApplication from "./UpdateApplication";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,6 +25,10 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit',
+  }
 }));
 
 const MenuAppBar = ({dispatch: dispetch}) => {
@@ -47,12 +52,14 @@ const MenuAppBar = ({dispatch: dispetch}) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon/>
-          </IconButton>
+          <Link to={'/tits'} className={classes.link}>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="Menu">
+                <MenuIcon/>
+            </IconButton>
+          </Link>
           <OfflineMode/>
           <Typography variant="h6" className={classes.title}>
-            SOGoS
+            <Link to={'/'} className={classes.link}>SOGoS</Link>
           </Typography>
           <UpdateApplication/>
           <InstallApplication />
