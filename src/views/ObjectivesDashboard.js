@@ -9,6 +9,8 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
+import uuid from 'uuid/v4';
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,11 +30,13 @@ const ObjectivesDashboard = ({fullName}) => {
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
-      <Button variant={'contained'}
-              color={'primary'}
-              className={classes.button}>
-        <AddIcon/> Add Item
-      </Button>
+      <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
+        <Button variant={'contained'}
+                color={'primary'}
+                className={classes.button}>
+          <AddIcon/> Add Item
+        </Button>
+      </Link>
       <div className={classes.root}>
         <ExpansionPanel>
           <ExpansionPanelSummary

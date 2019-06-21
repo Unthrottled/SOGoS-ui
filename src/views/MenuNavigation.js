@@ -33,11 +33,11 @@ const MenuNavigation = () => {
   const topics = [
     {
       title: 'Strategy',
-      path: '/strategy',
+      path: '/strategy/',
     },
     {
       title: 'Objectives',
-      path: '/strategy/objectives',
+      path: '/strategy/objectives/',
     },
     {
       title: 'Tits',
