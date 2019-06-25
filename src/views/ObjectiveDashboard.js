@@ -1,5 +1,6 @@
 import React from "react";
 import FaceIcon from '@material-ui/icons/Face';
+import SaveIcon from '@material-ui/icons/Save';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
 import {connect} from "react-redux";
@@ -13,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import Fab from "@material-ui/core/Fab";
 
 const useStyles = makeStyles(theme => ({
   chip: {},
@@ -25,7 +27,12 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     background: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
-  }
+  },
+  save: {
+    position: 'relative',
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+  },
 }));
 
 const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
@@ -73,6 +80,9 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
           ))}
         </List>
       </div>
+      <Fab color={'primary'} className={classes.save}>
+        <SaveIcon/>
+      </Fab>
     </LoggedInLayout>
   );
 };
