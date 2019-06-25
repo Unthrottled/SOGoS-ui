@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
+import {viewedObjectives} from "../actions/ObjectiveActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,8 +26,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ObjectivesDashboard = ({fullName}) => {
+const ObjectivesDashboard = ({fullName, dispatch}) => {
   const classes = useStyles();
+  const [didMountState] = useState('');
+  useEffect(()=>{
+    dispatch(viewedObjectives());
+  }, [didMountState]);
+
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>

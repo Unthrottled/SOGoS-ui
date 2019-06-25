@@ -77,7 +77,6 @@ const MenuNavigation = () => {
       <Divider/>
     </div>
   );
-  console.log(classes.drawer);
   return (
     <div>
       <IconButton edge="start"
