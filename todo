@@ -14,6 +14,7 @@
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
     - Post application installation.
+    - Data Storage.
 
 - Enable manual sync of data?
     - Periodic cache sync

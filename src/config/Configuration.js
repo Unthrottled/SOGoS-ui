@@ -30,7 +30,7 @@ export const fetchApplicationConfiguration = () =>{
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
-    whitelist: ['security', 'user', 'activity'],
+    whitelist: ['security', 'user', 'activity', 'strategy'],
     transforms: [blackListTransform],
   };
 

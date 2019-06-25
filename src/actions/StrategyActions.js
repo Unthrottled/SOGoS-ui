@@ -1,4 +1,4 @@
-import {createViewedObjectivesEvent} from "../events/ObjectiveEvents";
+import {createViewedObjectivesEvent} from "../events/StrategyEvents";
 
 export const
   viewedObjectives = () =>
