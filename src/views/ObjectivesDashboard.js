@@ -44,7 +44,7 @@ const ObjectivesDashboard = ({fullName, dispatch}) => {
         <Button variant={'contained'}
                 color={'primary'}
                 className={classes.button}>
-          <AddIcon/> Add Item
+          <AddIcon/> Create Objective
         </Button>
       </Link>
       <div className={classes.root}>
