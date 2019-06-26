@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import FaceIcon from '@material-ui/icons/Face';
 import SaveIcon from '@material-ui/icons/Save';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
@@ -7,7 +6,7 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
-import {makeStyles} from "@material-ui/core";
+import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -16,42 +15,198 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Fab from "@material-ui/core/Fab";
 import uuid from "uuid/v4";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
+import clsx from 'clsx';
+import ReactSelect from 'react-select';
+import Paper from '@material-ui/core/Paper';
+import CancelIcon from '@material-ui/icons/Cancel';
 
-const useStyles = makeStyles(theme => ({
-  chip: {},
-  keyResults: {
-    background: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-    margin: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius
-  },
-  avatar: {
-    background: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-  },
-  save: {
-    position: 'relative',
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-  },
+
+const suggestions = [
+  {label: 'Technical'},
+  {label: 'Recovery'},
+  {label: 'Social'},
+  {label: 'Financial'},
+  {label: 'Education'},
+  {label: 'Career'},
+].map(suggestion => ({
+  value: suggestion.label,
+  label: suggestion.label,
 }));
+
+const NoOptionsMessage = props => (
+  <Typography
+    color="textSecondary"
+    className={props.selectProps.classes.noOptionsMessage}
+    {...props.innerProps}
+  >
+    {props.children}
+  </Typography>
+);
+
+const inputComponent = ({inputRef, ...props}) =>
+  <div ref={inputRef} {...props} />;
+
+const Control = props => {
+  const {
+    children,
+    innerProps,
+    innerRef,
+    selectProps: {classes, TextFieldProps},
+  } = props;
+
+  return (
+    <TextField
+      fullWidth
+      InputProps={{
+        inputComponent,
+        inputProps: {
+          className: classes.input,
+          ref: innerRef,
+          children,
+          ...innerProps,
+        },
+      }}
+      {...TextFieldProps}
+    />
+  );
+};
+
+const Option = props => (
+  <MenuItem
+    ref={props.innerRef}
+    selected={props.isFocused}
+    component="div"
+    style={{
+      fontWeight: props.isSelected ? 500 : 400,
+    }}
+    {...props.innerProps}
+  >
+    {props.children}
+  </MenuItem>
+);
+
+const Placeholder = props => (
+  <Typography
+    color="textSecondary"
+    className={props.selectProps.classes.placeholder}
+    {...props.innerProps}
+  >
+    {props.children}
+  </Typography>
+);
+
+const SingleValue = props => (
+  <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+    {props.children}
+  </Typography>
+);
+
+const ValueContainer = props => <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+
+const MultiValue = props => (
+  <Chip
+    tabIndex={-1}
+    label={props.children}
+    className={clsx(props.selectProps.classes.chip, {
+      [props.selectProps.classes.chipFocused]: props.isFocused,
+    })}
+    onDelete={props.removeProps.onClick}
+    deleteIcon={<CancelIcon {...props.removeProps} />}
+  />
+);
+
+const Menu = props => (
+  <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+    {props.children}
+  </Paper>
+);
+
+const components = {
+  Control,
+  Menu,
+  MultiValue,
+  NoOptionsMessage,
+  Option,
+  Placeholder,
+  SingleValue,
+  ValueContainer,
+};
+
+const useStyles = makeStyles(theme => (
+  {
+    root: {
+      flexGrow: 1,
+      height: 250,
+    },
+    input: {
+      display: 'flex',
+      padding: 0,
+      height: 'auto',
+    },
+    valueContainer: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      flex: 1,
+      alignItems: 'center',
+      overflow: 'hidden',
+    },
+    chip: {
+      margin: theme.spacing(0.5, 0.25),
+    },
+    chipFocused: {
+      backgroundColor: emphasize(
+        theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+        0.08,
+      ),
+    },
+    noOptionsMessage: {
+      padding: theme.spacing(1, 2),
+    },
+    singleValue: {
+      fontSize: 16,
+    },
+    placeholder: {
+      position: 'absolute',
+      left: 2,
+      bottom: 6,
+      fontSize: 16,
+    },
+    paper: {
+      position: 'absolute',
+      zIndex: 1,
+      marginTop: theme.spacing(1),
+      left: 0,
+      right: 0,
+    },
+    divider: {
+      height: theme.spacing(2),
+    },
+    keyResults: {
+      background: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+      margin: theme.spacing(2),
+      borderRadius: theme.shape.borderRadius
+    },
+    avatar: {
+      background: theme.palette.secondary.main,
+      color: theme.palette.secondary.contrastText,
+    },
+    save: {
+      position: 'relative',
+      top: theme.spacing(1),
+      right: theme.spacing(1),
+    },
+    textField: {
+      width: '100%',
+    },
+  }
+));
 
 const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
-  const [categories, setCategories] = useState([]);
-  const deleteCategory = (categoryId: string) => {
-    setCategories(categories.filter(category => category.content !== categoryId));
-  };
-
-  const addCategory = () => {
-    setCategories([
-      ...categories,
-      {
-        id: uuid()
-      }
-    ])
-  };
-
+  const theme = useTheme();
   const [keyResults, setKeyResults] = useState([]);
   const addKeyResult = () => {
     setKeyResults([
@@ -62,9 +217,22 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
     ])
   };
 
-  const saveObjective = ()=>{
+  const saveObjective = () => {
     alert('finna bust a nut tonight');
   };
+
+  const selectStyles = {
+    input: base => ({
+      ...base,
+      color: theme.palette.text.primary,
+      '& input': {
+        font: 'inherit',
+      },
+    }),
+  };
+
+  const [multi, setMulti] = React.useState(null);
+  const handleChangeMulti = (value) => setMulti(value);
 
   return (
     <LoggedInLayout>
@@ -72,23 +240,31 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
       <Typography>
         Dis is objective id {objectiveId}
       </Typography>
-      <Button variant={'contained'}
-              color={'primary'}
-              onClick={addCategory}
-              className={classes.button}>
-        <AddIcon/> Add Category
-      </Button>
-      {
-        categories.map(category => (
-          <Chip
-            icon={<FaceIcon/>}
-            label={"Some Category"}
-            className={classes.chip}
-            color={'primary'}
-            onDelete={() => deleteCategory(category.id)}
-          />
-        ))
-      }
+      <TextField
+        className={classes.textField}
+        label={'What you do want to accomplish?'}
+        placeholder={'I want to use my time better.'}
+        variant={'filled'}
+        margin={'normal'}
+      />
+      <ReactSelect
+        classes={classes}
+        styles={selectStyles}
+        inputId="react-select-multiple"
+        TextFieldProps={{
+          label: 'Categories',
+          InputLabelProps: {
+            htmlFor: 'react-select-multiple',
+            shrink: true,
+          },
+          placeholder: 'Give your objective categories!',
+        }}
+        options={suggestions}
+        components={components}
+        value={multi}
+        onChange={handleChangeMulti}
+        isMulti
+      />
       <Button variant={'contained'}
               color={'primary'}
               onClick={addKeyResult}
