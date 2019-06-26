@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import FaceIcon from '@material-ui/icons/Face';
 import SaveIcon from '@material-ui/icons/Save';
 import DoneIcon from '@material-ui/icons/Done';
@@ -15,6 +15,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Fab from "@material-ui/core/Fab";
+import uuid from "uuid/v4";
 
 const useStyles = makeStyles(theme => ({
   chip: {},
@@ -37,50 +38,81 @@ const useStyles = makeStyles(theme => ({
 
 const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
+  const [categories, setCategories] = useState([]);
   const deleteCategory = (categoryId: string) => {
-    console.log(`deleted ${categoryId}`);
+    setCategories(categories.filter(category => category.content !== categoryId));
   };
-  const keyResults = [
-    {
-      content: 'Sweg'
-    },
-    {
-      content: 'Yolo'
-    },
-  ];
+
+  const addCategory = () => {
+    setCategories([
+      ...categories,
+      {
+        id: uuid()
+      }
+    ])
+  };
+
+  const [keyResults, setKeyResults] = useState([]);
+  const addKeyResult = () => {
+    setKeyResults([
+      ...keyResults,
+      {
+        id: uuid()
+      }
+    ])
+  };
+
+  const saveObjective = ()=>{
+    alert('finna bust a nut tonight');
+  };
+
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
       <Typography>
         Dis is objective id {objectiveId}
       </Typography>
-      <Chip
-        icon={<FaceIcon/>}
-        label={"Some Category"}
-        className={classes.chip}
-        color={'primary'}
-        onDelete={() => deleteCategory('categoryId')}
-      />
       <Button variant={'contained'}
               color={'primary'}
+              onClick={addCategory}
               className={classes.button}>
-        <AddIcon/> Add Key Result
+        <AddIcon/> Add Category
+      </Button>
+      {
+        categories.map(category => (
+          <Chip
+            icon={<FaceIcon/>}
+            label={"Some Category"}
+            className={classes.chip}
+            color={'primary'}
+            onDelete={() => deleteCategory(category.id)}
+          />
+        ))
+      }
+      <Button variant={'contained'}
+              color={'primary'}
+              onClick={addKeyResult}
+              className={classes.button}>
+        <AddIcon/>Add Key Result
       </Button>
       <div className={classes.keyResults}>
         <List>
           {keyResults.map((topic) => (
-            <ListItem>
+            <ListItem key={topic.id}>
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>
                   <DoneIcon/>
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={topic.content}/>
+              <ListItemText primary={topic.id}/>
             </ListItem>
           ))}
         </List>
       </div>
-      <Fab color={'primary'} className={classes.save}>
+      <Fab color={'primary'}
+           className={classes.save}
+           onClick={saveObjective}
+      >
         <SaveIcon/>
       </Fab>
     </LoggedInLayout>
