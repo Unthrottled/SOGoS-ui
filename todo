@@ -48,3 +48,8 @@ Needs UX:
 
 Tech Debt:
 -----
+
+Think pad:
+-----
+- Key results should be first class objects, as they are the portions that time is spent.
+It is the time that is put in towards achieving a key result that makes the difference (ie achieving the objective).

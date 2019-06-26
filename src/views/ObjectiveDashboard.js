@@ -18,7 +18,7 @@ import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import clsx from 'clsx';
-import ReactSelect from 'react-select';
+import ReactSelect from 'react-select/creatable';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
 
@@ -207,7 +207,12 @@ const useStyles = makeStyles(theme => (
 const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [keyResults, setKeyResults] = useState([]);
+  const [keyResults, setKeyResults] = useState([
+    {
+      id: uuid()
+    }
+
+  ]);
   const addKeyResult = () => {
     setKeyResults([
       ...keyResults,
@@ -265,12 +270,6 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
         onChange={handleChangeMulti}
         isMulti
       />
-      <Button variant={'contained'}
-              color={'primary'}
-              onClick={addKeyResult}
-              className={classes.button}>
-        <AddIcon/>Add Key Result
-      </Button>
       <div className={classes.keyResults}>
         <List>
           {keyResults.map((topic) => (
@@ -280,11 +279,23 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
                   <DoneIcon/>
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={topic.id}/>
+              <TextField
+                className={classes.textField}
+                label={'How will you know you are successful?'}
+                placeholder={'50% of my time awake is spent doing what I want.'}
+                variant={'outlined'}
+                margin={'normal'}
+              />
             </ListItem>
           ))}
         </List>
       </div>
+      <Button variant={'contained'}
+              color={'primary'}
+              onClick={addKeyResult}
+              className={classes.button}>
+        <AddIcon/>Add Key Result
+      </Button>
       <Fab color={'primary'}
            className={classes.save}
            onClick={saveObjective}
