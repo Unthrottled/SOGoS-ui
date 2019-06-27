@@ -211,8 +211,14 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
     {
       id: uuid()
     }
-
   ]);
+
+  const [objectiveValue, setObjective] = useState('');
+  const handleObjectiveChange = event => setObjective(event.target.value);
+  const updateResult = (resultId, resultValue) => {
+    keyResults.find(result => result.id === resultId).valueStatement = resultValue
+  };
+
   const addKeyResult = () => {
     setKeyResults([
       ...keyResults,
@@ -223,7 +229,12 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
   };
 
   const saveObjective = () => {
-    alert('finna bust a nut tonight');
+    const objective = {
+      id: objectiveId,
+      valueStatement: objectiveValue,
+      keyResults
+    };
+    console.log(objective);
   };
 
   const selectStyles = {
@@ -251,6 +262,7 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
         placeholder={'I want to use my time better.'}
         variant={'filled'}
         margin={'normal'}
+        onBlur={handleObjectiveChange}
       />
       <ReactSelect
         classes={classes}
@@ -285,6 +297,7 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
                 placeholder={'50% of my time awake is spent doing what I want.'}
                 variant={'outlined'}
                 margin={'normal'}
+                onBlur={event => updateResult(topic.id, event.target.value)}
               />
             </ListItem>
           ))}
