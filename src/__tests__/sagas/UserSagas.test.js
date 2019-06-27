@@ -44,7 +44,7 @@ describe('User Sagas', () => {
     describe('when an error occurs', () => {
       const it = sagaHelper(requestUserSaga());
       it('should perform a authenticated API response', (result) => {
-        expect(result).toEqual(call(performGet, './api/user'));
+        expect(result).toEqual(call(performGet, '/api/user'));
         return new Error('YA DUN MESSED UP A-A-RON');
       });
       it('should generate a failed to fetch user event', (result) => {
@@ -58,7 +58,7 @@ describe('User Sagas', () => {
     describe('when all is just', () => {
       const it = sagaHelper(requestUserSaga());
       it('should perform a authenticated API response', (result) => {
-        expect(result).toEqual(call(performGet, './api/user'));
+        expect(result).toEqual(call(performGet, '/api/user'));
         return {
           data: {
             'I AM': 'BECOME DEATH'
