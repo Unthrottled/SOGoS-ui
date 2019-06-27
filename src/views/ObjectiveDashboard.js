@@ -21,6 +21,8 @@ import clsx from 'clsx';
 import ReactSelect from 'react-select/creatable';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
+import {createdObjective} from "../actions/StrategyActions";
+import type {Objective} from "../reducers/StrategyReducer";
 
 
 const suggestions = [
@@ -204,12 +206,13 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
+const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [keyResults, setKeyResults] = useState([
     {
-      id: uuid()
+      id: uuid(),
+      objectiveId
     }
   ]);
 
@@ -223,18 +226,19 @@ const ObjectiveDashboard = ({fullName, match: {params: {objectiveId}}}) => {
     setKeyResults([
       ...keyResults,
       {
-        id: uuid()
+        id: uuid(),
+        objectiveId
       }
     ])
   };
 
   const saveObjective = () => {
-    const objective = {
+    const objective: Objective = {
       id: objectiveId,
       valueStatement: objectiveValue,
       keyResults
     };
-    console.log(objective);
+    dispatch(createdObjective(objective))
   };
 
   const selectStyles = {
