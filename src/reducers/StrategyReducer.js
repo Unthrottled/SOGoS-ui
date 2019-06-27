@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {CREATED_OBJECTIVE} from "../events/StrategyEvents";
+import {CACHED_OBJECTIVE, CREATED_OBJECTIVE, SYNCED_OBJECTIVES} from "../events/StrategyEvents";
 
 export type KeyResult = {
   id: string,
@@ -14,11 +14,18 @@ export type Objective = {
 export type StrategyState = {
   objectives: Objective[],
   keyResults: KeyResult[],
+  cache: any,
 }
+
+export type ObjectiveCacheEvent = {
+  objective: Objective,
+  userGUID: string,
+};
 
 const INITIAL_USER_STATE: StrategyState = {
   objectives: [],
   keyResults: [],
+  cache: {},
 };
 
 
@@ -35,7 +42,20 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
           ...state.keyResults,
           action.payload.keyResults,
         ]
+      };
+    case CACHED_OBJECTIVE: {
+      const {userGUID, objective} = action.payload;
+      if (state.cache[userGUID]) {
+        state.cache[userGUID].push(objective)
+      } else {
+        state.cache[userGUID] = [objective]
       }
+      return state;
+    }
+    case SYNCED_OBJECTIVES: {
+      state.cache[action.payload] = [];
+      return state;
+    }
     default:
       return state
   }
