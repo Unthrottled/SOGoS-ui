@@ -48,6 +48,8 @@ Needs UX:
 
 Tech Debt:
 -----
+- Less storing objective id when object still lives in objective document.
+
 
 Think pad:
 -----

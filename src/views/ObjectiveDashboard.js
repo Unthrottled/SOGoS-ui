@@ -9,7 +9,6 @@ import Chip from "@material-ui/core/Chip";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
