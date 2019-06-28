@@ -226,6 +226,7 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
       ...keyResults,
       {
         id: uuid(),
+        antecedenceTime: new Date().getTime(),
         objectiveId
       }
     ])
@@ -235,6 +236,7 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
     const objective: Objective = {
       id: objectiveId,
       valueStatement: objectiveValue,
+      antecedenceTime: new Date().getTime(),
       keyResults
     };
     dispatch(createdObjective(objective))
