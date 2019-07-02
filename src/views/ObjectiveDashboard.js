@@ -22,6 +22,7 @@ import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {createdObjective} from "../actions/StrategyActions";
 import type {Objective} from "../reducers/StrategyReducer";
+import {withRouter} from "react-router-dom";
 
 
 const suggestions = [
@@ -208,7 +209,7 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveDashboard = ({dispatch, objectives, fullName, match: {params: {objectiveId}}}) => {
+const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -247,8 +248,8 @@ const ObjectiveDashboard = ({dispatch, objectives, fullName, match: {params: {ob
       antecedenceTime: new Date().getTime(),
       keyResults
     };
-    dispatch(createdObjective(objective))
-
+    dispatch(createdObjective(objective));
+    history.push('/strategy/objectives/')
   };
 
   const selectStyles = {
@@ -345,4 +346,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(ObjectiveDashboard);
+export default connect(mapStateToProps)(withRouter(ObjectiveDashboard));
