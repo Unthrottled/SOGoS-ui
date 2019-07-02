@@ -13,6 +13,7 @@ export function* archiveFetchSaga({payload: {information: {guid}}}) {
   }
 }
 
+//todo: do not automatically fetch stuff
 function* listenToActivityEvents() {
   yield takeEvery(RECEIVED_USER, archiveFetchSaga);
 }

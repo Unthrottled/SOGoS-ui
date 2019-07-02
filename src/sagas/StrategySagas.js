@@ -1,9 +1,15 @@
 import {all, call, put, select, takeEvery} from 'redux-saga/effects'
-import {performPost} from "./APISagas";
-import {createCachedObjectiveEvent, CREATED_OBJECTIVE, createSyncedObjectiveEvent} from "../events/StrategyEvents";
+import {performPost, performStreamedGet} from "./APISagas";
+import {
+  createCachedObjectiveEvent,
+  CREATED_OBJECTIVE,
+  createFetchedObjectivesEvent,
+  createSyncedObjectiveEvent
+} from "../events/StrategyEvents";
 import {selectUserState} from "../reducers";
 import type {Objective} from "../reducers/StrategyReducer";
 import {isOnline} from "./NetworkSagas";
+import {RECEIVED_USER} from "../events/UserEvents";
 
 export function* objectiveCreationSaga({payload}) {
   const onlineStatus = yield call(isOnline);
@@ -31,8 +37,19 @@ export function* cacheObjectiveSaga(objective: Objective) {
   }))
 }
 
+export function* objectiveHistoryFetchSaga() {
+  try {
+    const data = yield call(performStreamedGet, `/api/strategy/objectives`);
+    yield put(createFetchedObjectivesEvent(data))
+  } catch (e) {
+    //todo: handle unable to get objectives
+    console.log('shit broked', e);
+  }
+}
+
 function* listenToActivityEvents() {
   yield takeEvery(CREATED_OBJECTIVE, objectiveCreationSaga);
+  yield takeEvery(RECEIVED_USER, objectiveHistoryFetchSaga);
 }
 
 export default function* StrategySagas() {

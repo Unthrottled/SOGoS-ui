@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {CACHED_OBJECTIVE, CREATED_OBJECTIVE, SYNCED_OBJECTIVES} from "../events/StrategyEvents";
+import {CACHED_OBJECTIVE, CREATED_OBJECTIVE, FOUND_OBJECTIVES, SYNCED_OBJECTIVES} from "../events/StrategyEvents";
 
 export type KeyResult = {
   id: string,
@@ -23,8 +23,8 @@ export type ObjectiveCacheEvent = {
 };
 
 const INITIAL_USER_STATE: StrategyState = {
-  objectives: [],
-  keyResults: [],
+  objectives: {},
+  keyResults: {},
   cache: {},
 };
 
@@ -42,6 +42,26 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
           ...state.keyResults,
           action.payload.keyResults,
         ]
+      };
+    case FOUND_OBJECTIVES:
+      const objectives = [
+        ...Object.keys(state.objectives).map(key => state.objectives[key]),
+        ...action.payload
+      ].reduce((accum, toIndex)=>{
+        accum[toIndex.id] = toIndex;
+        return accum;
+      }, {});
+      const keyResults = [
+        ...Object.keys(state.keyResults).map(key => state.keyResults[key]),
+        ...action.payload.flatMap(foundObjective=>foundObjective.keyResults),
+      ].reduce((accum, toIndex)=>{
+        accum[toIndex.id] = toIndex;
+        return accum;
+      }, {});
+      return {
+        ...state,
+        objectives,
+        keyResults
       };
     case CACHED_OBJECTIVE: {
       const {userGUID, objective} = action.payload;
