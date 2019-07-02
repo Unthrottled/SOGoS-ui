@@ -14,15 +14,24 @@ import {RECEIVED_USER} from "../events/UserEvents";
 export function* objectiveCreationSaga({payload}) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
-    yield call(objectiveUploadSaga, payload)
+    yield call(objectiveCreateSaga, payload)
   } else {
     yield call(cacheObjectiveSaga, payload)
   }
 }
 
-export function* objectiveUploadSaga(objective: Objective) {
+export function* objectiveCreateSaga(objective: Objective){
+  yield call(objectiveUploadSaga, objective, performPost);
+}
+
+//todo: update should work
+export function* objectiveUpdateSaga(objective: Objective){
+  yield call(objectiveUploadSaga, objective, performPost);
+}
+
+export function* objectiveUploadSaga(objective: Objective, apiAction) {
   try {
-    const data = yield call(performPost, `/api/strategy/objectives`, objective);
+    const data = yield call(apiAction, `/api/strategy/objectives`, objective);
     yield put(createSyncedObjectiveEvent(data))
   } catch (e) {
     yield call(cacheObjectiveSaga, objective)

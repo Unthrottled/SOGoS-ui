@@ -84,3 +84,11 @@ export function* performPost<T>(url: String, data, options = {headers: {}}): T {
     headers,
   });
 }
+
+export function* performPut<T>(url: String, data, options = {headers: {}}): T {
+  const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
+  return yield call(axios.put, url, data, {
+    ...options,
+    headers,
+  });
+}

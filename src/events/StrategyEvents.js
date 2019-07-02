@@ -2,6 +2,7 @@ import type {Objective, ObjectiveCacheEvent} from "../reducers/StrategyReducer";
 
 export const VIEWED_OBJECTIVES: 'VIEWED_OBJECTIVES' = 'VIEWED_OBJECTIVES';
 export const CREATED_OBJECTIVE: 'CREATED_OBJECTIVE' = 'CREATED_OBJECTIVE';
+export const UPDATED_OBJECTIVE: 'UPDATED_OBJECTIVE' = 'UPDATED_OBJECTIVE';
 export const SYNCED_OBJECTIVE: 'SYNCED_OBJECTIVE' = 'SYNCED_OBJECTIVE';
 export const SYNCED_OBJECTIVES: 'SYNCED_OBJECTIVES' = 'SYNCED_OBJECTIVES';
 export const CACHED_OBJECTIVE: 'CACHED_OBJECTIVE' = 'CACHED_OBJECTIVE';
@@ -28,5 +29,10 @@ export const createSyncedObjectiveEvent = (objective: Objective) => ({
 
 export const createCreatedObjectiveEvent = (objective: Objective) => ({
   type: CREATED_OBJECTIVE,
+  payload: objective,
+});
+
+export const createUpdatedObjectiveEvent = (objective: Objective) => ({
+  type: UPDATED_OBJECTIVE,
   payload: objective,
 });

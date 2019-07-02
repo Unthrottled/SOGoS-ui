@@ -1,5 +1,11 @@
 import {Action} from "redux";
-import {CACHED_OBJECTIVE, CREATED_OBJECTIVE, FOUND_OBJECTIVES, SYNCED_OBJECTIVES} from "../events/StrategyEvents";
+import {
+  CACHED_OBJECTIVE,
+  CREATED_OBJECTIVE,
+  FOUND_OBJECTIVES,
+  SYNCED_OBJECTIVES,
+  UPDATED_OBJECTIVE
+} from "../events/StrategyEvents";
 import {objectToArray} from "../miscellanous/Tools";
 
 export type KeyResult = {
@@ -57,6 +63,7 @@ function updateStateWithObjectives(newObjectives, newKeyResults, state) {
 const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Action) => {
   switch (action.type) {
     case CREATED_OBJECTIVE:
+    case UPDATED_OBJECTIVE:
       const newObjective = [action.payload];
       const keyResult = action.payload.keyResults;
       return updateStateWithObjectives(newObjective, keyResult, state);

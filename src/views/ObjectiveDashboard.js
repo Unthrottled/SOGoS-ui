@@ -20,7 +20,7 @@ import clsx from 'clsx';
 import ReactSelect from 'react-select/creatable';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {createdObjective} from "../actions/StrategyActions";
+import {createdObjective, updatedObjective} from "../actions/StrategyActions";
 import type {Objective} from "../reducers/StrategyReducer";
 import {withRouter} from "react-router-dom";
 
@@ -248,7 +248,11 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
       antecedenceTime: new Date().getTime(),
       keyResults
     };
-    dispatch(createdObjective(objective));
+    if(!objectives[objective.id]){
+      dispatch(createdObjective(objective));
+    } else {
+      dispatch(updatedObjective(objective));
+    }
     history.push('/strategy/objectives/')
   };
 

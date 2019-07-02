@@ -1,4 +1,8 @@
-import {createCreatedObjectiveEvent, createViewedObjectivesEvent} from "../events/StrategyEvents";
+import {
+  createCreatedObjectiveEvent,
+  createUpdatedObjectiveEvent,
+  createViewedObjectivesEvent
+} from "../events/StrategyEvents";
 import type {Objective} from "../reducers/StrategyReducer";
 
 export const
@@ -9,3 +13,6 @@ export const
 
 export const createdObjective = (objective: Objective) => dispatch =>
   dispatch(createCreatedObjectiveEvent(objective));
+
+export const updatedObjective = (objective: Objective) => dispatch =>
+  dispatch(createUpdatedObjectiveEvent(objective));
