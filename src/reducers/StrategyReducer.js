@@ -32,40 +32,38 @@ const INITIAL_USER_STATE: StrategyState = {
 };
 
 
+function updateStateWithObjectives(newObjectives, newKeyResults, state) {
+  const objectives = [
+    ...objectToArray(state.objectives),
+    ...newObjectives
+  ].reduce((accum, toIndex) => {
+    accum[toIndex.id] = toIndex;
+    return accum;
+  }, {});
+  const keyResults = [
+    ...objectToArray(state.keyResults),
+    ...newKeyResults,
+  ].reduce((accum, toIndex) => {
+    accum[toIndex.id] = toIndex;
+    return accum;
+  }, {});
+  return {
+    ...state,
+    objectives,
+    keyResults
+  };
+}
+
 const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Action) => {
   switch (action.type) {
     case CREATED_OBJECTIVE:
-      return {
-        ...state,
-        objectives: [
-          ...state.objectives,
-          action.payload
-        ],
-        keyResults: [
-          ...state.keyResults,
-          action.payload.keyResults,
-        ]
-      };
+      const newObjective = [action.payload];
+      const keyResult = action.payload.keyResults;
+      return updateStateWithObjectives(newObjective, keyResult, state);
     case FOUND_OBJECTIVES:
-      const objectives = [
-        ...objectToArray(state.objectives),
-        ...action.payload
-      ].reduce((accum, toIndex)=>{
-        accum[toIndex.id] = toIndex;
-        return accum;
-      }, {});
-      const keyResults = [
-        ...objectToArray(state.keyResults),
-        ...action.payload.flatMap(foundObjective=>foundObjective.keyResults),
-      ].reduce((accum, toIndex)=>{
-        accum[toIndex.id] = toIndex;
-        return accum;
-      }, {});
-      return {
-        ...state,
-        objectives,
-        keyResults
-      };
+      const rememberedObjectives = action.payload;
+      const rememberedKeyResults = action.payload.flatMap(foundObjective => foundObjective.keyResults);
+      return updateStateWithObjectives(rememberedObjectives, rememberedKeyResults, state);
     case CACHED_OBJECTIVE: {
       const {userGUID, objective} = action.payload;
       if (state.cache[userGUID]) {

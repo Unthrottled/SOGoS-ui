@@ -137,6 +137,9 @@ const components = {
 
 const useStyles = makeStyles(theme => (
   {
+    inputContainer: {
+      background: theme.palette.primary.main
+    },
     root: {
       flexGrow: 1,
       height: 250,
@@ -261,65 +264,67 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
       <Typography>
         Dis is objective id {objectiveId}
       </Typography>
-      <TextField
-        className={classes.textField}
-        label={'What you do want to accomplish?'}
-        placeholder={'I want to use my time better.'}
-        variant={'filled'}
-        margin={'normal'}
-        onBlur={handleObjectiveChange}
-      />
-      <ReactSelect
-        classes={classes}
-        styles={selectStyles}
-        inputId="react-select-multiple"
-        TextFieldProps={{
-          label: 'Categories',
-          InputLabelProps: {
-            htmlFor: 'react-select-multiple',
-            shrink: true,
-          },
-          placeholder: 'Give your objective categories!',
-        }}
-        options={suggestions}
-        components={components}
-        value={multi}
-        onChange={handleChangeMulti}
-        isMulti
-      />
-      <div className={classes.keyResults}>
-        <List>
-          {keyResults.map((topic) => (
-            <ListItem key={topic.id}>
-              <ListItemAvatar>
-                <Avatar className={classes.avatar}>
-                  <DoneIcon/>
-                </Avatar>
-              </ListItemAvatar>
-              <TextField
-                className={classes.textField}
-                label={'How will you know you are successful?'}
-                placeholder={'50% of my time awake is spent doing what I want.'}
-                variant={'outlined'}
-                margin={'normal'}
-                onBlur={event => updateResult(topic.id, event.target.value)}
-              />
-            </ListItem>
-          ))}
-        </List>
+      <div className={classes.inputContainer}>
+        <TextField
+          className={classes.textField}
+          label={'What you do want to accomplish?'}
+          placeholder={'I want to use my time better.'}
+          variant={'filled'}
+          margin={'normal'}
+          onBlur={handleObjectiveChange}
+        />
+        <ReactSelect
+          classes={classes}
+          styles={selectStyles}
+          inputId="react-select-multiple"
+          TextFieldProps={{
+            label: 'Categories',
+            InputLabelProps: {
+              htmlFor: 'react-select-multiple',
+              shrink: true,
+            },
+            placeholder: 'Give your objective categories!',
+          }}
+          options={suggestions}
+          components={components}
+          value={multi}
+          onChange={handleChangeMulti}
+          isMulti
+        />
+        <div className={classes.keyResults}>
+          <List>
+            {keyResults.map((topic) => (
+              <ListItem key={topic.id}>
+                <ListItemAvatar>
+                  <Avatar className={classes.avatar}>
+                    <DoneIcon/>
+                  </Avatar>
+                </ListItemAvatar>
+                <TextField
+                  className={classes.textField}
+                  label={'How will you know you are successful?'}
+                  placeholder={'50% of my time awake is spent doing what I want.'}
+                  variant={'outlined'}
+                  margin={'normal'}
+                  onBlur={event => updateResult(topic.id, event.target.value)}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+        <Button variant={'contained'}
+                color={'primary'}
+                onClick={addKeyResult}
+                className={classes.button}>
+          <AddIcon/>Add Key Result
+        </Button>
+        <Fab color={'primary'}
+             className={classes.save}
+             onClick={saveObjective}
+        >
+          <SaveIcon/>
+        </Fab>
       </div>
-      <Button variant={'contained'}
-              color={'primary'}
-              onClick={addKeyResult}
-              className={classes.button}>
-        <AddIcon/>Add Key Result
-      </Button>
-      <Fab color={'primary'}
-           className={classes.save}
-           onClick={saveObjective}
-      >
-        <SaveIcon/>
-      </Fab>
     </LoggedInLayout>
   );
 };
