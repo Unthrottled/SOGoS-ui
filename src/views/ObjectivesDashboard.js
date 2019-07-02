@@ -12,10 +12,13 @@ import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
 import {viewedObjectives} from "../actions/StrategyActions";
+import {objectToArray} from "../miscellanous/Tools";
+import type {Objective} from "../reducers/StrategyReducer";
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
+    textAlign: 'left',
   },
   button: {
     margin: theme.spacing(1)
@@ -30,12 +33,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ObjectivesDashboard = ({fullName, dispatch}) => {
+const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
     dispatch(viewedObjectives());
   }, [didMountState]);
+
+  const allObjectives: Objective[] = objectToArray(objectives);
 
   return (
     <LoggedInLayout>
@@ -48,77 +53,42 @@ const ObjectivesDashboard = ({fullName, dispatch}) => {
         </Button>
       </Link>
       <div className={classes.root}>
-        <ExpansionPanel className={classes.objective}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon className={classes.objective}/>}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography className={classes.heading}>Expansion Panel 1</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <ul>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-            </ul>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel className={classes.objective}>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon className={classes.objective}/>}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography className={classes.heading}>Expansion Panel 2</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <ul>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-              <li>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                  sit amet blandit leo lobortis eget.
-                </Typography>
-              </li>
-            </ul>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+        {
+          allObjectives.map(objective => (
+            <ExpansionPanel key={objective.id} className={classes.objective}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon className={classes.objective}/>}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>{objective.valueStatement}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <ul>
+                  {
+                    objective.keyResults.map(keyResult => (
+                      <li key={keyResult.id}>
+                        <Typography>
+                          {keyResult.valueStatement}
+                        </Typography>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          ))
+        }
       </div>
     </LoggedInLayout>
   );
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}} = state;
+  const {user: {information: {fullName}}, strategy: {objectives}} = state;
   return {
     fullName,
+    objectives,
   }
 };
 

@@ -1,14 +1,17 @@
 import {Action} from "redux";
 import {CACHED_OBJECTIVE, CREATED_OBJECTIVE, FOUND_OBJECTIVES, SYNCED_OBJECTIVES} from "../events/StrategyEvents";
+import {objectToArray} from "../miscellanous/Tools";
 
 export type KeyResult = {
   id: string,
   objectiveId: string,
+  valueStatement: string,
 }
 
 export type Objective = {
   id: string,
-  keyResult: KeyResult[],
+  valueStatement: string,
+  keyResults: KeyResult[],
 }
 
 export type StrategyState = {
@@ -45,14 +48,14 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       };
     case FOUND_OBJECTIVES:
       const objectives = [
-        ...Object.keys(state.objectives).map(key => state.objectives[key]),
+        ...objectToArray(state.objectives),
         ...action.payload
       ].reduce((accum, toIndex)=>{
         accum[toIndex.id] = toIndex;
         return accum;
       }, {});
       const keyResults = [
-        ...Object.keys(state.keyResults).map(key => state.keyResults[key]),
+        ...objectToArray(state.keyResults),
         ...action.payload.flatMap(foundObjective=>foundObjective.keyResults),
       ].reduce((accum, toIndex)=>{
         accum[toIndex.id] = toIndex;
