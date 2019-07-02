@@ -28,10 +28,6 @@ const theme = responsiveFontSizes(createMuiTheme({
 const useStyles = makeStyles(theme => ({
   content: {
     height: '100%'
-  },
-  sharkTits: {
-    background: 'url(https://static1.e621.net/data/a3/be/a3beb6fd045222a7088e8c886b916ddb.png)',
-    height: '100%'
   }
 }));
 
@@ -47,7 +43,7 @@ function App({dispatch: dispetch, isInitialized}) {
         <div className={classes.content}>
           <Switch>
             <PrivateRoute path={'/tits'} component={() => (
-              <LoggedInLayout className={classes.sharkTits}>
+              <LoggedInLayout>
               </LoggedInLayout>
             )}/>
             <Route path={'/login'} component={LoggedOut}/>
