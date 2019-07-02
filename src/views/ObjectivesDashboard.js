@@ -33,6 +33,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const MAX_OBJECTIVES = 5;
+
 const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
@@ -45,13 +47,18 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
-      <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
-        <Button variant={'contained'}
-                color={'primary'}
-                className={classes.button}>
-          <AddIcon/> Create Objective
-        </Button>
-      </Link>
+      {
+        allObjectives.length >= MAX_OBJECTIVES ? null :
+          (
+            <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
+              <Button variant={'contained'}
+                      color={'primary'}
+                      className={classes.button}>
+                <AddIcon/> Create Objective
+              </Button>
+            </Link>
+          )
+      }
       <div className={classes.root}>
         {
           allObjectives.map(objective => (
@@ -75,6 +82,15 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                     ))
                   }
                 </ul>
+                <div>
+                  <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
+                    <Button variant={'outlined'}
+                            color={'secondary'}
+                            className={classes.button}>
+                      <AddIcon/> Edit Objective
+                    </Button>
+                  </Link>
+                </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           ))

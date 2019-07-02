@@ -208,22 +208,27 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}) => {
+const ObjectiveDashboard = ({dispatch, objectives, fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [keyResults, setKeyResults] = useState([
-    {
-      id: uuid(),
-      objectiveId
-    }
-  ]);
 
-  const [objectiveValue, setObjective] = useState('');
+  const objective: Objective = objectives[objectiveId] ||
+    {
+      valueStatement: '',
+      keyResults: [
+        {
+          id: uuid(),
+          objectiveId
+        }
+      ]
+    };
+  const [keyResults, setKeyResults] = useState(objective.keyResults);
+  const [objectiveValue, setObjective] = useState(objective.valueStatement);
   const handleObjectiveChange = event => setObjective(event.target.value);
   const updateResult = (resultId, resultValue) => {
     keyResults.find(result => result.id === resultId).valueStatement = resultValue
-  };
 
+  };
   const addKeyResult = () => {
     setKeyResults([
       ...keyResults,
@@ -233,8 +238,8 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
         objectiveId
       }
     ])
-  };
 
+  };
   const saveObjective = () => {
     const objective: Objective = {
       id: objectiveId,
@@ -243,6 +248,7 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
       keyResults
     };
     dispatch(createdObjective(objective))
+
   };
 
   const selectStyles = {
@@ -254,8 +260,8 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
       },
     }),
   };
-
   const [multi, setMulti] = React.useState(null);
+
   const handleChangeMulti = (value) => setMulti(value);
 
   return (
@@ -271,6 +277,7 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
           placeholder={'I want to use my time better.'}
           variant={'filled'}
           margin={'normal'}
+          {...(objective ? {defaultValue: objective.valueStatement} : {})}
           onBlur={handleObjectiveChange}
         />
         <ReactSelect
@@ -306,6 +313,7 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
                   placeholder={'50% of my time awake is spent doing what I want.'}
                   variant={'outlined'}
                   margin={'normal'}
+                  {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
                   onBlur={event => updateResult(topic.id, event.target.value)}
                 />
               </ListItem>
@@ -330,9 +338,10 @@ const ObjectiveDashboard = ({dispatch, fullName, match: {params: {objectiveId}}}
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}} = state;
+  const {user: {information: {fullName}}, strategy: {objectives}} = state;
   return {
     fullName,
+    objectives
   }
 };
 
