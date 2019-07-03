@@ -3,6 +3,7 @@ import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEve
 import {canRefreshToken, canRefreshEitherTokens} from "../../security/OAuth";
 import {refreshTokenWithReplacementSaga, refreshTokenWithoutReplacementSaga} from "./RefreshTokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
+import {SessionExpiredException} from "../../types/SecurityModels";
 
 export function* accessTokenWithSessionExtensionSaga() {
   return yield call(accessTokenSagas, getOrRefreshAccessTokenWithSessionExtension);
@@ -17,7 +18,7 @@ export function* accessTokenSagas(getOrRefreshAccessTokenSaga) {
   if (accessToken) {
     return accessToken;
   } else {
-    // todo: ask user to sign in again.
+    throw new SessionExpiredException();
   }
 }
 
