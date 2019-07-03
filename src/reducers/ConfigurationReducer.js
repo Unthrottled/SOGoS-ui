@@ -1,20 +1,6 @@
 import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
 import {Action} from "redux";
-
-export type OAuthConfig = {
-  authorizationEndpoint: string,
-  endSessionEndpoint: string,
-  revocationEndpoint: string,
-  tokenEndpoint: string,
-  userInfoEndpoint: string,
-}
-
-export type InitialConfig = {
-  callbackURI: string,
-  clientID: string,
-  openIDConnectURI: string,
-  provider: string,
-}
+import type {InitialConfig, OAuthConfig} from "../types/ConfigurationModels";
 
 export type ConfigurationState = {
   oauth: OAuthConfig,

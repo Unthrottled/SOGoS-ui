@@ -5,7 +5,7 @@ import {
   createFailedToGetRemoteOAuthConfigurationsEvent,
   createReceivedRemoteOAuthConfigurations
 } from "../../../events/ConfigurationEvents";
-import type {InitialConfig, OAuthConfig} from "../../../reducers/ConfigurationReducer";
+import type {InitialConfig, OAuthConfig} from "../../../types/ConfigurationModels";
 import {
   authorizationServiceConfigurationSaga,
   fetchConfigurationsFromIssuer

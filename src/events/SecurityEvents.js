@@ -1,5 +1,5 @@
 import {TokenRequest, TokenResponse} from "@openid/appauth";
-import type {OAuthConfig} from "../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../types/ConfigurationModels";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';

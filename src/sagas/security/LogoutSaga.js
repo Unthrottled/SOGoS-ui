@@ -1,5 +1,5 @@
 import {call, put, select} from 'redux-saga/effects';
-import type {InitialConfig} from "../../reducers/ConfigurationReducer";
+import type {InitialConfig} from "../../types/ConfigurationModels";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {selectConfigurationState} from "../../reducers";
 import {createLoggedOffEvent} from "../../events/SecurityEvents";

@@ -24,7 +24,7 @@ import {
 import {completeAuthorizationRequest} from "../../../security/StupidShit";
 import {AuthorizationRequest, AuthorizationRequestResponse} from "@openid/appauth";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
-import type {OAuthConfig} from "../../../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../../../types/ConfigurationModels";
 import {NodeCrypto} from "@openid/appauth/built/node_support";
 import {fetchTokenWithRefreshSaga} from "../../../sagas/security/TokenSagas";
 

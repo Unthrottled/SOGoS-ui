@@ -2,8 +2,9 @@ import sagaHelper from 'redux-saga-testing';
 import {call, select} from 'redux-saga/effects';
 import logoutSaga, {constructRedirectURI, logoffPreFlightSaga, pushRedirect} from "../../../sagas/security/LogoutSaga";
 import {oauthConfigurationSaga} from "../../../sagas/configuration/ConfigurationConvienenceSagas";
-import type {ConfigurationState, OAuthConfig} from "../../../reducers/ConfigurationReducer";
+import type {ConfigurationState} from "../../../reducers/ConfigurationReducer";
 import {selectConfigurationState} from "../../../reducers";
+import type {OAuthConfig} from "../../../types/ConfigurationModels";
 
 describe('Logout Saga', () => {
   describe('constructRedirectURI', () => {

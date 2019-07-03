@@ -1,4 +1,4 @@
-import type {InitialConfig, OAuthConfig} from "../reducers/ConfigurationReducer";
+import type {InitialConfig, OAuthConfig} from "../types/ConfigurationModels";
 
 export const REQUESTED_OAUTH_CONFIGURATION: 'REQUESTED_OAUTH_CONFIGURATION' = 'REQUESTED_OAUTH_CONFIGURATION';
 export const REQUESTED_INITIAL_CONFIGURATION: 'REQUESTED_INITIAL_CONFIGURATION' = 'REQUESTED_INITIAL_CONFIGURATION';

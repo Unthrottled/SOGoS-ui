@@ -2,11 +2,12 @@ import {
   AuthorizationServiceConfiguration,
   BaseTokenRequestHandler,
   TokenRequest,
-  TokenRequestHandler, TokenResponse
+  TokenRequestHandler,
+  TokenResponse
 } from "@openid/appauth";
 import {createTokenFailureEvent, createTokenReceptionEvent} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
-import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../../types/ConfigurationModels";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
 

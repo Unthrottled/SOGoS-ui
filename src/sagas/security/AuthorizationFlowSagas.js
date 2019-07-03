@@ -19,7 +19,7 @@ import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
-import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../../types/ConfigurationModels";
 
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);

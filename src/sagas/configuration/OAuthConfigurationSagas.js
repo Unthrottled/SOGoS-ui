@@ -1,6 +1,6 @@
-import {put, select, take, call} from 'redux-saga/effects'
-import {RECEIVED_REMOTE_OAUTH_CONFIGURATION, createReceivedOAuthConfigurations} from "../../events/ConfigurationEvents";
-import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
+import {call, put, select, take} from 'redux-saga/effects'
+import {createReceivedOAuthConfigurations, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../../events/ConfigurationEvents";
+import type {OAuthConfig} from "../../types/ConfigurationModels";
 import {createOauthConfigurationObject} from "../../security/StupidShit";
 import {selectConfigurationState} from "../../reducers";
 

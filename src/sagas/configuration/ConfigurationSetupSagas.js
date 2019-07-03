@@ -1,11 +1,11 @@
 import {call, put} from 'redux-saga/effects'
 import {
-  createReceivedRemoteOAuthConfigurations,
-  createFailedToGetRemoteOAuthConfigurationsEvent
+  createFailedToGetRemoteOAuthConfigurationsEvent,
+  createReceivedRemoteOAuthConfigurations
 } from "../../events/ConfigurationEvents";
 import {AuthorizationServiceConfiguration} from "@openid/appauth";
 import {initialConfigurationFetchSaga} from "./InitialConfigurationSagas";
-import type {OAuthConfig} from "../../reducers/ConfigurationReducer";
+import type {OAuthConfig} from "../../types/ConfigurationModels";
 
 export const fetchConfigurationsFromIssuer = (issuerURI: string): Promise<OAuthConfig> =>
   AuthorizationServiceConfiguration.fetchFromIssuer(issuerURI);
