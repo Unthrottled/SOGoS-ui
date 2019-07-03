@@ -5,10 +5,11 @@ import {
 } from "../../events/ActivityEvents";
 import {call, delay, put, select, take} from 'redux-saga/effects'
 import {RECEIVED_USER} from "../../events/UserEvents";
-import {selectActivityState, selectNetworkState} from "../../reducers";
+import {selectActivityState, selectNetworkState, selectSecurityState} from "../../reducers";
 import {FOUND_WIFI} from "../../events/NetworkEvents";
 import {isOnline} from "../NetworkSagas";
 import {ActivityTimedType, ActivityType} from "../../types/ActivityModels";
+import {INITIALIZED_SECURITY} from "../../events/SecurityEvents";
 
 
 //todo: wrap activity in Activity function that has methods like deez.
@@ -23,7 +24,7 @@ const activitiesEqual = (currentActivity, activity) => {
 };
 
 function* handleNewActivity(activity) {
-  if(getActivityType(activity) === ActivityType.ACTIVE && getTimedType(activity) !== ActivityTimedType.NONE){
+  if (getActivityType(activity) === ActivityType.ACTIVE && getTimedType(activity) !== ActivityTimedType.NONE) {
     yield put(createResumedStartedTimedActivityEvent(activity));
   } else {
     yield put(createResumedStartedNonTimedActivityEvent(activity));
@@ -43,17 +44,21 @@ function* updateCurrentActivity(attempt: number = 10) {
   }
 }
 
-export function* handleError(attempt:number){
+export function* handleError(attempt: number) {
   const hasNetwork = yield isOnline();
-  if(hasNetwork){
+  if (hasNetwork) {
     yield delay(Math.pow(2, attempt) + Math.floor(Math.random() * 1000));
     yield updateCurrentActivity(attempt < 13 ? attempt + 1 : 10)
   }
 }
 
 export function* delayWork() {
-  const{isOnline} = yield select(selectNetworkState);
-  if(isOnline){
+  const globalState = yield select();
+  const {isOnline} = selectNetworkState(globalState);
+  const {isExpired} = selectSecurityState(globalState);
+  if (isExpired) {
+    yield take(INITIALIZED_SECURITY);// only going to happen after login
+  } else if (isOnline) {
     yield delay(1000);
   } else {
     yield take(FOUND_WIFI);

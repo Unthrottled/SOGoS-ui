@@ -13,10 +13,7 @@ const pickOne =[
 
 const useStyles = makeStyles(theme =>({
   sharkTits: {
-    background: `url(${pickOne[Math.floor(Math.random() * (pickOne.length + 1))]})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
+    background: `url(${pickOne[Math.floor(Math.random() * (pickOne.length + 1))]}) no-repeat center`,
     height: '100%'
   }
 }));

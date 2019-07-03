@@ -1,7 +1,12 @@
-- Pause Count Down Timer
+Tech Debt:
+-----
+- Less storing objective id when object still lives in objective document.
+-----
 
-- Session expiry does not work.
-    - Stop polling
+
+- History does not work on logon
+- History should not be fetched automatically
+- Limit history to range.
 
 - Objectives
     - Hard Limit
@@ -9,9 +14,7 @@
 - Key Result
     - Hard Limit
 
-- History does not work on logon
-- History should not be fetched automatically
-- Limit history to range.
+- Pause Count Down Timer
 
 - Better 404 handling
 
@@ -49,12 +52,6 @@ Maybe:
 Needs UX:
     - Offline Mode
     - Login
-
-
-Tech Debt:
------
-- Less storing objective id when object still lives in objective document.
-
 
 Think pad:
 -----

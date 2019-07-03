@@ -1,10 +1,17 @@
 import {combineReducers} from "redux";
+import type {UserState} from "./UserReducer";
 import userReducer from './UserReducer';
+import type {SecurityState} from "./SecurityReducer";
 import securityReducer from './SecurityReducer';
+import type {ConfigurationState} from "./ConfigurationReducer";
 import configurationReducer from './ConfigurationReducer';
+import type {ActivityState} from "./ActivityReducer";
 import activityReducer from './ActivityReducer';
+import type {NetworkState} from "./NetworkReducer";
 import networkReducer from './NetworkReducer';
+import type {HistoryState} from "./HistoryReducer";
 import HistoryReducer from "./HistoryReducer";
+import type {StrategyState} from "./StrategyReducer";
 import StrategyReducer from "./StrategyReducer";
 
 const rootReducer = combineReducers({
@@ -17,18 +24,18 @@ const rootReducer = combineReducers({
   strategy: StrategyReducer,
 });
 
-export const selectSecurityState = globalState =>globalState.security;
+export const selectSecurityState = (globalState): SecurityState => globalState.security;
 
-export const selectConfigurationState = globalState =>globalState.configuration;
+export const selectConfigurationState = (globalState): ConfigurationState => globalState.configuration;
 
-export const selectActivityState = globalState =>globalState.activity;
+export const selectActivityState = (globalState): ActivityState => globalState.activity;
 
-export const selectNetworkState = globalState =>globalState.network;
+export const selectNetworkState = (globalState): NetworkState => globalState.network;
 
-export const selectUserState = globalState =>globalState.user;
+export const selectUserState = (globalState): UserState => globalState.user;
 
-export const selectHistoryState = globalState =>globalState.history;
+export const selectHistoryState = (globalState): HistoryState => globalState.history;
 
-export const selectStrategyState = globalState =>globalState.strategy;
+export const selectStrategyState = (globalState): StrategyState => globalState.strategy;
 
 export default rootReducer;
