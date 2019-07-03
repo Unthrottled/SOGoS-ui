@@ -1,10 +1,7 @@
-import {RECEIVED_USER, User} from "../events/UserEvents";
+import {RECEIVED_USER} from "../events/UserEvents";
 import {LOGGED_OFF} from "../events/SecurityEvents";
 import {Action} from "redux";
-
-export type UserState = {
-  information: User,
-}
+import type {UserState} from "../types/UserModels";
 
 const INITIAL_USER_STATE : UserState = {
   information: {

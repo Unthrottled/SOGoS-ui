@@ -2,11 +2,7 @@ import {EXPIRED_SESSION, INITIALIZED_SECURITY, LOGGED_OFF, LOGGED_ON, RECEIVED_T
 import {tokenReceptionReducer} from "./security/TokenReducers";
 import {Action} from "redux";
 import {RECEIVED_USER} from "../events/UserEvents";
-
-export type TokenInformation = {
-  expiresAt: number, //epoch second
-  issuedAt: number, //epoch second
-}
+import type {TokenInformation} from "../types/SecurityModels";
 
 export type SecurityState = {
   isLoggedIn: boolean,
