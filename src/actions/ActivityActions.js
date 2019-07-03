@@ -1,4 +1,4 @@
-import type {ActivityContent} from "../events/ActivityEvents";
+import type {ActivityContent} from "../types/ActivityModels";
 import {
   createStartedActivityEvent,
   createStartedNonTimedActivityEvent,

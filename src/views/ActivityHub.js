@@ -8,7 +8,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
-import {ActivityTimedType, ActivityType} from "../events/ActivityEvents";
+import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {

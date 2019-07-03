@@ -1,7 +1,5 @@
-import { performGetWithoutSessionExtension} from "../APISagas";
+import {performGetWithoutSessionExtension} from "../APISagas";
 import {
-  ActivityTimedType,
-  ActivityType,
   createResumedStartedNonTimedActivityEvent,
   createResumedStartedTimedActivityEvent
 } from "../../events/ActivityEvents";
@@ -10,6 +8,7 @@ import {RECEIVED_USER} from "../../events/UserEvents";
 import {selectActivityState, selectNetworkState} from "../../reducers";
 import {FOUND_WIFI} from "../../events/NetworkEvents";
 import {isOnline} from "../NetworkSagas";
+import {ActivityTimedType, ActivityType} from "../../types/ActivityModels";
 
 
 //todo: wrap activity in Activity function that has methods like deez.

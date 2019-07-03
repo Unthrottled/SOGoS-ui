@@ -6,7 +6,7 @@ import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
-import {ActivityTimedType, ActivityType} from "../events/ActivityEvents";
+import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 
 const useStyles = makeStyles(theme => ({
   timer: {

@@ -1,3 +1,6 @@
+import type {ActivityContent, ActivityRegistryFailure, CachedActivity} from "../types/ActivityModels";
+import {ActivityTimedType} from "../types/ActivityModels";
+
 export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
 export const CACHED_ACTIVITY = 'CACHED_ACTIVITY';
 export const SYNCED_ACTIVITIES = 'SYNCED_ACTIVITIES';
@@ -8,22 +11,6 @@ export const RESUMED_NON_TIMED_ACTIVITY = 'RESUMED_NON_TIMED_ACTIVITY';
 export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 
-export type ActivityContent = {
-  uuid: string,
-  name: string,
-}
-
-export const ActivityType = {
-  ACTIVE: 'ACTIVE',
-  PASSIVE: 'PASSIVE',
-};
-
-export const ActivityTimedType = {
-  NONE: 'NONE',
-  TIMER: 'TIMER',
-  STOP_WATCH: 'STOP_WATCH',
-};
-
 export type Activity = {
   antecedenceTime: number,
   content: ActivityContent,
@@ -32,11 +19,6 @@ export type Activity = {
 export const CREATED = 'CREATED';
 export const UPDATED = 'UPDATED';
 export const DELETED = 'DELETED';
-
-export type CachedActivity = {
-  uploadType: CREATED | UPDATED | DELETED,
-  activity: Activity
-};
 
 export type ActivityCacheEvent = {
   cachedActivity: CachedActivity,
@@ -93,11 +75,6 @@ export const createRegisteredStartEvent = (activity: Activity) => ({
   type: REGISTERED_ACTIVITY_START,
   payload: activity
 });
-
-export type ActivityRegistryFailure = {
-  error: any,
-  activity: Activity,
-}
 
 export const createFailureToRegisterStartEvent = (activityRegistryFailure: ActivityRegistryFailure) => ({
   type: FAILED_TO_REGISTER_ACTIVITY_START,
