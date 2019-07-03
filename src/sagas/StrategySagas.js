@@ -1,10 +1,10 @@
 import {all, call, put, select, takeEvery} from 'redux-saga/effects'
-import {performPost, performStreamedGet} from "./APISagas";
+import {performPost, performPut, performStreamedGet} from "./APISagas";
 import {
   createCachedObjectiveEvent,
   CREATED_OBJECTIVE,
   createFetchedObjectivesEvent,
-  createSyncedObjectiveEvent
+  createSyncedObjectiveEvent, UPDATED_OBJECTIVE
 } from "../events/StrategyEvents";
 import {selectUserState} from "../reducers";
 import type {Objective} from "../reducers/StrategyReducer";
@@ -24,9 +24,18 @@ export function* objectiveCreateSaga(objective: Objective){
   yield call(objectiveUploadSaga, objective, performPost);
 }
 
-//todo: update should work
+//todo: sharing is caring
+export function* objectiveChangesSaga({payload}){
+  const onlineStatus = yield call(isOnline);
+  if (onlineStatus) {
+    yield call(objectiveUpdateSaga, payload)
+  } else {
+    yield call(cacheObjectiveSaga, payload)
+  }
+}
+
 export function* objectiveUpdateSaga(objective: Objective){
-  yield call(objectiveUploadSaga, objective, performPost);
+  yield call(objectiveUploadSaga, objective, performPut);
 }
 
 export function* objectiveUploadSaga(objective: Objective, apiAction) {
@@ -38,6 +47,7 @@ export function* objectiveUploadSaga(objective: Objective, apiAction) {
   }
 }
 
+//todo: cache objective updates and creations when offline
 export function* cacheObjectiveSaga(objective: Objective) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedObjectiveEvent({
@@ -58,6 +68,7 @@ export function* objectiveHistoryFetchSaga() {
 
 function* listenToActivityEvents() {
   yield takeEvery(CREATED_OBJECTIVE, objectiveCreationSaga);
+  yield takeEvery(UPDATED_OBJECTIVE, objectiveChangesSaga);
   yield takeEvery(RECEIVED_USER, objectiveHistoryFetchSaga);
 }
 
