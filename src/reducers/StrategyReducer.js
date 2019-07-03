@@ -7,7 +7,13 @@ import {
   UPDATED_OBJECTIVE
 } from "../events/StrategyEvents";
 import {objectToArray} from "../miscellanous/Tools";
-import type {StrategyState} from "../types/StrategyModels";
+import type {KeyResult, Objective} from "../types/StrategyModels";
+
+export type StrategyState = {
+  objectives: Objective[],
+  keyResults: KeyResult[],
+  cache: any,
+}
 
 const INITIAL_USER_STATE: StrategyState = {
   objectives: {},

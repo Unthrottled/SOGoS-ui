@@ -8,11 +8,6 @@ export type Objective = {
   valueStatement: string,
   keyResults: KeyResult[],
 }
-export type StrategyState = {
-  objectives: Objective[],
-  keyResults: KeyResult[],
-  cache: any,
-}
 
 export type ObjectiveCacheEvent = {
   objective: Objective,
