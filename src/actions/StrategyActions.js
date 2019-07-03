@@ -3,7 +3,7 @@ import {
   createUpdatedObjectiveEvent,
   createViewedObjectivesEvent
 } from "../events/StrategyEvents";
-import type {Objective} from "../reducers/StrategyReducer";
+import type {Objective} from "../types/StrategyModels";
 
 export const
   viewedObjectives = () =>

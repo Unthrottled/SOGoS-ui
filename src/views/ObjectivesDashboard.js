@@ -13,7 +13,7 @@ import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
 import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../miscellanous/Tools";
-import type {Objective} from "../reducers/StrategyReducer";
+import type {Objective} from "../types/StrategyModels";
 
 const useStyles = makeStyles(theme => ({
   root: {

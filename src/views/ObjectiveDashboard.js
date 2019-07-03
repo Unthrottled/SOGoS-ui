@@ -21,7 +21,7 @@ import ReactSelect from 'react-select/creatable';
 import Paper from '@material-ui/core/Paper';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {createdObjective, updatedObjective} from "../actions/StrategyActions";
-import type {Objective} from "../reducers/StrategyReducer";
+import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
 
 

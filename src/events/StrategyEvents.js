@@ -1,4 +1,4 @@
-import type {Objective, ObjectiveCacheEvent} from "../reducers/StrategyReducer";
+import type {Objective, ObjectiveCacheEvent} from "../types/StrategyModels";
 
 export const VIEWED_OBJECTIVES: 'VIEWED_OBJECTIVES' = 'VIEWED_OBJECTIVES';
 export const CREATED_OBJECTIVE: 'CREATED_OBJECTIVE' = 'CREATED_OBJECTIVE';

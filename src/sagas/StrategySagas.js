@@ -4,10 +4,11 @@ import {
   createCachedObjectiveEvent,
   CREATED_OBJECTIVE,
   createFetchedObjectivesEvent,
-  createSyncedObjectiveEvent, UPDATED_OBJECTIVE
+  createSyncedObjectiveEvent,
+  UPDATED_OBJECTIVE
 } from "../events/StrategyEvents";
 import {selectUserState} from "../reducers";
-import type {Objective} from "../reducers/StrategyReducer";
+import type {Objective} from "../types/StrategyModels";
 import {isOnline} from "./NetworkSagas";
 import {RECEIVED_USER} from "../events/UserEvents";
 
