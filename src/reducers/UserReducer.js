@@ -1,8 +1,11 @@
 import {RECEIVED_USER} from "../events/UserEvents";
 import {LOGGED_OFF} from "../events/SecurityEvents";
 import {Action} from "redux";
-import type {UserState} from "../types/UserModels";
+import type {User} from "../types/UserModels";
 
+export type UserState = {
+  information: User,
+}
 const INITIAL_USER_STATE : UserState = {
   information: {
     firstName: 'Smitty',

@@ -16,7 +16,6 @@ export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
 });
 
-
 export const createRequestLogonEvent = (oauthConfig) => ({
   type: REQUESTED_LOGON,
   payload: oauthConfig
