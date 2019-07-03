@@ -34,6 +34,8 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: Action) => {
         ...INITIAL_SECURITY_STATE,
       };
     case EXPIRED_SESSION:
+      delete state.refreshToken;
+      delete state.refreshTokenInformation;
       return {
         ...state,
         isExpired: true,

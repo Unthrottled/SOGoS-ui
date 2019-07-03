@@ -10,7 +10,6 @@ const INITIAL_HISTORY_STATE: HistoryState = {
   activityFeed: [],
 };
 
-
 const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Action) => {
   switch (action.type) {
     case RECEIVED_HISTORY:

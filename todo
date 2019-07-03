@@ -1,6 +1,7 @@
 - Pause Count Down Timer
 
 - Session expiry does not work.
+    - Stop polling
 
 - Objectives
     - Hard Limit
