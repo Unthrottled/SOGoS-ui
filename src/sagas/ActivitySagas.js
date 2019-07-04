@@ -6,7 +6,6 @@ import {registerActivitySaga} from "./activity/RegisterActivitySaga";
 import {FOUND_WIFI} from "../events/NetworkEvents";
 import {activitySyncSaga} from "./activity/ActivitySyncSaga";
 
-
 function* listenToActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, registerActivitySaga);
   yield takeEvery(FOUND_WIFI, activitySyncSaga);
@@ -17,5 +16,5 @@ function* listenToActivityEvents() {
 export default function* rootSaga() {
   yield all([
     listenToActivityEvents(),
-  ])
+  ]);
 }
