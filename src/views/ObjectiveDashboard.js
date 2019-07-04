@@ -219,7 +219,6 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
       keyResults: [
         {
           id: uuid(),
-          objectiveId
         }
       ]
     };
@@ -236,7 +235,6 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
       {
         id: uuid(),
         antecedenceTime: new Date().getTime(),
-        objectiveId
       }
     ])
 
