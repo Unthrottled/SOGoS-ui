@@ -6,7 +6,7 @@ import {objectiveHistoryFetchSaga, objectiveObservationSaga} from "./strategy/Ob
 
 export function* objectiveObservationInitializationSaga() {
   const {foundUser} = yield all({
-    askedForHistory: take(VIEWED_OBJECTIVES),
+    askedForObjectives: take(VIEWED_OBJECTIVES),
     foundUser: take(RECEIVED_USER),
   });
   yield fork(objectiveHistoryFetchSaga, foundUser);
