@@ -1,11 +1,12 @@
-import {all, call, put, select, takeEvery} from 'redux-saga/effects'
+import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
 import {performPost, performPut, performStreamedGet} from "./APISagas";
 import {
   createCachedObjectiveEvent,
   CREATED_OBJECTIVE,
   createFetchedObjectivesEvent,
   createSyncedObjectiveEvent,
-  UPDATED_OBJECTIVE
+  UPDATED_OBJECTIVE,
+  VIEWED_OBJECTIVES
 } from "../events/StrategyEvents";
 import {selectUserState} from "../reducers";
 import type {Objective} from "../types/StrategyModels";
@@ -21,12 +22,12 @@ export function* objectiveCreationSaga({payload}) {
   }
 }
 
-export function* objectiveCreateSaga(objective: Objective){
+export function* objectiveCreateSaga(objective: Objective) {
   yield call(objectiveUploadSaga, objective, performPost);
 }
 
 //todo: sharing is caring
-export function* objectiveChangesSaga({payload}){
+export function* objectiveChangesSaga({payload}) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(objectiveUpdateSaga, payload)
@@ -35,7 +36,7 @@ export function* objectiveChangesSaga({payload}){
   }
 }
 
-export function* objectiveUpdateSaga(objective: Objective){
+export function* objectiveUpdateSaga(objective: Objective) {
   yield call(objectiveUploadSaga, objective, performPut);
 }
 
@@ -67,10 +68,20 @@ export function* objectiveHistoryFetchSaga() {
   }
 }
 
+export function* objectiveObservationSaga() {
+  yield call(console.log, 'Viewed Objectives Again');
+}
+
 function* listenToActivityEvents() {
   yield takeEvery(CREATED_OBJECTIVE, objectiveCreationSaga);
   yield takeEvery(UPDATED_OBJECTIVE, objectiveChangesSaga);
-  yield takeEvery(RECEIVED_USER, objectiveHistoryFetchSaga);
+
+  const {foundUser} = yield all({
+    askedForHistory: take(VIEWED_OBJECTIVES),
+    foundUser: take(RECEIVED_USER),
+  });
+  yield fork(objectiveHistoryFetchSaga, foundUser);
+  yield takeEvery(VIEWED_OBJECTIVES, objectiveObservationSaga);
 }
 
 export default function* StrategySagas() {
