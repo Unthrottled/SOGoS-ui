@@ -1,7 +1,13 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from 'react-redux';
+import {viewedActivityFeed} from "../actions/HistoryActions";
 
-const ActivityFeed = ({activityFeed}) => {
+const ActivityFeed = ({activityFeed, dispatch}) => {
+  const [didMountState] = useState('');
+  useEffect(() => {
+    dispatch(viewedActivityFeed());
+  }, [didMountState]);
+
   return (
     <div>
       {
