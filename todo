@@ -1,5 +1,6 @@
 Tech Debt:
 -----
+- Less chatty actions (BIG REFACTOR)
 -----
 
 - Objectives
@@ -25,9 +26,16 @@ Tech Debt:
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
-- History
+- History:
     - Limit history to range.
     - Update History when viewed?
+
+- Objectives:
+    - Update Objectives when viewed?
+
+Needs UX:
+    - Offline Mode
+    - Login
 
 Sad Path
 ----
@@ -37,18 +45,14 @@ Sad Path
     - Authorization Configuration request failure
     - History
         - Activity fetch failure
-- Session Expired, stop polling.
-- Redirect To login should clear token cache.
 
 Maybe:
 ----
 - Redux Persist
     - Make sure that tokens are secure
 - Initial Loading Screen
+----
 
-Needs UX:
-    - Offline Mode
-    - Login
 
 Think pad:
 -----
