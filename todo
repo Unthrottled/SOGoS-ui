@@ -2,10 +2,6 @@ Tech Debt:
 -----
 -----
 
-- History does not work on logon
-- History should not be fetched automatically
-- Limit history to range.
-
 - Objectives
     - Hard Limit
     - Refresh objectives (Persist keeps more than 5)
@@ -29,6 +25,9 @@ Tech Debt:
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
+- History
+    - Limit history to range.
+    - Update History when viewed?
 
 Sad Path
 ----

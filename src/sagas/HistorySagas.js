@@ -1,6 +1,6 @@
-import {all, call, put, takeEvery} from 'redux-saga/effects'
+import {all, call, fork, put, take, takeEvery} from 'redux-saga/effects'
 import {performStreamedGet} from "./APISagas";
-import {createReceivedHistoryEvent} from "../events/HistoryEvents";
+import {createReceivedHistoryEvent, VIEWED_HISTORY} from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
 
 export function* archiveFetchSaga({payload: {information: {guid}}}) {
@@ -13,9 +13,18 @@ export function* archiveFetchSaga({payload: {information: {guid}}}) {
   }
 }
 
-//todo: do not automatically fetch stuff
+export function* historyObservationSaga(){
+  //todo: update history  when viewed again?
+  yield call(console.log, 'Viewed history again');
+}
+
 function* listenToActivityEvents() {
-  yield takeEvery(RECEIVED_USER, archiveFetchSaga);
+  const {foundUser} = yield all({
+    askedForHistory: take(VIEWED_HISTORY),
+    foundUser: take(RECEIVED_USER),
+  });
+  yield fork(archiveFetchSaga, foundUser);
+  yield takeEvery(VIEWED_HISTORY, historyObservationSaga);
 }
 
 export default function* HistorySagas() {
