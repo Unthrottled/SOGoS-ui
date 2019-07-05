@@ -1,8 +1,5 @@
-import {select, call, put, all, take} from 'redux-saga/effects'
+import {call, put, select} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
-import {activityLogonSaga, LOGGED_ON_ACTIVITY_NAME} from "../../../sagas/activity/LogonActivitySaga";
-import {LOGGED_ON} from "../../../events/SecurityEvents";
-import {RECEIVED_USER} from "../../../events/UserEvents";
 import {
   ACTIVITY_URL,
   activityCacheSaga,
@@ -10,10 +7,10 @@ import {
   registerActivitySaga
 } from "../../../sagas/activity/RegisterActivitySaga";
 import {
-  createCachedActivityEvent, CREATED,
+  createCachedActivityEvent,
+  CREATED,
   createFailureToRegisterStartEvent,
-  createRegisteredStartEvent,
-  createStartedActivityEvent
+  createRegisteredStartEvent
 } from "../../../events/ActivityEvents";
 import {isOnline} from "../../../sagas/NetworkSagas";
 import {performPost} from "../../../sagas/APISagas";
