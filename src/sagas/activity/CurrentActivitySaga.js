@@ -8,20 +8,14 @@ import {RECEIVED_USER} from "../../events/UserEvents";
 import {selectActivityState, selectNetworkState, selectSecurityState} from "../../reducers";
 import {FOUND_WIFI} from "../../events/NetworkEvents";
 import {isOnline} from "../NetworkSagas";
-import {ActivityTimedType, ActivityType} from "../../types/ActivityModels";
+import {
+  activitiesEqual,
+  ActivityTimedType,
+  ActivityType,
+  getActivityType,
+  getTimedType
+} from "../../types/ActivityModels";
 import {INITIALIZED_SECURITY} from "../../events/SecurityEvents";
-
-
-//todo: wrap activity in Activity function that has methods like deez.
-const getActivityContent = activity => activity.content || {};
-const getTimedType = activity => getActivityContent(activity).timedType || ActivityTimedType.NONE;
-const getActivityType = activity => getActivityContent(activity).type || ActivityType.PASSIVE;
-const getId = activity => getActivityContent(activity).uuid;
-
-const activitiesEqual = (currentActivity, activity) => {
-  const activityOneId = getId(currentActivity);
-  return activityOneId === getId(activity) && !!activityOneId;
-};
 
 function* handleNewActivity(activity) {
   if (getActivityType(activity) === ActivityType.ACTIVE && getTimedType(activity) !== ActivityTimedType.NONE) {
@@ -57,7 +51,7 @@ export function* delayWork() {
   const {isOnline} = selectNetworkState(globalState);
   const {isExpired} = selectSecurityState(globalState);
   if (isExpired) {
-    yield take(INITIALIZED_SECURITY);// only going to happen after login
+    yield take(INITIALIZED_SECURITY);// only going to happen after login, effective permablock
   } else if (isOnline) {
     yield delay(1000);
   } else {

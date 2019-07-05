@@ -4,9 +4,10 @@ import {
   RESUMED_NON_TIMED_ACTIVITY,
   RESUMED_TIMED_ACTIVITY,
   STARTED_NON_TIMED_ACTIVITY,
-  STARTED_TIMED_ACTIVITY, SYNCED_ACTIVITIES
+  STARTED_TIMED_ACTIVITY,
+  SYNCED_ACTIVITIES
 } from "../events/ActivityEvents";
-import type {Activity} from "../events/ActivityEvents";
+import type {Activity} from "../types/ActivityModels";
 
 export type ActivityState = {
   shouldTime: boolean,

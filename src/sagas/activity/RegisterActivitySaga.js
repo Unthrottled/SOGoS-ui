@@ -1,14 +1,14 @@
 import {performPost} from "../APISagas";
 import {
-  CREATED,
   createCachedActivityEvent,
+  CREATED,
   createFailureToRegisterStartEvent,
   createRegisteredStartEvent
 } from "../../events/ActivityEvents";
 import {call, put, select} from 'redux-saga/effects'
 import {isOnline} from "../NetworkSagas";
 import {selectUserState} from "../../reducers";
-import type {Activity} from "../../events/ActivityEvents";
+import type {Activity} from "../../types/ActivityModels";
 
 export function* registerActivitySaga(action) {
   const {payload: activity} = action;

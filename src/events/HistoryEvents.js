@@ -1,4 +1,4 @@
-import type {Activity} from "./ActivityEvents";
+import type {Activity} from "../types/ActivityModels";
 
 export const RECEIVED_HISTORY: 'RECEIVED_HISTORY' = 'RECEIVED_HISTORY';
 export const VIEWED_HISTORY: 'VIEWED_HISTORY' = 'VIEWED_HISTORY';
