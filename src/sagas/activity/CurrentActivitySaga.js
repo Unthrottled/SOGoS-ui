@@ -17,8 +17,11 @@ import {
 } from "../../types/ActivityModels";
 import {INITIALIZED_SECURITY} from "../../events/SecurityEvents";
 
-function* handleNewActivity(activity) {
-  if (getActivityType(activity) === ActivityType.ACTIVE && getTimedType(activity) !== ActivityTimedType.NONE) {
+export function* handleNewActivity(activity) {
+  const isTimedActivity =
+    getActivityType(activity) === ActivityType.ACTIVE &&
+    getTimedType(activity) !== ActivityTimedType.NONE;
+  if (isTimedActivity) {
     yield put(createResumedStartedTimedActivityEvent(activity));
   } else {
     yield put(createResumedStartedNonTimedActivityEvent(activity));
@@ -26,23 +29,24 @@ function* handleNewActivity(activity) {
 }
 
 export const CURRENT_ACTIVITY_URL = '/api/activity/current';
+
 export function* updateCurrentActivity(attempt: number = 10) {
   try {
     const {data: activity} = yield call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL);
     const {currentActivity} = yield select(selectActivityState);
     if (!activitiesEqual(currentActivity, activity)) {
-      yield handleNewActivity(activity);
+      yield call(handleNewActivity, activity);
     }
   } catch (error) {
-    yield handleError(attempt)
+    yield call(handleError, attempt)
   }
 }
 
 export function* handleError(attempt: number) {
-  const hasNetwork = yield isOnline();
+  const hasNetwork = yield call(isOnline);
   if (hasNetwork) {
     yield delay(Math.pow(2, attempt) + Math.floor(Math.random() * 1000));
-    yield updateCurrentActivity(attempt < 13 ? attempt + 1 : 10)
+    yield call(updateCurrentActivity, attempt < 13 ? attempt + 1 : 10)
   }
 }
 
