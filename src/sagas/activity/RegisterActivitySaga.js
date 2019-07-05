@@ -13,27 +13,28 @@ export function* registerActivitySaga(action) {
   const {payload: activity} = action;
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
-    yield activityUploadSaga(activity);
+    yield call(activityUploadSaga, activity);
   } else {
-    yield activityStartCacheSaga(activity);
+    yield call(activityCacheSaga, activity);
   }
 }
 
+export const ACTIVITY_URL = '/api/activity';
+
 export function* activityUploadSaga(activity) {
   try {
-    yield call(performPost, '/api/activity', activity);
+    yield call(performPost, ACTIVITY_URL, activity);
     yield put(createRegisteredStartEvent(activity));
   } catch (error) {
-    // todo: handle registry failures.
     yield put(createFailureToRegisterStartEvent({
       error,
       activity
     }));
-    yield activityStartCacheSaga(activity);
+    yield call(activityCacheSaga, activity);
   }
 }
 
-export function* activityStartCacheSaga(activity) {
+export function* activityCacheSaga(activity) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedActivityEvent({
     cachedActivity: {
