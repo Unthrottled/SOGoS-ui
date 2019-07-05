@@ -1,4 +1,4 @@
-import {call, put, all, take} from 'redux-saga/effects'
+import {select, call, put, all, take} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
 import {activityLogonSaga, LOGGED_ON_ACTIVITY_NAME} from "../../../sagas/activity/LogonActivitySaga";
 import {LOGGED_ON} from "../../../events/SecurityEvents";
@@ -10,12 +10,15 @@ import {
   registerActivitySaga
 } from "../../../sagas/activity/RegisterActivitySaga";
 import {
+  createCachedActivityEvent, CREATED,
   createFailureToRegisterStartEvent,
   createRegisteredStartEvent,
   createStartedActivityEvent
 } from "../../../events/ActivityEvents";
 import {isOnline} from "../../../sagas/NetworkSagas";
 import {performPost} from "../../../sagas/APISagas";
+import {selectUserState} from "../../../reducers";
+import type {UserState} from "../../../reducers/UserReducer";
 
 
 describe('RegisterActivitySagas', () => {
@@ -82,6 +85,32 @@ describe('RegisterActivitySagas', () => {
       });
       it('should cache activity', sagaEffect => {
         expect(sagaEffect).toEqual(call(activityCacheSaga, 'steve'));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('activityCacheSaga', () => {
+    describe('when called', () => {
+      const it = sagaHelper(activityCacheSaga('steve'));
+      it('should select user state', sagaEffect => {
+        expect(sagaEffect).toEqual(select(selectUserState));
+        const userState: UserState = {
+          information: {
+            guid: 'beans'
+          }
+        };
+        return userState;
+      });
+      it('should create expected event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createCachedActivityEvent({
+          cachedActivity: {
+            activity: 'steve',
+            uploadType: CREATED,
+          },
+          userGUID: 'beans'
+        })));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
