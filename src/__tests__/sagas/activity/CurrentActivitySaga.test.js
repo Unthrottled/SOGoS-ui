@@ -6,15 +6,18 @@ import {RECEIVED_USER} from "../../../events/UserEvents";
 import {registerActivitySaga} from "../../../sagas/activity/RegisterActivitySaga";
 import {createStartedActivityEvent} from "../../../events/ActivityEvents";
 import {
-  CURRENT_ACTIVITY_POLL_RATE,
+  CURRENT_ACTIVITY_POLL_RATE, CURRENT_ACTIVITY_URL,
   currentActivitySaga,
-  delayWork, handleError,
+  delayWork, handleError, handleNewActivity,
   updateCurrentActivity
 } from "../../../sagas/activity/CurrentActivitySaga";
 import type {NetworkState} from "../../../reducers/NetworkReducer";
 import type {SecurityState} from "../../../reducers/SecurityReducer";
 import {FOUND_WIFI} from "../../../events/NetworkEvents";
 import {isOnline} from "../../../sagas/NetworkSagas";
+import {performGetWithoutSessionExtension} from "../../../sagas/APISagas";
+import {selectActivityState} from "../../../reducers";
+import type {Activity} from "../../../types/ActivityModels";
 
 describe('Current Activity Sagas', () => {
   describe('currentActivitySaga', () => {
@@ -30,6 +33,185 @@ describe('Current Activity Sagas', () => {
         expect(sagaEffect).toEqual(call(delayWork));
       });
       //Repeat Forever
+    });
+  });
+  describe('updateCurrentActivity', () => {
+    describe('when given no parameters', () => {
+      describe('and an error happens', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          return new Error('Shit broked yo');
+        });
+        it('should handle the error', sagaEffect => {
+          expect(sagaEffect).toEqual(call(handleError, 10))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+      describe('and current activities are the same', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            data: activity,
+          };
+        });
+        it('should select current activity state', sagaEffect => {
+          expect(sagaEffect).toEqual(select(selectActivityState));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            currentActivity: activity
+          }
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+      describe('and current activities are not the same', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            data: activity,
+          };
+        });
+        it('should select current activity state', sagaEffect => {
+          expect(sagaEffect).toEqual(select(selectActivityState));
+          const activity: Activity = {
+            content : {
+              uuid: 'bustin'
+            }
+          };
+          return {
+            currentActivity: activity
+          }
+        });
+        it('should dispatch new activity event', sagaEffect => {
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          expect(sagaEffect).toEqual(call(handleNewActivity, activity))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+      describe('and current activities are not the same missing id', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            data: activity,
+          };
+        });
+        it('should select current activity state', sagaEffect => {
+          expect(sagaEffect).toEqual(select(selectActivityState));
+          const activity: Activity = {
+            content : {
+            }
+          };
+          return {
+            currentActivity: activity
+          }
+        });
+        it('should dispatch new activity event', sagaEffect => {
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          expect(sagaEffect).toEqual(call(handleNewActivity, activity))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+      describe('and current activities are not the same missing content', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            data: activity,
+          };
+        });
+        it('should select current activity state', sagaEffect => {
+          expect(sagaEffect).toEqual(select(selectActivityState));
+          const activity: Activity = {
+          };
+          return {
+            currentActivity: activity
+          }
+        });
+        it('should dispatch new activity event', sagaEffect => {
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          expect(sagaEffect).toEqual(call(handleNewActivity, activity))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+      describe('and current activities are not the same missing activity', () => {
+        const it = sagaHelper(updateCurrentActivity());
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          return {
+            data: activity,
+          };
+        });
+        it('should select current activity state', sagaEffect => {
+          expect(sagaEffect).toEqual(select(selectActivityState));
+          return {
+          }
+        });
+        it('should dispatch new activity event', sagaEffect => {
+          const activity: Activity = {
+            content : {
+              uuid: 'best activity'
+            }
+          };
+          expect(sagaEffect).toEqual(call(handleNewActivity, activity))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
     });
   });
   describe('handleError', () => {

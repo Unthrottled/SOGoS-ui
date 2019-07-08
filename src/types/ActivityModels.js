@@ -26,8 +26,7 @@ export type ActivityRegistryFailure = {
   error: any,
   activity: Activity,
 }
-//todo: wrap activity in Activity function that has methods like deez.
-const getActivityContent = (activity: Activity) => activity.content || {};
+const getActivityContent = (activity: Activity) => (activity && activity.content) || {};
 export const getTimedType = (activity: Activity) => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 export const getActivityType = (activity: Activity) => getActivityContent(activity).type || ActivityType.PASSIVE;
 const getId = (activity: Activity) => getActivityContent(activity).uuid;
