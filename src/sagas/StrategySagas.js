@@ -3,6 +3,9 @@ import {CREATED_OBJECTIVE, UPDATED_OBJECTIVE, VIEWED_OBJECTIVES} from "../events
 import {RECEIVED_USER} from "../events/UserEvents";
 import {objectiveChangesSaga, objectiveCreationSaga} from "./strategy/ObjectiveCreationSagas";
 import {objectiveHistoryFetchSaga, objectiveObservationSaga} from "./strategy/ObjectiveSagas";
+import {FOUND_WIFI} from "../events/NetworkEvents";
+import {strategySyncSaga} from "./strategy/StrategySyncSaga";
+import {LOGGED_ON} from "../events/SecurityEvents";
 
 export function* objectiveObservationInitializationSaga() {
   const {foundUser} = yield all({
@@ -16,6 +19,8 @@ export function* objectiveObservationInitializationSaga() {
 function* listenToActivityEvents() {
   yield takeEvery(CREATED_OBJECTIVE, objectiveCreationSaga);
   yield takeEvery(UPDATED_OBJECTIVE, objectiveChangesSaga);
+  yield takeEvery(FOUND_WIFI, strategySyncSaga);
+  yield takeEvery(LOGGED_ON, strategySyncSaga);
   yield fork(objectiveObservationInitializationSaga);
 }
 

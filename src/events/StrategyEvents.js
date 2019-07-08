@@ -27,6 +27,11 @@ export const createSyncedObjectiveEvent = (objective: Objective) => ({
   payload: objective,
 });
 
+export const createSyncedObjectivesEvent = (userGUID: string) => ({
+  type: SYNCED_OBJECTIVES,
+  payload: userGUID,
+});
+
 export const createCreatedObjectiveEvent = (objective: Objective) => ({
   type: CREATED_OBJECTIVE,
   payload: objective,

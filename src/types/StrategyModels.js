@@ -1,3 +1,5 @@
+import {CREATED, DELETED, UPDATED} from "../events/ActivityEvents";
+
 export type KeyResult = {
   id: string,
   objectiveId: string,
@@ -9,7 +11,12 @@ export type Objective = {
   keyResults: KeyResult[],
 }
 
+export type CachedObjective = {
+  uploadType: CREATED | UPDATED | DELETED,
+  objective: Objective
+};
+
 export type ObjectiveCacheEvent = {
-  objective: Objective,
+  objective: CachedObjective,
   userGUID: string,
 };

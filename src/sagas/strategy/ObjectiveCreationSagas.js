@@ -1,16 +1,21 @@
 import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
 import {isOnline} from "../NetworkSagas";
-import type {Objective} from "../../types/StrategyModels";
+import type {CachedObjective, Objective} from "../../types/StrategyModels";
 import {performPost, performPut} from "../APISagas";
 import {createCachedObjectiveEvent, createSyncedObjectiveEvent} from "../../events/StrategyEvents";
 import {selectUserState} from "../../reducers";
+import {CREATED, UPDATED} from "../../events/ActivityEvents";
 
 export function* objectiveCreationSaga({payload}) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(objectiveCreateSaga, payload)
   } else {
-    yield call(cacheObjectiveSaga, payload)
+    const cachedObjective: CachedObjective = {
+      objective: payload,
+      uploadType: CREATED,
+    };
+    yield call(cacheObjectiveSaga, cachedObjective)
   }
 }
 
@@ -24,7 +29,11 @@ export function* objectiveChangesSaga({payload}) {
   if (onlineStatus) {
     yield call(objectiveUpdateSaga, payload)
   } else {
-    yield call(cacheObjectiveSaga, payload)
+    const cachedObjective: CachedObjective = {
+      objective: payload,
+      uploadType: UPDATED,
+    };
+    yield call(cacheObjectiveSaga, cachedObjective)
   }
 }
 
@@ -42,7 +51,7 @@ export function* objectiveUploadSaga(objective: Objective, apiAction) {
 }
 
 //todo: cache objective updates and creations when offline
-export function* cacheObjectiveSaga(objective: Objective) {
+export function* cacheObjectiveSaga(objective: CachedObjective) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedObjectiveEvent({
     userGUID: guid,

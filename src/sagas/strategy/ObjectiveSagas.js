@@ -2,7 +2,6 @@ import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
 import {createFetchedObjectivesEvent} from "../../events/StrategyEvents";
 
-
 export function* objectiveHistoryFetchSaga() {
   try {
     const data = yield call(performStreamedGet, `/api/strategy/objectives`);
