@@ -23,7 +23,7 @@ export function* handleNewActivity(activity) {
     getTimedType(activity) !== ActivityTimedType.NONE;
   if (isTimedActivity) {
     yield put(createResumedStartedTimedActivityEvent(activity));
-  } else {
+  } else if(activity) {
     yield put(createResumedStartedNonTimedActivityEvent(activity));
   }
 }

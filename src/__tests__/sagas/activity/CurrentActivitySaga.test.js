@@ -4,7 +4,11 @@ import {activityLogonSaga, LOGGED_ON_ACTIVITY_NAME} from "../../../sagas/activit
 import {INITIALIZED_SECURITY, LOGGED_ON} from "../../../events/SecurityEvents";
 import {RECEIVED_USER} from "../../../events/UserEvents";
 import {registerActivitySaga} from "../../../sagas/activity/RegisterActivitySaga";
-import {createStartedActivityEvent} from "../../../events/ActivityEvents";
+import {
+  createResumedStartedNonTimedActivityEvent,
+  createResumedStartedTimedActivityEvent,
+  createStartedActivityEvent
+} from "../../../events/ActivityEvents";
 import {
   CURRENT_ACTIVITY_POLL_RATE, CURRENT_ACTIVITY_URL,
   currentActivitySaga,
@@ -18,6 +22,7 @@ import {isOnline} from "../../../sagas/NetworkSagas";
 import {performGetWithoutSessionExtension} from "../../../sagas/APISagas";
 import {selectActivityState} from "../../../reducers";
 import type {Activity} from "../../../types/ActivityModels";
+import {ActivityTimedType, ActivityType} from "../../../types/ActivityModels";
 
 describe('Current Activity Sagas', () => {
   describe('currentActivitySaga', () => {
@@ -35,7 +40,92 @@ describe('Current Activity Sagas', () => {
       //Repeat Forever
     });
   });
+  describe('handleNewActivity', () => {
+    describe('when is a timer activity', () => {
+      const activity: Activity = {
+        content: {
+          type: ActivityType.ACTIVE,
+          timedType: ActivityTimedType.TIMER,
+        }
+      };
+      const it = sagaHelper(handleNewActivity(activity));
+      it('should broadcast new timed activity event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createResumedStartedTimedActivityEvent(activity)));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined()
+      });
+    });
+    describe('when is a timed activity', () => {
+      const activity: Activity = {
+        content: {
+          type: ActivityType.ACTIVE,
+          timedType: ActivityTimedType.STOP_WATCH,
+        }
+      };
+      const it = sagaHelper(handleNewActivity(activity));
+      it('should broadcast new timed activity event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createResumedStartedTimedActivityEvent(activity)));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined()
+      });
+    });
+
+    describe('when is a passive timer activity', () => {
+      const activity: Activity = {
+        content: {
+          type: ActivityType.PASSIVE,
+          timedType: ActivityTimedType.TIMER,
+        }
+      };
+      const it = sagaHelper(handleNewActivity(activity));
+      it('should broadcast new timed activity event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createResumedStartedNonTimedActivityEvent(activity)));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined()
+      });
+    });
+    describe('when is a passive timed activity', () => {
+      const activity: Activity = {
+        content: {
+          type: ActivityType.PASSIVE,
+          timedType: ActivityTimedType.STOP_WATCH,
+        }
+      };
+      const it = sagaHelper(handleNewActivity(activity));
+      it('should broadcast new timed activity event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createResumedStartedNonTimedActivityEvent(activity)));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined()
+      });
+    });
+    describe('when given nothing', () => {
+      const it = sagaHelper(handleNewActivity());
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined()
+      });
+    });
+
+  });
   describe('updateCurrentActivity', () => {
+    describe('when given parameters', () => {
+      describe('and an error happens', () => {
+        const it = sagaHelper(updateCurrentActivity(69));
+        it('should try to get current activity and not extend the session', sagaEffect => {
+          expect(sagaEffect).toEqual(call(performGetWithoutSessionExtension, CURRENT_ACTIVITY_URL));
+          return new Error('Shit broked yo');
+        });
+        it('should handle the error', sagaEffect => {
+          expect(sagaEffect).toEqual(call(handleError, 69))
+        });
+        it('should complete', sagaEffect => {
+          expect(sagaEffect).toBeUndefined()
+        });
+      });
+    });
     describe('when given no parameters', () => {
       describe('and an error happens', () => {
         const it = sagaHelper(updateCurrentActivity());
