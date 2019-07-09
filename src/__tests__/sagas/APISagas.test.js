@@ -1,6 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {
-  createHeaders,
+  createHeaders, performDelete,
   performGet,
   performGetWithoutSessionExtension,
   performGetWithToken,
@@ -539,6 +539,118 @@ describe('API Sagas', () => {
       });
       it('should then perform a get request with authentication', (result) => {
         expect(result).toEqual(call(axios.put,
+          'http://localhost/api/onions',
+          {
+            'I AM': 'BECOME DEATH',
+          },
+          {
+            standby: 'for titan fall',
+            headers: {
+              Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+              'X-QUICK-SCOPE': 'L337',
+              "User-Identifier": "i am user guid",
+              "Verification": "Key of verification"
+            },
+          }));
+        return 'One response from the backend'
+      });
+      it('should then return the response of the backend call', (result) => {
+        expect(result).toEqual('One response from the backend');
+        return 'I am done!'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+  });
+  describe('performDelete', () => {
+    describe('when not supplied options', () => {
+      const it = sagaHelper(performDelete('http://localhost/api/onions', {
+        'I AM': 'BECOME DEATH',
+      }));
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {headers:{}}));
+        return {
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
+        };
+      });
+      it('should then perform a get request with authentication', (result) => {
+        expect(result).toEqual(call(axios.delete,
+          'http://localhost/api/onions',
+          {
+            'I AM': 'BECOME DEATH',
+          },
+          {
+            headers: {
+              Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+              "User-Identifier": "i am user guid",
+              Verification: "Key of verification"
+            },
+          }));
+        return 'One response from the backend'
+      });
+      it('should then return the response of the backend call', (result) => {
+        expect(result).toEqual('One response from the backend');
+        return 'I am done!'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+    describe('when not supplied options and state is empty', () => {
+      const it = sagaHelper(performDelete('http://localhost/api/onions', {
+        'I AM': 'BECOME DEATH',
+      }));
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {headers:{}}));
+        return {
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+        };
+      });
+      it('should then perform a get request with authentication without verification headers', (result) => {
+        expect(result).toEqual(call(axios.delete,
+          'http://localhost/api/onions',
+          {
+            'I AM': 'BECOME DEATH',
+          },
+          {
+            headers: {
+              Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+            },
+          }));
+        return 'One response from the backend'
+      });
+      it('should then return the response of the backend call', (result) => {
+        expect(result).toEqual('One response from the backend');
+        return 'I am done!'
+      });
+      it('should complete', (result) => {
+        expect(result).toBeUndefined();
+      });
+    });
+    describe('when supplied options', () => {
+      const it = sagaHelper(performDelete('http://localhost/api/onions', {
+        'I AM': 'BECOME DEATH',
+      }, {
+        standby: 'for titan fall',
+        headers: {
+          'Authorization': 'Basic Bitch',
+          'X-QUICK-SCOPE': 'L337'
+        }
+      }));
+      it('should put in a request for headers', (result) => {
+        expect(result).toEqual(call(createHeaders, accessTokenWithSessionExtensionSaga, {"headers": {"Authorization": "Basic Bitch", "X-QUICK-SCOPE": "L337"}, "standby": "for titan fall"}));
+        return {
+          Authorization: 'Bearer I AM ACCESS TOKEN, YO',
+          'X-QUICK-SCOPE': 'L337',
+          "User-Identifier": "i am user guid",
+          "Verification": "Key of verification"
+        };
+      });
+      it('should then perform a get request with authentication', (result) => {
+        expect(result).toEqual(call(axios.delete,
           'http://localhost/api/onions',
           {
             'I AM': 'BECOME DEATH',

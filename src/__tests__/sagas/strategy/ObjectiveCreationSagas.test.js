@@ -94,7 +94,7 @@ describe('Objective Creation Sagas', () => {
       });
       it('should try to get objectives', sagaEffect => {
         expect(sagaEffect).toEqual(
-          call(objectiveCreateSaga, 'best objective'));
+          call(objectiveUpdateSaga, 'best objective'));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
