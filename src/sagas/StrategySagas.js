@@ -1,11 +1,10 @@
 import {all, fork, take, takeEvery} from 'redux-saga/effects'
 import {CREATED_OBJECTIVE, DELETED_OBJECTIVE, UPDATED_OBJECTIVE, VIEWED_OBJECTIVES} from "../events/StrategyEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
-import {objectiveChangesSaga, objectiveCreationSaga} from "./strategy/ObjectiveCreationSagas";
+import {objectiveChangesSaga, objectiveCreationSaga, objectiveTerminationSaga} from "./strategy/ObjectiveCreationSagas";
 import {objectiveHistoryFetchSaga, objectiveObservationSaga} from "./strategy/ObjectiveSagas";
 import {FOUND_WIFI} from "../events/NetworkEvents";
 import {strategySyncSaga} from "./strategy/StrategySyncSaga";
-import {objectiveTerminationSaga} from "./strategy/ObjectiveTerminationSagas";
 
 export function* objectiveObservationInitializationSaga() {
   const {foundUser} = yield all({

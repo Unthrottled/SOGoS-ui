@@ -92,3 +92,12 @@ export function* performPut<T>(url: String, data, options = {headers: {}}): T {
     headers,
   });
 }
+
+export function* performDelete<T>(url: String, data, options = {headers: {}}): T {
+  const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
+  return yield call(axios.delete, url, {
+    ...options,
+    headers,
+    data
+  });
+}
