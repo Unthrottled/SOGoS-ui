@@ -5,7 +5,6 @@ import AddIcon from '@material-ui/icons/Add';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
@@ -15,15 +14,11 @@ import Avatar from "@material-ui/core/Avatar";
 import Fab from "@material-ui/core/Fab";
 import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import clsx from 'clsx';
 import ReactSelect from 'react-select/creatable';
-import Paper from '@material-ui/core/Paper';
-import CancelIcon from '@material-ui/icons/Cancel';
 import {createdObjective, updatedObjective} from "../actions/StrategyActions";
 import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
-
+import {components} from "./MultiSelectComponents";
 
 const suggestions = [
   {label: 'Technical'},
@@ -36,105 +31,6 @@ const suggestions = [
   value: suggestion.label,
   label: suggestion.label,
 }));
-
-const NoOptionsMessage = props => (
-  <Typography
-    color="textSecondary"
-    className={props.selectProps.classes.noOptionsMessage}
-    {...props.innerProps}
-  >
-    {props.children}
-  </Typography>
-);
-
-const inputComponent = ({inputRef, ...props}) =>
-  <div ref={inputRef} {...props} />;
-
-const Control = props => {
-  const {
-    children,
-    innerProps,
-    innerRef,
-    selectProps: {classes, TextFieldProps},
-  } = props;
-
-  return (
-    <TextField
-      fullWidth
-      InputProps={{
-        inputComponent,
-        inputProps: {
-          className: classes.input,
-          ref: innerRef,
-          children,
-          ...innerProps,
-        },
-      }}
-      {...TextFieldProps}
-    />
-  );
-};
-
-const Option = props => (
-  <MenuItem
-    ref={props.innerRef}
-    selected={props.isFocused}
-    component="div"
-    style={{
-      fontWeight: props.isSelected ? 500 : 400,
-    }}
-    {...props.innerProps}
-  >
-    {props.children}
-  </MenuItem>
-);
-
-const Placeholder = props => (
-  <Typography
-    color="textSecondary"
-    className={props.selectProps.classes.placeholder}
-    {...props.innerProps}
-  >
-    {props.children}
-  </Typography>
-);
-
-const SingleValue = props => (
-  <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
-    {props.children}
-  </Typography>
-);
-
-const ValueContainer = props => <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
-
-const MultiValue = props => (
-  <Chip
-    tabIndex={-1}
-    label={props.children}
-    className={clsx(props.selectProps.classes.chip, {
-      [props.selectProps.classes.chipFocused]: props.isFocused,
-    })}
-    onDelete={props.removeProps.onClick}
-    deleteIcon={<CancelIcon {...props.removeProps} />}
-  />
-);
-
-const Menu = props => (
-  <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
-    {props.children}
-  </Paper>
-);
-
-const components = {
-  Control,
-  Menu,
-  MultiValue,
-  NoOptionsMessage,
-  Option,
-  Placeholder,
-  SingleValue,
-  ValueContainer,
-};
 
 const useStyles = makeStyles(theme => (
   {
