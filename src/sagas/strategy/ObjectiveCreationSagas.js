@@ -46,8 +46,8 @@ export function* objectiveAPIInteractionSaga(objective: Objective,
 export const OBJECTIVES_URL = `/api/strategy/objectives`;
 export function* objectiveUploadSaga(objective: Objective, apiAction, cachingFunction: (Objective) => CachedObjective) {
   try {
-    const data = yield call(apiAction, OBJECTIVES_URL, objective);
-    yield put(createSyncedObjectiveEvent(data))
+    yield call(apiAction, OBJECTIVES_URL, objective);
+    yield put(createSyncedObjectiveEvent(objective))
   } catch (e) {
     yield call(cacheObjectiveSaga, cachingFunction(objective))
   }

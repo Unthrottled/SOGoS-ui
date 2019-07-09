@@ -149,7 +149,7 @@ describe('Objective Creation Sagas', () => {
       });
       it('should dispetch correct event', sagaEffect => {
         expect(sagaEffect).toEqual(
-          put(createSyncedObjectiveEvent('did objective thing')));
+          put(createSyncedObjectiveEvent('best objective')));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();

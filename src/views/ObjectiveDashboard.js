@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
 import {connect} from "react-redux";
@@ -15,10 +16,20 @@ import Fab from "@material-ui/core/Fab";
 import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {createdObjective, updatedObjective} from "../actions/StrategyActions";
+import {createdObjective, deletedObjective, updatedObjective} from "../actions/StrategyActions";
 import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
 import {components} from "./MultiSelectComponents";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import Slide from "@material-ui/core/Slide";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const suggestions = [
   {label: 'Technical'},
@@ -150,6 +161,11 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
     history.push('/strategy/objectives/')
   };
 
+  const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
+    dispatch(deletedObjective(objective));
+    history.push('/strategy/objectives/')
+  };
+
   const selectStyles = {
     input: base => ({
       ...base,
@@ -160,9 +176,11 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
     }),
   };
   const [multi, setMulti] = React.useState(null);
+  const [finnaDelete, setFinnaDelete] = useState(false);
 
   const handleChangeMulti = (value) => setMulti(value);
 
+  const dismissDeletionWindow = ()=>setFinnaDelete(false);
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
@@ -231,7 +249,40 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
         >
           <SaveIcon/>
         </Fab>
+        {
+          objective ? (
+            <Fab color={'primary'}
+                 className={classes.save}
+                 onClick={()=>setFinnaDelete(true)}
+            >
+              <DeleteIcon/>
+            </Fab>
+          ) : null
+        }
       </div>
+      <Dialog
+        open={finnaDelete}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={dismissDeletionWindow}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"Welcome to the Danger Zone!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Woah! Are you sure you want to delete this objective?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet} type={'danger'}>
+            Yes, Get rid of it
+          </Button>
+          <Button onClick={dismissDeletionWindow} >
+            No, I'll keep it
+          </Button>
+        </DialogActions>
+      </Dialog>
     </LoggedInLayout>
   );
 };

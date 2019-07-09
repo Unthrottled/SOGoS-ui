@@ -1,5 +1,5 @@
 import {
-  createCreatedObjectiveEvent,
+  createCreatedObjectiveEvent, createDeletedObjectiveEvent,
   createUpdatedObjectiveEvent,
   createViewedObjectivesEvent
 } from "../events/StrategyEvents";
@@ -13,6 +13,9 @@ export const
 
 export const createdObjective = (objective: Objective) => dispatch =>
   dispatch(createCreatedObjectiveEvent(objective));
+
+export const deletedObjective = (objective: Objective) => dispatch =>
+  dispatch(createDeletedObjectiveEvent(objective));
 
 export const updatedObjective = (objective: Objective) => dispatch =>
   dispatch(createUpdatedObjectiveEvent(objective));
