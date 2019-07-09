@@ -275,7 +275,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet} type={'danger'}>
+          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet} >
             Yes, Get rid of it
           </Button>
           <Button onClick={dismissDeletionWindow} >

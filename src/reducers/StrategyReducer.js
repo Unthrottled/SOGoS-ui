@@ -2,6 +2,7 @@ import {Action} from "redux";
 import {
   CACHED_OBJECTIVE,
   CREATED_OBJECTIVE,
+  DELETED_OBJECTIVE,
   FOUND_OBJECTIVES,
   SYNCED_OBJECTIVES,
   UPDATED_OBJECTIVE
@@ -51,6 +52,19 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       const newObjective = [action.payload];
       const keyResult = action.payload.keyResults;
       return updateStateWithObjectives(newObjective, keyResult, state);
+    case DELETED_OBJECTIVE:
+      const {payload: deletedObjective} = action;
+      const newObjectives = objectToArray(state.objectives).filter(suspiciousObjective =>
+        suspiciousObjective.id !== deletedObjective.id);
+      const newKeyResults = objectToArray(state.keyResults).filter(keyResult =>
+        deletedObjective.keyResults
+          .filter(keyResultToRemove =>
+            keyResultToRemove.id === keyResult.id));
+      return {
+        ...state,
+        objectives: newObjectives,
+        keyResults: newKeyResults,
+      };
     case FOUND_OBJECTIVES:
       const rememberedObjectives = action.payload;
       const rememberedKeyResults = action.payload.flatMap(foundObjective => foundObjective.keyResults);
