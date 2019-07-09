@@ -15,11 +15,11 @@ export function* objectiveChangesSaga({payload}) {
 }
 
 export function* objectiveCreateSaga(objective: Objective) {
-  yield call(objectiveUploadSaga, objective, performPost);
+  yield call(objectiveUploadSaga, objective, performPost, objectiveUploadToCached);
 }
 
 export function* objectiveUpdateSaga(objective: Objective) {
-  yield call(objectiveUploadSaga, objective, performPut);
+  yield call(objectiveUploadSaga, objective, performPut, objectiveUpdateToCached);
 }
 
 export const objectiveUploadToCached: (Objective) => CachedObjective = objective => ({
@@ -43,12 +43,13 @@ export function* objectiveAPIInteractionSaga(objective: Objective,
   }
 }
 
-export function* objectiveUploadSaga(objective: Objective, apiAction) {
+export const OBJECTIVES_URL = `/api/strategy/objectives`;
+export function* objectiveUploadSaga(objective: Objective, apiAction, cachingFunction: (Objective) => CachedObjective) {
   try {
-    const data = yield call(apiAction, `/api/strategy/objectives`, objective);
+    const data = yield call(apiAction, OBJECTIVES_URL, objective);
     yield put(createSyncedObjectiveEvent(data))
   } catch (e) {
-    yield call(cacheObjectiveSaga, objective)
+    yield call(cacheObjectiveSaga, cachingFunction(objective))
   }
 }
 
@@ -56,6 +57,6 @@ export function* cacheObjectiveSaga(objective: CachedObjective) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedObjectiveEvent({
     userGUID: guid,
-    objective: objective,
+    objective,
   }))
 }
