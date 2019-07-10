@@ -16,7 +16,7 @@ export type ActivityState = {
   cache: any,
 }
 
-const INITIAL_ACTIVITY_STATE: ActivityState = {
+export const INITIAL_ACTIVITY_STATE: ActivityState = {
   shouldTime: false,
   currentActivity: {
     content:{}
@@ -28,7 +28,7 @@ const INITIAL_ACTIVITY_STATE: ActivityState = {
 };
 
 
-const userReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Action) => {
+const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Action) => {
   switch (action.type) {
     case STARTED_TIMED_ACTIVITY :
     case RESUMED_TIMED_ACTIVITY :
@@ -64,4 +64,4 @@ const userReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Acti
   }
 };
 
-export default userReducer;
+export default activityReducer;
