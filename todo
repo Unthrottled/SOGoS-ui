@@ -1,3 +1,9 @@
+Immediate things need to be done:
+unit test strategy reducer,
+
+
+
+
 Tech Debt:
 -----
 - Less chatty actions (BIG REFACTOR)

@@ -1,7 +1,7 @@
 import sagaHelper from "redux-saga-testing";
 import {call, select,  put} from 'redux-saga/effects'
 import {objectiveHistoryFetchSaga, OBJECTIVES_URL} from "../../../sagas/strategy/ObjectiveSagas";
-import {performPost, performPut, performStreamedGet} from "../../../sagas/APISagas";
+import {performDelete, performPost, performPut, performStreamedGet} from "../../../sagas/APISagas";
 import {
   createCachedObjectiveEvent,
   createFetchedObjectivesEvent,
@@ -9,13 +9,19 @@ import {
 } from "../../../events/StrategyEvents";
 import {
   cacheObjectiveSaga,
-  objectiveAPIInteractionSaga, objectiveChangesSaga,
+  objectiveAPIInteractionSaga,
+  objectiveChangesSaga,
   objectiveCreateSaga,
-  objectiveCreationSaga, objectiveUpdateSaga, objectiveUpdateToCached, objectiveUploadSaga,
+  objectiveCreationSaga,
+  objectiveDeleteSaga, objectiveDeleteToCached,
+  objectiveTerminationSaga,
+  objectiveUpdateSaga,
+  objectiveUpdateToCached,
+  objectiveUploadSaga,
   objectiveUploadToCached
 } from "../../../sagas/strategy/ObjectiveCreationSagas";
 import {isOnline} from "../../../sagas/NetworkSagas";
-import {CREATED, UPDATED} from "../../../events/ActivityEvents";
+import {CREATED, DELETED, UPDATED} from "../../../events/ActivityEvents";
 import {selectUserState} from "../../../reducers";
 import type {UserState} from "../../../reducers/UserReducer";
 
@@ -54,6 +60,23 @@ describe('Objective Creation Sagas', () => {
       });
     });
   });
+  describe('objectiveTerminationSaga', () => {
+    describe('when called', () => {
+      const it = sagaHelper(objectiveTerminationSaga({
+        payload: 'dis is an objective',
+      }));
+      it('should try to delete objectives', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(objectiveAPIInteractionSaga,
+            'dis is an objective',
+            objectiveDeleteSaga,
+            objectiveDeleteToCached));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
   describe('objectiveCreateSaga', () => {
     describe('when called', () => {
       const it = sagaHelper(objectiveCreateSaga('best objective'));
@@ -77,6 +100,21 @@ describe('Objective Creation Sagas', () => {
             'best objective',
             performPut,
             objectiveUpdateToCached));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+  });
+  describe('objectiveDeleteSaga', () => {
+    describe('when called', () => {
+      const it = sagaHelper(objectiveDeleteSaga('best objective'));
+      it('should try to get objectives', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(objectiveUploadSaga,
+            'best objective',
+            performDelete,
+            objectiveDeleteToCached));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
@@ -167,6 +205,24 @@ describe('Objective Creation Sagas', () => {
           call(cacheObjectiveSaga, {
             objective: 'best objective',
             uploadType: UPDATED,
+          }));
+      });
+      it('should complete', sagaEffect => {
+        expect(sagaEffect).toBeUndefined();
+      });
+    });
+    describe('when offline and deleting', () => {
+      const it = sagaHelper(objectiveUploadSaga('best objective',
+        performPut, objectiveDeleteToCached));
+      it('should ask for online status', sagaEffect => {
+        expect(sagaEffect).toEqual(call(performPut, OBJECTIVES_URL, 'best objective'));
+        return new Error('Bruh, this aint gunna work');
+      });
+      it('should try to get objectives', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          call(cacheObjectiveSaga, {
+            objective: 'best objective',
+            uploadType: DELETED,
           }));
       });
       it('should complete', sagaEffect => {
