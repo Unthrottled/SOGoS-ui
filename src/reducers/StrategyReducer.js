@@ -23,21 +23,20 @@ const INITIAL_USER_STATE: StrategyState = {
 };
 
 
+const dictionaryReducer = (accum, toIndex) => {
+  accum[toIndex.id] = toIndex;
+  return accum;
+};
+
 function updateStateWithObjectives(newObjectives, newKeyResults, state) {
   const objectives = [
     ...objectToArray(state.objectives),
     ...newObjectives
-  ].reduce((accum, toIndex) => {
-    accum[toIndex.id] = toIndex;
-    return accum;
-  }, {});
+  ].reduce(dictionaryReducer, {});
   const keyResults = [
     ...objectToArray(state.keyResults),
     ...newKeyResults,
-  ].reduce((accum, toIndex) => {
-    accum[toIndex.id] = toIndex;
-    return accum;
-  }, {});
+  ].reduce(dictionaryReducer, {});
   return {
     ...state,
     objectives,
@@ -62,13 +61,17 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
             keyResultToRemove.id === keyResult.id));
       return {
         ...state,
-        objectives: newObjectives,
-        keyResults: newKeyResults,
+        objectives: newObjectives.reduce(dictionaryReducer, {}),
+        keyResults: newKeyResults.reduce(dictionaryReducer, {}),
       };
     case FOUND_OBJECTIVES:
-      const rememberedObjectives = action.payload;
-      const rememberedKeyResults = action.payload.flatMap(foundObjective => foundObjective.keyResults);
-      return updateStateWithObjectives(rememberedObjectives, rememberedKeyResults, state);
+      const rememberedObjectives = action.payload.reduce(dictionaryReducer, {});
+      const rememberedKeyResults = action.payload.flatMap(foundObjective => foundObjective.keyResults).reduce(dictionaryReducer, {});
+      return {
+        ...state,
+        objectives: rememberedObjectives,
+        keyResults: rememberedKeyResults,
+      };
     case CACHED_OBJECTIVE: {
       const {userGUID, objective} = action.payload;
       if (state.cache[userGUID]) {

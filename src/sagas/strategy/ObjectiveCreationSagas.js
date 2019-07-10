@@ -15,7 +15,7 @@ export function* objectiveChangesSaga({payload}) {
 }
 
 export function* objectiveTerminationSaga({payload}) {
-  yield call(objectiveAPIInteractionSaga, payload, objectiveDeleteSaga, objectiveUpdateToCached);
+  yield call(objectiveAPIInteractionSaga, payload, objectiveDeleteSaga, objectiveDeleteToCached);
 }
 
 export function* objectiveCreateSaga(objective: Objective) {
