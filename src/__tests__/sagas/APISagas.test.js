@@ -580,9 +580,9 @@ describe('API Sagas', () => {
         expect(result).toEqual(call(axios.delete,
           'http://localhost/api/onions',
           {
-            'I AM': 'BECOME DEATH',
-          },
-          {
+            data: {
+              'I AM': 'BECOME DEATH',
+            },
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
               "User-Identifier": "i am user guid",
@@ -613,9 +613,9 @@ describe('API Sagas', () => {
         expect(result).toEqual(call(axios.delete,
           'http://localhost/api/onions',
           {
-            'I AM': 'BECOME DEATH',
-          },
-          {
+            data:{
+              'I AM': 'BECOME DEATH',
+            },
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
             },
@@ -653,9 +653,9 @@ describe('API Sagas', () => {
         expect(result).toEqual(call(axios.delete,
           'http://localhost/api/onions',
           {
-            'I AM': 'BECOME DEATH',
-          },
-          {
+            data: {
+              'I AM': 'BECOME DEATH',
+            },
             standby: 'for titan fall',
             headers: {
               Authorization: 'Bearer I AM ACCESS TOKEN, YO',
