@@ -119,6 +119,7 @@ const useStyles = makeStyles(theme => (
 const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {params: {objectiveId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
+  const rememberedObjective = objectives[objectiveId];
 
   const objective: Objective = objectives[objectiveId] ||
     {
@@ -250,7 +251,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           <SaveIcon/>
         </Fab>
         {
-          objective ? (
+          rememberedObjective ? (
             <Fab color={'primary'}
                  className={classes.save}
                  onClick={()=>setFinnaDelete(true)}
