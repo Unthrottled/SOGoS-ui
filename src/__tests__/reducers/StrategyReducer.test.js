@@ -3,7 +3,7 @@ import type {StrategyState} from "../../reducers/StrategyReducer";
 import StrategyReducer from "../../reducers/StrategyReducer";
 import {
   CACHED_OBJECTIVE,
-  CREATED_OBJECTIVE,
+  CREATED_OBJECTIVE, DELETED_OBJECTIVE,
   FOUND_OBJECTIVES,
   SYNCED_OBJECTIVES,
   UPDATED_OBJECTIVE
@@ -120,7 +120,7 @@ describe('Strategy Reducer', () => {
       }
     });
   });
-  it('should return added state when given found objectives', async () => {
+  it('should return added state when given created objective', async () => {
     const action = {
       type: CREATED_OBJECTIVE,
       payload: {
@@ -269,7 +269,7 @@ describe('Strategy Reducer', () => {
       }
     });
   });
-  it('should return accumulated state when given found objectives', async () => {
+  it('should return updated state when given updated objective', async () => {
     const action = {
       type: UPDATED_OBJECTIVE,
       payload:
@@ -395,6 +395,141 @@ describe('Strategy Reducer', () => {
             },
           ]
         },
+        ".p.ek": {
+          "id": ".p.ek",
+          "keyResults": [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ],
+          "valueStatement": "To Do Cool stuff"
+        },
+        "hdkxhn": {
+          "id": "hdkxhn",
+          "keyResults": [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ],
+          "valueStatement": "Become Death"
+        }
+      }
+    });
+  });
+  it('should return removed state when given deleted objective', async () => {
+    const action = {
+      type: DELETED_OBJECTIVE,
+      payload:
+        {
+          id: 'Biggity Biggity',
+          valueStatement: 'Bitch Boy, v2',
+          keyResults: [
+            {
+              id: 'Halfway',
+              valueStatement: 'Hauser, v2',
+            },
+            {
+              id: 'Can\'t hear shit',
+              valueStatement: 'Cause it keeps getting louder, v2',
+            },
+          ]
+        },
+    };
+    const previousStrategyState: StrategyState = {
+      "cache": {
+        "lemons": []
+      },
+      "keyResults": {
+        "Can't hear shit": {
+          "id": "Can't hear shit",
+          "valueStatement": "Cause it keeps getting louder"
+        },
+        "Eat_Pant": {
+          "id": "Eat_Pant",
+          "valueStatement": "Eat Pant"
+        },
+        "Halfway": {
+          "id": "Halfway",
+          "valueStatement": "Hauser"
+        },
+        "Sky_Dive": {
+          "id": "Sky_Dive",
+          "valueStatement": "Sky Dive"
+        },
+        "cldcglkl": {
+          "id": "cldcglkl",
+          "valueStatement": "Harbinger of Doom"
+        },
+        "xktbsue": {
+          "id": "xktbsue",
+          "valueStatement": "Destroy Worlds"
+        }
+      },
+      "objectives": {
+        ".p.ek": {
+          "id": ".p.ek",
+          "keyResults": [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ],
+          "valueStatement": "To Do Cool stuff"
+        },
+        "hdkxhn": {
+          "id": "hdkxhn",
+          "keyResults": [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ],
+          "valueStatement": "Become Death"
+        }
+      }
+    };
+    const strategyState = StrategyReducer(previousStrategyState, action);
+    expect(strategyState).toEqual({
+      "cache": {
+        "lemons": []
+      },
+      "keyResults": {
+        "Eat_Pant": {
+          "id": "Eat_Pant",
+          "valueStatement": "Eat Pant"
+        },
+        "Sky_Dive": {
+          "id": "Sky_Dive",
+          "valueStatement": "Sky Dive"
+        },
+        "cldcglkl": {
+          "id": "cldcglkl",
+          "valueStatement": "Harbinger of Doom"
+        },
+        "xktbsue": {
+          "id": "xktbsue",
+          "valueStatement": "Destroy Worlds"
+        }
+      },
+      "objectives": {
         ".p.ek": {
           "id": ".p.ek",
           "keyResults": [

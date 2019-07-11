@@ -58,7 +58,7 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       const newKeyResults = objectToArray(state.keyResults).filter(keyResult =>
         deletedObjective.keyResults
           .filter(keyResultToRemove =>
-            keyResultToRemove.id === keyResult.id));
+            keyResultToRemove.id === keyResult.id).length === 0);
       return {
         ...state,
         objectives: newObjectives.reduce(dictionaryReducer, {}),
