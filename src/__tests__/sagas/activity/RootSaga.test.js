@@ -1,6 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import rootSaga from "../../../sagas";
-import { delay, all, take, put, select} from 'redux-saga/effects'
+import {all} from 'redux-saga/effects'
 
 describe('Root Reducer', () => {
   const it = sagaHelper(rootSaga());

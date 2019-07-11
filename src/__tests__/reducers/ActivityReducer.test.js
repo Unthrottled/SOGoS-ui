@@ -3,7 +3,8 @@ import {
   RESUMED_NON_TIMED_ACTIVITY,
   RESUMED_TIMED_ACTIVITY,
   STARTED_NON_TIMED_ACTIVITY,
-  STARTED_TIMED_ACTIVITY, SYNCED_ACTIVITIES
+  STARTED_TIMED_ACTIVITY,
+  SYNCED_ACTIVITIES
 } from "../../events/ActivityEvents";
 import activityReducer, {INITIAL_ACTIVITY_STATE} from "../../reducers/ActivityReducer";
 

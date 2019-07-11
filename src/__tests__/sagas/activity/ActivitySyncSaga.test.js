@@ -1,4 +1,4 @@
-import {select, call, put} from 'redux-saga/effects'
+import {call, put, select} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
 import type {UserState} from "../../../reducers/UserReducer";
 import type {ActivityState} from "../../../reducers/ActivityReducer";

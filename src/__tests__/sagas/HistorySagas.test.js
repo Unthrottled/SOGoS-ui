@@ -1,4 +1,4 @@
-import {all, call, fork, put, take, takeEvery} from 'redux-saga/effects'
+import {all, fork, take, takeEvery} from 'redux-saga/effects'
 
 import sagaHelper from "redux-saga-testing";
 import {initializeActivityFeedSaga} from "../../sagas/HistorySagas";

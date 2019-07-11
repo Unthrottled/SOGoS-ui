@@ -1,8 +1,6 @@
 import sagaHelper from "redux-saga-testing";
 import {call, put} from 'redux-saga/effects'
-import {objectiveHistoryFetchSaga, OBJECTIVES_URL} from "../../../sagas/strategy/ObjectiveSagas";
 import {performStreamedGet} from "../../../sagas/APISagas";
-import {createFetchedObjectivesEvent} from "../../../events/StrategyEvents";
 import {archiveFetchSaga, createHistoryAPIURL} from "../../../sagas/history/ActivityHistorySagas";
 import {createReceivedHistoryEvent} from "../../../events/HistoryEvents";
 

@@ -3,7 +3,8 @@ import type {StrategyState} from "../../reducers/StrategyReducer";
 import StrategyReducer from "../../reducers/StrategyReducer";
 import {
   CACHED_OBJECTIVE,
-  CREATED_OBJECTIVE, DELETED_OBJECTIVE,
+  CREATED_OBJECTIVE,
+  DELETED_OBJECTIVE,
   FOUND_OBJECTIVES,
   SYNCED_OBJECTIVES,
   UPDATED_OBJECTIVE

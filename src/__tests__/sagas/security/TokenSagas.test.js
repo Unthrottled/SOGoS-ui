@@ -1,7 +1,8 @@
 import sagaHelper from "redux-saga-testing";
 import {call, put} from 'redux-saga/effects';
 import {
-  fetchTokenSaga, fetchTokenWithoutSessionRefreshSaga,
+  fetchTokenSaga,
+  fetchTokenWithoutSessionRefreshSaga,
   fetchTokenWithRefreshSaga,
   identityFunction,
   refreshTokenDeleter,

@@ -1,6 +1,5 @@
 import sagaHelper from "redux-saga-testing";
-import {call, all, take} from 'redux-saga/effects'
-import {activityLogoutSaga, LOGGED_OFF_ACTIVITY_NAME} from "../../../sagas/activity/LogoutActivitySaga";
+import {all, call, take} from 'redux-saga/effects'
 import {registerActivitySaga} from "../../../sagas/activity/RegisterActivitySaga";
 import {createStartedActivityEvent} from "../../../events/ActivityEvents";
 import {activityLogonSaga, LOGGED_ON_ACTIVITY_NAME} from "../../../sagas/activity/LogonActivitySaga";

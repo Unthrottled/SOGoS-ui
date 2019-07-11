@@ -1,11 +1,8 @@
 import {call, put, select} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
 import type {UserState} from "../../../reducers/UserReducer";
-import type {ActivityState} from "../../../reducers/ActivityReducer";
-import {BULK_OBJECTIVE_UPLOAD_URL} from "../../../sagas/strategy/StrategySyncSaga";
+import {BULK_OBJECTIVE_UPLOAD_URL, strategySyncSaga} from "../../../sagas/strategy/StrategySyncSaga";
 import {performPost} from "../../../sagas/APISagas";
-import {createSyncedActivitiesEvent} from "../../../events/ActivityEvents";
-import {strategySyncSaga} from "../../../sagas/strategy/StrategySyncSaga";
 import type {StrategyState} from "../../../reducers/StrategyReducer";
 import {createSyncedObjectivesEvent} from "../../../events/StrategyEvents";
 

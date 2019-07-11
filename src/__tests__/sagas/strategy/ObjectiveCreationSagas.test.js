@@ -1,19 +1,16 @@
 import sagaHelper from "redux-saga-testing";
-import {call, select,  put} from 'redux-saga/effects'
-import {objectiveHistoryFetchSaga, OBJECTIVES_URL} from "../../../sagas/strategy/ObjectiveSagas";
-import {performDelete, performPost, performPut, performStreamedGet} from "../../../sagas/APISagas";
-import {
-  createCachedObjectiveEvent,
-  createFetchedObjectivesEvent,
-  createSyncedObjectiveEvent
-} from "../../../events/StrategyEvents";
+import {call, put, select} from 'redux-saga/effects'
+import {OBJECTIVES_URL} from "../../../sagas/strategy/ObjectiveSagas";
+import {performDelete, performPost, performPut} from "../../../sagas/APISagas";
+import {createCachedObjectiveEvent, createSyncedObjectiveEvent} from "../../../events/StrategyEvents";
 import {
   cacheObjectiveSaga,
   objectiveAPIInteractionSaga,
   objectiveChangesSaga,
   objectiveCreateSaga,
   objectiveCreationSaga,
-  objectiveDeleteSaga, objectiveDeleteToCached,
+  objectiveDeleteSaga,
+  objectiveDeleteToCached,
   objectiveTerminationSaga,
   objectiveUpdateSaga,
   objectiveUpdateToCached,

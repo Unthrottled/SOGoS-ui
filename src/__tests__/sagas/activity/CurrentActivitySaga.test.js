@@ -1,18 +1,18 @@
-import { delay, call, take, put, select} from 'redux-saga/effects'
+import {call, delay, put, select, take} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
-import {activityLogonSaga, LOGGED_ON_ACTIVITY_NAME} from "../../../sagas/activity/LogonActivitySaga";
-import {INITIALIZED_SECURITY, LOGGED_ON} from "../../../events/SecurityEvents";
+import {INITIALIZED_SECURITY} from "../../../events/SecurityEvents";
 import {RECEIVED_USER} from "../../../events/UserEvents";
-import {registerActivitySaga} from "../../../sagas/activity/RegisterActivitySaga";
 import {
   createResumedStartedNonTimedActivityEvent,
-  createResumedStartedTimedActivityEvent,
-  createStartedActivityEvent
+  createResumedStartedTimedActivityEvent
 } from "../../../events/ActivityEvents";
 import {
-  CURRENT_ACTIVITY_POLL_RATE, CURRENT_ACTIVITY_URL,
+  CURRENT_ACTIVITY_POLL_RATE,
+  CURRENT_ACTIVITY_URL,
   currentActivitySaga,
-  delayWork, handleError, handleNewActivity,
+  delayWork,
+  handleError,
+  handleNewActivity,
   updateCurrentActivity
 } from "../../../sagas/activity/CurrentActivitySaga";
 import type {NetworkState} from "../../../reducers/NetworkReducer";
