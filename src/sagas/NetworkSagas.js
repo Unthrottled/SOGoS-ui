@@ -1,4 +1,4 @@
-import {select, put, all, call, take, fork} from 'redux-saga/effects'
+import {all, call, fork, put, select, take} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
 import {createFoundWifiEvent, createLostWifiEvent, FOUND_WIFI} from "../events/NetworkEvents";
 import {selectNetworkState} from "../reducers";

@@ -4,7 +4,7 @@ import rootReducer from "../reducers";
 import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from '../sagas';
-import {persistReducer, persistStore, createTransform} from 'redux-persist';
+import {createTransform, persistReducer, persistStore} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 

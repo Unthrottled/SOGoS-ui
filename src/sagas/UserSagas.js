@@ -1,4 +1,4 @@
-import { call, all, put, select, takeEvery} from 'redux-saga/effects'
+import {all, call, put, select, takeEvery} from 'redux-saga/effects'
 import {INITIALIZED_SECURITY} from "../events/SecurityEvents";
 import {performGet} from "./APISagas";
 import {createFailedToGetUserEvent, createReceivedUserEvent} from "../events/UserEvents";

@@ -1,5 +1,6 @@
 import {
-  createCreatedObjectiveEvent, createDeletedObjectiveEvent,
+  createCreatedObjectiveEvent,
+  createDeletedObjectiveEvent,
   createUpdatedObjectiveEvent,
   createViewedObjectivesEvent
 } from "../events/StrategyEvents";

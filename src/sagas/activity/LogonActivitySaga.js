@@ -2,7 +2,7 @@ import {LOGGED_ON} from "../../events/SecurityEvents";
 import {RECEIVED_USER} from "../../events/UserEvents";
 import {createStartedActivityEvent} from "../../events/ActivityEvents";
 import uuid from "uuid/v4";
-import {call, all, take} from 'redux-saga/effects'
+import {all, call, take} from 'redux-saga/effects'
 import {registerActivitySaga} from "./RegisterActivitySaga";
 
 export const LOGGED_ON_ACTIVITY_NAME = "LOGGED_ON";

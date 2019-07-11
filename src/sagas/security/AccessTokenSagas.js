@@ -1,7 +1,7 @@
 import {call, fork, race, select, take} from 'redux-saga/effects';
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
-import {canRefreshToken, canRefreshEitherTokens} from "../../security/OAuth";
-import {refreshTokenWithReplacementSaga, refreshTokenWithoutReplacementSaga} from "./RefreshTokenSagas";
+import {canRefreshEitherTokens, canRefreshToken} from "../../security/OAuth";
+import {refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga} from "./RefreshTokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {SessionExpiredException} from "../../types/SecurityModels";
 
