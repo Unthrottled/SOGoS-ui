@@ -1,19 +1,18 @@
-import {
-  CACHED_ACTIVITY,
-  RESUMED_NON_TIMED_ACTIVITY,
-  RESUMED_TIMED_ACTIVITY,
-  STARTED_NON_TIMED_ACTIVITY,
-  STARTED_TIMED_ACTIVITY, SYNCED_ACTIVITIES
-} from "../../events/ActivityEvents";
-import activityReducer, {INITIAL_ACTIVITY_STATE} from "../../reducers/ActivityReducer";
-import StrategyReducer from "../../reducers/StrategyReducer";
-import {CACHED_OBJECTIVE, FOUND_OBJECTIVES, SYNCED_OBJECTIVES, UPDATED_OBJECTIVE} from "../../events/StrategyEvents";
+import {INITIAL_ACTIVITY_STATE} from "../../reducers/ActivityReducer";
 import type {StrategyState} from "../../reducers/StrategyReducer";
+import StrategyReducer from "../../reducers/StrategyReducer";
+import {
+  CACHED_OBJECTIVE,
+  CREATED_OBJECTIVE,
+  FOUND_OBJECTIVES,
+  SYNCED_OBJECTIVES,
+  UPDATED_OBJECTIVE
+} from "../../events/StrategyEvents";
 
-Array.prototype.flatMap = function(toConcat){
+Array.prototype.flatMap = function (toConcat) {
   return this
-    .map(a=>toConcat(a))
-    .reduce((accum, a)=> accum.concat(a), []);
+    .map(a => toConcat(a))
+    .reduce((accum, a) => accum.concat(a), []);
 };
 
 describe('Strategy Reducer', () => {
@@ -51,8 +50,8 @@ describe('Strategy Reducer', () => {
         },
       ]
     };
-    const previousStrategyState : StrategyState = {
-      cache : {
+    const previousStrategyState: StrategyState = {
+      cache: {
         'lemons': [],
       },
       objectives: {
@@ -121,6 +120,155 @@ describe('Strategy Reducer', () => {
       }
     });
   });
+  it('should return added state when given found objectives', async () => {
+    const action = {
+      type: CREATED_OBJECTIVE,
+      payload: {
+        id: 'Biggity Biggity',
+        valueStatement: 'Bitch Boy',
+        keyResults: [
+          {
+            id: 'Halfway',
+            valueStatement: 'Hauser',
+          },
+          {
+            id: 'Can\'t hear shit',
+            valueStatement: 'Cause it keeps getting louder',
+          },
+        ]
+      }
+    };
+    const previousStrategyState: StrategyState = {
+      "cache": {
+        "lemons": []
+      },
+      "keyResults": {
+        "Eat_Pant": {
+          "id": "Eat_Pant",
+          "valueStatement": "Eat Pant"
+        },
+        "Sky_Dive": {
+          "id": "Sky_Dive",
+          "valueStatement": "Sky Dive"
+        },
+        "cldcglkl": {
+          "id": "cldcglkl",
+          "valueStatement": "Harbinger of Doom"
+        },
+        "xktbsue": {
+          "id": "xktbsue",
+          "valueStatement": "Destroy Worlds"
+        }
+      },
+      "objectives": {
+        ".p.ek": {
+          "id": ".p.ek",
+          "keyResults": [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ],
+          "valueStatement": "To Do Cool stuff"
+        },
+        "hdkxhn": {
+          "id": "hdkxhn",
+          "keyResults": [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ],
+          "valueStatement": "Become Death"
+        }
+      }
+    };
+    const strategyState = StrategyReducer(previousStrategyState, action);
+    expect(strategyState).toEqual({
+      "cache": {
+        "lemons": []
+      },
+      "keyResults": {
+        "Can't hear shit": {
+          "id": "Can't hear shit",
+          "valueStatement": "Cause it keeps getting louder"
+        },
+        "Eat_Pant": {
+          "id": "Eat_Pant",
+          "valueStatement": "Eat Pant"
+        },
+        "Halfway": {
+          "id": "Halfway",
+          "valueStatement": "Hauser"
+        },
+        "Sky_Dive": {
+          "id": "Sky_Dive",
+          "valueStatement": "Sky Dive"
+        },
+        "cldcglkl": {
+          "id": "cldcglkl",
+          "valueStatement": "Harbinger of Doom"
+        },
+        "xktbsue": {
+          "id": "xktbsue",
+          "valueStatement": "Destroy Worlds"
+        }
+      },
+      "objectives": {
+        "Biggity Biggity":
+          {
+            id: 'Biggity Biggity',
+            valueStatement: 'Bitch Boy',
+            keyResults: [
+              {
+                id: 'Halfway',
+                valueStatement: 'Hauser',
+              },
+              {
+                id: 'Can\'t hear shit',
+                valueStatement: 'Cause it keeps getting louder',
+              },
+            ]
+          },
+        ".p.ek": {
+          "id": ".p.ek",
+          "keyResults": [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ],
+          "valueStatement": "To Do Cool stuff"
+        },
+        "hdkxhn": {
+          "id": "hdkxhn",
+          "keyResults": [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ],
+          "valueStatement": "Become Death"
+        }
+      }
+    });
+  });
   it('should return accumulated state when given found objectives', async () => {
     const action = {
       type: UPDATED_OBJECTIVE,
@@ -140,7 +288,7 @@ describe('Strategy Reducer', () => {
           ]
         },
     };
-    const previousStrategyState : StrategyState = {
+    const previousStrategyState: StrategyState = {
       "cache": {
         "lemons": []
       },
@@ -233,7 +381,7 @@ describe('Strategy Reducer', () => {
         }
       },
       "objectives": {
-        "Biggity Biggity":         {
+        "Biggity Biggity": {
           id: 'Biggity Biggity',
           valueStatement: 'Bitch Boy, v2',
           keyResults: [
