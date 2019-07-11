@@ -7,9 +7,120 @@ import {
 } from "../../events/ActivityEvents";
 import activityReducer, {INITIAL_ACTIVITY_STATE} from "../../reducers/ActivityReducer";
 import StrategyReducer from "../../reducers/StrategyReducer";
-import {CACHED_OBJECTIVE, SYNCED_OBJECTIVES} from "../../events/StrategyEvents";
+import {CACHED_OBJECTIVE, FOUND_OBJECTIVES, SYNCED_OBJECTIVES} from "../../events/StrategyEvents";
+import type {StrategyState} from "../../reducers/StrategyReducer";
+
+Array.prototype.flatMap = function(toConcat){
+  return this
+    .map(a=>toConcat(a))
+    .reduce((accum, a)=> accum.concat(a), []);
+};
 
 describe('Strategy Reducer', () => {
+  it('should return overwritten staten when given found objectives', async () => {
+    const action = {
+      type: FOUND_OBJECTIVES,
+      payload: [
+        {
+          id: '.p.ek',
+          valueStatement: 'To Do Cool stuff',
+          keyResults: [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ]
+        },
+        {
+          id: 'hdkxhn',
+          valueStatement: 'Become Death',
+          keyResults: [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ]
+        },
+      ]
+    };
+    const previousStrategyState : StrategyState = {
+      cache : {
+        'lemons': [],
+      },
+      objectives: {
+        aoeu: {
+          id: 'aoeu',
+        }
+      },
+      keyResults: {
+        xkxk: {
+          id: 'hxkhuexn',
+        }
+      }
+    };
+    const strategyState = StrategyReducer(previousStrategyState, action);
+    expect(strategyState).toEqual({
+      "cache": {
+        "lemons": []
+      },
+      "keyResults": {
+        "Eat_Pant": {
+          "id": "Eat_Pant",
+          "valueStatement": "Eat Pant"
+        },
+        "Sky_Dive": {
+          "id": "Sky_Dive",
+          "valueStatement": "Sky Dive"
+        },
+        "cldcglkl": {
+          "id": "cldcglkl",
+          "valueStatement": "Harbinger of Doom"
+        },
+        "xktbsue": {
+          "id": "xktbsue",
+          "valueStatement": "Destroy Worlds"
+        }
+      },
+      "objectives": {
+        ".p.ek": {
+          "id": ".p.ek",
+          "keyResults": [
+            {
+              id: 'Sky_Dive',
+              valueStatement: 'Sky Dive',
+            },
+            {
+              id: 'Eat_Pant',
+              valueStatement: 'Eat Pant',
+            },
+          ],
+          "valueStatement": "To Do Cool stuff"
+        },
+        "hdkxhn": {
+          "id": "hdkxhn",
+          "keyResults": [
+            {
+              id: 'xktbsue',
+              valueStatement: 'Destroy Worlds',
+            },
+            {
+              id: 'cldcglkl',
+              valueStatement: 'Harbinger of Doom',
+            },
+          ],
+          "valueStatement": "Become Death"
+        }
+      }
+    });
+  });
   it('should return expected state when given first cached activity', async () => {
     const action = {
       type: CACHED_OBJECTIVE,
