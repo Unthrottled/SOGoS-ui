@@ -38,6 +38,7 @@
       "src/miscellanous/**/*.{js,jsx,ts,tsx}",
       "src/reducers/**/*.{js,jsx,ts,tsx}",
       "src/sagas/**/*.{js,jsx,ts,tsx}",
+      "!src/sagas/*.{js,jsx,ts,tsx}",
       "src/events/**/*.{js,jsx,ts,tsx}"
     ]
   },

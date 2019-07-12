@@ -1,19 +1,12 @@
 Immediate things need to be done:
-unit test strategy reducer,
-
-aoeu
-
+----
 
 Tech Debt:
 -----
 - Less chatty actions (BIG REFACTOR)
------
 
-- Objectives
-    - Hard Limit
-    - Refresh objectives (Persist keeps more than 5)
-- Key Result
-    - Hard Limit
+Other Stuff
+-----
 
 - Pause Count Down Timer
 
