@@ -41,7 +41,7 @@ const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch:
     }))
   };
   const startRecoveryOrResume = () => {
-    if(name === 'RECOVERY'){
+    if (name === 'RECOVERY') {
       dispetch(startTimedActivity({
         ...previousActivity.content,
         uuid: uuid(),
@@ -51,7 +51,7 @@ const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch:
         name: 'RECOVERY',
         type: ActivityType.ACTIVE,
         timedType: ActivityTimedType.TIMER,
-        duration: 6000,
+        duration: 60000,
         uuid: uuid(),
       }));
     }
@@ -64,10 +64,14 @@ const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch:
         <div style={{flexGrow: 1, textAlign: "center"}}>
           {
             isTimer ?
-              <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
-                     onComplete={startRecoveryOrResume}
-                     countDown
-                     activityId={activityId}/> :
+              (
+                  <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
+                         onComplete={startRecoveryOrResume}
+                         countDown
+                         onPause={startRecoveryOrResume}
+                         onResume={startRecoveryOrResume}
+                         activityId={activityId}/>
+              ) :
               <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
           }
         </div>
