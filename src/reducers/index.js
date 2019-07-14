@@ -26,13 +26,13 @@ const rootReducer = combineReducers({
 
 export const selectSecurityState = (globalState): SecurityState => globalState.security;
 
-export const selectConfigurationState = (globalState): ConfigurationState => globalState.configuration;
-
 export const selectActivityState = (globalState): ActivityState => globalState.activity;
 
 export const selectNetworkState = (globalState): NetworkState => globalState.network;
 
 export const selectUserState = (globalState): UserState => globalState.user;
+
+export const selectConfigurationState = (globalState): ConfigurationState => globalState.configuration;
 
 export const selectHistoryState = (globalState): HistoryState => globalState.history;
 
