@@ -5,12 +5,12 @@ export type NetworkState = {
   isOnline: boolean,
 }
 
-const INITIAL_ACTIVITY_STATE: NetworkState = {
+export const INITIAL_NETWORK_STATE: NetworkState = {
   isOnline: false,
 };
 
 
-const networkReducer = (state: NetworkState = INITIAL_ACTIVITY_STATE, action: Action) => {
+const networkReducer = (state: NetworkState = INITIAL_NETWORK_STATE, action: Action = {}) => {
   switch (action.type) {
     case FOUND_WIFI :
       return {
