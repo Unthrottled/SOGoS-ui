@@ -1,6 +1,8 @@
 Immediate things need to be done:
 ----
 
+- Really long activities freak the UI out.
+
 Tech Debt:
 -----
 - Less chatty actions (BIG REFACTOR)

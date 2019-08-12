@@ -73,6 +73,7 @@ describe('History Reducer', () => {
   it('should return expected state when given received history from backend action and some state', async () => {
     const action = {
       type: RECEIVED_HISTORY,
+
       payload: ['NEW THING1','NEW THING2','NEW THING3',],
     };
     const historyState = HistoryReducer({
