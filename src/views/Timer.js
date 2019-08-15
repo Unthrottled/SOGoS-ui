@@ -1,13 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import PlayArrow from '@material-ui/icons/PlayArrow';
-
-function getDisplayTime(hours, minutes, seconds) {
-  const displayHours = hours ? `${hours}:` : '';
-  const displayMinutes = Math.floor(Math.log10(minutes || 1)) ? `${minutes}:` : `0${minutes}:`;
-  const displaySeconds = Math.floor(Math.log10(seconds || 1)) ? `${seconds}` : `0${seconds}`;
-  return `${displayHours}${displayMinutes}${displaySeconds}`;
-}
+import {TimeDisplay} from "./TimeDisplay";
 
 const Timer = ({startTimeInSeconds, activityId, countDown, onComplete, onPause, onResume}) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
@@ -42,15 +36,11 @@ const Timer = ({startTimeInSeconds, activityId, countDown, onComplete, onPause, 
       clearTimeout(timeout)
     }
   });
-  const hours = Math.floor(timeElapsed / 3600);
-  const remainingTimeForMinutes = timeElapsed - (hours * 3600);
-  const minutes = Math.floor(remainingTimeForMinutes / 60);
-  const seconds = remainingTimeForMinutes - (minutes * 60);
-  const displayTime = getDisplayTime(hours, minutes, seconds);
+
   return (
     <div>
       <div>
-        {displayTime}
+        <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
       {
         countDown ? (
