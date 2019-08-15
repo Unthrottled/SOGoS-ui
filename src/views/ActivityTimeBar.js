@@ -7,6 +7,7 @@ import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
+import {PomodoroTimer} from "./PomodoroTimer";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
-const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch: dispetch}) => {
+const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatch: dispetch}) => {
   const classes = useStyles();
   const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
 
@@ -65,12 +66,12 @@ const ActivityTimer = ({shouldTime, currentActivity, previousActivity, dispatch:
           {
             isTimer ?
               (
-                  <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
-                         onComplete={startRecoveryOrResume}
-                         countDown
-                         onPause={startRecoveryOrResume}
-                         onResume={startRecoveryOrResume}
-                         activityId={activityId}/>
+                <Timer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
+                       onComplete={startRecoveryOrResume}
+                       countDown
+                       onPause={startRecoveryOrResume}
+                       onResume={startRecoveryOrResume}
+                       activityId={activityId}/>
               ) :
               <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
           }
@@ -91,4 +92,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(ActivityTimer);
+export default connect(mapStateToProps)(ActivityTimeBar);

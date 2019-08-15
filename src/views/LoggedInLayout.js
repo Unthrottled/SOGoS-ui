@@ -1,6 +1,6 @@
 import React from "react";
 import MenuAppBar from "./MenuAppBar";
-import ActivityTimer from "./ActivityTimer";
+import ActivityTimer from "./ActivityTimeBar";
 import SessionExpired from "./SessionExpired";
 import Activity from "./ActivityHub";
 import makeStyles from "@material-ui/core/styles/makeStyles";
