@@ -14,6 +14,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import StrategicDashboard from "./StrategicDashboard";
 import ObjectivesDashboard from "./ObjectivesDashboard";
 import ObjectiveDashboard from "./ObjectiveDashboard";
+import {PomodoroTimer} from "./PomodoroTimer";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -56,7 +57,11 @@ function App({dispatch: dispetch, isInitialized}) {
         </div>
       </div>
     </ThemeProvider>
-  ) : (<div/>);
+  ) : (
+    <ThemeProvider theme={theme}>
+      <PomodoroTimer startTimeInSeconds={new Date().getTime() / 1000}/>
+    </ThemeProvider>
+  );
 }
 
 const mapStateToProps = ({security: {isInitialized}}) => ({
