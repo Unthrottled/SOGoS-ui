@@ -1,31 +1,50 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
+import {TimeDisplay} from "./TimeDisplay";
 
 export const PomodoroTimer = ({startTimeInSeconds}) => {
+  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [thing, setThing] = useState(9);
 
-  const emmitter = TimeEmitter();
-  const disposeable = emmitter((thing)=>console.log(thing));
+  const storedRef = useRef();
+  useEffect(()=>{
+    console.log('here we go again');
+    const emmitter = TimeEmitter(1000, ()=>setThing(thing+1));
+    const disposeable = emmitter((thing)=> {
+      console.log(timeElapsed + 1);
+      setTimeElapsed(timeElapsed + 1)
+    });
+    storedRef.current = disposeable
+  }, [thing]);
+
+  const pause = () => {
+    storedRef.current()
+  };
+
+
   return (<div>
     am timer
+    <TimeDisplay timeElapsed={timeElapsed}/>
     <Button variant={'contained'}
             color={'primary'}
-            onClick={()=> disposeable()}>Dispose</Button>
+            onClick={pause}>Dispose</Button>
   </div>)
 }
 
 
-const TimeEmitter = () => {
+const TimeEmitter = (timeout=1000, onDispose=()=>{}) => {
   let canceled = false;
   return (subscriber) => {
-    const timeout = setTimeout(()=>{
+    const interval = setInterval(()=>{
       if(!canceled){
         subscriber('hola')
       }
-    }, 1);
-    console.log('bustin')
+    }, timeout);
+    console.log('subscribed!');
     return () => {
-      console.log(timeout)
-      console.log('butts');
+      console.log('you killed me');
+      onDispose();
+      clearInterval(interval);
       canceled = true;
     }
   }
