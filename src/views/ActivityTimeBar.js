@@ -2,12 +2,12 @@ import React from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
 import Slide from "@material-ui/core/Slide";
-import Timer from "./Timer";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
+import Stopwatch from "./Stopwatch";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -72,7 +72,7 @@ const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatc
                        onResume={startRecoveryOrResume}
                        activityId={activityId}/>
               ) :
-              <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
+              <Stopwatch startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
           }
         </div>
         <div onClick={stopActivity} className={classes.close}>
