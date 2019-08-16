@@ -1,34 +1,65 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Button from "@material-ui/core/Button";
+import Pause from '@material-ui/icons/Pause';
+import PlayArrow from '@material-ui/icons/PlayArrow';
 import {TimeDisplay} from "./TimeDisplay";
 
-export const PomodoroTimer = ({startTimeInSeconds}) => {
-  const [timeElapsed, setTimeElapsed] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  const storedRef = useRef();
-
-  if (!(storedRef.current || paused)) {
-    const emmitter = TimeEmitter(1000, () => storedRef.current = undefined);
-    storedRef.current = emmitter((thing) => {
-      console.log(timeElapsed + 1);
-      setTimeElapsed(timeElapsed + 1)
-    })
-  }
-
-  const pause = () => {
-    storedRef.current();
-    setPaused(true);
+export const PomodoroTimer = ({startTimeInSeconds,
+                                activityId,
+                                onComplete,
+                                onPause,
+                                onBreak,
+                                onResume}) => {
+  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
+  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
+  const activityTheSame = rememberedActivity === activityId;
+  const [isPaused, setIsPaused] = useState(false);
+  const pauseTimer = () => {
+    onPause();
+    setIsPaused(true)
+  };
+  const resumeTimer = ()=>{
+    onResume();
+    setIsPaused(false)
   };
 
+  useEffect(() => {
+    let timeout;
+    if (timeElapsed < 1 && activityTheSame) {
+      onComplete && onComplete();
+    } else if(!isPaused) {
+      timeout = setTimeout(() => {
+        const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
+        setTimeElapsed(timeToIncrement -1 );
+        if (!activityTheSame) {
+          setRememberedActivity(activityId);
+        }
+      }, 1000);
+    } else if(timeout){
+      clearTimeout(timeout)
+    }
+    return () => {
+      clearTimeout(timeout)
+    }
+  });
 
-  return (<div>
-    am timer
-    <TimeDisplay timeElapsed={timeElapsed}/>
-    <Button variant={'contained'}
-            color={'primary'}
-            onClick={pause}>Dispose</Button>
-  </div>)
+  return (
+    <div>
+      <div>
+        <TimeDisplay timeElapsed={timeElapsed}/>
+      </div>
+          <div>
+            {
+              isPaused ?
+                (<div onClick={resumeTimer}>
+                  <PlayArrow/>
+                </div>):
+                (<div onClick={pauseTimer}>
+                  <Pause/>
+                </div>)
+            }
+          </div>
+    </div>);
 };
 
 

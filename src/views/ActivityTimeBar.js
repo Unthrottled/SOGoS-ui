@@ -8,7 +8,6 @@ import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActi
 import uuid from "uuid/v4";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
-import Stopwatch from "./Stopwatch";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -67,9 +66,13 @@ const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatc
           {
             isTimer ?
               (
-                <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}/>
+                <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
+                       onComplete={startRecoveryOrResume}
+                       onPause={startRecoveryOrResume}
+                       onResume={startRecoveryOrResume}
+                       activityId={activityId}/>
               ) :
-              <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}/>
+              <Timer startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
           }
         </div>
         <div onClick={stopActivity} className={classes.close}>
