@@ -1,6 +1,10 @@
 Immediate things need to be done:
 ----
 
+-PWA
+    - App does not work without wifi.
+    - Check to see when internet comes back.
+
 - Really long activities freak the UI out.
 
 Tech Debt:

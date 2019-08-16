@@ -1,7 +1,14 @@
 import {all, call, fork, put, select, take} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
-import {createFoundWifiEvent, createLostWifiEvent, FOUND_WIFI} from "../events/NetworkEvents";
+import {
+  createFoundInternetEvent,
+  createFoundWifiEvent,
+  createLostInternetEvent,
+  createLostWifiEvent,
+  FOUND_WIFI
+} from "../events/NetworkEvents";
 import {selectNetworkState} from "../reducers";
+import {performOpenGet} from "./APISagas";
 
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
@@ -59,8 +66,27 @@ function* initialNetworkStateSaga(){
   }
 }
 
+function* initialInternetStateSaga(){
+  const hasInternet = yield checkInternet();
+  if(hasInternet){
+    yield put(createFoundInternetEvent());
+  } else {
+    yield put(createLostInternetEvent())
+  }
+}
+
+//todo: figure out something better
+function* checkInternet() {
+  try {
+    yield performOpenGet('https://acari.io');
+    return true
+  } catch(ignored){}
+  return false;
+}
+
 function* listenToNetworkEvents() {
   yield fork(initialNetworkStateSaga);
+  yield fork(initialInternetStateSaga);
   yield fork(onlineSaga);
   yield fork(offLineSaga);
 }

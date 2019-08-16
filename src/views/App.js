@@ -57,11 +57,7 @@ function App({dispatch: dispetch, isInitialized}) {
         </div>
       </div>
     </ThemeProvider>
-  ) : (
-    <ThemeProvider theme={theme}>
-      <PomodoroTimer startTimeInSeconds={new Date().getTime() / 1000}/>
-    </ThemeProvider>
-  );
+  ) : (<div/>);
 }
 
 const mapStateToProps = ({security: {isInitialized}}) => ({
