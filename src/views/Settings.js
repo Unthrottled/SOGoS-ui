@@ -3,6 +3,37 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const PrettoSlider = withStyles({
+  root: {
+    color: '#52af77',
+    height: 8,
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus,&:hover,&$active': {
+      boxShadow: 'inherit',
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 8,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4,
+  },
+})(Slider);
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -23,7 +54,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const marks = [
+const restMarks = [
+  {
+    value: 0,
+    label: '0',
+  },
+  {
+    value: 3,
+    label: '3',
+  },
+  {
+    value: 5,
+    label: '5',
+  },
+  {
+    value: 10,
+    label: '10',
+  },
+  {
+    value: 20,
+    label: '20',
+  },
+  {
+    value: 30,
+    label: '30',
+  },
+];
+
+const workMarks = [
   {
     value: 0,
     label: '0',
@@ -59,7 +117,20 @@ const LoggedIn = ({}) => {
           aria-labelledby="discrete-slider-always"
           step={0.5}
           min={5}
-          marks={marks}
+          marks={workMarks}
+          max={workMarks[workMarks.length - 1].value}
+          valueLabelDisplay="on"
+        />
+        <Slider
+          id={'pomodoro-recovery-time'}
+          label={'Working Duration (minutes)'}
+          defaultValue={5}
+          helperText={'How long to recover before work.'}
+          aria-labelledby="discrete-slider-always"
+          step={0.5}
+          min={0.5}
+          marks={restMarks}
+          max={restMarks[restMarks.length - 1].value}
           valueLabelDisplay="on"
         />
       </div>
