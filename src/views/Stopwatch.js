@@ -9,9 +9,6 @@ const Stopwatch = ({
                      onPause,
                      onResume
                    }) => {
-  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
-  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
-  const activityTheSame = rememberedActivity === activityId;
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
     onPause();
@@ -22,15 +19,12 @@ const Stopwatch = ({
     setIsPaused(false)
   };
 
+  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
     let timeout;
     if (!isPaused) {
       timeout = setTimeout(() => {
-        const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
-        setTimeElapsed(timeToIncrement + 1);
-        if (!activityTheSame) {
-          setRememberedActivity(activityId);
-        }
+        setTimeElapsed(timeElapsed + 1);
       }, 1000);
     } else if (timeout) {
       clearTimeout(timeout)
@@ -39,6 +33,13 @@ const Stopwatch = ({
       clearTimeout(timeout)
     }
   });
+
+  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
+  const activityTheSame = rememberedActivity === activityId;
+  if(!activityTheSame){
+    setTimeElapsed(startTimeInSeconds);
+    setRememberedActivity(activityId);
+  }
 
   return (
     <div>

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(1)
   },
 }));
-
+const RECOVERY = 'RECOVERY';
 const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
@@ -45,7 +45,7 @@ const ActivityTimeBar = ({
 
   const stopActivity = () => {
     dispetch(startNonTimedActivity({
-      name: 'RECOVERY',
+      name: RECOVERY,
       type: ActivityType.ACTIVE,
       uuid: uuid(),
     }))
@@ -53,7 +53,7 @@ const ActivityTimeBar = ({
 
   const startRecovery = () => {
     dispetch(startTimedActivity({
-      name: 'RECOVERY',
+      name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
       duration: 6000,
@@ -62,7 +62,7 @@ const ActivityTimeBar = ({
   };
 
   const startRecoveryOrResume = () => {
-    if (name === 'RECOVERY') {
+    if (name === RECOVERY) {
       dispetch(startTimedActivity({
         ...previousActivity.content,
         uuid: uuid(),
@@ -75,7 +75,7 @@ const ActivityTimeBar = ({
   const isTimer = timedType === ActivityTimedType.TIMER;
 
   const getTimerBarClasses = () => {
-    const isRecovery = 'RECOVERY' === name;
+    const isRecovery = RECOVERY === name;
     const timerBarClasses = [classes.timer];
     if(isRecovery){
       timerBarClasses.push(classes.recovery)
