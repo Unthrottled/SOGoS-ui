@@ -75,7 +75,7 @@ function* initialInternetStateSaga(){
   }
 }
 
-//todo: figure out something better
+//todo: figure out something better that works
 function* checkInternet() {
   try {
     yield performOpenGet('https://acari.io');

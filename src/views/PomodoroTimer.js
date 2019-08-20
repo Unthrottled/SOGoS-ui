@@ -1,15 +1,16 @@
-import React, {useEffect, useRef, useState} from "react";
-import Button from "@material-ui/core/Button";
+import React, {useEffect, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import {TimeDisplay} from "./TimeDisplay";
 
-export const PomodoroTimer = ({startTimeInSeconds,
+export const PomodoroTimer = ({
+                                startTimeInSeconds,
                                 activityId,
                                 onComplete,
                                 onPause,
                                 onBreak,
-                                onResume}) => {
+                                onResume
+                              }) => {
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
   const activityTheSame = rememberedActivity === activityId;
@@ -18,7 +19,7 @@ export const PomodoroTimer = ({startTimeInSeconds,
     onPause();
     setIsPaused(true)
   };
-  const resumeTimer = ()=>{
+  const resumeTimer = () => {
     onResume();
     setIsPaused(false)
   };
@@ -27,15 +28,15 @@ export const PomodoroTimer = ({startTimeInSeconds,
     let timeout;
     if (timeElapsed < 1 && activityTheSame) {
       onComplete && onComplete();
-    } else if(!isPaused) {
+    } else if (!isPaused) {
       timeout = setTimeout(() => {
         const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
-        setTimeElapsed(timeToIncrement -1 );
+        setTimeElapsed(timeToIncrement - 1);
         if (!activityTheSame) {
           setRememberedActivity(activityId);
         }
       }, 1000);
-    } else if(timeout){
+    } else if (timeout) {
       clearTimeout(timeout)
     }
     return () => {
@@ -48,35 +49,16 @@ export const PomodoroTimer = ({startTimeInSeconds,
       <div>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
-          <div>
-            {
-              isPaused ?
-                (<div onClick={resumeTimer}>
-                  <PlayArrow/>
-                </div>):
-                (<div onClick={pauseTimer}>
-                  <Pause/>
-                </div>)
-            }
-          </div>
+      <div>
+        {
+          isPaused ?
+            (<div onClick={resumeTimer}>
+              <PlayArrow/>
+            </div>) :
+            (<div onClick={pauseTimer}>
+              <Pause/>
+            </div>)
+        }
+      </div>
     </div>);
-};
-
-
-const TimeEmitter = (timeout = 1000, onDispose = () => {}) => {
-  let canceled = false;
-  return (subscriber) => {
-    const interval = setInterval(() => {
-      if (!canceled) {
-        subscriber('hola')
-      }
-    }, timeout);
-    console.log('subscribed!');
-    return () => {
-      console.log('you killed me');
-      onDispose();
-      clearInterval(interval);
-      canceled = true;
-    }
-  };
 };

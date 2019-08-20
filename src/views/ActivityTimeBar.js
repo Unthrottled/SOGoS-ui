@@ -8,6 +8,7 @@ import uuid from "uuid/v4";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
+import {blue} from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -18,6 +19,9 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
     background: theme.palette.secondary.main
+  },
+  recovery: {
+    background: blue[500]
   },
   close: {
     display: 'inline-flex',
@@ -30,7 +34,12 @@ const useStyles = makeStyles(theme => ({
 const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
-const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatch: dispetch}) => {
+const ActivityTimeBar = ({
+                           shouldTime,
+                           currentActivity,
+                           previousActivity,
+                           dispatch: dispetch
+                         }) => {
   const classes = useStyles();
   const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
 
@@ -41,6 +50,17 @@ const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatc
       uuid: uuid(),
     }))
   };
+
+  const startRecovery = () => {
+    dispetch(startTimedActivity({
+      name: 'RECOVERY',
+      type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.TIMER,
+      duration: 6000,
+      uuid: uuid(),
+    }));
+  };
+
   const startRecoveryOrResume = () => {
     if (name === 'RECOVERY') {
       dispetch(startTimedActivity({
@@ -48,29 +68,34 @@ const ActivityTimeBar = ({shouldTime, currentActivity, previousActivity, dispatc
         uuid: uuid(),
       }));
     } else {
-      dispetch(startTimedActivity({
-        name: 'RECOVERY',
-        type: ActivityType.ACTIVE,
-        timedType: ActivityTimedType.TIMER,
-        duration: 60000,
-        uuid: uuid(),
-      }));
+      startRecovery()
     }
   };
 
   const isTimer = timedType === ActivityTimedType.TIMER;
+
+  const getTimerBarClasses = () => {
+    const isRecovery = 'RECOVERY' === name;
+    const timerBarClasses = [classes.timer];
+    if(isRecovery){
+      timerBarClasses.push(classes.recovery)
+    }
+    return timerBarClasses.join(' ');
+  };
+
   return shouldTime ? (
     <Slide direction={"up"} in={shouldTime}>
-      <div className={classes.timer}>
+      <div className={getTimerBarClasses()}>
         <div style={{flexGrow: 1, textAlign: "center"}}>
           {
             isTimer ?
               (
                 <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
-                       onComplete={startRecoveryOrResume}
-                       onPause={startRecoveryOrResume}
-                       onResume={startRecoveryOrResume}
-                       activityId={activityId}/>
+                               onComplete={startRecoveryOrResume}
+                               onPause={startRecoveryOrResume}
+                               onBreak={startRecovery}
+                               onResume={startRecoveryOrResume}
+                               activityId={activityId}/>
               ) :
               <Stopwatch startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
           }
