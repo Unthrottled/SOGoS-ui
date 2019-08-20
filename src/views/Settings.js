@@ -1,39 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
-import withStyles from "@material-ui/core/styles/withStyles";
-
-const PrettoSlider = withStyles({
-  root: {
-    color: '#52af77',
-    height: 8,
-  },
-  thumb: {
-    height: 24,
-    width: 24,
-    backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    marginTop: -8,
-    marginLeft: -12,
-    '&:focus,&:hover,&$active': {
-      boxShadow: 'inherit',
-    },
-  },
-  active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-  },
-  track: {
-    height: 8,
-    borderRadius: 4,
-  },
-  rail: {
-    height: 8,
-    borderRadius: 4,
-  },
-})(Slider);
+import SaveIcon from "@material-ui/icons/Save";
+import Fab from "@material-ui/core/Fab";
+import {Typography} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -106,16 +78,32 @@ const workMarks = [
 
 const LoggedIn = ({}) => {
   const classes = useStyles();
+  const saveSettings = () => {
+
+  };
+
+  const [recoveryTime, setRecoveryTime] = useState(5);
+  const saveRecoveryTime = (_, time) => {
+    setRecoveryTime(time)
+  };
+
+  const [workTime, setWorkTime] = useState(25);
+  const saveWorkTime = (_, time) => {
+    setWorkTime(time)
+  };
+
+  const cycleTimeMinutes = (workTime + recoveryTime) * 4 - recoveryTime;
   return (
     <LoggedInLayout>
       <div className={classes.container}>
         <Slider
           id={'pomodoro-work-time'}
           label={'Working Duration (minutes)'}
-          defaultValue={25}
+          defaultValue={workTime}
           helperText={'How long to work before a break.'}
           aria-labelledby="discrete-slider-always"
           step={0.5}
+          onChangeCommitted={saveWorkTime}
           min={5}
           marks={workMarks}
           max={workMarks[workMarks.length - 1].value}
@@ -124,15 +112,28 @@ const LoggedIn = ({}) => {
         <Slider
           id={'pomodoro-recovery-time'}
           label={'Working Duration (minutes)'}
-          defaultValue={5}
+          defaultValue={recoveryTime}
           helperText={'How long to recover before work.'}
           aria-labelledby="discrete-slider-always"
           step={0.5}
+          onChangeCommitted={saveRecoveryTime}
           min={0.5}
           marks={restMarks}
           max={restMarks[restMarks.length - 1].value}
           valueLabelDisplay="on"
         />
+        <div>
+          <Typography>
+            Full Cycle Time (4 iterations):
+            {cycleTimeMinutes} minutes or {cycleTimeMinutes/60} hours
+          </Typography>
+        </div>
+        <Fab color={'primary'}
+             className={classes.save}
+             onClick={saveSettings}
+        >
+          <SaveIcon/>
+        </Fab>
       </div>
     </LoggedInLayout>
   );
