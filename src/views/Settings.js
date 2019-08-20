@@ -6,7 +6,7 @@ import Slider from "@material-ui/core/Slider";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    background: theme.palette.primary.main,
+    background: theme.palette.primary.dark,
     maxWidth: theme.spacing(50),
     margin: 'auto',
     padding: theme.spacing(3),
@@ -26,19 +26,23 @@ const useStyles = makeStyles(theme => ({
 const marks = [
   {
     value: 0,
-    label: '0°C',
+    label: '0',
   },
   {
-    value: 20,
-    label: '20°C',
+    value: 15,
+    label: '15',
   },
   {
-    value: 37,
-    label: '37°C',
+    value: 30,
+    label: '30',
   },
   {
-    value: 100,
-    label: '100°C',
+    value: 60,
+    label: '60',
+  },
+  {
+    value: 90,
+    label: '90',
   },
 ];
 
@@ -53,7 +57,8 @@ const LoggedIn = ({}) => {
           defaultValue={25}
           helperText={'How long to work before a break.'}
           aria-labelledby="discrete-slider-always"
-          step={10}
+          step={0.5}
+          min={5}
           marks={marks}
           valueLabelDisplay="on"
         />
