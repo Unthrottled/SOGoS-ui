@@ -11,11 +11,9 @@ export const PomodoroTimer = ({
                                 onBreak,
                                 onResume
                               }) => {
-  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
-  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
-  const activityTheSame = rememberedActivity === activityId;
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
+
     onPause();
     setIsPaused(true)
   };
@@ -24,25 +22,30 @@ export const PomodoroTimer = ({
     setIsPaused(false)
   };
 
+  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
+  const activityTheSame = rememberedActivity === activityId;
+  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
     let timeout;
     if (timeElapsed < 1 && activityTheSame) {
       onComplete && onComplete();
     } else if (!isPaused) {
       timeout = setTimeout(() => {
-        const timeToIncrement = activityTheSame ? timeElapsed : startTimeInSeconds;
-        setTimeElapsed(timeToIncrement - 1);
-        if (!activityTheSame) {
-          setRememberedActivity(activityId);
-        }
+        setTimeElapsed(timeElapsed - 1);
       }, 1000);
     } else if (timeout) {
       clearTimeout(timeout)
     }
+
     return () => {
       clearTimeout(timeout)
     }
   });
+
+  if(!activityTheSame){
+    setTimeElapsed(startTimeInSeconds);
+    setRememberedActivity(activityId);
+  }
 
   return (
     <div>
