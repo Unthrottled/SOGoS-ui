@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import {connect} from "react-redux";
@@ -87,6 +88,13 @@ const MenuAppBar = ({dispatch: dispetch}) => {
                 logUserOut();
               }}>Logout</MenuItem>
             </Menu>
+          </div>
+          <div>
+            <Link to={'/settings'} className={classes.link}>
+              <IconButton color={'inherit'}>
+                <SettingsIcon/>
+              </IconButton>
+            </Link>
           </div>
         </Toolbar>
       </AppBar>
