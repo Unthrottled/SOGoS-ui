@@ -6,6 +6,7 @@ import Slider from "@material-ui/core/Slider";
 import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import {Typography} from "@material-ui/core";
+import {withRouter} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -76,10 +77,15 @@ const workMarks = [
   },
 ];
 
-const LoggedIn = ({}) => {
+const SettingsBoard = ({
+                         history,
+                         dispatch,
+                         pomodoroSettings,
+                       }) => {
   const classes = useStyles();
   const saveSettings = () => {
 
+    // history.push('/')
   };
 
   const [recoveryTime, setRecoveryTime] = useState(5);
@@ -125,7 +131,7 @@ const LoggedIn = ({}) => {
         <div>
           <Typography>
             Full Cycle Time (4 iterations):
-            {cycleTimeMinutes} minutes or {cycleTimeMinutes/60} hours
+            {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
           </Typography>
         </div>
         <Fab color={'primary'}
@@ -146,4 +152,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(LoggedIn);
+export default connect(mapStateToProps)(withRouter(SettingsBoard));

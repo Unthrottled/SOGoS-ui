@@ -13,6 +13,8 @@ import type {HistoryState} from "./HistoryReducer";
 import HistoryReducer from "./HistoryReducer";
 import type {StrategyState} from "./StrategyReducer";
 import StrategyReducer from "./StrategyReducer";
+import TacticalReducer from "./TacticalReducer";
+import type {TacticalState} from "./TacticalReducer";
 
 const rootReducer = combineReducers({
   security: securityReducer,
@@ -22,6 +24,7 @@ const rootReducer = combineReducers({
   network: networkReducer,
   history: HistoryReducer,
   strategy: StrategyReducer,
+  tactical: TacticalReducer,
 });
 
 export const selectSecurityState = (globalState): SecurityState => globalState.security;
@@ -37,5 +40,7 @@ export const selectConfigurationState = (globalState): ConfigurationState => glo
 export const selectHistoryState = (globalState): HistoryState => globalState.history;
 
 export const selectStrategyState = (globalState): StrategyState => globalState.strategy;
+
+export const selectTacticalState = (globalState): TacticalState => globalState.tactical;
 
 export default rootReducer;
