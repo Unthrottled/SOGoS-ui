@@ -8,6 +8,7 @@ import Fab from "@material-ui/core/Fab";
 import {Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
+import {selectTacticalState} from "../reducers";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -111,17 +112,18 @@ const SettingsBoard = ({
                          pomodoroSettings,
                        }) => {
   const classes = useStyles();
-  const [recoveryTime, setRecoveryTime] = useState(5);
+  const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration);
 
   const saveRecoveryTime = (_, time) => {
     setRecoveryTime(time)
   };
-  const [longRecoveryTime, setLongRecoveryTime] = useState(30);
+
+  const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration);
 
   const saveLongRecoveryTime = (_, time) => {
     setLongRecoveryTime(time)
   };
-  const [workTime, setWorkTime] = useState(25);
+  const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration);
 
   const saveWorkTime = (_, time) => {
     setWorkTime(time)
@@ -133,8 +135,8 @@ const SettingsBoard = ({
       loadDuration: workTime,
       shortRecoveryDuration: recoveryTime,
       longRecoveryDuration: longRecoveryTime,
-    }))
-    // history.push('/')
+    }));
+    history.push('/')
   };
 
   return (
@@ -194,9 +196,9 @@ const SettingsBoard = ({
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}} = state;
+  const {pomodoroSettings} = selectTacticalState(state);
   return {
-    fullName,
+    pomodoroSettings,
   }
 };
 
