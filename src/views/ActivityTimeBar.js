@@ -58,7 +58,7 @@ const ActivityTimeBar = ({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: pomodoroSettings.shortRecoveryDuration * 60000,
+      duration: pomodoroSettings.shortRecoveryDuration,
       uuid: uuid(),
     }));
   };

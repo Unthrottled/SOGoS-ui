@@ -8,9 +8,9 @@ export type TacticalState = {
 
 const INITIAL_TACTICAL_STATE: TacticalState = {
   pomodoroSettings: {
-    loadDuration: 25,
-    shortRecoveryDuration: 5,
-    longRecoveryDuration: 30,
+    loadDuration: 1620000,//milliseconds
+    shortRecoveryDuration: 180000,
+    longRecoveryDuration: 2400000,
   }
 };
 

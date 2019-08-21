@@ -83,6 +83,8 @@ const recoveryMarks = [
   },
 ];
 
+export const MINUTE_CONVERSION = 60000;
+
 const workMarks = [
   {
     value: 0,
@@ -105,25 +107,24 @@ const workMarks = [
     label: '90',
   },
 ];
-
 const SettingsBoard = ({
                          history,
                          dispatch,
                          pomodoroSettings,
                        }) => {
   const classes = useStyles();
-  const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration);
+  const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
 
   const saveRecoveryTime = (_, time) => {
     setRecoveryTime(time)
   };
 
-  const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration);
+  const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration / MINUTE_CONVERSION);
 
   const saveLongRecoveryTime = (_, time) => {
     setLongRecoveryTime(time)
   };
-  const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration);
+  const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration / MINUTE_CONVERSION);
 
   const saveWorkTime = (_, time) => {
     setWorkTime(time)
@@ -132,9 +133,9 @@ const SettingsBoard = ({
 
   const saveSettings = () => {
     dispatch(createUpdatedPomodoroSettingsEvent({
-      loadDuration: workTime,
-      shortRecoveryDuration: recoveryTime,
-      longRecoveryDuration: longRecoveryTime,
+      loadDuration: workTime * 60000,
+      shortRecoveryDuration: recoveryTime * 60000,
+      longRecoveryDuration: longRecoveryTime * 60000,
     }));
     history.push('/')
   };

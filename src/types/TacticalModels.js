@@ -1,6 +1,6 @@
 
 export type PomodoroSettings = {
-  loadDuration: number,
+  loadDuration: number, //milliseconds
   shortRecoveryDuration: number,
   longRecoveryDuration: number,
 }
