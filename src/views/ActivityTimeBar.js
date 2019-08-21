@@ -9,6 +9,7 @@ import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
 import {blue} from "@material-ui/core/colors";
+import {selectActivityState, selectTacticalState} from "../reducers";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -38,6 +39,7 @@ const ActivityTimeBar = ({
                            shouldTime,
                            currentActivity,
                            previousActivity,
+                           pomodoroSettings,
                            dispatch: dispetch
                          }) => {
   const classes = useStyles();
@@ -56,7 +58,7 @@ const ActivityTimeBar = ({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: 6000,
+      duration: pomodoroSettings.shortRecoveryDuration * 60000,
       uuid: uuid(),
     }));
   };
@@ -77,7 +79,7 @@ const ActivityTimeBar = ({
   const getTimerBarClasses = () => {
     const isRecovery = RECOVERY === name;
     const timerBarClasses = [classes.timer];
-    if(isRecovery){
+    if (isRecovery) {
       timerBarClasses.push(classes.recovery)
     }
     return timerBarClasses.join(' ');
@@ -108,11 +110,13 @@ const ActivityTimeBar = ({
 };
 
 const mapStateToProps = state => {
-  const {activity: {shouldTime, currentActivity, previousActivity}} = state;
+  const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
+  const {pomodoroSettings} = selectTacticalState(state);
   return {
     shouldTime,
     currentActivity,
-    previousActivity
+    previousActivity,
+    pomodoroSettings
   }
 };
 

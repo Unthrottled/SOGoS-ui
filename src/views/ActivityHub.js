@@ -9,6 +9,7 @@ import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
+import {selectTacticalState} from "../reducers";
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ActivityHub = ({dispatch: dispetch}) => {
+const ActivityHub = ({dispatch: dispetch, loadDuration}) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -39,7 +40,7 @@ const ActivityHub = ({dispatch: dispetch}) => {
       name: "SOME_TIMED_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: 6000,
+      duration: loadDuration * 60000,
       uuid: uuid(),
     }));
 
@@ -76,4 +77,11 @@ const ActivityHub = ({dispatch: dispetch}) => {
   );
 };
 
-export default connect()(ActivityHub);
+const mapStateToProps = state => {
+  const {pomodoroSettings: {loadDuration}} = selectTacticalState(state);
+  return {
+    loadDuration
+  }
+};
+
+export default connect(mapStateToProps)(ActivityHub);
