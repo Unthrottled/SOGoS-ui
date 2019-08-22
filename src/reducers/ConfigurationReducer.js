@@ -1,4 +1,8 @@
-import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
+import {
+  NOTIFICATION_ANSWERED,
+  RECEIVED_INITIAL_CONFIGURATION,
+  RECEIVED_REMOTE_OAUTH_CONFIGURATION
+} from "../events/ConfigurationEvents";
 import {Action} from "redux";
 import type {InitialConfig, MiscellaneousConfig, OAuthConfig} from "../types/ConfigurationModels";
 import {NOT_ASKED} from "../types/ConfigurationModels";
@@ -47,6 +51,14 @@ export const configurationReducer = (state: ConfigurationState = INITIAL_CONFIGU
           ...action.payload,
         }
       };
+    case NOTIFICATION_ANSWERED:
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          notificationsAllowed: action.payload,
+        }
+      }
     default:
       return state
   }

@@ -42,7 +42,6 @@ const ActivityHub = ({
     }));
 
   const commenceTimedActivity = () => {
-    console.log(notificationsAllowed)
     if(notificationsAllowed === NOT_ASKED) {
       Notification.requestPermission()
         .then(res => dispetch(receivedNotificationPermission(res)));
