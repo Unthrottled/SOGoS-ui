@@ -67,6 +67,8 @@ const ActivityTimeBar = ({
     if (name === RECOVERY) {
       dispetch(startTimedActivity({
         ...previousActivity.content,
+        duration: previousActivity.content.duration +
+          previousActivity.antecedenceTime - currentActivity.antecedenceTime,
         uuid: uuid(),
       }));
     } else {

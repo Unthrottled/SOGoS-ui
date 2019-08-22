@@ -13,7 +13,6 @@ export const PomodoroTimer = ({
                               }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
-
     onPause();
     setIsPaused(true)
   };

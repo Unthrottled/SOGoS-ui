@@ -50,7 +50,7 @@ const ActivityHub = ({
       name: "SOME_TIMED_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: 8000,
+      duration: 20000,
       // duration: loadDuration,
       uuid: uuid(),
     }));
