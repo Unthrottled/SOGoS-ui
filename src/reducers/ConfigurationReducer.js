@@ -58,7 +58,7 @@ export const configurationReducer = (state: ConfigurationState = INITIAL_CONFIGU
           ...state.miscellaneous,
           notificationsAllowed: action.payload,
         }
-      }
+      };
     default:
       return state
   }
