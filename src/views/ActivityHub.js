@@ -9,7 +9,9 @@ import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
-import {selectTacticalState} from "../reducers";
+import {selectConfigurationState, selectTacticalState} from "../reducers";
+import {NOT_ASKED} from "../types/ConfigurationModels";
+import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
@@ -23,7 +25,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ActivityHub = ({dispatch: dispetch, loadDuration}) => {
+const ActivityHub = ({
+                       dispatch: dispetch,
+                       loadDuration,
+                       notificationsAllowed,
+                     }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -35,14 +41,21 @@ const ActivityHub = ({dispatch: dispetch, loadDuration}) => {
       uuid: uuid(),
     }));
 
-  const commenceTimedActivity = () =>
-    dispetch(startTimedActivity({
+  const commenceTimedActivity = () => {
+    console.log(notificationsAllowed)
+    if(notificationsAllowed === NOT_ASKED) {
+      Notification.requestPermission()
+        .then(res => dispetch(receivedNotificationPermission(res)));
+    }
+    return dispetch(startTimedActivity({
       name: "SOME_TIMED_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: loadDuration,
+      duration: 8000,
+      // duration: loadDuration,
       uuid: uuid(),
     }));
+  };
 
   const handleClick = () => setOpen(!open);
 
@@ -79,8 +92,10 @@ const ActivityHub = ({dispatch: dispetch, loadDuration}) => {
 
 const mapStateToProps = state => {
   const {pomodoroSettings: {loadDuration}} = selectTacticalState(state);
+  const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
   return {
-    loadDuration
+    loadDuration,
+    notificationsAllowed
   }
 };
 

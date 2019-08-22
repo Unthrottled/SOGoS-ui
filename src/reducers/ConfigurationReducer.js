@@ -1,10 +1,12 @@
 import {RECEIVED_INITIAL_CONFIGURATION, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
 import {Action} from "redux";
-import type {InitialConfig, OAuthConfig} from "../types/ConfigurationModels";
+import type {InitialConfig, MiscellaneousConfig, OAuthConfig} from "../types/ConfigurationModels";
+import {NOT_ASKED} from "../types/ConfigurationModels";
 
 export type ConfigurationState = {
   oauth: OAuthConfig,
   initial: InitialConfig,
+  miscellaneous: MiscellaneousConfig,
 }
 
 export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
@@ -20,6 +22,9 @@ export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
     clientID: '',
     openIDConnectURI: '',
     provider: '',
+  },
+  miscellaneous: {
+    notificationsAllowed: NOT_ASKED
   }
 };
 

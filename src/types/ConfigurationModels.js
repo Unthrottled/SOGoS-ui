@@ -11,3 +11,8 @@ export type InitialConfig = {
   openIDConnectURI: string,
   provider: string,
 }
+export type MiscellaneousConfig = {
+  notificationsAllowed: string,
+}
+
+export const NOT_ASKED = 'NOT_ASKED';
