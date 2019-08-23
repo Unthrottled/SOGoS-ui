@@ -19,7 +19,10 @@ const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: 
     case UPDATED_POMODORO_SETTINGS:
       return {
         ...state,
-        pomodoroSettings: action.payload
+        pomodoroSettings: {
+          ...state.pomodoroSettings,
+          ...action.payload
+        }
       };
     default:
       return state
