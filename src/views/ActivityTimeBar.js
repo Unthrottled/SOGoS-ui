@@ -78,8 +78,8 @@ const ActivityTimeBar = ({
 
   const isTimer = timedType === ActivityTimedType.TIMER;
 
+  const isRecovery = RECOVERY === name;
   const getTimerBarClasses = () => {
-    const isRecovery = RECOVERY === name;
     const timerBarClasses = [classes.timer];
     if (isRecovery) {
       timerBarClasses.push(classes.recovery)
@@ -98,6 +98,7 @@ const ActivityTimeBar = ({
                                onComplete={startRecoveryOrResume}
                                onPause={startRecoveryOrResume}
                                onBreak={startRecovery}
+                               hidePause={isRecovery}
                                onResume={startRecoveryOrResume}
                                activityId={activityId}/>
               ) :

@@ -9,7 +9,8 @@ export const PomodoroTimer = ({
                                 onComplete,
                                 onPause,
                                 onBreak,
-                                onResume
+                                onResume,
+                                hidePause,
                               }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
@@ -53,13 +54,13 @@ export const PomodoroTimer = ({
       </div>
       <div>
         {
-          isPaused ?
+          !hidePause && (isPaused ?
             (<div onClick={resumeTimer}>
               <PlayArrow/>
             </div>) :
             (<div onClick={pauseTimer}>
               <Pause/>
-            </div>)
+            </div>))
         }
       </div>
     </div>);
