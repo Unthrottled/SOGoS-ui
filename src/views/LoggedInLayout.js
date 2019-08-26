@@ -4,6 +4,7 @@ import ActivityTimer from "./ActivityTimeBar";
 import SessionExpired from "./SessionExpired";
 import Activity from "./ActivityHub";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import PausedPomodoro from "./PausedPomodoro";
 
 const pickOne =[
   'https://acari.io/misc/9eccbbaf0461ecb3c044d582017dd6ee.jpg',
@@ -28,6 +29,7 @@ const LoggedInLayout = ({children, ...otherProperties}) => {
         children
       }
       <ActivityTimer/>
+      <PausedPomodoro/>
       <SessionExpired/>
     </div>
   );
