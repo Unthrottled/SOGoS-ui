@@ -2,6 +2,7 @@ import {call, put, select} from 'redux-saga/effects'
 import {performPost} from "../APISagas";
 import {selectStrategyState, selectUserState} from "../../reducers";
 import {createSyncedObjectivesEvent} from "../../events/StrategyEvents";
+import {createSyncedDataEvent} from "../../events/UserEvents";
 
 export const BULK_OBJECTIVE_UPLOAD_URL = '/api/strategy/objectives/bulk';
 
@@ -12,7 +13,8 @@ export function* strategySyncSaga() {
   if (guid && cache && cache[guid]) {
     try {
       yield call(performPost, BULK_OBJECTIVE_UPLOAD_URL, cache[guid]);
-      yield put(createSyncedObjectivesEvent(guid))
+      yield put(createSyncedObjectivesEvent(guid));
+      yield put(createSyncedDataEvent());
     } catch (e) {
       // todo: handle non-sychage
     }

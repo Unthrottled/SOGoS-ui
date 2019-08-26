@@ -9,6 +9,7 @@ import {call, put, select} from 'redux-saga/effects'
 import {isOnline} from "../NetworkSagas";
 import {selectUserState} from "../../reducers";
 import type {Activity} from "../../types/ActivityModels";
+import {createCachedDataEvent} from "../../events/UserEvents";
 
 export function* registerActivitySaga(action) {
   const {payload: activity} = action;
@@ -43,5 +44,6 @@ export function* activityCacheSaga(activity: Activity) {
       uploadType: CREATED,
     },
     userGUID: guid,
-  }))
+  }));
+  yield put(createCachedDataEvent());
 }

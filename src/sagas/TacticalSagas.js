@@ -1,6 +1,6 @@
 import {all, call, fork, put, select, take, takeEvery} from "@redux-saga/core/effects";
 import {performGet, performPost} from "./APISagas";
-import {RECEIVED_USER} from "../events/UserEvents";
+import {createCachedDataEvent, createSyncedDataEvent, RECEIVED_USER} from "../events/UserEvents";
 import {
   createCachedSettingsEvent,
   createFailureToRegisterPomodoroSettingsEvent,
@@ -33,7 +33,8 @@ function* settingsSyncSaga() {
   if (guid && cache && cache[guid]) {
     try {
       yield call(performPost, POMODORO_API, cache[guid]);
-      yield put(createSyncedSettingsEvent(guid))
+      yield put(createSyncedSettingsEvent(guid));
+      yield put(createSyncedDataEvent());
     } catch (e) {
       // todo: handle non-sychage
     }
@@ -59,7 +60,8 @@ export function* settingsCacheSaga(settings) {
       ...settings,
     },
     userGUID: guid,
-  }))
+  }));
+  yield put(createCachedDataEvent());
 }
 
 function* updatePomodoroSaga({payload}) {

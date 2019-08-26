@@ -5,6 +5,7 @@ import {performDelete, performPost, performPut} from "../APISagas";
 import {createCachedObjectiveEvent, createSyncedObjectiveEvent} from "../../events/StrategyEvents";
 import {selectUserState} from "../../reducers";
 import {CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
+import {createCachedDataEvent} from "../../events/UserEvents";
 
 export function* objectiveCreationSaga({payload}) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveCreateSaga, objectiveUploadToCached);
@@ -71,5 +72,6 @@ export function* cacheObjectiveSaga(objective: CachedObjective) {
   yield put(createCachedObjectiveEvent({
     userGUID: guid,
     objective,
-  }))
+  }));
+  yield put(createCachedDataEvent());
 }

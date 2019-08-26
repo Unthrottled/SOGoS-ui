@@ -1,4 +1,4 @@
-import {RECEIVED_USER} from "../events/UserEvents";
+import {CHECKED_CACHES, RECEIVED_USER} from "../events/UserEvents";
 import {LOGGED_OFF} from "../events/SecurityEvents";
 import {Action} from "redux";
 import type {User} from "../types/UserModels";
@@ -36,6 +36,15 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
       };
     case LOGGED_OFF: {
       return INITIAL_USER_STATE
+    }
+    case CHECKED_CACHES: {
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          hasItemsCached: action.payload,
+        }
+      }
     }
 
     default:

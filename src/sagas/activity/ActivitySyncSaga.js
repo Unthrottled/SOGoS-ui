@@ -2,6 +2,7 @@ import {call, put, select} from 'redux-saga/effects'
 import {performPost} from "../APISagas";
 import {createSyncedActivitiesEvent} from "../../events/ActivityEvents";
 import {selectActivityState, selectUserState} from "../../reducers";
+import {createSyncedDataEvent} from "../../events/UserEvents";
 
 export const BULK_UPLOAD_URL = '/api/activity/bulk';
 export function* activitySyncSaga() {
@@ -11,7 +12,8 @@ export function* activitySyncSaga() {
   if (guid && cache && cache[guid]) {
     try {
       yield call(performPost, BULK_UPLOAD_URL, cache[guid]);
-      yield put(createSyncedActivitiesEvent(guid))
+      yield put(createSyncedActivitiesEvent(guid));
+      yield put(createSyncedDataEvent());
     } catch (e) {
       // todo: handle non-sychage
     }
