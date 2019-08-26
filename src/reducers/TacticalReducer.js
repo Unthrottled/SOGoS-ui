@@ -6,6 +6,7 @@ import {
   SYNCED_SETTINGS,
   UPDATED_POMODORO_SETTINGS
 } from "../events/TacticalEvents";
+import {objectToKeyValueArray} from "../miscellanous/Tools";
 
 export type TacticalState = {
   pomodoroSettings: PomodoroSettings,
@@ -38,8 +39,17 @@ const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: 
       return state;
     }
     case SYNCED_SETTINGS: {
-      delete state.cache[action.payload];
-      return state;
+      return {
+        ...state,
+        cache: {
+          ...objectToKeyValueArray(state.cache)
+            .filter(keyValues => keyValues.key !== action.payload)
+            .reduce((accum, keyValue) => {
+              accum[keyValue.key] = keyValue.value;
+              return accum
+            }, {}),
+        }
+      };
     }
     default:
       return state

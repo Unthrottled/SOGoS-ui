@@ -7,7 +7,7 @@ import {
   SYNCED_OBJECTIVES,
   UPDATED_OBJECTIVE
 } from "../events/StrategyEvents";
-import {objectToArray} from "../miscellanous/Tools";
+import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import type {KeyResult, Objective} from "../types/StrategyModels";
 
 export type StrategyState = {
@@ -82,8 +82,17 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       return state;
     }
     case SYNCED_OBJECTIVES: {
-      delete state.cache[action.payload];
-      return state;
+      return {
+        ...state,
+        cache: {
+          ...objectToKeyValueArray(state.cache)
+            .filter(keyValues => keyValues.key !== action.payload)
+            .reduce((accum, keyValue) => {
+              accum[keyValue.key] = keyValue.value;
+              return accum
+            }, {}),
+        }
+      };
     }
     default:
       return state

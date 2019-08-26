@@ -67,8 +67,9 @@ export function* delayWork() {
 
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
-  while (true) {
-    yield call(updateCurrentActivity);
-    yield call(delayWork);
-  }
+  // while (true) {
+  //   yield call(updateCurrentActivity);
+  //   yield call(delayWork);
+  // } uuid:4ff4c234-81b3-4549-b6c4-39b3a7affc02
+  // uuid:68096c97-7cc6-4e0b-90e8-5b4e7a7f5e7c
 }

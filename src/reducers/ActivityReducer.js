@@ -8,6 +8,7 @@ import {
   SYNCED_ACTIVITIES
 } from "../events/ActivityEvents";
 import type {Activity} from "../types/ActivityModels";
+import {objectToKeyValueArray} from "../miscellanous/Tools";
 
 export type ActivityState = {
   shouldTime: boolean,
@@ -19,10 +20,10 @@ export type ActivityState = {
 export const INITIAL_ACTIVITY_STATE: ActivityState = {
   shouldTime: false,
   currentActivity: {
-    content:{}
+    content: {}
   },
   previousActivity: {
-    content:{}
+    content: {}
   },
   cache: {},
 };
@@ -48,7 +49,7 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       };
     case CACHED_ACTIVITY: {
       const {userGUID, cachedActivity} = action.payload;
-      if(state.cache[userGUID]){
+      if (state.cache[userGUID]) {
         state.cache[userGUID].push(cachedActivity)
       } else {
         state.cache[userGUID] = [cachedActivity]
@@ -56,8 +57,17 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       return state;
     }
     case SYNCED_ACTIVITIES: {
-      delete state.cache[action.payload];
-      return state;
+      return {
+        ...state,
+        cache: {
+          ...objectToKeyValueArray(state.cache)
+            .filter(keyValues => keyValues.key !== action.payload)
+            .reduce((accum, keyValue) => {
+              accum[keyValue.key] = keyValue.value;
+              return accum
+            }, {}),
+        }
+      };
     }
     default:
       return state
