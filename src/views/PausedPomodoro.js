@@ -4,8 +4,11 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import {selectActivityState} from "../reducers";
 import Stopwatch from "./Stopwatch";
-import {getTime} from "./ActivityTimeBar";
-import {ActivityTimedType, isActivityRecovery} from "../types/ActivityModels";
+import {getTime, resumeActivity} from "./ActivityTimeBar";
+import {ActivityTimedType, ActivityType, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
+import {startNonTimedActivity} from "../actions/ActivityActions";
+import uuid from "uuid/v4";
+import IconButton from "@material-ui/core/IconButton";
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,9 +32,22 @@ const PausedPomodoro = ({
                           shouldTime,
                           currentActivity,
                           previousActivity,
+                          dispatch: dispetch
                         }) => {
   const classes = useStyles();
   const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
+
+  const stopActivity = () => {
+    dispetch(startNonTimedActivity({
+      name: RECOVERY,
+      type: ActivityType.ACTIVE,
+      uuid: uuid(),
+    }))
+  };
+
+  const resumePreviousActivity = () => {
+    resumeActivity(dispetch, previousActivity, currentActivity);
+  };
 
   const isPausedPomodoro = shouldTime &&
     isActivityRecovery(currentActivity) &&
@@ -39,9 +55,11 @@ const PausedPomodoro = ({
   return isPausedPomodoro ? (
     <div className={classes.container}>
       <div className={classes.contents}>
-        <PlayCircleFilled
-          id={'paused-pomodoro'}
-          className={classes.icon}/>
+        <IconButton color={'inherit'} onClick={resumePreviousActivity}>
+          <PlayCircleFilled
+            id={'paused-pomodoro'}
+            className={classes.icon}/>
+        </IconButton>
         <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
                    activityId={activityId}/>
       </div>

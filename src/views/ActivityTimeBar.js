@@ -35,6 +35,15 @@ const useStyles = makeStyles(theme => ({
 export const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
+export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
+  dispetch(startTimedActivity({
+    ...previousActivity.content,
+    duration: previousActivity.content.duration +
+      previousActivity.antecedenceTime - currentActivity.antecedenceTime,
+    uuid: uuid(),
+  }));
+};
+
 const ActivityTimeBar = ({
                            shouldTime,
                            currentActivity,
@@ -74,12 +83,7 @@ const ActivityTimeBar = ({
 
   const startRecoveryOrResume = () => {
     if (name === RECOVERY) {
-      dispetch(startTimedActivity({
-        ...previousActivity.content,
-        duration: previousActivity.content.duration +
-          previousActivity.antecedenceTime - currentActivity.antecedenceTime,
-        uuid: uuid(),
-      }));
+      resumeActivity(dispetch, previousActivity, currentActivity);
     } else {
       startRecovery()
     }
