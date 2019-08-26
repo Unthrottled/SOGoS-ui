@@ -39,6 +39,7 @@ const ActivityHub = ({
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.STOP_WATCH,
       uuid: uuid(),
+      workStartedWomboCombo: new Date().getTime(),
     }));
 
   const commenceTimedActivity = () => {

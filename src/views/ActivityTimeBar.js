@@ -38,8 +38,10 @@ const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) 
 export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
   dispetch(startTimedActivity({
     ...previousActivity.content,
-    duration: previousActivity.content.duration +
-      previousActivity.antecedenceTime - currentActivity.antecedenceTime,
+    ...(previousActivity.content.duration ? {
+      duration: previousActivity.content.duration +
+        previousActivity.antecedenceTime - currentActivity.antecedenceTime
+    } : {}),
     uuid: uuid(),
   }));
 };
@@ -100,8 +102,7 @@ const ActivityTimeBar = ({
     return timerBarClasses.join(' ');
   };
 
-  const isTimeBarActivity = shouldTime && !(isRecovery && timedType===ActivityTimedType.STOP_WATCH);
-
+  const isTimeBarActivity = shouldTime && !(isRecovery && timedType === ActivityTimedType.STOP_WATCH);
   return isTimeBarActivity ? (
     <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
@@ -117,7 +118,9 @@ const ActivityTimeBar = ({
                                onResume={startRecoveryOrResume}
                                activityId={activityId}/>
               ) :
-              <Stopwatch startTimeInSeconds={getTime(antecedenceTime)} activityId={activityId}/>
+              <Stopwatch startTimeInSeconds={getTime(currentActivity.content.workStartedWomboCombo)}
+                         onPause={startPausedRecovery}
+                         activityId={activityId}/>
           }
         </div>
         <div onClick={stopActivity} className={classes.close}>
