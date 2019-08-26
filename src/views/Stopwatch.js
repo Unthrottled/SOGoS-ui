@@ -36,10 +36,19 @@ const Stopwatch = ({
 
   const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
   const activityTheSame = rememberedActivity === activityId;
-  if(!activityTheSame){
+  if (!activityTheSame) {
     setTimeElapsed(startTimeInSeconds);
     setRememberedActivity(activityId);
   }
+
+  const getPauseButton = () => isPaused ?
+    (<div onClick={resumeTimer}>
+      <PlayArrow/>
+    </div>) :
+    (<div onClick={pauseTimer}>
+      <Pause/>
+    </div>);
+
 
   return (
     <div>
@@ -48,13 +57,7 @@ const Stopwatch = ({
       </div>
       <div>
         {
-          isPaused ?
-            (<div onClick={resumeTimer}>
-              <PlayArrow/>
-            </div>) :
-            (<div onClick={pauseTimer}>
-              <Pause/>
-            </div>)
+          onPause && getPauseButton()
         }
       </div>
     </div>

@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {connect} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import PauseCircleFilled from '@material-ui/icons/PauseCircleFilled';
+import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
+import {selectActivityState, selectTacticalState} from "../reducers";
+import Stopwatch from "./Stopwatch";
+import {getTime} from "./ActivityTimeBar";
 
 
 const useStyles = makeStyles(theme => ({
@@ -21,21 +24,34 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PausedPomodoro = ({}) => {
+const PausedPomodoro = ({
+                          shouldTime,
+                          currentActivity,
+                          previousActivity,
+                        }) => {
   const classes = useStyles();
+  const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
+
   return (
     <div className={classes.container}>
       <div className={classes.contents}>
-        <PauseCircleFilled
+        <PlayCircleFilled
           id={'paused-pomodoro'}
           className={classes.icon}/>
+        <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
+                   activityId={activityId}/>
       </div>
     </div>
   );
 };
 
 const mapStateToProps = state => {
-  return {};
+  const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
+  return {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+  };
 };
 
 export default connect(mapStateToProps)(PausedPomodoro);

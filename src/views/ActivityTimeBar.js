@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 const RECOVERY = 'RECOVERY';
-const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
+export const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
 const ActivityTimeBar = ({
@@ -63,6 +63,15 @@ const ActivityTimeBar = ({
     }));
   };
 
+  const startPausedRecovery = () => {
+    dispetch(startTimedActivity({
+      name: RECOVERY,
+      type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.STOP_WATCH,
+      uuid: uuid(),
+    }));
+  };
+
   const startRecoveryOrResume = () => {
     if (name === RECOVERY) {
       dispetch(startTimedActivity({
@@ -87,8 +96,10 @@ const ActivityTimeBar = ({
     return timerBarClasses.join(' ');
   };
 
-  return shouldTime ? (
-    <Slide direction={"up"} in={shouldTime}>
+  const isTimeBarActivity = shouldTime && !(isRecovery && !isTimer);
+
+  return isTimeBarActivity ? (
+    <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
         <div style={{flexGrow: 1, textAlign: "center"}}>
           {
@@ -96,7 +107,7 @@ const ActivityTimeBar = ({
               (
                 <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
                                onComplete={startRecoveryOrResume}
-                               onPause={startRecoveryOrResume}
+                               onPause={startPausedRecovery()}
                                onBreak={startRecovery}
                                hidePause={isRecovery}
                                onResume={startRecoveryOrResume}
