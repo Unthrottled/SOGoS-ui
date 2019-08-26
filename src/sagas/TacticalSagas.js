@@ -1,22 +1,18 @@
-import {all, call, put, select, take, takeEvery} from "@redux-saga/core/effects";
-import {performGet, performOpenGet, performPost} from "./APISagas";
-import {LOGGED_ON} from "../events/SecurityEvents";
+import {all, call, fork, put, select, take, takeEvery} from "@redux-saga/core/effects";
+import {performGet, performPost} from "./APISagas";
 import {RECEIVED_USER} from "../events/UserEvents";
 import {
   createCachedSettingsEvent,
-  createFailureToRegisterPomodoroSettingsEvent, createRegisteredPomodoroSettingsEvent,
+  createFailureToRegisterPomodoroSettingsEvent,
+  createRegisteredPomodoroSettingsEvent,
+  createSyncedSettingsEvent,
   createUpdatedPomodoroSettingsEvent,
   UPDATED_POMODORO_SETTINGS
 } from "../events/TacticalEvents";
 import {delayWork} from "./activity/CurrentActivitySaga";
-import {
-  createCachedActivityEvent, CREATED,
-  createFailureToRegisterStartEvent,
-  createRegisteredStartEvent
-} from "../events/ActivityEvents";
-import {ACTIVITY_URL, activityCacheSaga} from "./activity/RegisterActivitySaga";
 import {isOnline} from "./NetworkSagas";
-import {selectUserState} from "../reducers";
+import {selectTacticalState, selectUserState} from "../reducers";
+import {FOUND_WIFI} from "../events/NetworkEvents";
 
 const POMODORO_API = '/api/tactical/pomodoro/settings';
 
@@ -30,28 +26,42 @@ function* fetchSettings() {
   }
 }
 
+function* settingsSyncSaga() {
+  const globalState = yield select();
+  const {information: {guid}} = selectUserState(globalState);
+  const {cache} = selectTacticalState(globalState);
+  if (guid && cache && cache[guid]) {
+    try {
+      yield call(performPost, POMODORO_API, cache[guid]);
+      yield put(createSyncedSettingsEvent(guid))
+    } catch (e) {
+      // todo: handle non-sychage
+    }
+  }
+}
+
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
   yield call(fetchSettings);
+  yield fork(settingsSyncSaga);
+  yield takeEvery(FOUND_WIFI, settingsSyncSaga);
 }
 
 function* watchForSettingsUpdates() {
   yield takeEvery(UPDATED_POMODORO_SETTINGS, updatePomodoroSaga)
 }
 
-//
 export function* settingsCacheSaga(settings) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedSettingsEvent({
     cachedSettings: {
-      settings,
-      uploadType: CREATED,
+      ...settings,
     },
     userGUID: guid,
   }))
 }
 
-function* updatePomodoroSaga({payload}){
+function* updatePomodoroSaga({payload}) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(settingsUploadSaga, payload)
@@ -72,7 +82,6 @@ function* settingsUploadSaga(settings) {
     yield call(settingsCacheSaga, settings)
   }
 }
-
 
 
 export default function* rootSaga() {
