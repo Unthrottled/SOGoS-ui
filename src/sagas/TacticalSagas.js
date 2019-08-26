@@ -1,6 +1,6 @@
 import {all, call, fork, put, select, take, takeEvery} from "@redux-saga/core/effects";
 import {performGet, performPost} from "./APISagas";
-import {createCachedDataEvent, createSyncedDataEvent, RECEIVED_USER} from "../events/UserEvents";
+import {createCachedDataEvent, createSyncedDataEvent, RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
 import {
   createCachedSettingsEvent,
   createFailureToRegisterPomodoroSettingsEvent,
@@ -46,6 +46,7 @@ function* initializeTacticalSettings() {
   yield call(fetchSettings);
   yield fork(settingsSyncSaga);
   yield takeEvery(FOUND_WIFI, settingsSyncSaga);
+  yield takeEvery(REQUESTED_SYNC, settingsSyncSaga);
   yield takeEvery(VIEWED_SETTINGS, fetchSettings);
 }
 

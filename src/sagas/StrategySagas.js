@@ -1,6 +1,6 @@
 import {all, fork, take, takeEvery} from 'redux-saga/effects'
 import {CREATED_OBJECTIVE, DELETED_OBJECTIVE, UPDATED_OBJECTIVE, VIEWED_OBJECTIVES} from "../events/StrategyEvents";
-import {RECEIVED_USER} from "../events/UserEvents";
+import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
 import {objectiveChangesSaga, objectiveCreationSaga, objectiveTerminationSaga} from "./strategy/ObjectiveCreationSagas";
 import {objectiveHistoryFetchSaga, objectiveObservationSaga} from "./strategy/ObjectiveSagas";
 import {FOUND_WIFI} from "../events/NetworkEvents";
@@ -21,6 +21,7 @@ function* listenToActivityEvents() {
   yield takeEvery(DELETED_OBJECTIVE, objectiveTerminationSaga);
   yield takeEvery(FOUND_WIFI, strategySyncSaga);
   yield takeEvery(RECEIVED_USER, strategySyncSaga);
+  yield takeEvery(REQUESTED_SYNC, strategySyncSaga);
   yield fork(objectiveObservationInitializationSaga);
 }
 

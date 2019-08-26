@@ -82,7 +82,7 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       return state;
     }
     case SYNCED_OBJECTIVES: {
-      state.cache[action.payload] = [];
+      delete state.cache[action.payload];
       return state;
     }
     default:

@@ -56,7 +56,7 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       return state;
     }
     case SYNCED_ACTIVITIES: {
-      state.cache[action.payload] = [];
+      delete state.cache[action.payload];
       return state;
     }
     default:

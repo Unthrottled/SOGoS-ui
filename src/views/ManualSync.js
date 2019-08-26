@@ -4,7 +4,7 @@ import Zoom from '@material-ui/core/Zoom';
 import Tooltip from '@material-ui/core/Tooltip';
 import Sync from '@material-ui/icons/Sync';
 import {makeStyles} from "@material-ui/core";
-import {selectNetworkState} from "../reducers";
+import {selectNetworkState, selectUserState} from "../reducers";
 import IconButton from "@material-ui/core/IconButton";
 import {requestedManualSync} from "../actions/UserActions";
 
@@ -14,12 +14,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ManualSync = ({isOnline, hasInternet, dispatch}) => {
+const ManualSync = ({isOnline, hasItemsCached, dispatch}) => {
   const classes = useStyles();
   return (
     <IconButton color={'inherit'} onClick={()=>dispatch(requestedManualSync())}>
       <Tooltip title={"Manually sync your data"}>
-        <Zoom in={!(isOnline && hasInternet)}>
+        <Zoom in={isOnline && hasItemsCached}>
           <Sync id={'manual-sync'} className={classes.offline}/>
         </Zoom>
       </Tooltip>
@@ -27,10 +27,11 @@ const ManualSync = ({isOnline, hasInternet, dispatch}) => {
   );
 };
 const mapStateToProps = state => {
-  const {isOnline, hasInternet} = selectNetworkState(state);
+  const {isOnline} = selectNetworkState(state);
+  const {miscellaneous: {hasItemsCached}} = selectUserState(state);
   return {
     isOnline,
-    hasInternet
+    hasItemsCached,
   }
 };
 export default connect(mapStateToProps)(ManualSync);

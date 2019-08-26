@@ -6,10 +6,12 @@ import {registerActivitySaga} from "./activity/RegisterActivitySaga";
 import {FOUND_WIFI} from "../events/NetworkEvents";
 import {activitySyncSaga} from "./activity/ActivitySyncSaga";
 import {activityNotificationSaga} from "./activity/ActivityNotificationSaga";
+import {REQUESTED_SYNC} from "../events/UserEvents";
 
 function* listenToActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, registerActivitySaga);
   yield takeEvery(FOUND_WIFI, activitySyncSaga);
+  yield takeEvery(REQUESTED_SYNC, activitySyncSaga);
   yield takeEvery(STARTED_TIMED_ACTIVITY, activityNotificationSaga);
   yield fork(activityLogonSaga);
   yield fork(currentActivitySaga);
