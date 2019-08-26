@@ -1,25 +1,17 @@
 Immediate things need to be done:
 ----
-
 - Time Bar jump on navigation.
-
-- Tactical Settings storage
-    - offline mode
 
 -PWA
     - App does not work without wifi.
     - Check to see when internet comes back.
+    - Tactical Settings storage
+        - offline mode
 
 - Really long activities freak the UI out.
 
-Tech Debt:
------
-- Less chatty actions (BIG REFACTOR)
-
 Other Stuff
 -----
-
-- Pause Count Down Timer
 
 - Better 404 handling
 
@@ -63,6 +55,7 @@ Maybe:
 - Redux Persist
     - Make sure that tokens are secure
 - Initial Loading Screen
+- Cross Device Settings Sync.
 ----
 
 
@@ -70,3 +63,8 @@ Think pad:
 -----
 
 What happens when you are doing timed intervals and you close the app?
+
+
+Tech Debt:
+-----
+- Less chatty actions (BIG REFACTOR)

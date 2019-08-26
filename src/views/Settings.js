@@ -118,8 +118,6 @@ const SettingsBoard = ({
   useEffect(() => {
     dispatch(viewedSettings());
   }, [didMountState]);
-  const [stateHack] = useState(pomodoroSettings);
-
   const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
 
   const saveRecoveryTime = (_, time) => {

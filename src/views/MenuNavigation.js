@@ -44,6 +44,11 @@ const MenuNavigation = () => {
       path: '/tits',
 
     },
+    {
+      title: 'Settings',
+      path: '/settings',
+
+    },
   ];
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
