@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -9,6 +9,7 @@ import {Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
 import {selectTacticalState} from "../reducers";
+import {viewedSettings} from "../actions/TacticalActions";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -113,6 +114,12 @@ const SettingsBoard = ({
                          pomodoroSettings,
                        }) => {
   const classes = useStyles();
+  const [didMountState] = useState('');
+  useEffect(() => {
+    dispatch(viewedSettings());
+  }, [didMountState]);
+  const [stateHack] = useState(pomodoroSettings);
+
   const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
 
   const saveRecoveryTime = (_, time) => {

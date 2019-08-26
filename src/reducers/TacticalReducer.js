@@ -1,6 +1,11 @@
 import {Action} from "redux";
 import type {PomodoroSettings} from "../types/TacticalModels";
-import {CACHED_SETTINGS, SYNCED_SETTINGS, UPDATED_POMODORO_SETTINGS} from "../events/TacticalEvents";
+import {
+  CACHED_SETTINGS,
+  REGISTERED_POMODORO_SETTINGS,
+  SYNCED_SETTINGS,
+  UPDATED_POMODORO_SETTINGS
+} from "../events/TacticalEvents";
 
 export type TacticalState = {
   pomodoroSettings: PomodoroSettings,
@@ -19,6 +24,7 @@ const INITIAL_TACTICAL_STATE: TacticalState = {
 const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: Action) => {
   switch (action.type) {
     case UPDATED_POMODORO_SETTINGS:
+    case REGISTERED_POMODORO_SETTINGS:
       return {
         ...state,
         pomodoroSettings: {

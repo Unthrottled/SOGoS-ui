@@ -7,7 +7,7 @@ import {
   createRegisteredPomodoroSettingsEvent,
   createSyncedSettingsEvent,
   createUpdatedPomodoroSettingsEvent,
-  UPDATED_POMODORO_SETTINGS
+  UPDATED_POMODORO_SETTINGS, VIEWED_SETTINGS
 } from "../events/TacticalEvents";
 import {delayWork} from "./activity/CurrentActivitySaga";
 import {isOnline} from "./NetworkSagas";
@@ -45,6 +45,7 @@ function* initializeTacticalSettings() {
   yield call(fetchSettings);
   yield fork(settingsSyncSaga);
   yield takeEvery(FOUND_WIFI, settingsSyncSaga);
+  yield takeEvery(VIEWED_SETTINGS, fetchSettings);
 }
 
 function* watchForSettingsUpdates() {

@@ -2,6 +2,7 @@ import type {CachedSettings, PomodoroSettings, PomodoroSettingsRegistryFailure} 
 
 export const UPDATED_POMODORO_SETTINGS: 'UPDATED_POMODORO_SETTINGS' = 'UPDATED_POMODORO_SETTINGS';
 export const CACHED_SETTINGS: 'CACHED_SETTINGS' = 'CACHED_SETTINGS';
+export const VIEWED_SETTINGS: 'VIEWED_SETTINGS' = 'VIEWED_SETTINGS';
 export const SYNCED_SETTINGS: 'SYNCED_SETTINGS' = 'SYNCED_SETTINGS';
 export const REGISTERED_POMODORO_SETTINGS: 'REGISTERED_POMODORO_SETTINGS' = 'REGISTERED_POMODORO_SETTINGS';
 export const FAILED_TO_REGISTER_POMODORO_SETTINGS: 'FAILED_TO_REGISTER_POMODORO_SETTINGS' = 'FAILED_TO_REGISTER_POMODORO_SETTINGS';
@@ -15,6 +16,10 @@ export type SettingsCacheEvent = {
   cachedSettings: CachedSettings,
   userGUID: string,
 };
+
+export const createViewedSettingsEvent = () => ({
+  type: VIEWED_SETTINGS,
+});
 
 export const createCachedSettingsEvent = (cachedSettings: SettingsCacheEvent) => ({
   type: CACHED_SETTINGS,
