@@ -7,14 +7,6 @@ Immediate things need to be done:
     - Tactical Settings storage
         - offline mode
 
-- Really long activities freak the UI out.
-
-Other Stuff
------
-
-- Better 404 handling
-
--PWA
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
     - Post application installation.
@@ -22,10 +14,6 @@ Other Stuff
 
 - Enable manual sync of data?
     - Periodic cache sync
-
-- What happens on logout?
-
-- Multi-Device Usage (Dafuq happens and who is in charge?)
 
 - History:
     - Limit history to range.
@@ -35,6 +23,11 @@ Other Stuff
     - Update Objectives when viewed?
     - bulk upload only if has stuff
     - What do when offline and has not looked at objectives?
+
+- Really long activities freak the UI out.
+
+Other Stuff
+-----
 
 Needs UX:
     - Offline Mode
@@ -55,13 +48,20 @@ Maybe:
     - Make sure that tokens are secure
 - Initial Loading Screen
 - Cross Device Settings Sync.
+- Better 404 handling
+
 ----
 
 
 Think pad:
 -----
 
-What happens when you are doing timed intervals and you close the app?
+- What happens when you are doing timed intervals and you close the app?
+
+- What happens on logout?
+
+- Multi-Device Usage (Dafuq happens and who is in charge?)
+
 
 
 Tech Debt:
