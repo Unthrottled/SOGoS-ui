@@ -7,6 +7,7 @@ import {all} from "redux-saga/effects";
 import HistorySagas from "./HistorySagas";
 import StrategySagas from "./StrategySagas";
 import TacticalSagas from "./TacticalSagas";
+import CacheSagas from "./CacheSagas";
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +19,6 @@ export default function* rootSaga() {
     HistorySagas(),
     StrategySagas(),
     TacticalSagas(),
+    CacheSagas(),
   ])
 }

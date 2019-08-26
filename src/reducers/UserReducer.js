@@ -3,8 +3,13 @@ import {LOGGED_OFF} from "../events/SecurityEvents";
 import {Action} from "redux";
 import type {User} from "../types/UserModels";
 
+export type UserMiscellaneous = {
+  hasItemsCached: boolean,
+};
+
 export type UserState = {
   information: User,
+  miscellaneous: UserMiscellaneous,
 }
 const INITIAL_USER_STATE : UserState = {
   information: {
@@ -13,9 +18,11 @@ const INITIAL_USER_STATE : UserState = {
     email: '',
     fullName: 'Smitty Werbenjagermangensen',
     guid: '',
+  },
+  miscellaneous: {
+    hasItemsCached: false,
   }
 };
-
 
 const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
   switch (action.type) {
@@ -30,6 +37,7 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: Action) => {
     case LOGGED_OFF: {
       return INITIAL_USER_STATE
     }
+
     default:
       return state
   }
