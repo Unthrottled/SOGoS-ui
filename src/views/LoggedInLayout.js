@@ -28,7 +28,6 @@ const LoggedInLayout = ({children, ...otherProperties}) => {
       {
         children
       }
-      <ActivityTimer/>
       <PausedPomodoro/>
       <SessionExpired/>
     </div>
