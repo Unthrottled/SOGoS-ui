@@ -6,7 +6,6 @@ Immediate things need to be done:
     - Check to see when internet comes back.
     - Tactical Settings storage
         - offline mode
-
     - Cache index html expiry (for dem sweet updates)
     - Notify user backend is not working.
     - Post application installation.

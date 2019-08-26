@@ -2,10 +2,15 @@ import type {User} from "../types/UserModels";
 
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' = 'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
+export const REQUESTED_SYNC: 'REQUESTED_SYNC' = 'REQUESTED_SYNC';
 
 export const createReceivedUserEvent = (user: User) => ({
   type: RECEIVED_USER,
   payload: user
+});
+
+export const createRequestedSyncEvent = () => ({
+  type: REQUESTED_SYNC,
 });
 
 export const createFailedToGetUserEvent = (error) => ({
