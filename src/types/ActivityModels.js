@@ -38,3 +38,7 @@ export const activitiesEqual = (currentActivity: Activity, activity: Activity) =
   const activityOneId = getId(currentActivity);
   return activityOneId === getId(activity) && !!activityOneId;
 };
+
+
+export const RECOVERY = 'RECOVERY';
+export const isActivityRecovery = (activity: Activity) => activity && activity.content && activity.content.name === RECOVERY;

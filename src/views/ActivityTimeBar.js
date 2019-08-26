@@ -5,7 +5,7 @@ import Slide from "@material-ui/core/Slide";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
-import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
+import {ActivityTimedType, ActivityType, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
 import {blue} from "@material-ui/core/colors";
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(1)
   },
 }));
-const RECOVERY = 'RECOVERY';
+
 export const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
@@ -87,7 +87,7 @@ const ActivityTimeBar = ({
 
   const isTimer = timedType === ActivityTimedType.TIMER;
 
-  const isRecovery = RECOVERY === name;
+  const isRecovery = isActivityRecovery(currentActivity);
   const getTimerBarClasses = () => {
     const timerBarClasses = [classes.timer];
     if (isRecovery) {
@@ -96,7 +96,7 @@ const ActivityTimeBar = ({
     return timerBarClasses.join(' ');
   };
 
-  const isTimeBarActivity = shouldTime && !(isRecovery && !isTimer);
+  const isTimeBarActivity = shouldTime && !(isRecovery && timedType===ActivityTimedType.STOP_WATCH);
 
   return isTimeBarActivity ? (
     <Slide direction={"up"} in={isTimeBarActivity}>
@@ -107,7 +107,7 @@ const ActivityTimeBar = ({
               (
                 <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
                                onComplete={startRecoveryOrResume}
-                               onPause={startPausedRecovery()}
+                               onPause={startPausedRecovery}
                                onBreak={startRecovery}
                                hidePause={isRecovery}
                                onResume={startRecoveryOrResume}

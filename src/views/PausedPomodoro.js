@@ -2,9 +2,10 @@ import * as React from 'react';
 import {connect} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
-import {selectActivityState, selectTacticalState} from "../reducers";
+import {selectActivityState} from "../reducers";
 import Stopwatch from "./Stopwatch";
 import {getTime} from "./ActivityTimeBar";
+import {ActivityTimedType, isActivityRecovery} from "../types/ActivityModels";
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +33,10 @@ const PausedPomodoro = ({
   const classes = useStyles();
   const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
 
-  return (
+  const isPausedPomodoro = shouldTime &&
+    isActivityRecovery(currentActivity) &&
+    timedType === ActivityTimedType.STOP_WATCH;
+  return isPausedPomodoro ? (
     <div className={classes.container}>
       <div className={classes.contents}>
         <PlayCircleFilled
@@ -42,7 +46,7 @@ const PausedPomodoro = ({
                    activityId={activityId}/>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 const mapStateToProps = state => {
