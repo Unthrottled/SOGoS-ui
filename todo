@@ -5,7 +5,11 @@ Things To Test For Real:
 
 Immediate things need to be done:
 ----
+- Associate Activity To Objective.
+- Objective Completion.
 
+TODO
+-----
 -PWA
     - App does not work without wifi.
     - Check to see when internet comes back.
@@ -21,6 +25,7 @@ Immediate things need to be done:
     - Update History when viewed?
 
 - Objectives:
+    - Figure out how to associate key result to activity dedicated to objective.
     - Update Objectives when viewed?
     - bulk upload only if has stuff
     - What do when offline and has not looked at objectives?
