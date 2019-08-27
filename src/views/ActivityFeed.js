@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {connect} from 'react-redux';
 import {viewedActivityFeed} from "../actions/HistoryActions";
-import {ResponsiveCalendar} from "@nivo/calendar";
+// import {ResponsiveCalendar} from "@nivo/calendar";
 
 const ActivityFeed = ({activityFeed, dispatch}) => {
   const [didMountState] = useState('');
@@ -15,48 +15,48 @@ const ActivityFeed = ({activityFeed, dispatch}) => {
       height: '100%',
       minHeight: '500px',
     }}>
-      <div style={{
-        width: '100%',
-        height: '25%',
-        minHeight: '500px',
-      }}>
-        <ResponsiveCalendar
-          data={data}
-          from="2016-06-12"
-          to="2016-07-12"
-          emptyColor="#eeeeee"
-          colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}
-          margin={{top: 40, right: 40, bottom: 40, left: 40}}
-          // yearSpacing={40}
-          monthBorderColor="#ffffff"
-          dayBorderWidth={2}
-          dayBorderColor="#ffffff"
-          // tooltip={(thing)=>(<div style={{
-          //   color: 'red'
-          // }}>
-          //   butts
-          // </div>)}
-          // legends={[
-          //   {
-          //     anchor: 'bottom-right',
-          //     direction: 'row',
-          //     translateY: 36,
-          //     itemCount: 4,
-          //     itemWidth: 42,
-          //     itemHeight: 36,
-          //     itemsSpacing: 14,
-          //     itemDirection: 'right-to-left'
-          //   }
-          // ]}
-        />
-      </div>
-      {
-        activityFeed.map(activity => (
-          <div key={activity.content.uuid}>
-            {new Date(activity.antecedenceTime).toISOString()} {activity.content.name}
-          </div>
-        ))
-      }
+      {/*<div style={{*/}
+      {/*  width: '100%',*/}
+      {/*  height: '25%',*/}
+      {/*  minHeight: '500px',*/}
+      {/*}}>*/}
+      {/*  <ResponsiveCalendar*/}
+      {/*    data={data}*/}
+      {/*    from="2016-06-12"*/}
+      {/*    to="2016-07-12"*/}
+      {/*    emptyColor="#eeeeee"*/}
+      {/*    colors={['#61cdbb', '#97e3d5', '#e8c1a0', '#f47560']}*/}
+      {/*    margin={{top: 40, right: 40, bottom: 40, left: 40}}*/}
+      {/*    // yearSpacing={40}*/}
+      {/*    monthBorderColor="#ffffff"*/}
+      {/*    dayBorderWidth={2}*/}
+      {/*    dayBorderColor="#ffffff"*/}
+      {/*    // tooltip={(thing)=>(<div style={{*/}
+      {/*    //   color: 'red'*/}
+      {/*    // }}>*/}
+      {/*    //   butts*/}
+      {/*    // </div>)}*/}
+      {/*    // legends={[*/}
+      {/*    //   {*/}
+      {/*    //     anchor: 'bottom-right',*/}
+      {/*    //     direction: 'row',*/}
+      {/*    //     translateY: 36,*/}
+      {/*    //     itemCount: 4,*/}
+      {/*    //     itemWidth: 42,*/}
+      {/*    //     itemHeight: 36,*/}
+      {/*    //     itemsSpacing: 14,*/}
+      {/*    //     itemDirection: 'right-to-left'*/}
+      {/*    //   }*/}
+      {/*    // ]}*/}
+      {/*  />*/}
+      {/*</div>*/}
+      {/*{*/}
+      {/*  activityFeed.map(activity => (*/}
+      {/*    <div key={activity.content.uuid}>*/}
+      {/*      {new Date(activity.antecedenceTime).toISOString()} {activity.content.name}*/}
+      {/*    </div>*/}
+      {/*  ))*/}
+      {/*}*/}
     </div>
   );
 };

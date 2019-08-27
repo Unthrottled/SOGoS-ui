@@ -12,6 +12,10 @@ import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {selectConfigurationState, selectTacticalState} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
+import IconButton from "@material-ui/core/IconButton";
+import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
+import {Cancel} from "@material-ui/icons";
+import {Grow} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
@@ -23,6 +27,28 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(1),
     margin: theme.spacing(1),
   },
+  container: {
+    background: 'rgba(0,0,0,0.2)',
+    position: 'absolute',
+    top: '0',
+    width: '100%',
+    height: '100%',
+    zIndex: '9001',
+  },
+  contents: {
+    top: '20%',
+    height: '100%',
+    position: 'relative',
+  },
+  icon: {
+    fontSize: '4em',
+  },
+  cancel: {
+    marginTop: theme.spacing(5),
+  },
+  cancelIcon: {
+    fontSize: '1.25em',
+  },
 }));
 
 const ActivityHub = ({
@@ -32,6 +58,7 @@ const ActivityHub = ({
                      }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [strategyOpen, setStrategyOpen] = useState(false);
 
   const commenceActivity = () =>
     dispetch(startTimedActivity({
@@ -58,34 +85,85 @@ const ActivityHub = ({
 
   const handleClick = () => setOpen(!open);
 
+  const baseAction = (callBack) => {
+    setStrategyOpen(!strategyOpen);
+  };
+
+  const closeStrategy = () => {
+    setStrategyOpen(false);
+  };
+
   const actions = [
-    {icon: <Timer/>, name: 'Start Timed Task', perform: () => commenceTimedActivity()},
-    {icon: <StopWatch/>, name: 'Start Task', perform: () => commenceActivity()},
+    {icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedActivity)},
+    {icon: <StopWatch/>, name: 'Start Task', perform: () => baseAction(commenceActivity)},
   ];
 
   return (
-    <SpeedDial
-      ariaLabel="SpeedDial example"
-      className={classes.speedDial}
-      hidden={false}
-      icon={<SpeedDialIcon/>}
-      onClick={handleClick}
-      open={open}
-      direction={"right"}
-    >
-      {actions.map(action => (
-        <SpeedDialAction
-          key={action.name}
-          icon={action.icon}
-          tooltipTitle={action.name}
-          onClick={() => {
-            handleClick();
-            action.perform();
-          }}
-          title={""}
-          children={<div/>}/>
-      ))}
-    </SpeedDial>
+    <div>
+      <SpeedDial
+        ariaLabel="SpeedDial example"
+        className={classes.speedDial}
+        hidden={false}
+        icon={<SpeedDialIcon/>}
+        onClick={handleClick}
+        open={open}
+        direction={"right"}
+      >
+        {actions.map(action => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            tooltipOpen
+            tooltipPlacement={'bottom'}
+            onClick={() => {
+              handleClick();
+              action.perform();
+            }}
+            title={""}
+            children={<div/>}/>
+        ))}
+      </SpeedDial>
+      <Grow in={strategyOpen}>
+        <div className={classes.container}>
+          <div className={classes.contents}>
+            <IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton><IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton><IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton><IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton><IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton><IconButton color={'inherit'}>
+              <PlayCircleFilled
+                id={'paused-pomodoro'}
+                className={classes.icon}/>
+            </IconButton>
+            <br/>
+            <IconButton
+              className={classes.cancel}
+              onClick={closeStrategy}
+              color={'inherit'}>
+              <Cancel className={classes.cancelIcon}/>
+            </IconButton>
+          </div>
+        </div>
+      </Grow>
+    </div>
+
   );
 };
 

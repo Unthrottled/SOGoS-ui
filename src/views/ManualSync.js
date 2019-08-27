@@ -16,15 +16,16 @@ const useStyles = makeStyles(theme => ({
 
 const ManualSync = ({isOnline, hasItemsCached, dispatch}) => {
   const classes = useStyles();
-  return (
+  const shouldDisplay = isOnline && hasItemsCached;
+  return shouldDisplay ? (
     <IconButton color={'inherit'} onClick={()=>dispatch(requestedManualSync())}>
       <Tooltip title={"Manually sync your data"}>
-        <Zoom in={isOnline && hasItemsCached}>
+        <Zoom in={shouldDisplay}>
           <Sync id={'manual-sync'} className={classes.offline}/>
         </Zoom>
       </Tooltip>
     </IconButton>
-  );
+  ) : null;
 };
 const mapStateToProps = state => {
   const {isOnline} = selectNetworkState(state);
