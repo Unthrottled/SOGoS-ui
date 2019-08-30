@@ -181,6 +181,8 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
 
   const handleChangeMulti = (value) => setMulti(value);
 
+  const [selectedIcon, setSelectedIcon] = useState("star");
+
   const dismissDeletionWindow = ()=>setFinnaDelete(false);
   return (
     <LoggedInLayout>

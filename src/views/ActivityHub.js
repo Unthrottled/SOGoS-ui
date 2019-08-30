@@ -16,6 +16,15 @@ import IconButton from "@material-ui/core/IconButton";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import {Cancel} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
+import Goal from '../images/Goal.svg';
+import ReactSVG from 'react-svg';
+
+const GoalSVG = () => (      <ReactSVG src={Goal} beforeInjection={(svg) => {
+  svg.setAttribute('width', '200px');
+  svg.setAttribute('height', '200px');
+  console.log(svg);
+  window.svgboi = svg
+}}/>);
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
@@ -128,29 +137,17 @@ const ActivityHub = ({
         <div className={classes.container}>
           <div className={classes.contents}>
             <IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <PlayCircleFilled
-                id={'paused-pomodoro'}
-                className={classes.icon}/>
+              <GoalSVG/>
             </IconButton>
             <br/>
             <IconButton
