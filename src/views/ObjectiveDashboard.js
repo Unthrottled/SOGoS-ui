@@ -28,11 +28,9 @@ import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
+import {SketchPicker} from 'react-color';
+import {objectToArray} from "../miscellanous/Tools";
 
-const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
-  svg.setAttribute('width', '100px');
-  svg.setAttribute('height', '100px');
-}}/>);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -188,8 +186,25 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
 
   const handleChangeMulti = (value) => setMulti(value);
 
-  const [selectedIcon, setSelectedIcon] = useState("star");
-
+  const [skyColor, setSkyColor] = useState({
+    hex: '#86a4f3',
+    opacity: 1,
+  });
+  const findChild = (node, finder) => {
+    const queue = [];
+    queue.push(node);
+    while (queue.length > 0){
+      const currentNode = queue.pop();
+      if(finder(currentNode)){
+        return currentNode;
+      } else {
+        currentNode._checked = 1;
+        objectToArray(currentNode.childNodes).filter(n => !n._checked)
+          .forEach(n=>queue.unshift(n));
+      }
+    }
+    return undefined;
+  };
   const dismissDeletionWindow = ()=>setFinnaDelete(false);
   return (
     <LoggedInLayout>
@@ -198,6 +213,21 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
         Dis is objective id {objectiveId}
       </Typography>
       <div className={classes.inputContainer}>
+        <ReactSVG src={Goal} beforeInjection={(svg) => {
+          svg.setAttribute('width', '100px');
+          svg.setAttribute('height', '100px');
+          const background = findChild(svg, (node)=> {
+            return node.id && node.id.indexOf('path5680') > -1;
+          });
+          background.setAttribute('fill', skyColor.hex);
+          background.setAttribute('fill-opacity', skyColor.opacity);
+        }}/>
+        <SketchPicker onChangeComplete={(color)=>{
+          setSkyColor({
+            hex: color.hex,
+            opacity: color.rgb.a
+          })
+        }}/>
         <TextField
           className={classes.textField}
           label={'What you do want to accomplish?'}

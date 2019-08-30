@@ -58,7 +58,9 @@
       id="layer1"
       transform="translate(20.51458,-23.997247)">
     <path
-        style="fill:#86a4f3;fill-opacity:1;stroke:none;stroke-width:6.50078773;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+        fill="#86a4f3"
+        fill-rule="1"
+        style="stroke:none;stroke-width:6.50078773;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
         d="M 489.72461 3.2753906 A 491.42855 491.42855 0 0 0 3.2617188 497.98047 A 491.42855 491.42855 0 0 0 87.238281 768.78906 L 269.69336 523.625 L 326.04102 642.95312 L 492.97852 388.22852 L 659.91406 642.95312 L 716.26367 523.625 L 900.70312 771.45703 A 491.42855 491.42855 0 0 0 986.10742 494.67773 L 986.0625 488.07422 A 491.42855 491.42855 0 0 0 489.72461 3.2753906 z "
         id="path5680"
         transform="matrix(0.26458333,0,0,0.26458333,-20.51458,23.997247)" />

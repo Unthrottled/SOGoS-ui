@@ -13,16 +13,14 @@ import {selectConfigurationState, selectTacticalState} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
-import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import {Cancel} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
 import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
 
-const GoalSVG = () => (      <ReactSVG src={Goal} beforeInjection={(svg) => {
+const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
   svg.setAttribute('width', '200px');
   svg.setAttribute('height', '200px');
-  console.log(svg);
   window.svgboi = svg
 }}/>);
 
@@ -79,7 +77,7 @@ const ActivityHub = ({
     }));
 
   const commenceTimedActivity = () => {
-    if(notificationsAllowed === NOT_ASKED) {
+    if (notificationsAllowed === NOT_ASKED) {
       Notification.requestPermission()
         .then(res => dispetch(receivedNotificationPermission(res)));
     }
@@ -139,16 +137,16 @@ const ActivityHub = ({
             <IconButton color={'inherit'}>
               <GoalSVG/>
             </IconButton><IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton><IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton><IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton><IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton><IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton>
+            <GoalSVG/>
+          </IconButton><IconButton color={'inherit'}>
+            <GoalSVG/>
+          </IconButton><IconButton color={'inherit'}>
+            <GoalSVG/>
+          </IconButton><IconButton color={'inherit'}>
+            <GoalSVG/>
+          </IconButton><IconButton color={'inherit'}>
+            <GoalSVG/>
+          </IconButton>
             <br/>
             <IconButton
               className={classes.cancel}
