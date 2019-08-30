@@ -14,6 +14,14 @@ import {Link} from "react-router-dom";
 import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
+import Goal from '../images/Goal.svg';
+import ReactSVG from 'react-svg';
+
+const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
+  svg.setAttribute('width', '50px');
+  svg.setAttribute('height', '50px');
+}}/>);
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,12 +32,17 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1)
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(20),
+    margin: 'auto 0',
+    paddingLeft: '1rem',
     fontWeight: theme.typography.fontWeightRegular,
   },
   objective: {
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
+  },
+  objectiveSummary: {
+
   },
 }));
 
@@ -68,6 +81,7 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
+                <GoalSVG/>
                 <Typography className={classes.heading}>{objective.valueStatement}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>

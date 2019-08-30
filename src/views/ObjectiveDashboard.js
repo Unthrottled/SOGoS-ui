@@ -26,6 +26,13 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
+import Goal from '../images/Goal.svg';
+import ReactSVG from 'react-svg';
+
+const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
+  svg.setAttribute('width', '100px');
+  svg.setAttribute('height', '100px');
+}}/>);
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
