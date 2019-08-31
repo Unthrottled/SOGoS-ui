@@ -1,4 +1,5 @@
 import {
+  createCompletedObjectiveEvent,
   createCreatedObjectiveEvent,
   createDeletedObjectiveEvent,
   createUpdatedObjectiveEvent,
@@ -17,6 +18,9 @@ export const createdObjective = (objective: Objective) => dispatch =>
 
 export const deletedObjective = (objective: Objective) => dispatch =>
   dispatch(createDeletedObjectiveEvent(objective));
+
+export const completedObjective = (objective: Objective) => dispatch =>
+  dispatch(createCompletedObjectiveEvent(objective));
 
 export const updatedObjective = (objective: Objective) => dispatch =>
   dispatch(createUpdatedObjectiveEvent(objective));

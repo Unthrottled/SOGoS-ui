@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
@@ -17,7 +18,7 @@ import Fab from "@material-ui/core/Fab";
 import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {createdObjective, deletedObjective, updatedObjective} from "../actions/StrategyActions";
+import {completedObjective, createdObjective, deletedObjective, updatedObjective} from "../actions/StrategyActions";
 import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
 import {components} from "./MultiSelectComponents";
@@ -174,6 +175,10 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
     dispatch(deletedObjective(objective));
     history.push('/strategy/objectives/')
   };
+  const completeThatObjectiveYo = () => {
+    dispatch(completedObjective(objective));
+    history.push('/strategy/objectives/')
+  };
 
   const selectStyles = {
     input: base => ({
@@ -186,12 +191,14 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
   };
   const [multi, setMulti] = React.useState(null);
   const [finnaDelete, setFinnaDelete] = useState(false);
+  const [finnaComplete, setFinnaComplete] = useState(false);
 
   const handleChangeMulti = (value) => setMulti(value);
 
   const iconCustomization = objective.iconCustomization;
   const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
   const dismissDeletionWindow = () => setFinnaDelete(false);
+  const dismissCompletionWindow = () => setFinnaComplete(false);
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
@@ -278,6 +285,16 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
             </Fab>
           ) : null
         }
+        {
+          rememberedObjective ? (
+            <Fab color={'primary'}
+                 className={classes.save}
+                 onClick={() => setFinnaComplete(true)}
+            >
+              <CheckIcon/>
+            </Fab>
+          ) : null
+        }
       </div>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
@@ -287,6 +304,15 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
                   onNegativeAction={dismissDeletionWindow}
                   onPositiveAction={wipeObjectiveOffOfTheFaceOfThePlanet}
                   contents={"Woah! Are you sure you want to delete this objective?"}
+      />
+      <PopupModal open={finnaComplete}
+                  negativeActionText={"No, I'm still working"}
+                  positiveActionText={"Yes, I'm done"}
+                  title={"Congratulations!"}
+                  onDismiss={dismissCompletionWindow}
+                  onNegativeAction={dismissCompletionWindow}
+                  onPositiveAction={completeThatObjectiveYo}
+                  contents={"Excellent work! Are ready to complete your objective?"}
       />
     </LoggedInLayout>
   );
