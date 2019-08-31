@@ -30,6 +30,7 @@ import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
 import {SketchPicker} from 'react-color';
 import {objectToArray} from "../miscellanous/Tools";
+import {ColorPicker} from "./ColorPicker";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -222,12 +223,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           background.setAttribute('fill', skyColor.hex);
           background.setAttribute('fill-opacity', skyColor.opacity);
         }}/>
-        <SketchPicker onChangeComplete={(color)=>{
-          setSkyColor({
-            hex: color.hex,
-            opacity: color.rgb.a
-          })
-        }}/>
+        <ColorPicker onSelect={setSkyColor}/>
         <TextField
           className={classes.textField}
           label={'What you do want to accomplish?'}
