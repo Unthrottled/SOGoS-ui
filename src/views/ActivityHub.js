@@ -59,6 +59,12 @@ const useStyles = makeStyles(theme => ({
   cancelIcon: {
     fontSize: '1.25em',
   },
+  bigIcon: {
+    fontSize: "150px",
+    padding: "50px",
+    background: theme.palette.primary.main,
+    borderRadius: '50%',
+  }
 }));
 
 const ActivityHub = ({
@@ -99,9 +105,11 @@ const ActivityHub = ({
   const handleClick = () => setOpen(!open);
 
   const [selectedAction, setSelectedAction] = useState(null);
-  const baseAction = (action) => {
+  const [selectedIcon, setSelectedIcon] = useState(null);
+  const baseAction = (action, icon) => {
     setStrategyOpen(!strategyOpen);
-    setSelectedAction(()=>action)
+    setSelectedAction(() => action);
+    setSelectedIcon(icon)
   };
 
   const closeStrategy = () => {
@@ -109,8 +117,14 @@ const ActivityHub = ({
   };
 
   const actions = [
-    {icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedActivity)},
-    {icon: <StopWatch/>, name: 'Start Task', perform: () => baseAction(commenceActivity)},
+    {
+      icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedActivity,
+        (<Timer className={classes.bigIcon}/>))
+    },
+    {
+      icon: <StopWatch/>, name: 'Start Task', perform: () => baseAction(commenceActivity,
+        (<StopWatch className={classes.bigIcon}/>))
+    },
   ];
 
   return (
@@ -146,8 +160,8 @@ const ActivityHub = ({
               objectToArray(objectives).map(objective => (
                 <IconButton color={'inherit'}
                             onClick={() => {
-                               selectedAction(objective);
-                               closeStrategy();
+                              selectedAction(objective);
+                              closeStrategy();
                             }}>
                   <GoalIcon objective={objective} size={{
                     height: '250px',
@@ -156,6 +170,11 @@ const ActivityHub = ({
                 </IconButton>
               ))
             }
+            <IconButton
+              onClick={closeStrategy}
+              color={'inherit'}>
+              {selectedIcon}
+            </IconButton>
             <br/>
             <IconButton
               className={classes.cancel}
