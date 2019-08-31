@@ -9,7 +9,7 @@ import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
-import {selectConfigurationState, selectTacticalState} from "../reducers";
+import {selectConfigurationState, selectStrategyState, selectTacticalState} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
@@ -17,6 +17,8 @@ import {Cancel} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
 import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
+import {GoalIcon} from "./GoalIcon";
+import {objectToArray} from "../miscellanous/Tools";
 
 const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
   svg.setAttribute('width', '200px');
@@ -62,6 +64,7 @@ const ActivityHub = ({
                        dispatch: dispetch,
                        loadDuration,
                        notificationsAllowed,
+                       objectives,
                      }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -134,19 +137,13 @@ const ActivityHub = ({
       <Grow in={strategyOpen}>
         <div className={classes.container}>
           <div className={classes.contents}>
-            <IconButton color={'inherit'}>
-              <GoalSVG/>
-            </IconButton><IconButton color={'inherit'}>
-            <GoalSVG/>
-          </IconButton><IconButton color={'inherit'}>
-            <GoalSVG/>
-          </IconButton><IconButton color={'inherit'}>
-            <GoalSVG/>
-          </IconButton><IconButton color={'inherit'}>
-            <GoalSVG/>
-          </IconButton><IconButton color={'inherit'}>
-            <GoalSVG/>
-          </IconButton>
+            {
+              objectToArray(objectives).map(objective => (
+                <IconButton color={'inherit'}>
+                  <GoalIcon objective={objective}/>
+                </IconButton>
+              ))
+            }
             <br/>
             <IconButton
               className={classes.cancel}
@@ -165,9 +162,11 @@ const ActivityHub = ({
 const mapStateToProps = state => {
   const {pomodoroSettings: {loadDuration}} = selectTacticalState(state);
   const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
+  const {objectives} = selectStrategyState(state);
   return {
     loadDuration,
-    notificationsAllowed
+    notificationsAllowed,
+    objectives
   }
 };
 
