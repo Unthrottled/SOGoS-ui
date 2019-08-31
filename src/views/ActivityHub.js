@@ -19,6 +19,7 @@ import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
 import {GoalIcon} from "./GoalIcon";
 import {objectToArray} from "../miscellanous/Tools";
+import type {Objective} from "../types/StrategyModels";
 
 const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
   svg.setAttribute('width', '200px');
@@ -70,24 +71,26 @@ const ActivityHub = ({
   const [open, setOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
 
-  const commenceActivity = () =>
+  const commenceActivity = (objective: Objective) =>
     dispetch(startTimedActivity({
-      name: "SOME_ACTIVITY",
+      name: "OBJECTIVE_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.STOP_WATCH,
+      objectiveID: objective.id,
       uuid: uuid(),
       workStartedWomboCombo: new Date().getTime(),
     }));
 
-  const commenceTimedActivity = () => {
+  const commenceTimedActivity = (objective: Objective) => {
     if (notificationsAllowed === NOT_ASKED) {
       Notification.requestPermission()
         .then(res => dispetch(receivedNotificationPermission(res)));
     }
     return dispetch(startTimedActivity({
-      name: "SOME_TIMED_ACTIVITY",
+      name: "TIMED_OBJECTIVE_ACTIVITY",
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
+      objectiveID: objective.id,
       duration: loadDuration,
       uuid: uuid(),
     }));
@@ -95,8 +98,10 @@ const ActivityHub = ({
 
   const handleClick = () => setOpen(!open);
 
-  const baseAction = (callBack) => {
+  const [selectedAction, setSelectedAction] = useState(null);
+  const baseAction = (action) => {
     setStrategyOpen(!strategyOpen);
+    setSelectedAction(()=>action)
   };
 
   const closeStrategy = () => {
@@ -139,7 +144,11 @@ const ActivityHub = ({
           <div className={classes.contents}>
             {
               objectToArray(objectives).map(objective => (
-                <IconButton color={'inherit'}>
+                <IconButton color={'inherit'}
+                            onClick={() => {
+                               selectedAction(objective);
+                               closeStrategy();
+                            }}>
                   <GoalIcon objective={objective} size={{
                     height: '250px',
                     width: '250px',
