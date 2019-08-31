@@ -21,19 +21,9 @@ import {createdObjective, deletedObjective, updatedObjective} from "../actions/S
 import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
 import {components} from "./MultiSelectComponents";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
-import Slide from "@material-ui/core/Slide";
 import {ColorPicker} from "./ColorPicker";
 import {MountainIcon} from "./MountainIcon";
-
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import {PopupModal} from "./PopupModal";
 
 const suggestions = [
   {label: 'Technical'},
@@ -176,9 +166,9 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
     history.push('/strategy/objectives/')
   };
 
-  const discardChanges = () =>{
+  const discardChanges = () => {
     history.push('/strategy/objectives/');
-  }
+  };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
     dispatch(deletedObjective(objective));
@@ -289,29 +279,15 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           ) : null
         }
       </div>
-      <Dialog
-        open={finnaDelete}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={dismissDeletionWindow}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle id="alert-dialog-slide-title">{"Welcome to the Danger Zone!"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Woah! Are you sure you want to delete this objective?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet}>
-            Yes, Get rid of it
-          </Button>
-          <Button onClick={dismissDeletionWindow}>
-            No, I'll keep it
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <PopupModal open={finnaDelete}
+                  negativeActionText={"No, I'll keep it"}
+                  positiveActionText={"Yes, Get rid of it"}
+                  title={"Welcome to the Danger Zone!"}
+                  onDismiss={dismissDeletionWindow}
+                  onNegativeAction={dismissDeletionWindow}
+                  onPositiveAction={wipeObjectiveOffOfTheFaceOfThePlanet}
+                  contents={"Woah! Are you sure you want to delete this objective?"}
+      />
     </LoggedInLayout>
   );
 };
