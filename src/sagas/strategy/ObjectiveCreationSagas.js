@@ -4,7 +4,7 @@ import type {CachedObjective, Objective} from "../../types/StrategyModels";
 import {performDelete, performPost, performPut} from "../APISagas";
 import {createCachedObjectiveEvent, createSyncedObjectiveEvent} from "../../events/StrategyEvents";
 import {selectUserState} from "../../reducers";
-import {CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
+import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
 import {createCachedDataEvent} from "../../events/UserEvents";
 
 export function* objectiveCreationSaga({payload}) {
@@ -19,6 +19,10 @@ export function* objectiveTerminationSaga({payload}) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveDeleteSaga, objectiveDeleteToCached);
 }
 
+export function* objectiveCompletionSaga({payload}) {
+  yield call(objectiveAPIInteractionSaga, payload, objectiveCompleteSaga, objectiveCompleteToCached);
+}
+
 export function* objectiveCreateSaga(objective: Objective) {
   yield call(objectiveUploadSaga, objective, performPost, objectiveUploadToCached);
 }
@@ -29,6 +33,12 @@ export function* objectiveUpdateSaga(objective: Objective) {
 
 export function* objectiveDeleteSaga(objective: Objective) {
   yield call(objectiveUploadSaga, objective, performDelete, objectiveDeleteToCached);
+}
+
+export function* objectiveCompleteSaga(objective: Objective) {
+  yield call(objectiveUploadSaga, objective, performPost, objectiveCompleteToCached,
+    (_objective: Objective) =>
+      `${OBJECTIVES_URL}/${_objective.id}/complete`);
 }
 
 export const objectiveUploadToCached: (Objective) => CachedObjective = objective => ({
@@ -46,9 +56,14 @@ export const objectiveDeleteToCached: (Objective) => CachedObjective = objective
   uploadType: DELETED,
 });
 
+export const objectiveCompleteToCached: (Objective) => CachedObjective = objective => ({
+  objective,
+  uploadType: COMPLETED,
+});
+
 export function* objectiveAPIInteractionSaga(objective: Objective,
                                              objectiveSaga,
-                                             cachedObjectiveFunction: (Objective)=>CachedObjective){
+                                             cachedObjectiveFunction: (Objective)=>CachedObjective) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(objectiveSaga, objective)
@@ -56,11 +71,15 @@ export function* objectiveAPIInteractionSaga(objective: Objective,
     yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective))
   }
 }
+
 export const OBJECTIVES_URL = `/api/strategy/objectives`;
 
-export function* objectiveUploadSaga(objective: Objective, apiAction, cachingFunction: (Objective) => CachedObjective) {
+export function* objectiveUploadSaga(objective: Objective,
+                                     apiAction,
+                                     cachingFunction: (Objective) => CachedObjective,
+                                     urlFunction: (Objective)=> string = __ => OBJECTIVES_URL) {
   try {
-    yield call(apiAction, OBJECTIVES_URL, objective);
+    yield call(apiAction, urlFunction(objective), objective);
     yield put(createSyncedObjectiveEvent(objective))
   } catch (e) {
     yield call(cacheObjectiveSaga, cachingFunction(objective))
