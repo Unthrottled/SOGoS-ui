@@ -8,15 +8,21 @@ import IconButton from "@material-ui/core/IconButton";
 import {Fade} from "@material-ui/core";
 import Popper from "@material-ui/core/Popper";
 
-export const ColorPicker = ({onSelect}) => {
+export const ColorPicker = ({onSelect, onComplete}) => {
   const [open, setOpen] = useState(false);
   const [ancorElement, setAnchorElement] = useState(null);
   const [currentColor, setCurrentColor] = useState({
     hex: '#86a4f3',
     opacity: 1,
   });
+
+  const [savedColor, setSetSavedColor] = useState({
+    hex: '#86a4f3',
+    opacity: 1,
+  });
   const edit = (e) => {
     setAnchorElement(e.currentTarget);
+    setSetSavedColor(currentColor);
     setOpen(true);
   };
   return (
@@ -33,11 +39,13 @@ export const ColorPicker = ({onSelect}) => {
               <SketchPicker
                 color={currentColor.hex}
                 onChangeComplete={(color) => {
-                  setCurrentColor({
+                  const brandNewColour = {
                     hex: color.hex,
                     opacity: color.rgb.a
-                  })
-              }}/>
+                  };
+                  setCurrentColor(brandNewColour);
+                  onSelect(brandNewColour);
+                }}/>
               <IconButton color={'inherit'} onClick={()=>{
                 setOpen(false);
                 onSelect(currentColor)
@@ -46,6 +54,7 @@ export const ColorPicker = ({onSelect}) => {
               </IconButton>
               <IconButton color={'inherit'} onClick={()=>{
                 setOpen(false);
+                onSelect(savedColor)
               }}>
                 <Cancel/>
               </IconButton>
