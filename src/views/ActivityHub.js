@@ -77,38 +77,61 @@ const ActivityHub = ({
   const [open, setOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
 
-  const commenceActivity = (objective: Objective) =>
+  const commenceActivity = (name, supplements) =>
     dispetch(startTimedActivity({
-      name: "OBJECTIVE_ACTIVITY",
+      ...supplements,
+      name,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.STOP_WATCH,
-      objectiveID: objective.id,
       uuid: uuid(),
       workStartedWomboCombo: new Date().getTime(),
     }));
 
-  const commenceTimedActivity = (objective: Objective) => {
+  const commenceTimedActivity = (name, supplements) => {
     if (notificationsAllowed === NOT_ASKED) {
       Notification.requestPermission()
         .then(res => dispetch(receivedNotificationPermission(res)));
     }
     return dispetch(startTimedActivity({
-      name: "TIMED_OBJECTIVE_ACTIVITY",
+      ...supplements,
+      name,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      objectiveID: objective.id,
       duration: loadDuration,
       uuid: uuid(),
     }));
   };
 
+  const commenceTimedObjectiveActivity = (objective: Objective) =>{
+    commenceTimedActivity("TIMED_OBJECTIVE_ACTIVITY", { objectiveID: objective.id})
+  };
+
+  const commenceGenericTimedActivity = () =>{
+    commenceTimedActivity("GENERIC_TIMED_ACTIVITY", {})
+  };
+
+  const commenceObjectiveActivity = (objective: Objective) =>{
+    commenceActivity("OBJECTIVE_ACTIVITY", { objectiveID: objective.id})
+  };
+
+  const commenceGenericActivity = () =>{
+    commenceActivity("GENERIC_ACTIVITY", {})
+  };
+
   const handleClick = () => setOpen(!open);
 
   const [selectedAction, setSelectedAction] = useState(null);
+  const [selectedGenericAction, setSelectedGenericAction] = useState(null);
+  const invokeGenericAction = () =>{
+    selectedGenericAction();
+    closeStrategy();
+  };
+
   const [selectedIcon, setSelectedIcon] = useState(null);
-  const baseAction = (action, icon) => {
+  const baseAction = (action, icon, genericAction) => {
     setStrategyOpen(!strategyOpen);
     setSelectedAction(() => action);
+    setSelectedGenericAction(() => genericAction);
     setSelectedIcon(icon)
   };
 
@@ -118,12 +141,14 @@ const ActivityHub = ({
 
   const actions = [
     {
-      icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedActivity,
-        (<Timer className={classes.bigIcon}/>))
+      icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedObjectiveActivity,
+        (<Timer className={classes.bigIcon}/>),
+        commenceGenericTimedActivity)
     },
     {
-      icon: <StopWatch/>, name: 'Start Task', perform: () => baseAction(commenceActivity,
-        (<StopWatch className={classes.bigIcon}/>))
+      icon: <StopWatch/>, name: 'Start Task', perform: () => baseAction(commenceObjectiveActivity,
+        (<StopWatch className={classes.bigIcon}/>),
+        commenceGenericActivity)
     },
   ];
 
@@ -171,7 +196,7 @@ const ActivityHub = ({
               ))
             }
             <IconButton
-              onClick={closeStrategy}
+              onClick={invokeGenericAction}
               color={'inherit'}>
               {selectedIcon}
             </IconButton>
