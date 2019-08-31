@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
-import Cancel from '@material-ui/icons/Cancel';
+import Stop from '@material-ui/icons/Stop';
 import {selectActivityState} from "../reducers";
 import Stopwatch from "./Stopwatch";
 import {getTime, resumeActivity} from "./ActivityTimeBar";
@@ -72,7 +72,7 @@ const PausedPomodoro = ({
         <IconButton
           className={classes.cancel}
           color={'inherit'} onClick={stopActivity}>
-          <Cancel className={classes.cancelIcon}/>
+          <Stop className={classes.cancelIcon}/>
         </IconButton>
       </div>
     </div>
