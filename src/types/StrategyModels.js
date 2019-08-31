@@ -5,10 +5,20 @@ export type KeyResult = {
   objectiveId: string,
   valueStatement: string,
 }
+export type ColorType = {
+  hex: string,
+  opacity: number
+}
+
+export type IconCustomization = {
+  background: ColorType,
+}
+
 export type Objective = {
   id: string,
   valueStatement: string,
   keyResults: KeyResult[],
+  iconCustomization: IconCustomization
 }
 
 export type CachedObjective = {

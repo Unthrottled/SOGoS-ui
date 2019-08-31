@@ -127,9 +127,16 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
   const theme = useTheme();
   const rememberedObjective = objectives[objectiveId];
 
+  const defaultSky = {
+    hex: '#86a4f3',
+    opacity: 1,
+  };
   const objective: Objective = objectives[objectiveId] ||
     {
       valueStatement: '',
+      iconCustomization: {
+        background: defaultSky
+      },
       keyResults: [
         {
           id: uuid(),
@@ -158,7 +165,10 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
       id: objectiveId,
       valueStatement: objectiveValue,
       antecedenceTime: new Date().getTime(),
-      keyResults
+      keyResults,
+      iconCustomization: {
+        background: skyColor,
+      }
     };
     if(!objectives[objective.id]){
       dispatch(createdObjective(objective));
@@ -187,10 +197,8 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
 
   const handleChangeMulti = (value) => setMulti(value);
 
-  const [skyColor, setSkyColor] = useState({
-    hex: '#86a4f3',
-    opacity: 1,
-  });
+  const iconCustomization = objective.iconCustomization;
+  const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
   const findChild = (node, finder) => {
     const queue = [];
     queue.push(node);
