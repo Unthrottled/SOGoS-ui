@@ -82,7 +82,10 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <GoalIcon objective={objective}/>
+                <GoalIcon objective={objective} size={{
+                  width: '75px',
+                  height: '75px',
+                }}/>
                 <Typography className={classes.heading}>{objective.valueStatement}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>

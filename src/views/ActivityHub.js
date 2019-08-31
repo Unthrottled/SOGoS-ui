@@ -140,7 +140,10 @@ const ActivityHub = ({
             {
               objectToArray(objectives).map(objective => (
                 <IconButton color={'inherit'}>
-                  <GoalIcon objective={objective}/>
+                  <GoalIcon objective={objective} size={{
+                    height: '250px',
+                    width: '250px',
+                  }}/>
                 </IconButton>
               ))
             }

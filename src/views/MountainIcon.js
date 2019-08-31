@@ -22,16 +22,28 @@ const findChild = (node, finder) => {
 };
 
 
+export type SizeType = {
+  width?: string,
+  height?: string,
+}
+
 type Props = {
-  skyColor: ColorType
+  skyColor: ColorType,
+  size?: SizeType,
+};
+
+const defaultSize: SizeType = {
+  height: '100px',
+  width: '100px',
 };
 export const MountainIcon = (props: Props) => {
-  const {skyColor} = props;
+  const {skyColor, size} = props;
+  const usableSize = size || defaultSize;
   return (
     <div>
       <ReactSVG src={Goal} beforeInjection={(svg) => {
-        svg.setAttribute('width', '100px');
-        svg.setAttribute('height', '100px');
+        svg.setAttribute('width', usableSize.width || defaultSize.width);
+        svg.setAttribute('height', usableSize.height || defaultSize.height);
         const background = findChild(svg, (node) => {
           return node.id && node.id.indexOf('path5680') > -1;
         });

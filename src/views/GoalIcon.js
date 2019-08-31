@@ -2,11 +2,13 @@
 import * as React from 'react';
 import type {Objective} from "../types/StrategyModels";
 import {MountainIcon} from "./MountainIcon";
+import type {SizeType} from "./MountainIcon";
 
 type GoalProps = {
-  objective: Objective
+  objective: Objective,
+  size?: SizeType,
 }
-export const GoalIcon = ({objective}: GoalProps) => {
+export const GoalIcon = ({objective, size}: GoalProps) => {
   const iconCustomization = objective.iconCustomization;
   const skyColor = (iconCustomization && iconCustomization.background) || {
     hex: '#86a4f3',
@@ -14,7 +16,7 @@ export const GoalIcon = ({objective}: GoalProps) => {
   };
   return (
     <div>
-      <MountainIcon skyColor={skyColor}/>
+      <MountainIcon skyColor={skyColor} size={size}/>
     </div>
   );
 };
