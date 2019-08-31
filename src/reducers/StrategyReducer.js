@@ -1,6 +1,6 @@
 import {Action} from "redux";
 import {
-  CACHED_OBJECTIVE,
+  CACHED_OBJECTIVE, COMPLETED_OBJECTIVE,
   CREATED_OBJECTIVE,
   DELETED_OBJECTIVE,
   FOUND_OBJECTIVES,
@@ -52,6 +52,7 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       const keyResult = action.payload.keyResults;
       return updateStateWithObjectives(newObjective, keyResult, state);
     case DELETED_OBJECTIVE:
+    case COMPLETED_OBJECTIVE:
       const {payload: deletedObjective} = action;
       const newObjectives = objectToArray(state.objectives).filter(suspiciousObjective =>
         suspiciousObjective.id !== deletedObjective.id);
