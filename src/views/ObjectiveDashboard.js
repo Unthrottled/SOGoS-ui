@@ -26,11 +26,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
-import Goal from '../images/Goal.svg';
-import ReactSVG from 'react-svg';
-import {SketchPicker} from 'react-color';
-import {objectToArray} from "../miscellanous/Tools";
 import {ColorPicker} from "./ColorPicker";
+import {MountainIcon} from "./MountainIcon";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -170,7 +167,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
         background: skyColor,
       }
     };
-    if(!objectives[objective.id]){
+    if (!objectives[objective.id]) {
       dispatch(createdObjective(objective));
     } else {
       dispatch(updatedObjective(objective));
@@ -199,22 +196,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
 
   const iconCustomization = objective.iconCustomization;
   const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
-  const findChild = (node, finder) => {
-    const queue = [];
-    queue.push(node);
-    while (queue.length > 0){
-      const currentNode = queue.pop();
-      if(finder(currentNode)){
-        return currentNode;
-      } else {
-        currentNode._checked = 1;
-        objectToArray(currentNode.childNodes).filter(n => !n._checked)
-          .forEach(n=>queue.unshift(n));
-      }
-    }
-    return undefined;
-  };
-  const dismissDeletionWindow = ()=>setFinnaDelete(false);
+  const dismissDeletionWindow = () => setFinnaDelete(false);
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
@@ -222,15 +204,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
         Dis is objective id {objectiveId}
       </Typography>
       <div className={classes.inputContainer}>
-        <ReactSVG src={Goal} beforeInjection={(svg) => {
-          svg.setAttribute('width', '100px');
-          svg.setAttribute('height', '100px');
-          const background = findChild(svg, (node)=> {
-            return node.id && node.id.indexOf('path5680') > -1;
-          });
-          background.setAttribute('fill', skyColor.hex);
-          background.setAttribute('fill-opacity', skyColor.opacity);
-        }}/>
+        <MountainIcon skyColor={skyColor}/>
         <ColorPicker onSelect={setSkyColor}/>
         <TextField
           className={classes.textField}
@@ -297,7 +271,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           rememberedObjective ? (
             <Fab color={'primary'}
                  className={classes.save}
-                 onClick={()=>setFinnaDelete(true)}
+                 onClick={() => setFinnaDelete(true)}
             >
               <DeleteIcon/>
             </Fab>
@@ -319,10 +293,10 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet} >
+          <Button onClick={wipeObjectiveOffOfTheFaceOfThePlanet}>
             Yes, Get rid of it
           </Button>
-          <Button onClick={dismissDeletionWindow} >
+          <Button onClick={dismissDeletionWindow}>
             No, I'll keep it
           </Button>
         </DialogActions>

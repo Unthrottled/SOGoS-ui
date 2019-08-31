@@ -16,6 +16,7 @@ import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import Goal from '../images/Goal.svg';
 import ReactSVG from 'react-svg';
+import {GoalIcon} from "./GoalIcon";
 
 const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
   svg.setAttribute('width', '50px');
@@ -81,7 +82,7 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <GoalSVG/>
+                <GoalIcon objective={objective}/>
                 <Typography className={classes.heading}>{objective.valueStatement}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
