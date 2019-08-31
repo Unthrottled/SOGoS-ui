@@ -4,6 +4,7 @@ import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
 import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 import Fab from "@material-ui/core/Fab";
 import {Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
@@ -145,6 +146,10 @@ const SettingsBoard = ({
     history.push('/')
   };
 
+  const discardChanges = () => {
+    history.push('/');
+  };
+
   return (
     <LoggedInLayout>
       <div className={classes.container}>
@@ -195,6 +200,12 @@ const SettingsBoard = ({
              onClick={saveSettings}
         >
           <SaveIcon/>
+        </Fab>
+        <Fab color={'primary'}
+             className={classes.save}
+             onClick={discardChanges}
+        >
+          <CancelIcon/>
         </Fab>
       </div>
     </LoggedInLayout>

@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
@@ -175,6 +176,10 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
     history.push('/strategy/objectives/')
   };
 
+  const discardChanges = () =>{
+    history.push('/strategy/objectives/');
+  }
+
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
     dispatch(deletedObjective(objective));
     history.push('/strategy/objectives/')
@@ -266,6 +271,12 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
              onClick={saveObjective}
         >
           <SaveIcon/>
+        </Fab>
+        <Fab color={'primary'}
+             className={classes.save}
+             onClick={discardChanges}
+        >
+          <CancelIcon/>
         </Fab>
         {
           rememberedObjective ? (
