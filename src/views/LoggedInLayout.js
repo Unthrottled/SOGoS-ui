@@ -1,20 +1,12 @@
 import React from "react";
 import MenuAppBar from "./MenuAppBar";
-import ActivityTimer from "./ActivityTimeBar";
 import SessionExpired from "./SessionExpired";
 import Activity from "./ActivityHub";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PausedPomodoro from "./PausedPomodoro";
 
-const pickOne =[
-  'https://acari.io/misc/9eccbbaf0461ecb3c044d582017dd6ee.jpg',
-  'https://static1.e621.net/data/a3/be/a3beb6fd045222a7088e8c886b916ddb.png',
-  'https://acari.io/misc/0ee2189a1b290267840e5cb90ff4a1d8.jpg',
-];
-
 const useStyles = makeStyles(theme =>({
-  sharkTits: {
-    background: `url(${pickOne[Math.floor(Math.random() * (pickOne.length))]}) no-repeat center`,
+  container: {
     height: '100%'
   }
 }));
@@ -22,7 +14,7 @@ const useStyles = makeStyles(theme =>({
 const LoggedInLayout = ({children, ...otherProperties}) => {
   const classes = useStyles();
   return (
-    <div {...otherProperties} className={classes.sharkTits}>
+    <div {...otherProperties} className={classes.container}>
       <MenuAppBar/>
       <Activity/>
       {
