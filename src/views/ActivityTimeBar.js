@@ -39,8 +39,8 @@ export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
   dispetch(startTimedActivity({
     ...previousActivity.content,
     ...(previousActivity.content.duration ? {
-      duration: previousActivity.content.duration +
-        previousActivity.antecedenceTime - currentActivity.antecedenceTime
+      duration: Math.max(previousActivity.content.duration +
+        (previousActivity.antecedenceTime - currentActivity.antecedenceTime), 0)
     } : {}),
     uuid: uuid(),
   }));
@@ -85,6 +85,7 @@ const ActivityTimeBar = ({
 
   const startRecoveryOrResume = () => {
     if (name === RECOVERY) {
+      previousActivity.duration = pomodoroSettings.loadDuration;
       resumeActivity(dispetch, previousActivity, currentActivity);
     } else {
       startRecovery()
