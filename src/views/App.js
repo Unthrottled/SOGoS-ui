@@ -16,6 +16,7 @@ import ObjectivesDashboard from "./ObjectivesDashboard";
 import ObjectiveDashboard from "./ObjectiveDashboard";
 import Settings from "./Settings";
 import ActivityTimer from "./ActivityTimeBar";
+import Dashboard from "./Dashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -66,6 +67,7 @@ function App({dispatch: dispetch, isInitialized}) {
             <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
             <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
             <PrivateRoute path={'/'} exact component={LoggedIn}/>
+            <PrivateRoute path={'/dashboard'} exact component={Dashboard}/>
             <Route component={() => (<h2>404</h2>)}/>
           </Switch>
           <ActivityTimer/>
