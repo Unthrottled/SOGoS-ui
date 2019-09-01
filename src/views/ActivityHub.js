@@ -15,17 +15,10 @@ import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
 import {Cancel} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
-import Goal from '../images/Goal.svg';
-import ReactSVG from 'react-svg';
 import {GoalIcon} from "./GoalIcon";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 
-const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
-  svg.setAttribute('width', '200px');
-  svg.setAttribute('height', '200px');
-  window.svgboi = svg
-}}/>);
 
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
