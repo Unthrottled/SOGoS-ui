@@ -85,8 +85,14 @@ const ActivityTimeBar = ({
 
   const startRecoveryOrResume = () => {
     if (name === RECOVERY) {
-      previousActivity.duration = pomodoroSettings.loadDuration;
-      resumeActivity(dispetch, previousActivity, currentActivity);
+      dispetch(startTimedActivity({
+        ...previousActivity.content,
+        ...(previousActivity.content.duration ? {
+          duration: pomodoroSettings.loadDuration
+        } : {}),
+        uuid: uuid(),
+      }));
+
     } else {
       startRecovery()
     }
