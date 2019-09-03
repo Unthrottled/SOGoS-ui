@@ -1,15 +1,26 @@
+Immediate things need to be done:
+----
+- Data Visualization
+
+
+Nice To Haves
+----
+- On-boarding Experience
+
+
+Edge Cases
+----
+- No internet.
+- Resuming timed load after not using the app.
+- Failure
+
 Things To Test For Real:
 ---
 - Enable manual sync of data.
     - Periodic cache sync.
 
-Immediate things need to be done:
-----
-- Recovery time is janky and does not work.
 
-- Onboarding Experience
-
-TODO
+Things to think about
 -----
 -PWA
     - App does not work without wifi.
@@ -20,34 +31,6 @@ TODO
     - Notify user backend is not working.
     - Post application installation.
     - Data Storage.
-
-- History:
-    - Limit history to range.
-    - Update History when viewed?
-
-- Objectives:
-    - Figure out how to associate key result to activity dedicated to objective.
-    - Update Objectives when viewed?
-    - bulk upload only if has stuff
-    - What do when offline and has not looked at objectives?
-
-- Really long activities freak the UI out.
-
-Other Stuff
------
-
-Needs UX:
-    - Offline Mode
-    - Login
-
-Sad Path
-----
-- Failures:
-    - Token request
-    - Initial Configuration request
-    - Authorization Configuration request failure
-    - History
-        - Activity fetch failure
 
 Maybe:
 ----
@@ -69,8 +52,3 @@ Think pad:
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
-
-
-Tech Debt:
------
-- Less chatty actions (BIG REFACTOR)
