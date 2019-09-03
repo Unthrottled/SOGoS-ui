@@ -177,6 +177,7 @@ const ActivityHub = ({
             {
               objectToArray(objectives).map(objective => (
                 <IconButton color={'inherit'}
+                            key={objective.id}
                             onClick={() => {
                               selectedAction(objective);
                               closeStrategy();
