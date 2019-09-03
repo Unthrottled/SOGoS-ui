@@ -42,7 +42,7 @@ const PausedPomodoro = ({
                           dispatch: dispetch
                         }) => {
   const classes = useStyles();
-  const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
+  const {antecedenceTime, content: {uuid: activityId, timedType}} = currentActivity;
 
   const stopActivity = () => {
     dispetch(startNonTimedActivity({

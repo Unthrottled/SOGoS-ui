@@ -9,7 +9,6 @@ import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
 import {green, purple} from "@material-ui/core/colors";
 import {Route, Switch} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
-import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import StrategicDashboard from "./StrategicDashboard";
 import ObjectivesDashboard from "./ObjectivesDashboard";
@@ -34,17 +33,17 @@ const useStyles = makeStyles(theme => ({
     height: '100%'
   },
   '@global': {
-  '*::-webkit-scrollbar': {
-    width: '0.4em'
-  },
-  '*::-webkit-scrollbar-track': {
-    '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-  },
-  '*::-webkit-scrollbar-thumb': {
-    backgroundColor: purple["500"],
-    outline: '1px solid slategrey'
+    '*::-webkit-scrollbar': {
+      width: '0.4em'
+    },
+    '*::-webkit-scrollbar-track': {
+      '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+    },
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: purple["500"],
+      outline: '1px solid slategrey'
+    }
   }
-}
 }));
 
 function App({dispatch: dispetch, isInitialized}) {

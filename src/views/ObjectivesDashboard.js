@@ -14,15 +14,7 @@ import {Link} from "react-router-dom";
 import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
-import Goal from '../images/Goal.svg';
-import ReactSVG from 'react-svg';
 import {GoalIcon} from "./GoalIcon";
-
-const GoalSVG = () => (<ReactSVG src={Goal} beforeInjection={(svg) => {
-  svg.setAttribute('width', '50px');
-  svg.setAttribute('height', '50px');
-}}/>);
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,9 +34,7 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   },
-  objectiveSummary: {
-
-  },
+  objectiveSummary: {},
 }));
 
 const MAX_OBJECTIVES = 5;

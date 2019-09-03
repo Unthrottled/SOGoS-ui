@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 
-const LoggedIn = ({}) => {
+const LoggedIn = () => {
   return (
     <LoggedInLayout>
     </LoggedInLayout>
