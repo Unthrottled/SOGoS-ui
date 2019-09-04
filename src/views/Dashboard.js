@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {PieFlavored} from "./PieFlavored";
+import {HeatMappo} from "./HeatMappo";
 
 const drawerWidth = 240;
 
@@ -108,6 +109,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
+                <HeatMappo/>
               </Paper>
             </Grid>
             <Grid item xs={12}>
