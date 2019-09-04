@@ -9,7 +9,7 @@ export const HeatMappo = (props: Props) => {
   const [didMountState] = useState('');
   useEffect(() => {
     const selection = select('#heatBoi');
-    var margin = {top: 50, right: 0, bottom: 100, left: 30},
+    var margin = {top: 25, right: 0, bottom: 100, left: 30},
       width = 800 - margin.left - margin.right,
       height = 400 - margin.top - margin.bottom,
       gridSize = Math.floor(width / 24),
@@ -19,13 +19,11 @@ export const HeatMappo = (props: Props) => {
       times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
 
     const pieSVG = selection.append('svg')
-    // .attr("width", width + margin.left + margin.right)
-    // .attr("height", height + margin.top + margin.bottom)
       .attr("viewBox", [0,0, width, height])
       .style("width", '100%')
       .style("height", '100%')
       .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .attr("transform", "translate(" + 0 + "," + margin.top + ")");
 
     const dayLabels = pieSVG.selectAll(".dayLabel")
       .data(days)
