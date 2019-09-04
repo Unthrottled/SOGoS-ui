@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {PieFlavored} from "./PieFlavored";
 import {HeatMappo} from "./HeatMappo";
+import {TimeLine} from "./TimeLine";
 
 const drawerWidth = 240;
 
@@ -112,8 +113,9 @@ const Dashboard = () => {
                 <HeatMappo/>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
+            <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <TimeLine/>
               </Paper>
             </Grid>
           </Grid>
