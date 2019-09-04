@@ -8,11 +8,12 @@ export const PieFlavored = (props: Props) => {
   const [didMountState] = useState('');
   useEffect(() => {
     const selection = select('#pieBoi');
-    const  width = 100;
-    const  height = 100;
+    const  width = 200;
+    const  height = 200;
 
     const pieSVG = selection.append('svg')
-      .attr("viewBox", [-width / 2, -height / 2, width, height]);
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .style("height", '100%');
     const pieFlavored = pie()
       .padAngle(0.005)
       .sort(null)
@@ -22,13 +23,16 @@ export const PieFlavored = (props: Props) => {
     const color = scaleOrdinal()
       .domain(pieData.map(d => d.value))
       .range(quantize(t => interpolateSpectral(t * 0.8 + 0.1), pieData.length).reverse());
+
     const radius = Math.min(width, height) / 2;
-    const arcThing = arc().innerRadius(radius * 0.67).outerRadius(radius - 1);
+    const arcThing = arc()
+      .innerRadius(radius * 0.67)
+      .outerRadius(radius - 1);
 
     pieSVG.selectAll("path")
       .data(arcs)
       .join("path")
-      .attr("fill", d => color(d.data.name))
+      .attr("fill", d => color(d.data.value))
       .attr("d", arcThing)
       .append("title")
       .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
@@ -50,13 +54,11 @@ export const PieFlavored = (props: Props) => {
         .attr("y", "0.7em")
         .attr("fill-opacity", 0.7)
         .text(d => d.data.value.toLocaleString()));
-
-    console.log(selection);
   }, [didMountState]);
 
   return (
     <div style={{
-
+      height: '100%',
     }} id={'pieBoi'}>
 
     </div>

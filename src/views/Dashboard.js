@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    minHeight: 240,
+    height: 240,
   },
 }));
 
