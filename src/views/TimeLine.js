@@ -2,16 +2,36 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
-import {brush, brushX} from 'd3-brush';
-import {pie, scaleOrdinal, quantize, interpolateSpectral, arc,} from 'd3'
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 type Props = {};
+
+const withStyles = makeStyles(theme => ({
+  miniItem0: {
+    fill: 'darksalmon',
+    strokeWidth: 6,
+  },
+
+  miniItem1: {
+    fill: 'darkolivegreen',
+    fillOpacity: .7,
+    strokeWidth: 6,
+  },
+
+  miniItem2: {
+    fill: 'slategray',
+    fillOpacity: .7,
+    strokeWidth: 6,
+  }
+}));
+
 export const TimeLine = (props: Props) => {
   const [didMountState] = useState('');
+  const classes = withStyles();
   useEffect(() => {
     const selection = select('#timeBoi');
     var m = [20, 15, 15, 120], //top right bottom left
-      w = 960 - m[1] - m[3],
+      w = 1500 - m[1] - m[3],
       h = 500 - m[0] - m[2],
       miniHeight = laneLength * 12 + 50,
       mainHeight = h - miniHeight - 50;
@@ -19,153 +39,70 @@ export const TimeLine = (props: Props) => {
     var x = scaleLinear()
       .domain([timeBegin, timeEnd])
       .range([0, w]);
-    var x1 = scaleLinear()
-      .range([0, w]);
     var y1 = scaleLinear()
       .domain([0, laneLength])
-      .range([0, mainHeight]);
-    var y2 = scaleLinear()
-      .domain([0, laneLength])
-      .range([0, miniHeight]);
-
+      .range([0, h]);
 
     const timeSVG = selection.append('svg')
-      .attr("viewBox", [0,0, w, h])
-      .style("height", '100%');
+      .attr("viewBox", [0, 0, w, h])
+      .style("height", '100%')
+      .style("width", '100%')
+    ;
 
-  timeSVG.append("defs").append("clipPath")
+    timeSVG.append("defs").append("clipPath")
       .attr("id", "clip")
       .append("rect")
       .attr("width", w)
       .attr("height", mainHeight);
 
-    var main = timeSVG.append("g")
-      .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
-      .attr("width", w)
-      .attr("height", mainHeight)
-      .attr("class", "main");
-
     var mini = timeSVG.append("g")
-      .attr("transform", "translate(" + m[3] + "," + (mainHeight + m[0]) + ")")
+      .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
       .attr("width", w)
-      .attr("height", miniHeight)
+      .attr("height", h)
       .attr("class", "mini");
 
-//main lanes and texts
-    main.append("g").selectAll(".laneLines")
-      .data(items)
-      .enter().append("line")
-      .attr("x1", m[1])
-      .attr("y1", function(d) {return y1(d.lane);})
-      .attr("x2", w)
-      .attr("y2", function(d) {return y1(d.lane);})
-      .attr("stroke", "lightgray")
-
-    main.append("g").selectAll(".laneText")
-      .data(lanes)
-      .enter().append("text")
-      .text(function(d) {return d;})
-      .attr("x", -m[1])
-      .attr("y", function(d, i) {return y1(i + .5);})
-      .attr("dy", ".5ex")
-      .attr("text-anchor", "end")
-      .attr("class", "laneText");
-
-    //mini lanes and texts
     mini.append("g").selectAll(".laneLines")
       .data(items)
       .enter().append("line")
       .attr("x1", m[1])
-      .attr("y1", function(d) {return y2(d.lane);})
+      .attr("y1", d => y1(d.lane))
       .attr("x2", w)
-      .attr("y2", function(d) {return y2(d.lane);})
+      .attr("y2", d => y1(d.lane))
       .attr("stroke", "lightgray");
 
     mini.append("g").selectAll(".laneText")
       .data(lanes)
       .enter().append("text")
-      .text(function(d) {return d;})
+      .text(d => d)
       .attr("x", -m[1])
-      .attr("y", function(d, i) {return y2(i + .5);})
+      .attr("y", (d, i) => y1(i + .5))
       .attr("dy", ".5ex")
       .attr("text-anchor", "end")
       .attr("class", "laneText");
 
-    var itemRects = main.append("g")
-      .attr("clip-path", "url(#clip)");
-
-    //mini item rects
     mini.append("g").selectAll("miniItems")
       .data(items)
       .enter().append("rect")
-      .attr("class", function(d) {return "miniItem" + d.lane;})
-      .attr("x", function(d) {return x(d.start);})
-      .attr("y", function(d) {return y2(d.lane + .5) - 5;})
-      .attr("width", function(d) {return x(d.end - d.start);})
-      .attr("height", 10);
+      .attr("class", d => classes["miniItem" + d.lane])
+      .attr("x", d => x(d.start))
+      .attr("y", d => y1(d.lane) + 10)
+      .attr("width", d => x(d.end - d.start))
+      .attr("height", () => .8 * y1(1));
 
     //mini labels
     mini.append("g").selectAll(".miniLabels")
       .data(items)
       .enter().append("text")
-      .text(function(d) {return d.id;})
-      .attr("x", function(d) {return x(d.start);})
-      .attr("y", function(d) {return y2(d.lane + .5);})
+      .text(d => d.id)
+      .attr("x", d => x(d.start))
+      .attr("y", d => y1(d.lane + .5))
       .attr("dy", ".5ex");
-
-
-    // var brushThing = brush()
-    //   .x(x)
-    //   .on("brush", display);
-
-    const display = () => {
-      // var rects, labels,
-        // minExtent = brushThing.extent()[0],
-        // maxExtent = brushThing.extent()[1],
-        // visItems = items.filter(function(d) {return d.start < maxExtent && d.end > minExtent;});
-
-      // mini.select(".brush")
-      //   .call(brush.extent([minExtent, maxExtent]));
-
-      // x1.domain([minExtent, maxExtent]);
-
-      // rects = itemRects.selectAll("rect")
-      //   .data(visItems, function(d) { return d.id; })
-      //   .attr("x", function(d) {return x1(d.start);})
-      //   .attr("width", function(d) {return x1(d.end) - x1(d.start);});
-      //
-      // rects.enter().append("rect")
-      //   .attr("class", function(d) {return "miniItem" + d.lane;})
-      //   .attr("x", function(d) {return x1(d.start);})
-      //   .attr("y", function(d) {return y1(d.lane) + 10;})
-      //   .attr("width", function(d) {return x1(d.end) - x1(d.start);})
-      //   .attr("height", function(d) {return .8 * y1(1);});
-      //
-      // rects.exit().remove();
-      //
-      // //update the item labels
-      // labels = itemRects.selectAll("text")
-      //   .data(visItems, function (d) { return d.id; })
-      //   .attr("x", function(d) {return x1(Math.max(d.start, minExtent) + 2);});
-      //
-      // labels.enter().append("text")
-      //   .text(function(d) {return d.id;})
-      //   .attr("x", function(d) {return x1(Math.max(d.start, minExtent));})
-      //   .attr("y", function(d) {return y1(d.lane + .5);})
-      //   .attr("text-anchor", "start");
-      //
-      // labels.exit().remove();
-    };
 
     mini.append("g")
       .attr("class", "x brush")
-      // .call(brushThing)
       .selectAll("rect")
       .attr("y", 1)
       .attr("height", miniHeight - 1);
-
-    display();
-
 
   }, [didMountState]);
 
@@ -179,7 +116,7 @@ export const TimeLine = (props: Props) => {
 };
 
 
-var lanes = ["Chinese","Japanese","Korean"],
+var lanes = ["Chinese", "Japanese", "Korean"],
   laneLength = lanes.length,
   items = [{"lane": 0, "id": "Qin", "start": 5, "end": 205},
     {"lane": 0, "id": "Jin", "start": 265, "end": 420},
@@ -205,5 +142,5 @@ var lanes = ["Chinese","Japanese","Korean"],
     {"lane": 2, "id": "Goryeo", "start": 920, "end": 1380},
     {"lane": 2, "id": "Joseon", "start": 1390, "end": 1890},
     {"lane": 2, "id": "Korean Empire", "start": 1900, "end": 1945}],
-timeBegin = 0,
+  timeBegin = 0,
   timeEnd = 2000;
