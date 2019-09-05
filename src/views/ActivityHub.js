@@ -18,6 +18,7 @@ import {Grow} from "@material-ui/core";
 import {GoalIcon} from "./GoalIcon";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,6 +58,9 @@ const useStyles = makeStyles(theme => ({
     padding: "50px",
     background: theme.palette.primary.main,
     borderRadius: '50%',
+  },
+  goalIcon: {
+    marginTop: theme.spacing(5)
   }
 }));
 
@@ -145,6 +149,13 @@ const ActivityHub = ({
     },
   ];
 
+  const [showToolTips , setShowTooltips] = useState(false);
+  if(strategyOpen) {
+    setTimeout(()=> setShowTooltips(true), 250);
+  } else if (showToolTips) {
+    setShowTooltips(false)
+  }
+
   return (
     <div>
       <SpeedDial
@@ -176,17 +187,20 @@ const ActivityHub = ({
           <div className={classes.contents}>
             {
               objectToArray(objectives).map(objective => (
-                <IconButton color={'inherit'}
-                            key={objective.id}
-                            onClick={() => {
-                              selectedAction(objective);
-                              closeStrategy();
-                            }}>
-                  <GoalIcon objective={objective} size={{
-                    height: '250px',
-                    width: '250px',
-                  }}/>
-                </IconButton>
+                <Tooltip open={showToolTips} placement={'top'} title={objective.valueStatement}>
+                  <IconButton color={'inherit'}
+                              key={objective.id}
+                              className={classes.goalIcon}
+                              onClick={() => {
+                                selectedAction(objective);
+                                closeStrategy();
+                              }}>
+                    <GoalIcon objective={objective} size={{
+                      height: '250px',
+                      width: '250px',
+                    }}/>
+                  </IconButton>
+                </Tooltip>
               ))
             }
             <IconButton
