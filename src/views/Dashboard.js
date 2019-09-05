@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import {PieFlavored} from "./PieFlavored";
 import {HeatMappo} from "./HeatMappo";
 import {TimeLine} from "./TimeLine";
+import {DripDrop} from "./DripDrop";
 
 const drawerWidth = 240;
 
@@ -75,7 +76,6 @@ const useStyles = makeStyles(theme => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: '100vh',
     overflow: 'auto',
   },
   container: {
@@ -104,19 +104,24 @@ const Dashboard = () => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <PieFlavored/>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <HeatMappo/>
-              </Paper>
+              <div>
+                <DripDrop/>
+              </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
+              <div className={fixedHeightPaper}>
+                <PieFlavored/>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={4} lg={3}>
+              <div className={fixedHeightPaper}>
+                <HeatMappo/>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={8} lg={9}>
+              <div className={fixedHeightPaper}>
                 <TimeLine/>
-              </Paper>
+              </div>
             </Grid>
           </Grid>
         </Container>
