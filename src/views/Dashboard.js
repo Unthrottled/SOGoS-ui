@@ -104,8 +104,8 @@ const Dashboard = () => {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-              <div>
-                <DripDrop/>
+              <div className={fixedHeightPaper}>
+                <TimeLine/>
               </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
@@ -113,14 +113,14 @@ const Dashboard = () => {
                 <PieFlavored/>
               </div>
             </Grid>
-            <Grid item xs={12} md={4} lg={3}>
+            <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
                 <HeatMappo/>
               </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
-              <div className={fixedHeightPaper}>
-                <TimeLine/>
+              <div>
+                <DripDrop/>
               </div>
             </Grid>
           </Grid>

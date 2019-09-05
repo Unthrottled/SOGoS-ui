@@ -48,10 +48,6 @@ const MenuNavigation = () => {
       title: 'Settings',
       path: '/settings',
     },
-    {
-      title: 'Dashboard',
-      path: '/dashboard',
-    },
   ];
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
