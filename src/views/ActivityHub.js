@@ -21,6 +21,7 @@ import type {Objective} from "../types/StrategyModels";
 import Tooltip from "@material-ui/core/Tooltip";
 
 
+
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),

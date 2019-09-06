@@ -4,6 +4,9 @@ export const ActivityType = {
   ACTIVE: 'ACTIVE',
   PASSIVE: 'PASSIVE',
 };
+export const ActivityStrategy = {
+  GENERIC: 'GENERIC',
+};
 export const ActivityTimedType = {
   NONE: 'NONE',
   TIMER: 'TIMER',
@@ -32,6 +35,8 @@ export type ActivityRegistryFailure = {
 const getActivityContent = (activity: Activity): ActivityContent => (activity && activity.content) || {};
 export const getTimedType = (activity: Activity) => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 export const getActivityType = (activity: Activity) => getActivityContent(activity).type || ActivityType.PASSIVE;
+export const getActivityName = (activity: Activity) => getActivityContent(activity).name;
+export const getActivityObjectiveID = (activity: Activity) => getActivityContent(activity).objectiveID || ActivityStrategy.GENERIC;
 const getId = (activity: Activity) => getActivityContent(activity).uuid;
 
 export const activitiesEqual = (currentActivity: Activity, activity: Activity) => {

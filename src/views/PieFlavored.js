@@ -1,15 +1,91 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {select} from 'd3-selection';
-import {pie, scaleOrdinal, quantize, interpolateSpectral, arc} from 'd3'
+import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
+import {connect} from "react-redux";
+import {selectHistoryState} from "../reducers";
+import {
+  getActivityName,
+  getActivityObjectiveID,
+  getActivityType,
+  isActivityRecovery,
+  RECOVERY
+} from "../types/ActivityModels";
+import type {Activity} from "../types/ActivityModels";
+import {LOGGED_OFF, LOGGED_ON} from "../events/SecurityEvents";
 
-type Props = {};
-export const PieFlavored = (props: Props) => {
+const getActivityIdentifier = currentActivity => isActivityRecovery(currentActivity) ? RECOVERY : getActivityObjectiveID(currentActivity);
+
+const PieFlavored = ({activityFeed}) => {
   const [didMountState] = useState('');
+  const areDifferent = (currentActivity, nextActivity) => true;
+  const shouldTime = (activity: Activity) => {
+    const activityName = getActivityName(activity);
+    switch (activityName) {
+      case LOGGED_ON:
+      case LOGGED_OFF:
+        return false;
+      default:
+        return true;
+
+    }
+  };
+  const activityProjection = activityFeed.reduceRight((accum, activity)=> {
+    if(accum.trackedTime < 0){
+      accum.trackedTime = activity.antecedenceTime
+    }
+
+    if(shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
+      accum.currentActivity = activity;
+    } else if(areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
+      // Different Type: Create workable chunk and start next activity.
+      const currentActivity = accum.currentActivity;
+      accum.currentActivity = activity;
+      const duration = activity.antecedenceTime - accum.trackedTime ;
+      accum.trackedTime = activity.antecedenceTime;
+      const activityName = getActivityName(currentActivity);
+      const activityIdentifier = getActivityIdentifier(currentActivity);
+      if(!accum.activityBins[activityIdentifier]){
+        accum.activityBins[activityIdentifier] = [];
+      }
+      accum.activityBins[activityIdentifier].push({
+        activityName,
+        activityIdentifier,
+        duration,
+        spawn: currentActivity,
+      });
+    }
+    return accum;
+  }, {
+    trackedTime: -1,
+    currentActivity: {},
+    activityBins: {}
+  });
+
+  const bins = activityProjection.activityBins;
+  const activityIdentifier = getActivityIdentifier(activityProjection.currentActivity);
+  if(!bins[activityIdentifier]){
+    bins[activityIdentifier] = []
+  }
+  const activityName = getActivityName(activityProjection.currentActivity);
+  const meow = new Date().getTime();
+  const duration = meow - activityProjection.trackedTime;
+  bins[activityIdentifier].push({
+    activityName,
+    activityIdentifier,
+    duration,
+    spawn: activityProjection.currentActivity,
+  });
+
+  console.log(bins);
+
+
   useEffect(() => {
+
+
     const selection = select('#pieBoi');
-    const  width = 200;
-    const  height = 200;
+    const width = 200;
+    const height = 200;
 
     const pieSVG = selection.append('svg')
       .attr("viewBox", [-width / 2, -height / 2, width, height])
@@ -97,3 +173,10 @@ const pieData = [
     "color": "hsl(299, 70%, 50%)"
   }
 ];
+const mapStateToProps = state => {
+  const {activityFeed} = selectHistoryState(state);
+  return {
+    activityFeed
+  }
+};
+export default connect(mapStateToProps)(PieFlavored);

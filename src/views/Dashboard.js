@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import {PieFlavored} from "./PieFlavored";
+import PieFlavored from "./PieFlavored";
 import {HeatMappo} from "./HeatMappo";
 import {TimeLine} from "./TimeLine";
 import {DripDrop} from "./DripDrop";
