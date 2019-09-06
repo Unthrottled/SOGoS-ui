@@ -4,15 +4,10 @@ import {select} from 'd3-selection';
 import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
 import {connect} from "react-redux";
 import {selectHistoryState} from "../reducers";
-import {
-  getActivityName,
-  getActivityObjectiveID,
-  getActivityType,
-  isActivityRecovery,
-  RECOVERY
-} from "../types/ActivityModels";
 import type {Activity} from "../types/ActivityModels";
+import {getActivityName, getActivityObjectiveID, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
 import {LOGGED_OFF, LOGGED_ON} from "../events/SecurityEvents";
+import {objectToKeyValueArray} from "../miscellanous/Tools";
 
 const getActivityIdentifier = currentActivity => isActivityRecovery(currentActivity) ? RECOVERY : getActivityObjectiveID(currentActivity);
 
@@ -30,22 +25,22 @@ const PieFlavored = ({activityFeed}) => {
 
     }
   };
-  const activityProjection = activityFeed.reduceRight((accum, activity)=> {
-    if(accum.trackedTime < 0){
+  const activityProjection = activityFeed.reduceRight((accum, activity) => {
+    if (accum.trackedTime < 0) {
       accum.trackedTime = activity.antecedenceTime
     }
 
-    if(shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
+    if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
       accum.currentActivity = activity;
-    } else if(areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
+    } else if (areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
       // Different Type: Create workable chunk and start next activity.
       const currentActivity = accum.currentActivity;
       accum.currentActivity = activity;
-      const duration = activity.antecedenceTime - accum.trackedTime ;
+      const duration = activity.antecedenceTime - accum.trackedTime;
       accum.trackedTime = activity.antecedenceTime;
       const activityName = getActivityName(currentActivity);
       const activityIdentifier = getActivityIdentifier(currentActivity);
-      if(!accum.activityBins[activityIdentifier]){
+      if (!accum.activityBins[activityIdentifier]) {
         accum.activityBins[activityIdentifier] = [];
       }
       accum.activityBins[activityIdentifier].push({
@@ -64,7 +59,7 @@ const PieFlavored = ({activityFeed}) => {
 
   const bins = activityProjection.activityBins;
   const activityIdentifier = getActivityIdentifier(activityProjection.currentActivity);
-  if(!bins[activityIdentifier]){
+  if (!bins[activityIdentifier]) {
     bins[activityIdentifier] = []
   }
   const activityName = getActivityName(activityProjection.currentActivity);
@@ -78,15 +73,21 @@ const PieFlavored = ({activityFeed}) => {
   });
 
   console.log(bins);
-
-
-  useEffect(() => {
-
+  const pieData = objectToKeyValueArray(bins)
+    .reduce((accum, keyValue) => {
+      accum.push({
+        name: keyValue.key,
+        value: keyValue.value.reduce((accum, binBoi) => accum + binBoi.duration, 0)
+      });
+      return accum;
+    }, []);
+  console.log(pieData);
 
     const selection = select('#pieBoi');
     const width = 200;
     const height = 200;
 
+    selection.select('svg').remove();
     const pieSVG = selection.append('svg')
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .style("height", '100%');
@@ -130,7 +131,6 @@ const PieFlavored = ({activityFeed}) => {
         .attr("y", "0.7em")
         .attr("fill-opacity", 0.7)
         .text(d => d.data.value.toLocaleString()));
-  }, [didMountState]);
 
   return (
     <div style={{
@@ -141,38 +141,6 @@ const PieFlavored = ({activityFeed}) => {
   );
 };
 
-const pieData = [
-  {
-    "id": "c",
-    "label": "c",
-    "value": 412,
-    "color": "hsl(30, 70%, 50%)"
-  },
-  {
-    "id": "python",
-    "label": "python",
-    "value": 260,
-    "color": "hsl(148, 70%, 50%)"
-  },
-  {
-    "id": "make",
-    "label": "make",
-    "value": 324,
-    "color": "hsl(353, 70%, 50%)"
-  },
-  {
-    "id": "css",
-    "label": "css",
-    "value": 489,
-    "color": "hsl(135, 70%, 50%)"
-  },
-  {
-    "id": "go",
-    "label": "go",
-    "value": 496,
-    "color": "hsl(299, 70%, 50%)"
-  }
-];
 const mapStateToProps = state => {
   const {activityFeed} = selectHistoryState(state);
   return {
