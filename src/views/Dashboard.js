@@ -1,16 +1,15 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
-import ActivityFeed from "./ActivityFeed";
 import clsx from 'clsx';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import {PieFlavored} from "./PieFlavored";
 import {HeatMappo} from "./HeatMappo";
 import {TimeLine} from "./TimeLine";
 import {DripDrop} from "./DripDrop";
+import {viewedActivityFeed} from "../actions/HistoryActions";
 
 const drawerWidth = 240;
 
@@ -94,9 +93,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Dashboard = () => {
+const Dashboard = ({dispatch}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [didMountState] = useState('');
+  useEffect(() => {
+    dispatch(viewedActivityFeed());
+  }, [didMountState]);
   return (
     <LoggedInLayout>
       <main className={classes.content}>
