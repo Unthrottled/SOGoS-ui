@@ -72,7 +72,6 @@ const PieFlavored = ({activityFeed}) => {
     spawn: activityProjection.currentActivity,
   });
 
-  console.log(bins);
   const pieData = objectToKeyValueArray(bins)
     .reduce((accum, keyValue) => {
       accum.push({
@@ -81,14 +80,15 @@ const PieFlavored = ({activityFeed}) => {
       });
       return accum;
     }, []);
-  console.log(pieData);
 
+  useEffect(()=>{
     const selection = select('#pieBoi');
+    console.log('dis selection', selection)
     const width = 200;
     const height = 200;
 
-    // selection.select('svg').remove();
-    
+    selection.select('svg').remove();
+
     const pieSVG = selection.append('svg')
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .style("height", '100%');
@@ -133,6 +133,7 @@ const PieFlavored = ({activityFeed}) => {
         .attr("y", "0.7em")
         .attr("fill-opacity", 0.7)
         .text(d => d.data.value.toLocaleString()));
+  })
 
   return (
     <div style={{
