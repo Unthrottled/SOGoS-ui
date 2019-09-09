@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {select} from 'd3-selection';
 import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
 import {connect} from "react-redux";

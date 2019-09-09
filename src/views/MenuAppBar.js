@@ -4,7 +4,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -61,7 +60,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
             <Link to={'/'} className={classes.link}>SOGoS</Link>
           </Typography>
           <UpdateApplication/>
-          <InstallApplication />
+          <InstallApplication/>
           <div>
             <IconButton
               aria-owns={open ? 'menu-appbar' : undefined}
@@ -85,10 +84,10 @@ const MenuAppBar = ({dispatch: dispetch}) => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={()=>{
+              <MenuItem onClick={() => {
                 handleClose();
               }}><Link to={'/settings'} className={classes.link}>Settings</Link></MenuItem>
-              <MenuItem onClick={()=>{
+              <MenuItem onClick={() => {
                 handleClose();
                 logUserOut();
               }}>Logout</MenuItem>

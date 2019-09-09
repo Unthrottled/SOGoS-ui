@@ -188,9 +188,11 @@ const ActivityHub = ({
           <div className={classes.contents}>
             {
               objectToArray(objectives).map(objective => (
-                <Tooltip open={showToolTips} placement={'top'} title={objective.valueStatement}>
+                <Tooltip key={`tip_${objective.id}`}
+                         open={showToolTips}
+                         placement={'top'}
+                         title={objective.valueStatement}>
                   <IconButton color={'inherit'}
-                              key={objective.id}
                               className={classes.goalIcon}
                               onClick={() => {
                                 selectedAction(objective);
