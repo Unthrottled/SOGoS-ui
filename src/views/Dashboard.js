@@ -7,7 +7,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import PieFlavored from "./PieFlavored";
 import {HeatMappo} from "./HeatMappo";
-import {TimeLine} from "./TimeLine";
+import TimeLine from "./TimeLine";
 import {DripDrop} from "./DripDrop";
 import {viewedActivityFeed} from "../actions/HistoryActions";
 

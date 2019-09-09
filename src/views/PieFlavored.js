@@ -4,27 +4,12 @@ import {select} from 'd3-selection';
 import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
 import {connect} from "react-redux";
 import {selectHistoryState} from "../reducers";
-import type {Activity} from "../types/ActivityModels";
-import {getActivityName, getActivityObjectiveID, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
-import {LOGGED_OFF, LOGGED_ON} from "../events/SecurityEvents";
+import {getActivityName} from "../types/ActivityModels";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
+import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 
-const getActivityIdentifier = currentActivity => isActivityRecovery(currentActivity) ? RECOVERY : getActivityObjectiveID(currentActivity);
 
 const PieFlavored = ({activityFeed}) => {
-  const [didMountState] = useState('');
-  const areDifferent = (currentActivity, nextActivity) => true;
-  const shouldTime = (activity: Activity) => {
-    const activityName = getActivityName(activity);
-    switch (activityName) {
-      case LOGGED_ON:
-      case LOGGED_OFF:
-        return false;
-      default:
-        return true;
-
-    }
-  };
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
       accum.trackedTime = activity.antecedenceTime
@@ -62,6 +47,7 @@ const PieFlavored = ({activityFeed}) => {
   if (!bins[activityIdentifier]) {
     bins[activityIdentifier] = []
   }
+
   const activityName = getActivityName(activityProjection.currentActivity);
   const meow = new Date().getTime();
   const duration = meow - activityProjection.trackedTime;
@@ -81,9 +67,8 @@ const PieFlavored = ({activityFeed}) => {
       return accum;
     }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const selection = select('#pieBoi');
-    console.log('dis selection', selection)
     const width = 200;
     const height = 200;
 
@@ -133,7 +118,7 @@ const PieFlavored = ({activityFeed}) => {
         .attr("y", "0.7em")
         .attr("fill-opacity", 0.7)
         .text(d => d.data.value.toLocaleString()));
-  })
+  });
 
   return (
     <div style={{
