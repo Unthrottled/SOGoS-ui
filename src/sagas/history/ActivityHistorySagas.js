@@ -7,7 +7,8 @@ export const createHistoryAPIURL = guid => `/api/history/${guid}/feed`;
 export function* archiveFetchSaga({payload: {information: {guid}}}) {
   try {
     const data = yield call(performStreamedGet, createHistoryAPIURL(guid));
-    yield put(createReceivedHistoryEvent(data))
+    const sortedData = data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
+    yield put(createReceivedHistoryEvent(sortedData))
   } catch (e) {
     //todo: handle unable to get history
     console.log('shit broked', e);

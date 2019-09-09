@@ -138,8 +138,7 @@ const TimeLine = ({activityFeed}) => {
         });
         return keyValue.value
       });
-      console.log(items)
-      
+
       mini.append("g").selectAll(".laneLines")
         .data(items)
         .enter().append("line")
