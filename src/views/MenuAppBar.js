@@ -63,20 +63,13 @@ const MenuAppBar = ({dispatch: dispetch}) => {
           <UpdateApplication/>
           <InstallApplication />
           <div>
-            <Link to={'/settings'} className={classes.link}>
-              <IconButton color={'inherit'}>
-                <SettingsIcon/>
-              </IconButton>
-            </Link>
-          </div>
-          <div>
             <IconButton
               aria-owns={open ? 'menu-appbar' : undefined}
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle/>
+              <SettingsIcon/>
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -92,6 +85,9 @@ const MenuAppBar = ({dispatch: dispetch}) => {
               open={open}
               onClose={handleClose}
             >
+              <MenuItem onClick={()=>{
+                handleClose();
+              }}><Link to={'/settings'} className={classes.link}>Settings</Link></MenuItem>
               <MenuItem onClick={()=>{
                 handleClose();
                 logUserOut();

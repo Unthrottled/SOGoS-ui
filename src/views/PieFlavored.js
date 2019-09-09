@@ -87,10 +87,12 @@ const PieFlavored = ({activityFeed}) => {
     const width = 200;
     const height = 200;
 
-    selection.select('svg').remove();
+    // selection.select('svg').remove();
+    
     const pieSVG = selection.append('svg')
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .style("height", '100%');
+
     const pieFlavored = pie()
       .padAngle(0.005)
       .sort(null)
