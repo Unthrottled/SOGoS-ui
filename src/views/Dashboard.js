@@ -108,17 +108,17 @@ const Dashboard = ({dispatch}) => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
+                <HeatMappo/>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={8} lg={9}>
+              <div className={fixedHeightPaper}>
                 <TimeLine/>
               </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
                 <PieFlavored/>
-              </div>
-            </Grid>
-            <Grid item xs={12} md={8} lg={9}>
-              <div className={fixedHeightPaper}>
-                <HeatMappo/>
               </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
