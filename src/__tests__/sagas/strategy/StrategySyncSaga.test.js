@@ -5,6 +5,7 @@ import {BULK_OBJECTIVE_UPLOAD_URL, strategySyncSaga} from "../../../sagas/strate
 import {performPost} from "../../../sagas/APISagas";
 import type {StrategyState} from "../../../reducers/StrategyReducer";
 import {createSyncedObjectivesEvent} from "../../../events/StrategyEvents";
+import {createSyncedDataEvent} from "../../../events/UserEvents";
 
 describe('StrategySyncSaga', () => {
   describe('strategySyncSaga', () => {
@@ -117,6 +118,10 @@ describe('StrategySyncSaga', () => {
       });
       it('should create synced activities event', sagaEffect => {
         expect(sagaEffect).toEqual(put(createSyncedObjectivesEvent('steve')));
+        return {};
+      });
+      it('should create synced data event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createSyncedDataEvent()));
         return {};
       });
       it('should complete', sagaEffect => {

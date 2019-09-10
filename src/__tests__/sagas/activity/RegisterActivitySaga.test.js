@@ -16,6 +16,7 @@ import {isOnline} from "../../../sagas/NetworkSagas";
 import {performPost} from "../../../sagas/APISagas";
 import {selectUserState} from "../../../reducers";
 import type {UserState} from "../../../reducers/UserReducer";
+import {createCachedDataEvent, createSyncedDataEvent} from "../../../events/UserEvents";
 
 
 describe('RegisterActivitySagas', () => {
@@ -108,6 +109,10 @@ describe('RegisterActivitySagas', () => {
           },
           userGUID: 'beans'
         })));
+      });
+      it('should create cached data event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createCachedDataEvent()));
+        return {};
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();

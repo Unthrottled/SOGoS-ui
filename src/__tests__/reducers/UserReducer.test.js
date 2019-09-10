@@ -14,7 +14,7 @@ describe('User Reducer', () => {
         email: '',
         fullName: 'Smitty Werbenjagermangensen',
         guid: '',
-      }
+      },"miscellaneous": {"hasItemsCached": false}
 
     })
   });
@@ -78,7 +78,7 @@ describe('User Reducer', () => {
         email: '',
         fullName: 'Smitty Werbenjagermangensen',
         guid: '',
-      }
+      }, "miscellaneous": {"hasItemsCached": false}
     })
   });
 });

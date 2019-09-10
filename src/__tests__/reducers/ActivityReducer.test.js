@@ -132,7 +132,7 @@ describe('Activity Reducer', () => {
       "shouldTime": false
     });
   });
-  it('should return expected state when given second cached activity', async () => {
+  it('should return expected cache state when given second cached activity', async () => {
     const action = {
       type: SYNCED_ACTIVITIES,
       payload: 'coolio'
@@ -151,7 +151,6 @@ describe('Activity Reducer', () => {
     }, action);
     expect(activityState).toEqual({
       "cache": {
-        "coolio": []
       },
       "currentActivity": "steve",
       "previousActivity": {

@@ -27,7 +27,7 @@ describe('Also Initial Configuration Sagas', () => {
         expect(sagaEffect).toEqual(call(waitForWifi))
       });
       it('should perform the correct request', sagaEffect => {
-        expect(sagaEffect).toEqual(call(performOpenGet, '/configurations'));
+        expect(sagaEffect).toEqual(call(performOpenGet, '/api/configurations'));
         const initialConfig: InitialConfig = {
           callbackURI: 'http://hollaatyaboi.io',
         };
@@ -55,7 +55,7 @@ describe('Also Initial Configuration Sagas', () => {
         expect(sagaEffect).toEqual(call(waitForWifi))
       });
       it('should perform the correct request', sagaEffect => {
-        expect(sagaEffect).toEqual(call(performOpenGet, '/configurations'));
+        expect(sagaEffect).toEqual(call(performOpenGet, '/api/configurations'));
         return new Error(`SHIT'S BROKE, YO.`);
       });
       it('should dispatch the correct event', sagaEffect => {

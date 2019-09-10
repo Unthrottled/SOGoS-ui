@@ -5,6 +5,7 @@ import type {ActivityState} from "../../../reducers/ActivityReducer";
 import {activitySyncSaga, BULK_UPLOAD_URL} from "../../../sagas/activity/ActivitySyncSaga";
 import {performPost} from "../../../sagas/APISagas";
 import {createSyncedActivitiesEvent} from "../../../events/ActivityEvents";
+import {createSyncedDataEvent} from "../../../events/UserEvents";
 
 describe('ActivitySyncSaga', () => {
   describe('activitySyncSaga', () => {
@@ -117,6 +118,10 @@ describe('ActivitySyncSaga', () => {
       });
       it('should create synced activities event', sagaEffect => {
         expect(sagaEffect).toEqual(put(createSyncedActivitiesEvent('steve')));
+        return {};
+      });
+      it('should create synced data event', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createSyncedDataEvent()));
         return {};
       });
       it('should complete', sagaEffect => {

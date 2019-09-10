@@ -10,14 +10,8 @@ describe('StrategySagas', () => {
     describe('when both objective observation and the user has been found', () => {
       const it = sagaHelper(objectiveObservationInitializationSaga());
       it('should wait for both events to happen', sagaEffect => {
-        expect(sagaEffect).toEqual(all({
-          askedForObjectives: take(VIEWED_OBJECTIVES),
-          foundUser: take(RECEIVED_USER),
-        }));
-        return {
-          foundUser: 'steve',
-          askedForObjectives: "Yep, that's history",
-        }
+        expect(sagaEffect).toEqual(take(RECEIVED_USER));
+        return 'steve';
       });
       it('should fetch activity history', sagaEffect => {
         expect(sagaEffect).toEqual(fork(objectiveHistoryFetchSaga, 'steve'));
