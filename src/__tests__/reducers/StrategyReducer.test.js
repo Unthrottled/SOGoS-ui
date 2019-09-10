@@ -620,7 +620,7 @@ describe('Strategy Reducer', () => {
       "shouldTime": false
     });
   });
-  it('should return expected state when given second cached activity', async () => {
+  it('should return expected empty cache state when given second cached activity', async () => {
     const action = {
       type: SYNCED_OBJECTIVES,
       payload: 'coolio'
@@ -639,7 +639,6 @@ describe('Strategy Reducer', () => {
     }, action);
     expect(activityState).toEqual({
       "cache": {
-        "coolio": []
       },
       "currentActivity": "steve",
       "previousActivity": {

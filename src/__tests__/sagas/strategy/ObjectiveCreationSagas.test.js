@@ -21,6 +21,7 @@ import {isOnline} from "../../../sagas/NetworkSagas";
 import {CREATED, DELETED, UPDATED} from "../../../events/ActivityEvents";
 import {selectUserState} from "../../../reducers";
 import type {UserState} from "../../../reducers/UserReducer";
+import {createCachedDataEvent} from "../../../events/UserEvents";
 
 describe('Objective Creation Sagas', () => {
   describe('objectiveCreationSaga', () => {
@@ -245,6 +246,10 @@ describe('Objective Creation Sagas', () => {
             userGUID: 'potato',
             objective: 'best objective',
           })));
+      });
+      it('should dispetch cached item event', sagaEffect => {
+        expect(sagaEffect).toEqual(
+          put(createCachedDataEvent()));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();

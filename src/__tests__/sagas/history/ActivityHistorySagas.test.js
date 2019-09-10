@@ -32,10 +32,10 @@ describe('Activity History Sagas', () => {
       }));
       it('should try to get objectives', sagaEffect => {
         expect(sagaEffect).toEqual(call(performStreamedGet, createHistoryAPIURL('phil')));
-        return 'all the data';
+        return [{antecedenceTime: 2},{antecedenceTime: 3},{antecedenceTime: 1},];
       });
       it('should let errybody know it got stuff', sagaEffect => {
-        expect(sagaEffect).toEqual(put(createReceivedHistoryEvent('all the data')))
+        expect(sagaEffect).toEqual(put(createReceivedHistoryEvent([{antecedenceTime: 3},{antecedenceTime: 2},{antecedenceTime: 1},])))
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
