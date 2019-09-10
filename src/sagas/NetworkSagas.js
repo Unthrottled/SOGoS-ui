@@ -41,8 +41,7 @@ function* offLineSaga() {
       yield put(createLostWifiEvent());
     }
   } catch (e) {
-    //todo: re-establish channel.
-    console.log('shit broke in offline saga', e);
+    yield fork(offLineSaga);
   }
 }
 
