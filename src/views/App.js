@@ -16,6 +16,7 @@ import Settings from "./Settings";
 import ActivityTimer from "./ActivityTimeBar";
 import Dashboard from "./Dashboard";
 import {Tits} from "./Tits";
+import SnackBoi from "./SnackBoi";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
