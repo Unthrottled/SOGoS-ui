@@ -1,6 +1,7 @@
 import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
 import {createFetchedObjectivesEvent} from "../../events/StrategyEvents";
+import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
 export const OBJECTIVES_URL = `/api/strategy/objectives`;
 
@@ -9,8 +10,7 @@ export function* objectiveHistoryFetchSaga() {
     const data = yield call(performStreamedGet, OBJECTIVES_URL);
     yield put(createFetchedObjectivesEvent(data))
   } catch (e) {
-    //todo: handle unable to get objectives
-    console.log('shit broked', e);
+    yield put(createShowWarningNotificationEvent("Unable to get objectives! Try again later, please."))
   }
 }
 
