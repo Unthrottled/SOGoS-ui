@@ -8,6 +8,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from "@material-ui/core/IconButton";
 import {amber} from "@material-ui/core/colors";
 import Snackbar from "@material-ui/core/Snackbar";
+import {selectMiscState} from "../reducers";
+import {createHideNotificationEvent} from "../events/MiscEvents";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -26,17 +28,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type Props = {};
-const SnackBoi = (props: Props) => {
+const SnackBoi = ({message, shown, dispatch}) => {
   const classes = useStyles();
   const onClose = () => {
-
+      dispatch(createHideNotificationEvent())
   };
-
 
   return (
     <div className={classes.container}>
-      <Snackbar open={true} autoHideDuration={1000} anchorOrigin={{
+      <Snackbar open={shown}
+                autoHideDuration={7000}
+                onClose={onClose}
+                anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'left',
       }}>
@@ -45,7 +48,7 @@ const SnackBoi = (props: Props) => {
           message={
             <span className={classes.message}>
             <WarningIcon className={classes.icon}/>
-            Finna bust a nut
+              {message}
           </span>
           }
           action={
@@ -60,9 +63,10 @@ const SnackBoi = (props: Props) => {
 
 
 const mapStateToProps = state => {
-  const {security: {isExpired}} = state;
+  const {notification: {message, shown}} = selectMiscState(state);
   return {
-    isExpired
+    message,
+    shown
   };
 };
 
