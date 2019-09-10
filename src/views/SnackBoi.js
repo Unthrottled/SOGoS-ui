@@ -7,13 +7,11 @@ import WarningIcon from '@material-ui/icons/Warning';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from "@material-ui/core/IconButton";
 import {amber} from "@material-ui/core/colors";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    zIndex: 90000,
-    position: 'absolute',
-    left: theme.spacing(5),
-    bottom: theme.spacing(5),
+
   },
   snackBar: {
     backgroundColor: amber[700],
@@ -28,31 +26,34 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type Props = {
-
-};
+type Props = {};
 const SnackBoi = (props: Props) => {
   const classes = useStyles();
-  const onClose = ()=>{
+  const onClose = () => {
 
   };
 
 
   return (
     <div className={classes.container}>
-      <SnackbarContent
-        className={classes.snackBar}
-        message={
-          <span className={classes.message}>
+      <Snackbar open={true} autoHideDuration={1000} anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}>
+        <SnackbarContent
+          className={classes.snackBar}
+          message={
+            <span className={classes.message}>
             <WarningIcon className={classes.icon}/>
             Finna bust a nut
           </span>
-        }
-        action={
-          [<IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-          <CloseIcon className={classes.icon} />
-        </IconButton>,]}
-      />
+          }
+          action={
+            [<IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
+              <CloseIcon className={classes.icon}/>
+            </IconButton>,]}
+        />
+      </Snackbar>
     </div>
   );
 };
