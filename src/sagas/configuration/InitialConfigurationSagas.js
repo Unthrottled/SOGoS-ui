@@ -15,7 +15,7 @@ import {waitForWifi} from "../NetworkSagas";
 export function* initialConfigurationSaga() {
   try {
     yield call(waitForWifi);
-    const {data} = yield call(performOpenGet, '/configurations'); // todo: api proxy?
+    const {data} = yield call(performOpenGet, '/api/configurations');
     yield put(createReceivedInitialConfigurationsEvent({
       ...data,
       callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':'+window.location.port: ''}`
