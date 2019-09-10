@@ -32,10 +32,6 @@ const useStyles = makeStyles(theme => ({
 const MenuNavigation = () => {
   const topics = [
     {
-      title: 'Strategy',
-      path: '/strategy/',
-    },
-    {
       title: 'Objectives',
       path: '/strategy/objectives/',
     },
