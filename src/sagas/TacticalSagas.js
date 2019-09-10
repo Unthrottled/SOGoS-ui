@@ -13,6 +13,7 @@ import {delayWork} from "./activity/CurrentActivitySaga";
 import {isOnline} from "./NetworkSagas";
 import {selectTacticalState, selectUserState} from "../reducers";
 import {FOUND_WIFI} from "../events/NetworkEvents";
+import {createShowWarningNotificationEvent} from "../events/MiscEvents";
 
 const POMODORO_API = '/api/tactical/pomodoro/settings';
 
@@ -36,7 +37,7 @@ function* settingsSyncSaga() {
       yield put(createSyncedSettingsEvent(guid));
       yield put(createSyncedDataEvent());
     } catch (e) {
-      // todo: handle non-sychage
+      yield put(createShowWarningNotificationEvent("Unable to sync settings! Try again later, please."))
     }
   }
 }
