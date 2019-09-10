@@ -13,6 +13,7 @@ import {objectToKeyValueArray} from "../miscellanous/Tools";
 const withStyles = makeStyles(__ => ({
   miniItem0: {
     fill: 'darksalmon',
+    fillOpacity: .7,
     strokeWidth: 6,
   },
 

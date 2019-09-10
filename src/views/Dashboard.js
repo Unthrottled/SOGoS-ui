@@ -6,9 +6,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import PieFlavored from "./PieFlavored";
-import {HeatMappo} from "./HeatMappo";
 import TimeLine from "./TimeLine";
-import {DripDrop} from "./DripDrop";
 import {viewedActivityFeed} from "../actions/HistoryActions";
 
 const drawerWidth = 240;
@@ -108,22 +106,12 @@ const Dashboard = ({dispatch}) => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
-                <HeatMappo/>
-              </div>
-            </Grid>
-            <Grid item xs={12} md={8} lg={9}>
-              <div className={fixedHeightPaper}>
                 <TimeLine/>
               </div>
             </Grid>
             <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
                 <PieFlavored/>
-              </div>
-            </Grid>
-            <Grid item xs={12} md={8} lg={9}>
-              <div>
-                <DripDrop/>
               </div>
             </Grid>
           </Grid>
