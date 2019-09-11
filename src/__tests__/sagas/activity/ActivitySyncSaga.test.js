@@ -6,6 +6,7 @@ import {activitySyncSaga, BULK_UPLOAD_URL} from "../../../sagas/activity/Activit
 import {performPost} from "../../../sagas/APISagas";
 import {createSyncedActivitiesEvent} from "../../../events/ActivityEvents";
 import {createSyncedDataEvent} from "../../../events/UserEvents";
+import {createShowWarningNotificationEvent} from "../../../events/MiscEvents";
 
 describe('ActivitySyncSaga', () => {
   describe('activitySyncSaga', () => {
@@ -88,6 +89,9 @@ describe('ActivitySyncSaga', () => {
       it('should perform a bulk upload', sagaEffect => {
         expect(sagaEffect).toEqual(call(performPost, BULK_UPLOAD_URL, 'pants'));
         return new Error("Shit's broke yo");
+      });
+      it('should notify user', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createShowWarningNotificationEvent("Unable to sync activity data! Try again later, please.")));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();

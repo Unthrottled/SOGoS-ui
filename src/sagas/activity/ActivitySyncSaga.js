@@ -3,6 +3,7 @@ import {performPost} from "../APISagas";
 import {createSyncedActivitiesEvent} from "../../events/ActivityEvents";
 import {selectActivityState, selectUserState} from "../../reducers";
 import {createSyncedDataEvent} from "../../events/UserEvents";
+import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
 export const BULK_UPLOAD_URL = '/api/activity/bulk';
 export function* activitySyncSaga() {
@@ -15,7 +16,7 @@ export function* activitySyncSaga() {
       yield put(createSyncedActivitiesEvent(guid));
       yield put(createSyncedDataEvent());
     } catch (e) {
-      // todo: handle non-sychage
+      yield put(createShowWarningNotificationEvent("Unable to sync activity data! Try again later, please."))
     }
   }
 }
