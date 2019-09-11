@@ -5,6 +5,8 @@ import oboe from 'oboe';
 
 import {accessTokenWithoutSessionExtensionSaga, accessTokenWithSessionExtensionSaga} from "./security/AccessTokenSagas";
 
+const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
+
 export const createStreamChannel = ({url, method, headers, body}) => {
   return eventChannel(statusObserver => {
     const requestStream = oboe({
@@ -17,14 +19,14 @@ export const createStreamChannel = ({url, method, headers, body}) => {
     }).done((jsonThingo: any) => {
       statusObserver(jsonThingo);
     }).fail((error: any) => {
-      //todo: error handling
       console.log('Error streaming', error);
+      statusObserver(SHITS_BROKE_YO);
       statusObserver(END);
     }).on('end', () => {
       statusObserver(END);
     });
     return () => requestStream.abort();
-  }, buffers.expanding())
+  }, buffers.expanding(100))
 };
 
 export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[] {
@@ -36,13 +38,22 @@ export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[
     body: '',
   });
   const aggregate = [];
+  let error;
   try {
     while (true) {
       const itemChunk = yield take(streamChannel);
-      aggregate.unshift(itemChunk);
+      if(itemChunk !== SHITS_BROKE_YO) {
+        aggregate.unshift(itemChunk);
+      } else {
+        error = itemChunk;
+      }
     }
   } finally {
-    return aggregate; //dis dumb
+    if(!error){
+      return aggregate; //dis dumb
+    } else {
+      throw new Error('yeet');
+    }
   }
 }
 
