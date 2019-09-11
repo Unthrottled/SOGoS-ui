@@ -1,6 +1,7 @@
 import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
 import {createReceivedHistoryEvent} from "../../events/HistoryEvents";
+import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
 export const createHistoryAPIURL = guid => `/api/history/${guid}/feed`;
 
@@ -10,8 +11,7 @@ export function* archiveFetchSaga({payload: {information: {guid}}}) {
     const sortedData = data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
     yield put(createReceivedHistoryEvent(sortedData))
   } catch (e) {
-    //todo: handle unable to get history
-    console.log('shit broked', e);
+    yield put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please."))
   }
 }
 

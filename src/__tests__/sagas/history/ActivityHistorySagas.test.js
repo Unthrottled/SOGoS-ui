@@ -3,6 +3,7 @@ import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../../../sagas/APISagas";
 import {archiveFetchSaga, createHistoryAPIURL} from "../../../sagas/history/ActivityHistorySagas";
 import {createReceivedHistoryEvent} from "../../../events/HistoryEvents";
+import {createShowWarningNotificationEvent} from "../../../events/MiscEvents";
 
 describe('Activity History Sagas', () => {
   describe('archiveFetchSaga', () => {
@@ -17,6 +18,9 @@ describe('Activity History Sagas', () => {
       it('should try to get objectives', sagaEffect => {
         expect(sagaEffect).toEqual(call(performStreamedGet, createHistoryAPIURL('phil')));
         return new Error('shit is broke yo');
+      });
+      it('should notify user', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please.")));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
