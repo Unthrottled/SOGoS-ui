@@ -47,7 +47,6 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
     yield call(constructAuthorizationRequestHandler);
   const authorizationResult: AuthorizationRequestResponse =
     yield call(completeAuthorizationRequest, authorizationHandler);
-  //todo: handle errors
   if (authorizationResult) {
     const {request, response} = authorizationResult;
     const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
@@ -88,7 +87,7 @@ export function* exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthCon
     tokenReception: take(RECEIVED_TOKENS),
     tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
   });
-  // todo: handle token failure at another level
+
   if (tokenReception) {
     yield put(createLoggedOnAction());
   }
