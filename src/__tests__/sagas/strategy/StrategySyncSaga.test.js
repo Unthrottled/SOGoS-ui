@@ -6,6 +6,7 @@ import {performPost} from "../../../sagas/APISagas";
 import type {StrategyState} from "../../../reducers/StrategyReducer";
 import {createSyncedObjectivesEvent} from "../../../events/StrategyEvents";
 import {createSyncedDataEvent} from "../../../events/UserEvents";
+import {createShowWarningNotificationEvent} from "../../../events/MiscEvents";
 
 describe('StrategySyncSaga', () => {
   describe('strategySyncSaga', () => {
@@ -88,6 +89,9 @@ describe('StrategySyncSaga', () => {
       it('should perform a bulk upload', sagaEffect => {
         expect(sagaEffect).toEqual(call(performPost, BULK_OBJECTIVE_UPLOAD_URL, 'pants'));
         return new Error("Shit's broke yo");
+      });
+      it('should display message to user', sagaEffect => {
+        expect(sagaEffect).toEqual(put(createShowWarningNotificationEvent("Unable to sync settings! Try again later, please.")));
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
