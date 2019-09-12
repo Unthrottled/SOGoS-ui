@@ -53,7 +53,7 @@ export const createResumedStartedTimedActivityEvent = (activity: Activity) => ({
   payload: activity
 });
 
-export const createFoundPerviousActivityActivityEvent = (activity: Activity) => ({
+export const createFoundPreviousActivityActivityEvent = (activity: Activity) => ({
   type: FOUND_PREVIOUS_ACTIVITY,
   payload: activity
 });

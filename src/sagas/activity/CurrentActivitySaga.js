@@ -1,6 +1,6 @@
 import {performGetWithoutSessionExtension} from "../APISagas";
 import {
-  createFoundPerviousActivityActivityEvent,
+  createFoundPreviousActivityActivityEvent,
   createResumedStartedNonTimedActivityEvent,
   createResumedStartedTimedActivityEvent
 } from "../../events/ActivityEvents";
@@ -47,7 +47,7 @@ export function* updateCurrentActivity(attempt: number = 10) {
 export function* updatePreviousActivity(attempt: number = 10) {
   try {
     const {data: activity} = yield call(performGetWithoutSessionExtension, PREVIOUS_ACTIVITY_URL);
-    yield put(createFoundPerviousActivityActivityEvent(activity));
+    yield put(createFoundPreviousActivityActivityEvent(activity));
   } catch (error) {
     console.log('aww shit', error);
     yield call(handleError, attempt, updatePreviousActivity)

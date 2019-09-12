@@ -1,6 +1,6 @@
 import {Action} from "redux";
 import {
-  CACHED_ACTIVITY,
+  CACHED_ACTIVITY, FOUND_PREVIOUS_ACTIVITY,
   RESUMED_NON_TIMED_ACTIVITY,
   RESUMED_TIMED_ACTIVITY,
   STARTED_NON_TIMED_ACTIVITY,
@@ -36,7 +36,7 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       return {
         ...state,
         shouldTime: true,
-        previousActivity: state.currentActivity,
+        previousActivity: state.currentActivity.antecedenceTime ? state.currentActivity : state.previousActivity,
         currentActivity: action.payload
       };
     case STARTED_NON_TIMED_ACTIVITY:
@@ -44,8 +44,13 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       return {
         ...state,
         shouldTime: false,
-        previousActivity: state.currentActivity,
+        previousActivity: state.currentActivity.antecedenceTime ? state.currentActivity: state.previousActivity,
         currentActivity: action.payload,
+      };
+    case FOUND_PREVIOUS_ACTIVITY:
+      return {
+        ...state,
+        previousActivity: action.payload,
       };
     case CACHED_ACTIVITY: {
       const {userGUID, cachedActivity} = action.payload;
