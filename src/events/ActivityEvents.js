@@ -4,6 +4,7 @@ import {ActivityTimedType} from "../types/ActivityModels";
 export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
 export const CACHED_ACTIVITY = 'CACHED_ACTIVITY';
 export const SYNCED_ACTIVITIES = 'SYNCED_ACTIVITIES';
+export const FOUND_PREVIOUS_ACTIVITY = 'FOUND_PREVIOUS_ACTIVITY';
 export const STARTED_TIMED_ACTIVITY = 'STARTED_TIMED_ACTIVITY';
 export const STARTED_NON_TIMED_ACTIVITY = 'STARTED_NON_TIMED_ACTIVITY';
 export const RESUMED_TIMED_ACTIVITY = 'RESUMED_TIMED_ACTIVITY';
@@ -49,6 +50,11 @@ export const createStartedNonTimedActivityEvent = (content: ActivityContent) => 
 
 export const createResumedStartedTimedActivityEvent = (activity: Activity) => ({
   type: RESUMED_TIMED_ACTIVITY,
+  payload: activity
+});
+
+export const createFoundPerviousActivityActivityEvent = (activity: Activity) => ({
+  type: FOUND_PREVIOUS_ACTIVITY,
   payload: activity
 });
 
