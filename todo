@@ -1,7 +1,8 @@
 Immediate things need to be done:
 ----
 
-- Previous activity lost when browser window closes or moving to another device.
+- What happens when you are doing timed intervals and you close the app?
+- What happens on logout when doing a timed activity?
 
 
 Nice To Haves
@@ -46,10 +47,6 @@ Maybe:
 
 Think pad:
 -----
-
-- What happens when you are doing timed intervals and you close the app?
-
-- What happens on logout?
 
 - Multi-Device Usage (Dafuq happens and who is in charge?)
 
