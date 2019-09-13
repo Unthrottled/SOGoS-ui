@@ -1,6 +1,8 @@
 Immediate things need to be done:
 ----
 
+- Time Range data selection.
+
 - What happens when you are doing timed intervals and you close the app?
 - What happens on logout when doing a timed activity?
 

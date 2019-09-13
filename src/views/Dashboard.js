@@ -132,7 +132,6 @@ const Dashboard = ({dispatch}) => {
   };
 
   const submitTimeFrame = () => {
-    console.log(from, to);
     dispatch(createAdjustedHistoryTimeFrame(
       new Date(from).valueOf(),
       new Date(to).valueOf()

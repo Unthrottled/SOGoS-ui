@@ -16,7 +16,13 @@ export function* archiveFetchSaga({payload: {information: {guid}}},
   try {
     const data = yield call(performStreamedGet, createHistoryAPIURL(guid, fromDate, toDate));
     const sortedData = data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
-    yield put(createReceivedHistoryEvent(sortedData))
+    yield put(createReceivedHistoryEvent({
+      activities: sortedData,
+      between :{
+        from: fromDate,
+        to: toDate,
+      }
+    }))
   } catch (e) {
     yield put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please."))
   }
