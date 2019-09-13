@@ -11,6 +11,7 @@ import {viewedActivityFeed} from "../actions/HistoryActions";
 import {TextField} from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import Fab from "@material-ui/core/Fab";
+import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 
 const drawerWidth = 240;
 
@@ -132,10 +133,10 @@ const Dashboard = ({dispatch}) => {
 
   const submitTimeFrame = () => {
     console.log(from, to);
-    // dispatch(createAdjustedHistoryTimeframe({
-    //   from,
-    //   to
-    // }));
+    dispatch(createAdjustedHistoryTimeFrame(
+      new Date(from).valueOf(),
+      new Date(to).valueOf()
+    ));
   };
 
   return (

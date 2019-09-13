@@ -26,3 +26,7 @@ export function* historyObservationSaga() {
   //todo: update history  when viewed again?
   yield call(console.log, 'Viewed history again');
 }
+
+export function* historyAdjustmentSaga({payload: {from, to}}) {
+  yield call(console.log, `Bro you adjusted history from ${from} to ${to}`);
+}

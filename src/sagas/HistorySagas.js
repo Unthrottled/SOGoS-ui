@@ -1,7 +1,7 @@
 import {all, fork, take, takeEvery} from 'redux-saga/effects'
-import {VIEWED_HISTORY} from "../events/HistoryEvents";
+import {ADJUSTED_HISTORY, VIEWED_HISTORY} from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
-import {archiveFetchSaga, historyObservationSaga} from "./history/ActivityHistorySagas";
+import {archiveFetchSaga, historyAdjustmentSaga, historyObservationSaga} from "./history/ActivityHistorySagas";
 
 export function* initializeActivityFeedSaga() {
   const {foundUser} = yield all({
@@ -10,6 +10,7 @@ export function* initializeActivityFeedSaga() {
   });
   yield fork(archiveFetchSaga, foundUser);
   yield takeEvery(VIEWED_HISTORY, historyObservationSaga);
+  yield takeEvery(ADJUSTED_HISTORY, historyAdjustmentSaga);
 }
 
 function* listenToActivityEvents() {
