@@ -8,6 +8,9 @@ import Grid from "@material-ui/core/Grid";
 import PieFlavored from "./PieFlavored";
 import TimeLine from "./TimeLine";
 import {viewedActivityFeed} from "../actions/HistoryActions";
+import {TextField} from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
+import Fab from "@material-ui/core/Fab";
 
 const drawerWidth = 240;
 
@@ -88,21 +91,88 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
+  form: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    background: theme.palette.primary.dark,
+    margin: 'auto',
+    padding: theme.spacing(3),
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  }
 }));
 
+
+const SEVEN_DAYS = 604800000;
 
 const Dashboard = ({dispatch}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [didMountState] = useState('');
+
   useEffect(() => {
     dispatch(viewedActivityFeed());
   }, [didMountState]);
+  const meow = new Date();
+
+  const meowISO = meow.toISOString();
+  const meowMinusSevenISO = new Date(meow.getTime() - SEVEN_DAYS).toISOString();
+  const [to, setTo] = useState(meowISO.substring(0, meowISO.lastIndexOf('.')));
+  const [from, setFrom] = useState(meowMinusSevenISO.substring(0, meowMinusSevenISO.lastIndexOf('.')));
+
+  const adjustTo = (value) =>{
+    setTo(value.target.value);
+  };
+
+  const adjustFrom = (value) =>{
+    setFrom(value.target.value);
+  };
+
+  const submitTimeFrame = () => {
+    console.log(from, to);
+    // dispatch(createAdjustedHistoryTimeframe({
+    //   from,
+    //   to
+    // }));
+  };
+
   return (
     <LoggedInLayout>
       <main className={classes.content}>
         <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg" className={classes.container}>
+          <form className={classes.form} noValidate>
+            <TextField
+              id="datetime-local"
+              label="From"
+              type="datetime-local"
+              defaultValue={from}
+              className={classes.textField}
+              onChange={adjustFrom}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              id="datetime-local"
+              label="To"
+              type="datetime-local"
+              defaultValue={to}
+              className={classes.textField}
+              onChange={adjustTo}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <Fab color={'primary'}
+                 className={classes.save}
+                 onClick={submitTimeFrame}
+            >
+              <DoneIcon/>
+            </Fab>
+          </form>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
