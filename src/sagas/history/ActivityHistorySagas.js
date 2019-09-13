@@ -3,11 +3,18 @@ import {performStreamedGet} from "../APISagas";
 import {createReceivedHistoryEvent} from "../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
-export const createHistoryAPIURL = guid => `/api/history/${guid}/feed`;
+export const createHistoryAPIURL = (guid, from, to) =>
+  `/api/history/${guid}/feed?from=${from}&to=${to}`;
 
-export function* archiveFetchSaga({payload: {information: {guid}}}) {
+const meow = new Date();
+const SEVEN_DAYS = 604800000;
+const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
+
+export function* archiveFetchSaga({payload: {information: {guid}}},
+                                  fromDate: number = meowMinusSeven.getTime(),
+                                  toDate: number = meow.getTime()) {
   try {
-    const data = yield call(performStreamedGet, createHistoryAPIURL(guid));
+    const data = yield call(performStreamedGet, createHistoryAPIURL(guid, fromDate, toDate));
     const sortedData = data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
     yield put(createReceivedHistoryEvent(sortedData))
   } catch (e) {
