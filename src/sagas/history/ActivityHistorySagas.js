@@ -1,6 +1,6 @@
 import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
-import {createReceivedHistoryEvent} from "../../events/HistoryEvents";
+import {createInitializedHistoryEvent} from "../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
 export const createHistoryAPIURL = (guid, from, to) =>
@@ -26,7 +26,7 @@ export function* historyInitializationSaga({payload: {information: {guid}}}) {
   const fromDate = meowMinusSeven.getTime();
   const toDate = meow.getTime();
   const initialHistoryFeed = yield call(archiveFetchSaga, guid, fromDate, toDate);
-  yield put(createReceivedHistoryEvent({
+  yield put(createInitializedHistoryEvent({
     activities: initialHistoryFeed,
     between :{
       from: fromDate,

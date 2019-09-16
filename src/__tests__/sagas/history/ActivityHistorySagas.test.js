@@ -2,7 +2,7 @@ import sagaHelper from "redux-saga-testing";
 import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../../../sagas/APISagas";
 import {archiveFetchSaga, createHistoryAPIURL} from "../../../sagas/history/ActivityHistorySagas";
-import {createReceivedHistoryEvent} from "../../../events/HistoryEvents";
+import {createInitializedHistoryEvent} from "../../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../../events/MiscEvents";
 
 describe('Activity History Sagas', () => {
@@ -39,7 +39,7 @@ describe('Activity History Sagas', () => {
         return [{antecedenceTime: 2},{antecedenceTime: 3},{antecedenceTime: 1},];
       });
       it('should let errybody know it got stuff', sagaEffect => {
-        expect(sagaEffect).toEqual(put(createReceivedHistoryEvent([{antecedenceTime: 3},{antecedenceTime: 2},{antecedenceTime: 1},])))
+        expect(sagaEffect).toEqual(put(createInitializedHistoryEvent([{antecedenceTime: 3},{antecedenceTime: 2},{antecedenceTime: 1},])))
       });
       it('should complete', sagaEffect => {
         expect(sagaEffect).toBeUndefined();
