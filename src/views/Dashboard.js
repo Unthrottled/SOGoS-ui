@@ -12,6 +12,7 @@ import {TextField} from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import Fab from "@material-ui/core/Fab";
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
+import {selectHistoryState, selectUserState} from "../reducers";
 
 const drawerWidth = 240;
 
@@ -105,9 +106,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
-const SEVEN_DAYS = 604800000;
-
 const pad = number => {
   if (number < 10) {
     return '0' + number;
@@ -124,7 +122,7 @@ const getDateString = (date: Date) => {
     ':' + pad(date.getSeconds());
 };
 
-const Dashboard = ({dispatch}) => {
+const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [didMountState] = useState('');
@@ -132,25 +130,25 @@ const Dashboard = ({dispatch}) => {
   useEffect(() => {
     dispatch(viewedActivityFeed());
   }, [didMountState]);
-  const meow = new Date();
 
-  const meowISO = getDateString(meow);
-  const meowMinusSevenISO = getDateString(new Date(meow.getTime() - SEVEN_DAYS));
-  const [to, setTo] = useState(meowISO);
-  const [from, setFrom] = useState(meowMinusSevenISO);
+  const meow = getDateString(new Date(selectedTo));
+  const meowMinusSeven = getDateString(new Date(selectedFrom));
 
-  const adjustTo = (value) =>{
+  const [to, setTo] = useState();
+  const [from, setFrom] = useState();
+
+  const adjustTo = (value) => {
     setTo(value.target.value);
   };
 
-  const adjustFrom = (value) =>{
+  const adjustFrom = (value) => {
     setFrom(value.target.value);
   };
 
   const submitTimeFrame = () => {
     dispatch(createAdjustedHistoryTimeFrame(
-      new Date(from).valueOf(),
-      new Date(to).valueOf()
+      new Date(from || selectedFrom).valueOf(),
+      new Date(to || selectedTo).valueOf()
     ));
   };
 
@@ -160,28 +158,32 @@ const Dashboard = ({dispatch}) => {
         <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg" className={classes.container}>
           <form className={classes.form} noValidate>
-            <TextField
-              id="datetime-local"
-              label="From"
-              type="datetime-local"
-              defaultValue={from}
-              className={classes.textField}
-              onChange={adjustFrom}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              id="datetime-local"
-              label="To"
-              type="datetime-local"
-              defaultValue={to}
-              className={classes.textField}
-              onChange={adjustTo}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+            {
+              selectedTo ? (<div>
+                <TextField
+                  id="datetime-local"
+                  label="From"
+                  type="datetime-local"
+                  defaultValue={meowMinusSeven}
+                  className={classes.textField}
+                  onChange={adjustFrom}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  id="datetime-local"
+                  label="To"
+                  type="datetime-local"
+                  defaultValue={meow}
+                  className={classes.textField}
+                  onChange={adjustTo}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </div>) : null
+            }
             <Fab color={'primary'}
                  className={classes.save}
                  onClick={submitTimeFrame}
@@ -208,9 +210,12 @@ const Dashboard = ({dispatch}) => {
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}} = state;
+  const {information: {fullName}} = selectUserState(state);
+  const {selectedHistoryRange: {from, to}} = selectHistoryState(state);
   return {
     fullName,
+    selectedFrom: from,
+    selectedTo: to
   }
 };
 

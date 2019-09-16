@@ -20,9 +20,9 @@ export type ActivityUpdatePayload = {
   full: ActivityReceptionPayload,
 }
 
-export const createInitializedHistoryEvent = (activityReception: ActivityReceptionPayload) => ({
+export const createInitializedHistoryEvent = (activityUpdate: ActivityUpdatePayload) => ({
   type: INITIALIZED_HISTORY,
-  payload: activityReception,
+  payload: activityUpdate,
 });
 
 export const createUpdatedHistoryEvent = (activityUpdate: ActivityUpdatePayload) => ({

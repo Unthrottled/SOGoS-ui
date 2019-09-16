@@ -29,10 +29,19 @@ export function* historyInitializationSaga({payload: {information: {guid}}}) {
   const toDate = meow.valueOf() + 1;
   const initialHistoryFeed = yield call(archiveFetchSaga, guid, fromDate, toDate);
   yield put(createInitializedHistoryEvent({
-    activities: initialHistoryFeed,
-    between :{
-      from: fromDate,
-      to: toDate,
+    selection: {
+      activities: initialHistoryFeed,
+      between :{
+        from: meowMinusSeven.valueOf(),
+        to: meow.valueOf(),
+      }
+    },
+    full : {
+      activities: initialHistoryFeed,
+      between :{
+        from: fromDate,
+        to: toDate,
+      }
     }
   }))
 }
