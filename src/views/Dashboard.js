@@ -108,6 +108,22 @@ const useStyles = makeStyles(theme => ({
 
 const SEVEN_DAYS = 604800000;
 
+const pad = number => {
+  if (number < 10) {
+    return '0' + number;
+  }
+  return number;
+};
+
+const getDateString = (date: Date) => {
+  return date.getFullYear() +
+    '-' + pad(date.getMonth() + 1) +
+    '-' + pad(date.getDate()) +
+    'T' + pad(date.getHours()) +
+    ':' + pad(date.getMinutes()) +
+    ':' + pad(date.getSeconds());
+};
+
 const Dashboard = ({dispatch}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -118,10 +134,10 @@ const Dashboard = ({dispatch}) => {
   }, [didMountState]);
   const meow = new Date();
 
-  const meowISO = meow.toISOString();
-  const meowMinusSevenISO = new Date(meow.getTime() - SEVEN_DAYS).toISOString();
-  const [to, setTo] = useState(meowISO.substring(0, meowISO.lastIndexOf('.')));
-  const [from, setFrom] = useState(meowMinusSevenISO.substring(0, meowMinusSevenISO.lastIndexOf('.')));
+  const meowISO = getDateString(meow);
+  const meowMinusSevenISO = getDateString(new Date(meow.getTime() - SEVEN_DAYS));
+  const [to, setTo] = useState(meowISO);
+  const [from, setFrom] = useState(meowMinusSevenISO);
 
   const adjustTo = (value) =>{
     setTo(value.target.value);
