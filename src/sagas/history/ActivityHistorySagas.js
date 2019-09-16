@@ -4,6 +4,8 @@ import {createInitializedHistoryEvent} from "../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {selectHistoryState} from "../../reducers";
 import type {HistoryState} from "../../reducers/HistoryReducer";
+import {binarySearch} from "../../miscellanous/Tools";
+import type {Activity} from "../../types/ActivityModels";
 
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
@@ -55,9 +57,14 @@ export function* historyAdjustmentSaga({payload: {from, to}}) {
   yield call(console.log, `Bro you adjusted history from ${from} to ${to}`);
   const historyState : HistoryState = yield select(selectHistoryState);
   const fullHistoryRange = historyState.fullHistoryRange;
-  console.log(fullHistoryRange.to - to);
   if(from > fullHistoryRange.from && to < fullHistoryRange.to){
-    console.log("I don't have to make a call to get shit");
+    const newFrom = Math.abs(binarySearch(historyState.fullFeed, (activity: Activity)=> {
+      return from - activity.antecedenceTime
+    }));
+    const newTo = Math.abs(binarySearch(historyState.fullFeed, (activity: Activity)=> {
+      return to - activity.antecedenceTime
+    }));
+    console.log("I found dis", newFrom, newTo, historyState.fullFeed.length);
   } else {
     console.log("Great now I actually have to do something");
   }
