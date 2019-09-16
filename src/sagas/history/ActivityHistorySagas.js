@@ -10,22 +10,29 @@ const meow = new Date();
 const SEVEN_DAYS = 604800000;
 const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
 
-export function* archiveFetchSaga({payload: {information: {guid}}},
-                                  fromDate: number = meowMinusSeven.getTime(),
-                                  toDate: number = meow.getTime()) {
+export function* archiveFetchSaga(guid,
+                                  fromDate: number,
+                                  toDate: number) {
   try {
     const data = yield call(performStreamedGet, createHistoryAPIURL(guid, fromDate, toDate));
-    const sortedData = data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
-    yield put(createReceivedHistoryEvent({
-      activities: sortedData,
-      between :{
-        from: fromDate,
-        to: toDate,
-      }
-    }))
+    return data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
   } catch (e) {
     yield put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please."))
+    return [];
   }
+}
+
+export function* historyInitializationSaga({payload: {information: {guid}}}) {
+  const fromDate = meowMinusSeven.getTime();
+  const toDate = meow.getTime();
+  const initialHistoryFeed = yield call(archiveFetchSaga, guid, fromDate, toDate);
+  yield put(createReceivedHistoryEvent({
+    activities: initialHistoryFeed,
+    between :{
+      from: fromDate,
+      to: toDate,
+    }
+  }))
 }
 
 export function* historyObservationSaga() {
