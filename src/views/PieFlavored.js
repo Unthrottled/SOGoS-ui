@@ -9,7 +9,7 @@ import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 
 
-const PieFlavored = ({activityFeed}) => {
+const PieFlavored = ({activityFeed, relativeToTime}) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
       accum.trackedTime = activity.antecedenceTime
@@ -50,7 +50,8 @@ const PieFlavored = ({activityFeed}) => {
 
   const activityName = getActivityName(activityProjection.currentActivity);
   const meow = new Date().getTime();
-  const duration = meow - activityProjection.trackedTime;
+  const capTime = meow < relativeToTime ? meow : relativeToTime;
+  const duration = capTime - activityProjection.trackedTime;
   bins[activityIdentifier].push({
     activityName,
     activityIdentifier,
@@ -132,9 +133,10 @@ const PieFlavored = ({activityFeed}) => {
 };
 
 const mapStateToProps = state => {
-  const {activityFeed} = selectHistoryState(state);
+  const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
   return {
-    activityFeed
+    activityFeed,
+    relativeToTime: to,
   }
 };
 export default connect(mapStateToProps)(PieFlavored);
