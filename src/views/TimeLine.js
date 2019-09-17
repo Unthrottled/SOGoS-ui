@@ -35,7 +35,7 @@ const withStyles = makeStyles(__ => ({
   }
 }));
 
-const TimeLine = ({activityFeed}) => {
+const TimeLine = ({activityFeed, relativeToTime}) => {
   const classes = withStyles();
 
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
@@ -74,11 +74,12 @@ const TimeLine = ({activityFeed}) => {
     bins[activityIdentifier] = []
   }
   const activityName = getActivityName(activityProjection.currentActivity);
+  const meow = new Date().valueOf();
   bins[activityIdentifier].push({
     activityName,
     activityIdentifier,
     start: activityProjection.currentActivity.antecedenceTime,
-    stop: new Date().getTime(),
+    stop: relativeToTime > meow ? meow : relativeToTime,
     spawn: {
       start: activityProjection.currentActivity.antecedenceTime,
       stop: "Meow"
@@ -100,8 +101,8 @@ const TimeLine = ({activityFeed}) => {
         mainHeight = h - miniHeight - 50;
 
       const timeBegin = activityFeed[activityFeed.length - 1].antecedenceTime;
-      const timeEnd = activityFeed[0].antecedenceTime;
-      
+      const timeEnd = relativeToTime;
+
       var x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
         .range([0, w]);
@@ -194,9 +195,10 @@ const TimeLine = ({activityFeed}) => {
 };
 
 const mapStateToProps = state => {
-  const {activityFeed} = selectHistoryState(state);
+  const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
   return {
-    activityFeed
+    activityFeed,
+    relativeToTime: to,
   }
 };
 export default connect(mapStateToProps)(TimeLine);
