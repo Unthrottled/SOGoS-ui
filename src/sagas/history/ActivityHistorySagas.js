@@ -1,6 +1,6 @@
 import {call, put, select} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
-import {createInitializedHistoryEvent} from "../../events/HistoryEvents";
+import {createInitializedHistoryEvent, createUpdatedHistorySelectionEvent} from "../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {selectHistoryState} from "../../reducers";
 import type {HistoryState} from "../../reducers/HistoryReducer";
@@ -54,17 +54,24 @@ export function* historyObservationSaga() {
 }
 
 export function* historyAdjustmentSaga({payload: {from, to}}) {
-  yield call(console.log, `Bro you adjusted history from ${from} to ${to}`);
   const historyState : HistoryState = yield select(selectHistoryState);
   const fullHistoryRange = historyState.fullHistoryRange;
   if(from > fullHistoryRange.from && to < fullHistoryRange.to){
-    const newFrom = Math.abs(binarySearch(historyState.fullFeed, (activity: Activity)=> {
+    const fullFeed = historyState.fullFeed;
+    const newFrom = Math.abs(binarySearch(fullFeed, (activity: Activity)=> {
       return from - activity.antecedenceTime
     }));
-    const newTo = Math.abs(binarySearch(historyState.fullFeed, (activity: Activity)=> {
+    const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
+    const newTo = Math.abs(binarySearch(fullFeed, (activity: Activity)=> {
       return to - activity.antecedenceTime
     }));
-    console.log("I found dis", newFrom, newTo, historyState.fullFeed.length);
+    yield put(createUpdatedHistorySelectionEvent({
+      between: {
+        from,
+        to
+      },
+      activities: fullFeed.slice(newTo, safeFrom)
+    }))
   } else {
     console.log("Great now I actually have to do something");
   }
