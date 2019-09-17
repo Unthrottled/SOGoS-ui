@@ -1,19 +1,20 @@
 Immediate things need to be done:
 ----
+- Auto sync needs to be turned off.
+- Time tasks and associate tasks with objectives.
+- Make Pretty.
 
-- Timeline should cut off to the selected to range and not when the activity ended (could be really long)
-
-- What happens when you are doing timed intervals and you close the app?
-- What happens on logout when doing a timed activity?
-
-
-Nice To Haves
-----
+Mile-Stones after MVP:
+-----
+- Sharable dashboard.
+    - auto-sync
 - On-boarding Experience
 
 
 Edge Cases
 ----
+- What happens when you are doing timed intervals and you close the app?
+- What happens on logout when doing a timed activity?
 - No internet.
 - Resuming timed load after not using the app.
 - Failure
