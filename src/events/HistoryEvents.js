@@ -2,6 +2,7 @@ import type {Activity} from "../types/ActivityModels";
 import type {DateRange} from "../reducers/HistoryReducer";
 
 export const UPDATED_HISTORY_SELECTION: 'UPDATED_HISTORY_SELECTION' = 'UPDATED_HISTORY_SELECTION';
+export const UPDATED_FULL_FEED: 'UPDATED_FULL_FEED' = 'UPDATED_FULL_FEED';
 export const INITIALIZED_HISTORY: 'INITIALIZED_HISTORY' = 'INITIALIZED_HISTORY';
 export const UPDATED_HISTORY: 'UPDATED_HISTORY' = 'UPDATED_HISTORY';
 export const VIEWED_HISTORY: 'VIEWED_HISTORY' = 'VIEWED_HISTORY';
@@ -33,6 +34,11 @@ export const createUpdatedHistoryEvent = (activityUpdate: ActivityUpdatePayload)
 
 export const createUpdatedHistorySelectionEvent = (activityUpdate: ActivityReceptionPayload) => ({
   type: UPDATED_HISTORY_SELECTION,
+  payload: activityUpdate,
+});
+
+export const createUpdatedFullFeedEvent = (activityUpdate: ActivityReceptionPayload) => ({
+  type: UPDATED_FULL_FEED,
   payload: activityUpdate,
 });
 

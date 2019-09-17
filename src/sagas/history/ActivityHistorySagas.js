@@ -1,11 +1,16 @@
 import {call, put, select} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
-import {createInitializedHistoryEvent, createUpdatedHistorySelectionEvent} from "../../events/HistoryEvents";
+import {
+  createInitializedHistoryEvent,
+  createUpdatedFullFeedEvent,
+  createUpdatedHistorySelectionEvent
+} from "../../events/HistoryEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
-import {selectHistoryState} from "../../reducers";
+import {selectHistoryState, selectUserState} from "../../reducers";
 import type {HistoryState} from "../../reducers/HistoryReducer";
 import {binarySearch} from "../../miscellanous/Tools";
 import type {Activity} from "../../types/ActivityModels";
+import type {UserState} from "../../reducers/UserReducer";
 
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
@@ -21,7 +26,7 @@ export function* archiveFetchSaga(guid,
     const data = yield call(performStreamedGet, createHistoryAPIURL(guid, fromDate, toDate));
     return data.sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
   } catch (e) {
-    yield put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please."))
+    yield put(createShowWarningNotificationEvent("Unable to get activity history! Try again later, please."));
     return [];
   }
 }
@@ -33,14 +38,14 @@ export function* historyInitializationSaga({payload: {information: {guid}}}) {
   yield put(createInitializedHistoryEvent({
     selection: {
       activities: initialHistoryFeed,
-      between :{
+      between: {
         from: meowMinusSeven.valueOf(),
         to: meow.valueOf(),
       }
     },
-    full : {
+    full: {
       activities: initialHistoryFeed,
-      between :{
+      between: {
         from: fromDate,
         to: toDate,
       }
@@ -54,26 +59,75 @@ export function* historyObservationSaga() {
 }
 
 export function* historyAdjustmentSaga({payload: {from, to}}) {
-  const historyState : HistoryState = yield select(selectHistoryState);
+  const fullHistoryFeed = yield call(getOrUpdateFullFeed, to, from);
+  yield call(updateSelection, fullHistoryFeed, to, from);
+}
+
+export function* getOrUpdateFullFeed(to: number, from: number): Activity[] {
+  const historyState: HistoryState = yield select(selectHistoryState);
   const fullHistoryRange = historyState.fullHistoryRange;
-  if(from > fullHistoryRange.from && to < fullHistoryRange.to){
-    const fullFeed = historyState.fullFeed;
-    const newFrom = Math.abs(binarySearch(fullFeed, (activity: Activity)=> {
-      return from - activity.antecedenceTime
-    }));
-    const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
-    const newTo = Math.abs(binarySearch(fullFeed, (activity: Activity)=> {
-      return to - activity.antecedenceTime
-    }));
-    yield put(createUpdatedHistorySelectionEvent({
-      between: {
-        from,
-        to
-      },
-      activities: fullFeed.slice(newTo, safeFrom)
-    }))
+  if (from > fullHistoryRange.from && to < fullHistoryRange.to) {
+    return historyState.fullFeed;
   } else {
     console.log("Great now I actually have to do something");
+    return yield call(updateFullFeed, to, from);
   }
+}
 
+export function* updateFullFeed(to: number, from: number): Activity[] {
+  const historyState: HistoryState = yield select(selectHistoryState);
+  const userState: UserState = yield select(selectUserState);
+  const fullHistoryRange = historyState.fullHistoryRange;
+  if(from < fullHistoryRange.from && to <= fullHistoryRange.to){
+    const olderHistory = yield call(archiveFetchSaga, userState.information.guid, from, fullHistoryRange.from);
+    const updatedHistory = historyState.fullFeed.concat(olderHistory);
+    yield put(createUpdatedFullFeedEvent({
+      activities: updatedHistory,
+      between: {
+        from,
+        to: fullHistoryRange.to,
+      }
+    }));
+    return updatedHistory;
+  } else if (from >= fullHistoryRange.from && to > fullHistoryRange.to){
+    const newerHistory = yield call(archiveFetchSaga, userState.information.guid, fullHistoryRange.to, to);
+    const updatedHistory = newerHistory.concat(historyState.fullFeed);
+    yield put(createUpdatedFullFeedEvent({
+      activities: updatedHistory,
+      between: {
+        from: fullHistoryRange.from,
+        to,
+      }
+    }));
+    return updatedHistory;
+  } else {
+    const olderHistory = yield call(archiveFetchSaga, userState.information.guid, from, fullHistoryRange.from);
+    const newerHistory = yield call(archiveFetchSaga, userState.information.guid, fullHistoryRange.to, to);
+    const updatedHistory = newerHistory.concat(historyState.fullFeed).concat(olderHistory);
+    yield put(createUpdatedFullFeedEvent({
+      activities: updatedHistory,
+      between: {
+        from,
+        to,
+      }
+    }));
+    return updatedHistory;
+  }
+}
+
+export function* updateSelection(fullFeed: Activity[], to: number, from: number) {
+  const newFrom = Math.abs(binarySearch(fullFeed, (activity: Activity) => {
+    return from - activity.antecedenceTime
+  }));
+  const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
+  const newTo = Math.abs(binarySearch(fullFeed, (activity: Activity) => {
+    return to - activity.antecedenceTime
+  }));
+  yield put(createUpdatedHistorySelectionEvent({
+    between: {
+      from,
+      to
+    },
+    activities: fullFeed.slice(newTo, safeFrom)
+  }))
 }
