@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
+import {Link} from "react-router-dom";
 
 const StrategicDashboard = ({fullName}) => {
   return (
@@ -10,6 +11,7 @@ const StrategicDashboard = ({fullName}) => {
       <Typography>
         Time to stratergize.
       </Typography>
+      <Link to={'./objectives/'}>View Objectives</Link>
     </LoggedInLayout>
   );
 };
