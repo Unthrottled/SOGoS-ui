@@ -69,7 +69,6 @@ export function* getOrUpdateFullFeed(to: number, from: number): Activity[] {
   if (from > fullHistoryRange.from && to < fullHistoryRange.to) {
     return historyState.fullFeed;
   } else {
-    console.log("Great now I actually have to do something");
     return yield call(updateFullFeed, to, from);
   }
 }
