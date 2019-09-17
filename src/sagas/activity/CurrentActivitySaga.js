@@ -80,8 +80,9 @@ export function* delayWork() {
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
   yield call(updatePreviousActivity);
-  while (true) {
+  // todo: bring back when dashboards are sharable.
+  // while (true) {
     yield call(updateCurrentActivity);
-    yield call(delayWork);
-  }
+  //   yield call(delayWork);
+  // }
 }
