@@ -213,9 +213,9 @@ const SettingsBoard = ({
 };
 
 const mapStateToProps = state => {
-  const {pomodoroSettings} = selectTacticalState(state);
+  const {pomodoro: {settings}} = selectTacticalState(state);
   return {
-    pomodoroSettings,
+    pomodoroSettings: settings,
   }
 };
 

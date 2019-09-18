@@ -11,10 +11,10 @@ export const UPDATED_ACTIVITY: 'UPDATED_ACTIVITY' = 'UPDATED_ACTIVITY';
 export const DELETED_ACTIVITY: 'DELETED_ACTIVITY' = 'DELETED_ACTIVITY';
 export const HID_ACTIVITY: 'HID_ACTIVITY' = 'HID_ACTIVITY';
 export const FOUND_ACTIVITIES: 'FOUND_ACTIVITIES' = 'FOUND_ACTIVITIES';
-export const CACHED_ACTIVITY: 'CACHED_ACTIVITY' = 'CACHED_ACTIVITY';
+export const CACHED_TACTICAL_ACTIVITY: 'CACHED_TACTICAL_ACTIVITY' = 'CACHED_TACTICAL_ACTIVITY';
 export const VIEWED_ACTIVITIES: 'VIEWED_ACTIVITIES' = 'VIEWED_ACTIVITIES';
-export const SYNCED_ACTIVITIES: 'SYNCED_ACTIVITIES' = 'SYNCED_ACTIVITIES';
-export const SYNCED_ACTIVITY: 'SYNCED_ACTIVITY' = 'SYNCED_ACTIVITY';
+export const SYNCED_TACTICAL_ACTIVITIES: 'SYNCED_TACTICAL_ACTIVITIES' = 'SYNCED_TACTICAL_ACTIVITIES';
+export const SYNCED_TACTICAL_ACTIVITY: 'SYNCED_TACTICAL_ACTIVITY' = 'SYNCED_TACTICAL_ACTIVITY';
 
 export const UPDATED_POMODORO_SETTINGS: 'UPDATED_POMODORO_SETTINGS' = 'UPDATED_POMODORO_SETTINGS';
 export const CACHED_SETTINGS: 'CACHED_SETTINGS' = 'CACHED_SETTINGS';
@@ -62,7 +62,7 @@ export const createViewedActivitesEvent = () => ({
 });
 
 export const createCachedActivityEvent = (objectiveCacheEvent: ActivityCacheEvent) => ({
-  type: CACHED_ACTIVITY,
+  type: CACHED_TACTICAL_ACTIVITY,
   payload: objectiveCacheEvent
 });
 
@@ -72,12 +72,12 @@ export const createFetchedActivitesEvent = (objectiveHistory: TacticalActivity[]
 });
 
 export const createSyncedActivityEvent = (objective: TacticalActivity) => ({
-  type: SYNCED_ACTIVITY,
+  type: SYNCED_TACTICAL_ACTIVITY,
   payload: objective,
 });
 
 export const createSyncedActivitesEvent = (userGUID: string) => ({
-  type: SYNCED_ACTIVITIES,
+  type: SYNCED_TACTICAL_ACTIVITIES,
   payload: userGUID,
 });
 

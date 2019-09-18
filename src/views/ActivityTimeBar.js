@@ -139,12 +139,12 @@ const ActivityTimeBar = ({
 
 const mapStateToProps = state => {
   const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
-  const {pomodoroSettings} = selectTacticalState(state);
+  const {pomodoro: {settings}} = selectTacticalState(state);
   return {
     shouldTime,
     currentActivity,
     previousActivity,
-    pomodoroSettings
+    pomodoroSettings: settings
   }
 };
 
