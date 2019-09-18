@@ -7,13 +7,15 @@ import {
   createRegisteredPomodoroSettingsEvent,
   createSyncedSettingsEvent,
   createUpdatedPomodoroSettingsEvent,
-  UPDATED_POMODORO_SETTINGS, VIEWED_SETTINGS
+  UPDATED_POMODORO_SETTINGS,
+  VIEWED_SETTINGS
 } from "../events/TacticalEvents";
 import {delayWork} from "./activity/CurrentActivitySaga";
 import {isOnline} from "./NetworkSagas";
 import {selectTacticalState, selectUserState} from "../reducers";
 import {FOUND_WIFI} from "../events/NetworkEvents";
 import {createShowWarningNotificationEvent} from "../events/MiscEvents";
+import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
 
 const POMODORO_API = '/api/tactical/pomodoro/settings';
 
@@ -88,10 +90,17 @@ function* settingsUploadSaga(settings) {
   }
 }
 
+function* listenForTacticalEvents() {
+  yield takeEvery(FOUND_WIFI, tacticalActivitySyncSaga);
+  yield takeEvery(RECEIVED_USER, tacticalActivitySyncSaga);
+  yield takeEvery(REQUESTED_SYNC, tacticalActivitySyncSaga());
+}
+
 
 export default function* rootSaga() {
   yield all([
     initializeTacticalSettings(),
+    listenForTacticalEvents(),
     watchForSettingsUpdates(),
   ]);
 }

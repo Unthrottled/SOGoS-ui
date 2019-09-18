@@ -76,7 +76,7 @@ export const createSyncedActivityEvent = (objective: TacticalActivity) => ({
   payload: objective,
 });
 
-export const createSyncedActivitesEvent = (userGUID: string) => ({
+export const createSyncedTacticalActivitiesEvent = (userGUID: string) => ({
   type: SYNCED_TACTICAL_ACTIVITIES,
   payload: userGUID,
 });
