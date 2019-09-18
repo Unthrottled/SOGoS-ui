@@ -2,6 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
+import {Link} from "react-router-dom";
 
 const TacticalDashboard = ({fullName}) => {
   return (
@@ -10,6 +11,7 @@ const TacticalDashboard = ({fullName}) => {
       <Typography>
         Time to get tactical. Cover me! I'm reloading!
       </Typography>
+      <Link to={'./activities/'}>View Activities</Link>
     </LoggedInLayout>
   );
 };

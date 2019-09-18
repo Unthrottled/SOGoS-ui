@@ -18,6 +18,8 @@ import Dashboard from "./Dashboard";
 import {Tits} from "./Tits";
 import Tasks from "./Tasks";
 import TacticalDashboard from "./TacticalDashboard";
+import ActivitiesDashboard from "./ActivitiesDashboard";
+import ActivityDashboard from "./ActivityDashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -63,9 +65,10 @@ function App({dispatch: dispetch, isInitialized}) {
             <PrivateRoute path={'/settings'} component={Settings}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
             <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
+            <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
+            <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
             <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
             <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
-            <PrivateRoute path={'/tactical/tasks'} component={Tasks}/>
             <PrivateRoute path={'/'} exact component={Dashboard}/>
             <Route component={() => (<h2>404</h2>)}/>
           </Switch>
