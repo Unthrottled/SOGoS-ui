@@ -7,10 +7,21 @@ import {
   UPDATED_POMODORO_SETTINGS
 } from "../events/TacticalEvents";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
+import type {TacticalActivity} from "../types/ActivityModels";
 
-export type TacticalState = {
+export type PomodoroState = {
   pomodoroSettings: PomodoroSettings,
   cache: any,
+}
+
+export type ActivityState = {
+  activities: TacticalActivity[],
+  cache: any,
+}
+
+export type TacticalState = {
+  activity: ActivityState,
+  pomodoro: PomodoroState,
 }
 
 const INITIAL_TACTICAL_STATE: TacticalState = {
@@ -24,6 +35,9 @@ const INITIAL_TACTICAL_STATE: TacticalState = {
 
 const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: Action) => {
   switch (action.type) {
+
+
+
     case UPDATED_POMODORO_SETTINGS:
     case REGISTERED_POMODORO_SETTINGS:
       return {
