@@ -65,8 +65,8 @@ function App({dispatch: dispetch, isInitialized}) {
             <PrivateRoute path={'/settings'} component={Settings}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
             <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
-            <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
             <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
+            <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
             <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
             <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
             <PrivateRoute path={'/'} exact component={Dashboard}/>

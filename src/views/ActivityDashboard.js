@@ -111,16 +111,16 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {params: {objectiveId}}}) => {
+const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {params: {activityId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const rememberedObjective = objectives[objectiveId];
+  const rememberedObjective = objectives[activityId];
 
   const defaultSky = {
     hex: '#86a4f3',
     opacity: 1,
   };
-  const objective: Objective = objectives[objectiveId] ||
+  const objective: Objective = objectives[activityId] ||
     {
       valueStatement: '',
       iconCustomization: {
@@ -151,7 +151,7 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
   };
   const saveObjective = () => {
     const objective: Objective = {
-      id: objectiveId,
+      id: activityId,
       valueStatement: objectiveValue,
       antecedenceTime: new Date().getTime(),
       keyResults,
@@ -164,20 +164,20 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
     } else {
       dispatch(updatedObjective(objective));
     }
-    history.push('/strategy/objectives/')
+    history.push('/tactical/activities/')
   };
 
   const discardChanges = () => {
-    history.push('/strategy/objectives/');
+    history.push('/tactical/activities/');
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
     dispatch(deletedObjective(objective));
-    history.push('/strategy/objectives/')
+    history.push('/tactical/activities/')
   };
   const completeThatObjectiveYo = () => {
     dispatch(completedObjective(objective));
-    history.push('/strategy/objectives/')
+    history.push('/tactical/activities/')
   };
 
   const selectStyles = {
@@ -203,15 +203,15 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
       <Typography>
-        Dis is objective id {objectiveId}
+        Dis is activity id {activityId}
       </Typography>
       <div className={classes.inputContainer}>
         <MountainIcon skyColor={skyColor}/>
         <ColorPicker onSelect={setSkyColor}/>
         <TextField
           className={classes.textField}
-          label={'What you do want to accomplish?'}
-          placeholder={'I want to use my time better.'}
+          label={'What is it you do?'}
+          placeholder={'Coding'}
           variant={'filled'}
           margin={'normal'}
           {...(objective ? {defaultValue: objective.valueStatement} : {})}
@@ -227,7 +227,7 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
               htmlFor: 'react-select-multiple',
               shrink: true,
             },
-            placeholder: 'Give your objective categories!',
+            placeholder: 'Give your activity categories!',
           }}
           options={suggestions}
           components={components}

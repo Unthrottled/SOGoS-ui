@@ -37,8 +37,6 @@ const useStyles = makeStyles(theme => ({
   objectiveSummary: {},
 }));
 
-const MAX_OBJECTIVES = 5;
-
 const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
@@ -51,18 +49,13 @@ const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
   return (
     <LoggedInLayout>
       <h3>What's up {fullName}?</h3>
-      {
-        allObjectives.length >= MAX_OBJECTIVES ? null :
-          (
-            <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
-              <Button variant={'contained'}
-                      color={'primary'}
-                      className={classes.button}>
-                <AddIcon/> Create Objective
-              </Button>
-            </Link>
-          )
-      }
+      <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
+        <Button variant={'contained'}
+                color={'primary'}
+                className={classes.button}>
+          <AddIcon/> Create Activity
+        </Button>
+      </Link>
       <div className={classes.root}>
         {
           allObjectives.map(objective => (
@@ -95,7 +88,7 @@ const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
                     <Button variant={'outlined'}
                             color={'secondary'}
                             className={classes.button}>
-                      <AddIcon/> Edit Objective
+                      <AddIcon/> Edit Activity
                     </Button>
                   </Link>
                 </div>
