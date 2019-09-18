@@ -1,5 +1,11 @@
 import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
-import {selectActivityState, selectStrategyState, selectTacticalState, selectUserState} from "../reducers";
+import {
+  selectActivityState,
+  selectPomodoroState,
+  selectStrategyState,
+  selectTacticalActivityState,
+  selectUserState
+} from "../reducers";
 import {CACHED_DATA, createCheckedCachesEvent, RECEIVED_USER, SYNCED_DATA} from "../events/UserEvents";
 import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
 
@@ -13,7 +19,8 @@ export function* inspectCaches() {
   const globalState = yield select();
   const hasCachedItems = [
     selectActivityState,
-    selectTacticalState,
+    selectTacticalActivityState,
+    selectPomodoroState,
     selectStrategyState,
   ].map(stateSelector => stateSelector(globalState))
     .map(state => state.cache[userGUID])

@@ -10,76 +10,72 @@ import {
   SYNCED_TACTICAL_ACTIVITIES,
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
+import {dictionaryReducer} from "./StrategyReducer";
 
-const dictionaryReducer = (accum, toIndex) => {
-  accum[toIndex.id] = toIndex;
-  return accum;
-};
 
-function updateStateWithObjectives(newObjectives, newKeyResults, state) {
-  const objectives = [
-    ...objectToArray(state.objectives),
-    ...newObjectives
-  ].reduce(dictionaryReducer, {});
-  const keyResults = [
-    ...objectToArray(state.keyResults),
-    ...newKeyResults,
+const updateStateWithActivities = (newActivities, newKeyResults, state: TacticalState): TacticalState => {
+  const tacticalActivities = [
+    ...objectToArray(state.activity.activities),
+    ...newActivities
   ].reduce(dictionaryReducer, {});
   return {
     ...state,
-    objectives,
-    keyResults
+    activity: {
+      ...state.activity,
+      activities: tacticalActivities
+    }
   };
-}
+};
 
 const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: Action) => {
   switch (action.type) {
     case CREATED_ACTIVITY:
     case UPDATED_ACTIVITY:
-      const newObjective = [action.payload];
-      const keyResult = action.payload.keyResults;
-      return updateStateWithObjectives(newObjective, keyResult, state);
+      const newActivity = [action.payload];
+      return updateStateWithActivities(newActivity, state);
     case DELETED_ACTIVITY:
-      const {payload: deletedObjective} = action;
-      const newObjectives = objectToArray(state.objectives).filter(suspiciousObjective =>
-        suspiciousObjective.id !== deletedObjective.id);
-      const newKeyResults = objectToArray(state.keyResults).filter(keyResult =>
-        deletedObjective.keyResults
-          .filter(keyResultToRemove =>
-            keyResultToRemove.id === keyResult.id).length === 0);
+      const {payload: deletedActivity} = action;
+      const newActivities = objectToArray(state.activity.activities).filter(suspiciousActivity =>
+        suspiciousActivity.id !== deletedActivity.id);
       return {
         ...state,
-        objectives: newObjectives.reduce(dictionaryReducer, {}),
-        keyResults: newKeyResults.reduce(dictionaryReducer, {}),
+        activity: {
+         ...state.activity,
+          activities: newActivities.reduce(dictionaryReducer, {}),
+        }
       };
     case FOUND_ACTIVITIES:
-      const rememberedObjectives = action.payload.reduce(dictionaryReducer, {});
-      const rememberedKeyResults = action.payload.flatMap(foundObjective => foundObjective.keyResults).reduce(dictionaryReducer, {});
+      const rememberedActivities = action.payload.reduce(dictionaryReducer, {});
       return {
         ...state,
-        objectives: rememberedObjectives,
-        keyResults: rememberedKeyResults,
+        activity: {
+          ...state.activity,
+          activities: rememberedActivities,
+        },
       };
     case CACHED_TACTICAL_ACTIVITY: {
       const {userGUID, objective} = action.payload;
-      if (state.cache[userGUID]) {
-        state.cache[userGUID].push(objective)
+      if (state.activity.cache[userGUID]) {
+        state.activity.cache[userGUID].push(objective)
       } else {
-        state.cache[userGUID] = [objective]
+        state.activity.cache[userGUID] = [objective]
       }
       return state;
     }
     case SYNCED_TACTICAL_ACTIVITIES: {
       return {
         ...state,
-        cache: {
-          ...objectToKeyValueArray(state.cache)
-            .filter(keyValues => keyValues.key !== action.payload)
-            .reduce((accum, keyValue) => {
-              accum[keyValue.key] = keyValue.value;
-              return accum
-            }, {}),
-        }
+        activity: {
+          ...state.activity,
+          cache: {
+            ...objectToKeyValueArray(state.activity.cache)
+              .filter(keyValues => keyValues.key !== action.payload)
+              .reduce((accum, keyValue) => {
+                accum[keyValue.key] = keyValue.value;
+                return accum
+              }, {}),
+          }
+        },
       };
     }
     default:

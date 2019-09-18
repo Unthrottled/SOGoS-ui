@@ -14,9 +14,10 @@ import HistoryReducer from "./HistoryReducer";
 import type {StrategyState} from "./StrategyReducer";
 import StrategyReducer from "./StrategyReducer";
 import TacticalReducer from "./TacticalReducer";
-import type {TacticalState} from "./TacticalReducer";
+import type {TacticalActivityState, TacticalState} from "./TacticalReducer";
 import MiscReducer from "./MiscReducer";
 import type {MiscState} from "./MiscReducer";
+import type {PomodoroSettings} from "../types/TacticalModels";
 
 const rootReducer = combineReducers({
   security: securityReducer,
@@ -47,5 +48,9 @@ export const selectHistoryState = (globalState): HistoryState => globalState.his
 export const selectStrategyState = (globalState): StrategyState => globalState.strategy;
 
 export const selectTacticalState = (globalState): TacticalState => globalState.tactical;
+
+export const selectPomodoroState = (globalState): PomodoroSettings => selectTacticalState(globalState).pomodoro;
+
+export const selectTacticalActivityState = (globalState): TacticalActivityState => selectTacticalState(globalState).activity;
 
 export default rootReducer;

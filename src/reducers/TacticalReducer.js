@@ -14,13 +14,13 @@ export type PomodoroState = {
   cache: any,
 }
 
-export type ActivityState = {
+export type TacticalActivityState = {
   activities: TacticalActivity[],
   cache: any,
 }
 
 export type TacticalState = {
-  activity: ActivityState,
+  activity: TacticalActivityState,
   pomodoro: PomodoroState,
 }
 
@@ -31,6 +31,10 @@ export const INITIAL_TACTICAL_STATE: TacticalState = {
       shortRecoveryDuration: 180000,
       longRecoveryDuration: 2400000,
     },
+    cache: {},
+  },
+  activity: {
+    activities: {},
     cache: {},
   }
 };

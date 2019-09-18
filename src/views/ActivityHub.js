@@ -21,7 +21,6 @@ import type {Objective} from "../types/StrategyModels";
 import Tooltip from "@material-ui/core/Tooltip";
 
 
-
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -100,19 +99,19 @@ const ActivityHub = ({
     }));
   };
 
-  const commenceTimedObjectiveActivity = (objective: Objective) =>{
-    commenceTimedActivity("TIMED_OBJECTIVE_ACTIVITY", { objectiveID: objective.id})
+  const commenceTimedObjectiveActivity = (objective: Objective) => {
+    commenceTimedActivity("TIMED_OBJECTIVE_ACTIVITY", {objectiveID: objective.id})
   };
 
-  const commenceGenericTimedActivity = () =>{
+  const commenceGenericTimedActivity = () => {
     commenceTimedActivity("GENERIC_TIMED_ACTIVITY", {})
   };
 
-  const commenceObjectiveActivity = (objective: Objective) =>{
-    commenceActivity("OBJECTIVE_ACTIVITY", { objectiveID: objective.id})
+  const commenceObjectiveActivity = (objective: Objective) => {
+    commenceActivity("OBJECTIVE_ACTIVITY", {objectiveID: objective.id})
   };
 
-  const commenceGenericActivity = () =>{
+  const commenceGenericActivity = () => {
     commenceActivity("GENERIC_ACTIVITY", {})
   };
 
@@ -120,7 +119,7 @@ const ActivityHub = ({
 
   const [selectedAction, setSelectedAction] = useState(null);
   const [selectedGenericAction, setSelectedGenericAction] = useState(null);
-  const invokeGenericAction = () =>{
+  const invokeGenericAction = () => {
     selectedGenericAction();
     closeStrategy();
   };
@@ -150,9 +149,9 @@ const ActivityHub = ({
     },
   ];
 
-  const [showToolTips , setShowTooltips] = useState(false);
-  if(strategyOpen) {
-    setTimeout(()=> setShowTooltips(true), 250);
+  const [showToolTips, setShowTooltips] = useState(false);
+  if (strategyOpen) {
+    setTimeout(() => setShowTooltips(true), 250);
   } else if (showToolTips) {
     setShowTooltips(false)
   }
@@ -227,7 +226,7 @@ const ActivityHub = ({
 };
 
 const mapStateToProps = state => {
-  const {pomodoroSettings: {loadDuration}} = selectTacticalState(state);
+  const {pomodoro: {settings: {loadDuration}}} = selectTacticalState(state);
   const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
   const {objectives} = selectStrategyState(state);
   return {

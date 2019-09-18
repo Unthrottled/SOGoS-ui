@@ -30,7 +30,7 @@ function* fetchSettings() {
 function* settingsSyncSaga() {
   const globalState = yield select();
   const {information: {guid}} = selectUserState(globalState);
-  const {cache} = selectTacticalState(globalState);
+  const {pomodoro: {cache}} = selectTacticalState(globalState);
   if (guid && cache && cache[guid]) {
     try {
       yield call(performPost, POMODORO_API, cache[guid]);

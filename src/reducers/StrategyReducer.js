@@ -23,7 +23,7 @@ const INITIAL_USER_STATE: StrategyState = {
 };
 
 
-const dictionaryReducer = (accum, toIndex) => {
+export const dictionaryReducer = (accum, toIndex) => {
   accum[toIndex.id] = toIndex;
   return accum;
 };
