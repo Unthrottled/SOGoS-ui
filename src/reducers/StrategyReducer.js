@@ -80,7 +80,12 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: Acti
       } else {
         state.cache[userGUID] = [objective]
       }
-      return state;
+      return {
+        ...state,
+        cache: {
+          ...state.cache,
+        }
+      };
     }
     case SYNCED_OBJECTIVES: {
       return {

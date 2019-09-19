@@ -54,7 +54,12 @@ const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: 
     case CACHED_SETTINGS: {
       const {userGUID, cachedSettings} = action.payload;
       updatedState.pomodoro.cache[userGUID] = cachedSettings;
-      return updatedState;
+      return {
+        ...updatedState,
+        pomodoro: {
+          ...updatedState.pomodoro
+        }
+      };
     }
     case SYNCED_SETTINGS: {
       return {

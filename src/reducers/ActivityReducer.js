@@ -59,7 +59,12 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: 
       } else {
         state.cache[userGUID] = [cachedActivity]
       }
-      return state;
+      return {
+        ...state,
+        cache: {
+          ...state.cache,
+        }
+      };
     }
     case SYNCED_ACTIVITIES: {
       return {
