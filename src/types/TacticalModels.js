@@ -16,7 +16,12 @@ export type PomodoroSettingsRegistryFailure = {
   settings: PomodoroSettings,
 }
 
-export type TacticalActivity = {};
+export type TacticalActivity = {
+  id: string,
+  name: string,
+  valueStatement: string,
+  categories: string[],
+};
 
 export type CachedTacticalActivity = {
   uploadType: CREATED | UPDATED | DELETED,

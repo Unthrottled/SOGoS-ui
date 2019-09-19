@@ -11,10 +11,11 @@ import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
-import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../miscellanous/Tools";
-import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "./GoalIcon";
+import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {selectTacticalActivityState, selectUserState} from "../reducers";
+import type {TacticalActivity} from "../types/TacticalModels";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,14 +38,14 @@ const useStyles = makeStyles(theme => ({
   objectiveSummary: {},
 }));
 
-const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
+const ActivitiesDashboard = ({activities, fullName, dispatch}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
-    dispatch(viewedObjectives());
+    dispatch(createViewedTacticalActivitesEvent());
   }, [didMountState]);
 
-  const allObjectives: Objective[] = objectToArray(objectives);
+  const allTacticalActivites: TacticalActivity[] = objectToArray(activities);
 
   return (
     <LoggedInLayout>
@@ -58,33 +59,22 @@ const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
       </Link>
       <div className={classes.root}>
         {
-          allObjectives.map(objective => (
-            <ExpansionPanel key={objective.id} className={classes.objective}>
+          allTacticalActivites.map(tacticalActivity => (
+            <ExpansionPanel key={tacticalActivity.id} className={classes.objective}>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon className={classes.objective}/>}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <GoalIcon objective={objective} size={{
+                <GoalIcon objective={tacticalActivity} size={{
                   width: '75px',
                   height: '75px',
                 }}/>
-                <Typography className={classes.heading}>{objective.valueStatement}</Typography>
+                <Typography className={classes.heading}>{tacticalActivity.name}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <ul>
-                  {
-                    objective.keyResults.map(keyResult => (
-                      <li key={keyResult.id}>
-                        <Typography>
-                          {keyResult.valueStatement}
-                        </Typography>
-                      </li>
-                    ))
-                  }
-                </ul>
                 <div>
-                  <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
+                  <Link to={`./${tacticalActivity.id}`} style={{textDecoration: 'none'}}>
                     <Button variant={'outlined'}
                             color={'secondary'}
                             className={classes.button}>
@@ -102,10 +92,11 @@ const ActivitiesDashboard = ({objectives, fullName, dispatch}) => {
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}, strategy: {objectives}} = state;
+  const {information: {fullName}} = selectUserState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     fullName,
-    objectives,
+    activities,
   }
 };
 

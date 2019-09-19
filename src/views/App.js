@@ -16,7 +16,6 @@ import Settings from "./Settings";
 import ActivityTimer from "./ActivityTimeBar";
 import Dashboard from "./Dashboard";
 import {Tits} from "./Tits";
-import Tasks from "./Tasks";
 import TacticalDashboard from "./TacticalDashboard";
 import ActivitiesDashboard from "./ActivitiesDashboard";
 import ActivityDashboard from "./ActivityDashboard";
