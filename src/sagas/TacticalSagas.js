@@ -1,48 +1,15 @@
-import {all, call, fork, put, select, take, takeEvery} from "@redux-saga/core/effects";
-import {performGet, performPost} from "./APISagas";
-import {createCachedDataEvent, createSyncedDataEvent, RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
-import {
-  createCachedSettingsEvent,
-  createFailureToRegisterPomodoroSettingsEvent,
-  createRegisteredPomodoroSettingsEvent,
-  createSyncedSettingsEvent,
-  createUpdatedPomodoroSettingsEvent,
-  UPDATED_POMODORO_SETTINGS,
-  VIEWED_SETTINGS
-} from "../events/TacticalEvents";
-import {delayWork} from "./activity/CurrentActivitySaga";
-import {isOnline} from "./NetworkSagas";
-import {selectTacticalState, selectUserState} from "../reducers";
+import {all, call, fork, take, takeEvery} from "@redux-saga/core/effects";
+import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
+import {CREATED_ACTIVITY, DELETED_ACTIVITY, UPDATED_POMODORO_SETTINGS, VIEWED_SETTINGS} from "../events/TacticalEvents";
 import {FOUND_WIFI} from "../events/NetworkEvents";
-import {createShowWarningNotificationEvent} from "../events/MiscEvents";
 import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
-
-const POMODORO_API = '/api/tactical/pomodoro/settings';
-
-function* fetchSettings() {
-  try {
-    const {data} = yield call(performGet, POMODORO_API);
-    yield put(createUpdatedPomodoroSettingsEvent(data));
-  } catch (e) {
-    yield call(delayWork);
-    yield call(fetchSettings);
-  }
-}
-
-function* settingsSyncSaga() {
-  const globalState = yield select();
-  const {information: {guid}} = selectUserState(globalState);
-  const {pomodoro: {cache}} = selectTacticalState(globalState);
-  if (guid && cache && cache[guid]) {
-    try {
-      yield call(performPost, POMODORO_API, cache[guid]);
-      yield put(createSyncedSettingsEvent(guid));
-      yield put(createSyncedDataEvent());
-    } catch (e) {
-      yield put(createShowWarningNotificationEvent("Unable to sync settings! Try again later, please."))
-    }
-  }
-}
+import {
+  activityChangesSaga,
+  activityCreationSaga,
+  activityTerminationSaga
+} from "./tactical/TacticalActivityCreationSagas";
+import {UPDATED_OBJECTIVE} from "../events/StrategyEvents";
+import {fetchSettings, settingsSyncSaga, updatePomodoroSaga} from "./tactical/PomodoroSettingsSagas";
 
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
@@ -57,45 +24,14 @@ function* watchForSettingsUpdates() {
   yield takeEvery(UPDATED_POMODORO_SETTINGS, updatePomodoroSaga)
 }
 
-export function* settingsCacheSaga(settings) {
-  const {information: {guid}} = yield select(selectUserState);
-  yield put(createCachedSettingsEvent({
-    cachedSettings: {
-      ...settings,
-    },
-    userGUID: guid,
-  }));
-  yield put(createCachedDataEvent());
-}
-
-function* updatePomodoroSaga({payload}) {
-  const onlineStatus = yield call(isOnline);
-  if (onlineStatus) {
-    yield call(settingsUploadSaga, payload)
-  } else {
-    yield call(settingsCacheSaga, payload)
-  }
-}
-
-function* settingsUploadSaga(settings) {
-  try {
-    yield call(performPost, POMODORO_API, settings);
-    yield put(createRegisteredPomodoroSettingsEvent(settings));
-  } catch (error) {
-    yield put(createFailureToRegisterPomodoroSettingsEvent({
-      error,
-      settings
-    }));
-    yield call(settingsCacheSaga, settings)
-  }
-}
-
 function* listenForTacticalEvents() {
   yield takeEvery(FOUND_WIFI, tacticalActivitySyncSaga);
   yield takeEvery(RECEIVED_USER, tacticalActivitySyncSaga);
-  yield takeEvery(REQUESTED_SYNC, tacticalActivitySyncSaga());
+  yield takeEvery(REQUESTED_SYNC, tacticalActivitySyncSaga);
+  yield takeEvery(CREATED_ACTIVITY, activityCreationSaga);
+  yield takeEvery(UPDATED_OBJECTIVE, activityChangesSaga);
+  yield takeEvery(DELETED_ACTIVITY, activityTerminationSaga);
 }
-
 
 export default function* rootSaga() {
   yield all([

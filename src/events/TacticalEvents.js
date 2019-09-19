@@ -57,21 +57,21 @@ export const createFailureToRegisterPomodoroSettingsEvent = (pomodoroSettingsReg
   payload: pomodoroSettingsRegistryFailure
 });
 
-export const createViewedActivitesEvent = () => ({
+export const createViewedTacticalActivitesEvent = () => ({
   type: VIEWED_ACTIVITIES,
 });
 
-export const createCachedActivityEvent = (objectiveCacheEvent: ActivityCacheEvent) => ({
+export const createCachedTacticalActivityEvent = (objectiveCacheEvent: ActivityCacheEvent) => ({
   type: CACHED_TACTICAL_ACTIVITY,
   payload: objectiveCacheEvent
 });
 
-export const createFetchedActivitesEvent = (objectiveHistory: TacticalActivity[]) => ({
+export const createFetchedTacticalActivitesEvent = (objectiveHistory: TacticalActivity[]) => ({
   type: FOUND_ACTIVITIES,
   payload: objectiveHistory
 });
 
-export const createSyncedActivityEvent = (objective: TacticalActivity) => ({
+export const createSyncedTacticalActivityEvent = (objective: TacticalActivity) => ({
   type: SYNCED_TACTICAL_ACTIVITY,
   payload: objective,
 });
@@ -81,22 +81,22 @@ export const createSyncedTacticalActivitiesEvent = (userGUID: string) => ({
   payload: userGUID,
 });
 
-export const createCreatedActivityEvent = (objective: TacticalActivity) => ({
+export const createCreatedTacticalActivityEvent = (objective: TacticalActivity) => ({
   type: CREATED_ACTIVITY,
   payload: objective,
 });
 
-export const createUpdatedActivityEvent = (objective: TacticalActivity) => ({
+export const createUpdatedTacticalActivityEvent = (objective: TacticalActivity) => ({
   type: UPDATED_ACTIVITY,
   payload: objective,
 });
 
-export const createDeletedActivityEvent = (objective: TacticalActivity) => ({
+export const createDeletedTacticalActivityEvent = (objective: TacticalActivity) => ({
   type: DELETED_ACTIVITY,
   payload: objective,
 });
 
-export const createHideActivityEvent = (objective: TacticalActivity) => ({
+export const createHideTacticalActivityEvent = (objective: TacticalActivity) => ({
   type: HID_ACTIVITY,
   payload: objective,
 });

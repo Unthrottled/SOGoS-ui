@@ -5,6 +5,7 @@ import {selectUserState} from "../../reducers";
 import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
 import {createCachedDataEvent} from "../../events/UserEvents";
 import type {CachedTacticalActivity, TacticalActivity} from "../../types/TacticalModels";
+import {createCachedTacticalActivityEvent, createSyncedTacticalActivityEvent} from "../../events/TacticalEvents";
 
 export function* activityCreationSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityCreateSaga, activityUploadToCached);
