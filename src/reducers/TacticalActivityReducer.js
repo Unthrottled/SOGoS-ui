@@ -13,7 +13,7 @@ import {
 import {dictionaryReducer} from "./StrategyReducer";
 
 
-const updateStateWithActivities = (newActivities, newKeyResults, state: TacticalState): TacticalState => {
+const updateStateWithActivities = (newActivities, state: TacticalState): TacticalState => {
   const tacticalActivities = [
     ...objectToArray(state.activity.activities),
     ...newActivities
@@ -54,13 +54,18 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         },
       };
     case CACHED_TACTICAL_ACTIVITY: {
-      const {userGUID, objective} = action.payload;
+      const {userGUID, cachedActivity} = action.payload;
       if (state.activity.cache[userGUID]) {
-        state.activity.cache[userGUID].push(objective)
+        state.activity.cache[userGUID].push(cachedActivity)
       } else {
-        state.activity.cache[userGUID] = [objective]
+        state.activity.cache[userGUID] = [cachedActivity]
       }
-      return state;
+      return {
+        ...state,
+        activity: {
+          ...state.activity,
+        }
+      };
     }
     case SYNCED_TACTICAL_ACTIVITIES: {
       return {

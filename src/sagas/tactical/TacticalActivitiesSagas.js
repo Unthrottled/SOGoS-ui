@@ -1,6 +1,5 @@
 import {call, put} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
-import {createFetchedObjectivesEvent} from "../../events/StrategyEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {createFetchedTacticalActivitesEvent} from "../../events/TacticalEvents";
 

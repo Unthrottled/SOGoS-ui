@@ -86,11 +86,11 @@ export function* activityUploadSaga(activity: TacticalActivity,
   }
 }
 
-export function* cacheTacticalActivitySaga(activity: CachedTacticalActivity) {
+export function* cacheTacticalActivitySaga(cachedActivity: CachedTacticalActivity) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedTacticalActivityEvent({
     userGUID: guid,
-    activity,
+    cachedActivity,
   }));
   yield put(createCachedDataEvent());
 }

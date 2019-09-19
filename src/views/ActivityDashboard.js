@@ -3,28 +3,26 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DoneIcon from '@material-ui/icons/Done';
-import AddIcon from '@material-ui/icons/Add';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 import Fab from "@material-ui/core/Fab";
-import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {completedObjective, createdObjective, deletedObjective, updatedObjective} from "../actions/StrategyActions";
-import type {Objective} from "../types/StrategyModels";
 import {withRouter} from "react-router-dom";
 import {components} from "./MultiSelectComponents";
 import {ColorPicker} from "./ColorPicker";
 import {MountainIcon} from "./MountainIcon";
 import {PopupModal} from "./PopupModal";
+import {
+  createCreatedTacticalActivityEvent,
+  createDeletedTacticalActivityEvent,
+  createHideTacticalActivityEvent,
+  createUpdatedTacticalActivityEvent
+} from "../events/TacticalEvents";
+import type {TacticalActivity} from "../types/TacticalModels";
+import {selectTacticalActivityState, selectUserState} from "../reducers";
 
 const suggestions = [
   {label: 'Technical'},
@@ -111,58 +109,39 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {params: {activityId}}}) => {
+const ActivityDashboard = ({dispatch, activities, history, fullName, match: {params: {activityId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const rememberedObjective = objectives[activityId];
+  const rememberedTacticalObjective = activities[activityId];
 
   const defaultSky = {
     hex: '#86a4f3',
     opacity: 1,
   };
-  const objective: Objective = objectives[activityId] ||
+  const currentTacticalActivity: TacticalActivity = activities[activityId] ||
     {
-      valueStatement: '',
+      name: '',
       iconCustomization: {
         background: defaultSky
       },
-      keyResults: [
-        {
-          id: uuid(),
-        }
-      ]
     };
-  const [keyResults, setKeyResults] = useState(objective.keyResults);
-  const [objectiveValue, setObjective] = useState(objective.valueStatement);
-  const handleObjectiveChange = event => setObjective(event.target.value);
-  const updateResult = (resultId, resultValue) => {
-    keyResults.find(result => result.id === resultId).valueStatement = resultValue
 
-  };
-  const addKeyResult = () => {
-    setKeyResults([
-      ...keyResults,
-      {
-        id: uuid(),
-        antecedenceTime: new Date().getTime(),
-      }
-    ])
+  const [tacticalActivityName, setTacticalActivityName] = useState(currentTacticalActivity.name);
+  const handleTacticalNameChange = event => setTacticalActivityName(event.target.value);
 
-  };
-  const saveObjective = () => {
-    const objective: Objective = {
+  const saveTacticalActivity = () => {
+    const tacticalActivity: TacticalActivity = {
       id: activityId,
-      valueStatement: objectiveValue,
+      name: tacticalActivityName,
       antecedenceTime: new Date().getTime(),
-      keyResults,
       iconCustomization: {
         background: skyColor,
       }
     };
-    if (!objectives[objective.id]) {
-      dispatch(createdObjective(objective));
+    if (!activities[tacticalActivity.id]) {
+      dispatch(createCreatedTacticalActivityEvent(tacticalActivity));
     } else {
-      dispatch(updatedObjective(objective));
+      dispatch(createUpdatedTacticalActivityEvent(tacticalActivity));
     }
     history.push('/tactical/activities/')
   };
@@ -172,11 +151,11 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
-    dispatch(deletedObjective(objective));
+    dispatch(createDeletedTacticalActivityEvent(currentTacticalActivity));
     history.push('/tactical/activities/')
   };
   const completeThatObjectiveYo = () => {
-    dispatch(completedObjective(objective));
+    dispatch(createHideTacticalActivityEvent(currentTacticalActivity));
     history.push('/tactical/activities/')
   };
 
@@ -195,7 +174,7 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
 
   const handleChangeMulti = (value) => setMulti(value);
 
-  const iconCustomization = objective.iconCustomization;
+  const iconCustomization = currentTacticalActivity.iconCustomization;
   const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
   const dismissDeletionWindow = () => setFinnaDelete(false);
   const dismissCompletionWindow = () => setFinnaComplete(false);
@@ -214,8 +193,8 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
           placeholder={'Coding'}
           variant={'filled'}
           margin={'normal'}
-          {...(objective ? {defaultValue: objective.valueStatement} : {})}
-          onBlur={handleObjectiveChange}
+          {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.valueStatement} : {})}
+          onBlur={handleTacticalNameChange}
         />
         <ReactSelect
           classes={classes}
@@ -235,37 +214,9 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
           onChange={handleChangeMulti}
           isMulti
         />
-        <div className={classes.keyResults}>
-          <List>
-            {keyResults.map((topic) => (
-              <ListItem key={topic.id}>
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    <DoneIcon/>
-                  </Avatar>
-                </ListItemAvatar>
-                <TextField
-                  className={classes.textField}
-                  label={'How will you know you are successful?'}
-                  placeholder={'50% of my time awake is spent doing what I want.'}
-                  variant={'outlined'}
-                  margin={'normal'}
-                  {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
-                  onBlur={event => updateResult(topic.id, event.target.value)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </div>
-        <Button variant={'contained'}
-                color={'primary'}
-                onClick={addKeyResult}
-                className={classes.button}>
-          <AddIcon/>Add Key Result
-        </Button>
         <Fab color={'primary'}
              className={classes.save}
-             onClick={saveObjective}
+             onClick={saveTacticalActivity}
         >
           <SaveIcon/>
         </Fab>
@@ -276,7 +227,7 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
           <CancelIcon/>
         </Fab>
         {
-          rememberedObjective ? (
+          rememberedTacticalObjective ? (
             <Fab color={'primary'}
                  className={classes.save}
                  onClick={() => setFinnaDelete(true)}
@@ -286,7 +237,7 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
           ) : null
         }
         {
-          rememberedObjective ? (
+          rememberedTacticalObjective ? (
             <Fab color={'primary'}
                  className={classes.save}
                  onClick={() => setFinnaComplete(true)}
@@ -319,11 +270,12 @@ const ActivityDashboard = ({dispatch, objectives, history, fullName, match: {par
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}, strategy: {objectives}} = state;
+  const {information: {fullName}} = selectUserState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     fullName,
-    objectives
-  }
+    activities,
+  };
 };
 
 export default connect(mapStateToProps)(withRouter(ActivityDashboard));
