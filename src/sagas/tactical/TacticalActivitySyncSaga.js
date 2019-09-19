@@ -17,7 +17,7 @@ export function* tacticalActivitySyncSaga() {
       yield put(createSyncedTacticalActivitiesEvent(guid));
       yield put(createSyncedDataEvent());
     } catch (e) {
-      yield put(createShowWarningNotificationEvent("Unable to created activities! Try again later, please."))
+      yield put(createShowWarningNotificationEvent("Unable to sync created activities! Try again later, please."))
     }
   }
 }

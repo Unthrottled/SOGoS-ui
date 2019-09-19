@@ -193,7 +193,7 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
           placeholder={'Coding'}
           variant={'filled'}
           margin={'normal'}
-          {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.valueStatement} : {})}
+          {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.name} : {})}
           onBlur={handleTacticalNameChange}
         />
         <ReactSelect
