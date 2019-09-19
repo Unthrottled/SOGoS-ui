@@ -1,6 +1,13 @@
 import {all, call, fork, take, takeEvery} from "@redux-saga/core/effects";
 import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
-import {CREATED_ACTIVITY, DELETED_ACTIVITY, UPDATED_POMODORO_SETTINGS, VIEWED_SETTINGS} from "../events/TacticalEvents";
+import {
+  CREATED_ACTIVITY,
+  DELETED_ACTIVITY,
+  UPDATED_ACTIVITY,
+  UPDATED_POMODORO_SETTINGS,
+  VIEWED_ACTIVITIES,
+  VIEWED_SETTINGS
+} from "../events/TacticalEvents";
 import {FOUND_WIFI} from "../events/NetworkEvents";
 import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
 import {
@@ -8,8 +15,8 @@ import {
   activityCreationSaga,
   activityTerminationSaga
 } from "./tactical/TacticalActivityCreationSagas";
-import {UPDATED_OBJECTIVE} from "../events/StrategyEvents";
 import {fetchSettings, settingsSyncSaga, updatePomodoroSaga} from "./tactical/PomodoroSettingsSagas";
+import {tacticalActivitiesFetchSaga, tacticalActivityObservationSaga} from "./tactical/TacticalActivitiesSagas";
 
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
@@ -24,12 +31,19 @@ function* watchForSettingsUpdates() {
   yield takeEvery(UPDATED_POMODORO_SETTINGS, updatePomodoroSaga)
 }
 
+function* tacticalActivitiesObservationInitializationSaga() {
+  const foundUser = yield take(RECEIVED_USER);
+  yield fork(tacticalActivitiesFetchSaga, foundUser);
+  yield takeEvery(VIEWED_ACTIVITIES, tacticalActivityObservationSaga);
+}
+
 function* listenForTacticalEvents() {
+  yield fork(tacticalActivitiesObservationInitializationSaga);
   yield takeEvery(FOUND_WIFI, tacticalActivitySyncSaga);
   yield takeEvery(RECEIVED_USER, tacticalActivitySyncSaga);
   yield takeEvery(REQUESTED_SYNC, tacticalActivitySyncSaga);
   yield takeEvery(CREATED_ACTIVITY, activityCreationSaga);
-  yield takeEvery(UPDATED_OBJECTIVE, activityChangesSaga);
+  yield takeEvery(UPDATED_ACTIVITY, activityChangesSaga);
   yield takeEvery(DELETED_ACTIVITY, activityTerminationSaga);
 }
 
