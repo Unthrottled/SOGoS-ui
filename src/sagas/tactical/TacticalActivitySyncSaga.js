@@ -5,7 +5,7 @@ import {createSyncedDataEvent} from "../../events/UserEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {createSyncedTacticalActivitiesEvent} from "../../events/TacticalEvents";
 
-export const BULK_ACTIVITY_UPLOAD_URL = '/api/tactical/activities/bulk';
+export const BULK_ACTIVITY_UPLOAD_URL = '/api/tactical/activity/bulk';
 
 export function* tacticalActivitySyncSaga() {
   const globalState = yield select();

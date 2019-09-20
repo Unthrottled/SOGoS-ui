@@ -72,7 +72,7 @@ export function* activityAPIInteractionSaga(activity: TacticalActivity,
   }
 }
 
-export const TACTICAL_ACTIVITIES_URL = `/api/tactical/activities`;
+export const TACTICAL_ACTIVITIES_URL = `/api/tactical/activity`;
 
 export function* activityUploadSaga(activity: TacticalActivity,
                                      apiAction,

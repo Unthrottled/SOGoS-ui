@@ -1,6 +1,7 @@
 Immediate things need to be done:
 ----
 - Time tasks and associate tasks with objectives.
+    - When offline and creating tasks, the task disappears on refresh.
 - Make Pretty.
 
 Mile-Stones after MVP:
