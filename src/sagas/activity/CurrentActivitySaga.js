@@ -49,8 +49,9 @@ export function* updatePreviousActivity(attempt: number = 10) {
     const {data: activity} = yield call(performGetWithoutSessionExtension, PREVIOUS_ACTIVITY_URL);
     yield put(createFoundPreviousActivityActivityEvent(activity));
   } catch (error) {
-    console.log('aww shit', error);
-    yield call(handleError, attempt, updatePreviousActivity)
+    if(error.response.status !== 404){
+      yield call(handleError, attempt, updatePreviousActivity)
+    }
   }
 }
 
