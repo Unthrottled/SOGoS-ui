@@ -23,6 +23,7 @@ import {
 } from "../events/TacticalEvents";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
+import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
 
 const suggestions = [
   {label: 'Technical'},
@@ -114,15 +115,12 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
   const theme = useTheme();
   const rememberedTacticalObjective = activities[activityId];
 
-  const defaultSky = {
-    hex: '#86a4f3',
-    opacity: 1,
-  };
   const currentTacticalActivity: TacticalActivity = activities[activityId] ||
     {
       name: '',
       iconCustomization: {
-        background: defaultSky
+        background: defaultBackground,
+        line: defaultLine
       },
     };
 
@@ -135,7 +133,8 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
       name: tacticalActivityName,
       antecedenceTime: new Date().getTime(),
       iconCustomization: {
-        background: skyColor,
+        background: backgroundColor,
+        line: lineColor,
       }
     };
     if (!activities[tacticalActivity.id]) {
@@ -175,7 +174,8 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
   const handleChangeMulti = (value) => setMulti(value);
 
   const iconCustomization = currentTacticalActivity.iconCustomization;
-  const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
+  const [backgroundColor, setBackgroundColor] = useState((iconCustomization && iconCustomization.background) || defaultBackground);
+  const [lineColor, setLineColor] = useState((iconCustomization && iconCustomization.line) || defaultLine);
   const dismissDeletionWindow = () => setFinnaDelete(false);
   const dismissCompletionWindow = () => setFinnaComplete(false);
   return (
@@ -185,8 +185,12 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
         Dis is activity id {activityId}
       </Typography>
       <div className={classes.inputContainer}>
-        <MountainIcon skyColor={skyColor}/>
-        <ColorPicker onSelect={setSkyColor}/>
+        <ActivityIcon
+          backgroundColor={backgroundColor}
+          lineColor={lineColor}
+        />
+        <ColorPicker defaultColor={backgroundColor} onSelect={setBackgroundColor}/>
+        <ColorPicker defaultColor={lineColor} onSelect={setLineColor}/>
         <TextField
           className={classes.textField}
           label={'What is it you do?'}

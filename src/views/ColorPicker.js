@@ -8,10 +8,10 @@ import IconButton from "@material-ui/core/IconButton";
 import {Fade} from "@material-ui/core";
 import Popper from "@material-ui/core/Popper";
 
-export const ColorPicker = ({onSelect, onComplete}) => {
+export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
   const [open, setOpen] = useState(false);
   const [ancorElement, setAnchorElement] = useState(null);
-  const [currentColor, setCurrentColor] = useState({
+  const [currentColor, setCurrentColor] = useState(defaultColor || {
     hex: '#86a4f3',
     opacity: 1,
   });

@@ -5,19 +5,24 @@ import Goal from "../images/Goal.svg";
 import ReactSVG from "react-svg";
 import {objectToArray} from "../miscellanous/Tools";
 
-const findChild = (node, finder) => {
+export const findChild = (node, finder) => {
   const queue = [];
+  const touched = [];
   queue.push(node);
   while (queue.length > 0) {
     const currentNode = queue.pop();
+    touched.push(currentNode);
     if (finder(currentNode)) {
+      touched.forEach(n => n._checked = 0);
       return currentNode;
     } else {
       currentNode._checked = 1;
-      objectToArray(currentNode.childNodes).filter(n => !n._checked)
+      objectToArray(currentNode.childNodes)
+        .filter(n => !n._checked)
         .forEach(n => queue.unshift(n));
     }
   }
+  touched.forEach(n => n._checked = 0);
   return undefined;
 };
 

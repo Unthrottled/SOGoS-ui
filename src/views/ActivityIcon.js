@@ -3,6 +3,7 @@ import * as React from 'react';
 import type {ColorType} from "../types/StrategyModels";
 import Activity from "../images/ActivityIcon.svg";
 import ReactSVG from "react-svg";
+import {findChild} from "./MountainIcon";
 
 
 type Props = {
@@ -16,12 +17,12 @@ const defaultSize: SizeType = {
   width: '100px',
 };
 
-const defaultBackground: ColorType = {
+export const defaultBackground: ColorType = {
   hex: "#1fdb1f",
   opacity: 1
 };
 
-const defaultLine: ColorType = {
+export const defaultLine: ColorType = {
   hex: "#44932d",
   opacity: 1
 };
@@ -42,7 +43,7 @@ export const ActivityIcon = (props: Props) => {
 
   function alterColor(svg, childID, usableColorType) {
     const background = findChild(svg, (node) => {
-      return node.id && node.id.indexOf(childID) > -1;
+      return node.id && node.id.startsWith(childID);
     });
     background.setAttribute('fill', usableColorType.hex);
     background.setAttribute('fill-opacity', usableColorType.opacity);
@@ -53,9 +54,8 @@ export const ActivityIcon = (props: Props) => {
       <ReactSVG src={Activity} beforeInjection={(svg) => {
         svg.setAttribute('width', usableSize.width || defaultSize.width);
         svg.setAttribute('height', usableSize.height || defaultSize.height);
-        const usableColor = 'activity_line';
-        alterColor(svg, usableColor, usableLine);
-        alterColor(svg, "activity_background", usableBackground);
+        alterColor(svg, 'activityLine', usableLine);
+        alterColor(svg, 'activityBackground', usableBackground);
       }}/>
     </div>
   );
