@@ -18,7 +18,8 @@ export type Objective = {
   id: string,
   valueStatement: string,
   keyResults: KeyResult[],
-  iconCustomization: IconCustomization
+  iconCustomization: IconCustomization,
+  associatedActivities: string[],
 }
 
 export type CachedObjective = {

@@ -98,6 +98,13 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                       <AddIcon/> Edit Objective
                     </Button>
                   </Link>
+                  <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
+                    <Button variant={'outlined'}
+                            color={'secondary'}
+                            className={classes.button}>
+                      <AddIcon/>Associate Activities
+                    </Button>
+                  </Link>
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
