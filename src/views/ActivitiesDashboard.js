@@ -16,6 +16,7 @@ import {GoalIcon} from "./GoalIcon";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
+import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,10 +67,11 @@ const ActivitiesDashboard = ({activities, fullName, dispatch}) => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <GoalIcon objective={tacticalActivity} size={{
-                  width: '75px',
-                  height: '75px',
-                }}/>
+                <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                      size={{
+                                        width: '75px',
+                                        height: '75px',
+                                      }}/>
                 <Typography className={classes.heading}>{tacticalActivity.name}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>

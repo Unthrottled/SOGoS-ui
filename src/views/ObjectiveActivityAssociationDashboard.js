@@ -17,6 +17,7 @@ import {GoalIcon} from "./GoalIcon";
 import {Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
 import {createdObjective, updatedObjective} from "../actions/StrategyActions";
+import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
 const useStyles = makeStyles(theme => (
   {
@@ -150,7 +151,7 @@ const ObjectiveActivityAssociationDashboard = ({
             {tacticalTacticalActivites.map((activity: TacticalActivity) => (
               <ListItem key={activity.id}>
                 <ListItemAvatar>
-                  <GoalIcon objective={activity} size={{
+                  <TacticalActivityIcon tacticalActivity={activity} size={{
                     width: '75px',
                     height: '75px',
                   }}/>

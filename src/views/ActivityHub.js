@@ -25,6 +25,7 @@ import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import Tooltip from "@material-ui/core/Tooltip";
 import type {TacticalActivity} from "../types/TacticalModels";
+import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
 
 const useStyles = makeStyles(theme => ({
@@ -203,7 +204,7 @@ const ActivityHub = ({
                                 selectedAction(activity);
                                 closeStrategy();
                               }}>
-                    <GoalIcon objective={activity} size={{
+                    <TacticalActivityIcon tacticalActivity={activity} size={{
                       height: '250px',
                       width: '250px',
                     }}/>
