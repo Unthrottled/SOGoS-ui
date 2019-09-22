@@ -120,7 +120,6 @@ const ObjectiveActivityAssociationDashboard = ({
       ...activitySwitches
     });
   };
-  console.log(selectedActivites, activitySwitches);
 
   const saveObjective = () => {
     const objective: Objective = {
