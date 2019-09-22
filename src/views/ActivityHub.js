@@ -9,7 +9,12 @@ import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
-import {selectConfigurationState, selectStrategyState, selectTacticalState} from "../reducers";
+import {
+  selectConfigurationState,
+  selectStrategyState,
+  selectTacticalActivityState,
+  selectTacticalState
+} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,6 +24,7 @@ import {GoalIcon} from "./GoalIcon";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import Tooltip from "@material-ui/core/Tooltip";
+import type {TacticalActivity} from "../types/TacticalModels";
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,7 +74,7 @@ const ActivityHub = ({
                        dispatch: dispetch,
                        loadDuration,
                        notificationsAllowed,
-                       objectives,
+                       activities,
                      }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -99,16 +105,16 @@ const ActivityHub = ({
     }));
   };
 
-  const commenceTimedObjectiveActivity = (objective: Objective) => {
-    commenceTimedActivity("TIMED_OBJECTIVE_ACTIVITY", {objectiveID: objective.id})
+  const commenceTimedObjectiveActivity = (activity: TacticalActivity) => {
+    commenceTimedActivity(activity.name, {activityID: activity.id})
   };
 
   const commenceGenericTimedActivity = () => {
     commenceTimedActivity("GENERIC_TIMED_ACTIVITY", {})
   };
 
-  const commenceObjectiveActivity = (objective: Objective) => {
-    commenceActivity("OBJECTIVE_ACTIVITY", {objectiveID: objective.id})
+  const commenceObjectiveActivity = (activity: TacticalActivity) => {
+    commenceActivity(activity.name, {activityID: activity.id})
   };
 
   const commenceGenericActivity = () => {
@@ -186,18 +192,18 @@ const ActivityHub = ({
         <div className={classes.container}>
           <div className={classes.contents}>
             {
-              objectToArray(objectives).map(objective => (
-                <Tooltip key={`tip_${objective.id}`}
+              objectToArray(activities).map((activity: TacticalActivity) => (
+                <Tooltip key={`tip_${activity.id}`}
                          open={showToolTips}
                          placement={'top'}
-                         title={objective.valueStatement}>
+                         title={activity.name}>
                   <IconButton color={'inherit'}
                               className={classes.goalIcon}
                               onClick={() => {
-                                selectedAction(objective);
+                                selectedAction(activity);
                                 closeStrategy();
                               }}>
-                    <GoalIcon objective={objective} size={{
+                    <GoalIcon objective={activity} size={{
                       height: '250px',
                       width: '250px',
                     }}/>
@@ -228,11 +234,11 @@ const ActivityHub = ({
 const mapStateToProps = state => {
   const {pomodoro: {settings: {loadDuration}}} = selectTacticalState(state);
   const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
-  const {objectives} = selectStrategyState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     loadDuration,
     notificationsAllowed,
-    objectives
+    activities
   }
 };
 

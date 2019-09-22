@@ -1,7 +1,7 @@
 Immediate things need to be done:
 ----
 - Time tasks and associate tasks with objectives.
-    - When offline and creating tasks, the task disappears on refresh.
+- First login so that way we know when they first started.
 - Make Pretty.
 
 Mile-Stones after MVP:
@@ -13,6 +13,9 @@ Mile-Stones after MVP:
 
 Edge Cases
 ----
+- When offline and creating tasks, the task disappears on refresh.
+- You cache by guid, but the activities are just by id
+    - That means that other people can see your objectives
 - What happens when you are doing timed intervals and you close the app?
 - What happens on logout when doing a timed activity?
 - No internet.
