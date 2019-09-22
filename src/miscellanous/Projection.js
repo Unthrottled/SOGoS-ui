@@ -1,8 +1,9 @@
 import type {Activity} from "../types/ActivityModels";
-import {getActivityName, getActivityObjectiveID, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
+import {getActivityID, getActivityName, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
 import {LOGGED_OFF, LOGGED_ON} from "../events/SecurityEvents";
 
 
+//todo: this
 export const areDifferent = (currentActivity, nextActivity) => true;
 export const shouldTime = (activity: Activity) => {
   const activityName = getActivityName(activity);
@@ -16,4 +17,4 @@ export const shouldTime = (activity: Activity) => {
   }
 };
 
-export const getActivityIdentifier = currentActivity => isActivityRecovery(currentActivity) ? RECOVERY : getActivityObjectiveID(currentActivity);
+export const getActivityIdentifier = currentActivity => isActivityRecovery(currentActivity) ? RECOVERY : getActivityID(currentActivity);
