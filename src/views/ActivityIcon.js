@@ -41,12 +41,14 @@ export const ActivityIcon = (props: Props) => {
 
   const usableSize = size || defaultSize;
 
-  function alterColor(svg, childID, usableColorType) {
+  function alterColor(svg, childID, usableColorType, modifier = (node, color)=>{
+    node.setAttribute('fill', color.hex);
+    node.setAttribute('fill-opacity', color.opacity);
+  }) {
     const background = findChild(svg, (node) => {
       return node.id && node.id.startsWith(childID);
     });
-    background.setAttribute('fill', usableColorType.hex);
-    background.setAttribute('fill-opacity', usableColorType.opacity);
+    modifier(background, usableColorType);
   }
 
   return (
@@ -54,7 +56,10 @@ export const ActivityIcon = (props: Props) => {
       <ReactSVG src={Activity} beforeInjection={(svg) => {
         svg.setAttribute('width', usableSize.width || defaultSize.width);
         svg.setAttribute('height', usableSize.height || defaultSize.height);
-        alterColor(svg, 'activityLine', usableLine);
+        alterColor(svg, 'activityLine', usableLine, (node, color)=>{
+          node.setAttribute('stroke', color.hex);
+          node.setAttribute('stroke-opacity', color.opacity);
+        });
         alterColor(svg, 'activityBackground', usableBackground);
       }}/>
     </div>

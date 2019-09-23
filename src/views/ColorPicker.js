@@ -16,7 +16,7 @@ export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
     opacity: 1,
   });
 
-  const [savedColor, setSetSavedColor] = useState({
+  const [savedColor, setSetSavedColor] = useState(defaultColor || {
     hex: '#86a4f3',
     opacity: 1,
   });
@@ -38,6 +38,7 @@ export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
             <div>
               <SketchPicker
                 color={currentColor.hex}
+                alpha={currentColor.opacity}
                 onChangeComplete={(color) => {
                   const brandNewColour = {
                     hex: color.hex,
