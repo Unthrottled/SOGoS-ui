@@ -16,7 +16,7 @@ export const reverseBinarySearch = (list, comparator) => {
 
 const reverseBinarySearchRecursion = (list, start, stop, comparator) => {
   if(stop <= start) {
-    return -stop;
+    return -(stop + 1);
   } else {
     const middleIndex = Math.floor((stop + start)/2);
     const compareValue = comparator(list[middleIndex]);
