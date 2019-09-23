@@ -25,7 +25,7 @@ function* listenToActivityEvents() {
 export function* historyAdjustmentCapstoneSaga({payload}) {
   const dateRange: DateRange = payload;
   const fullRangeAndFeed = yield call(getFullHistory, dateRange);
-  yield call(capstoneHistorySaga, fullRangeAndFeed);
+  yield call(capstoneHistorySaga, dateRange, fullRangeAndFeed);
 }
 
 export function* historyInitializationCapstoneSaga({payload}) {
@@ -34,7 +34,7 @@ export function* historyInitializationCapstoneSaga({payload}) {
     timeRange: full.between,
     activities: full.activities,
   };
-  yield call(capstoneHistorySaga, fullRangeAndActivities);
+  yield call(capstoneHistorySaga, full.between, fullRangeAndActivities);
 }
 
 export default function* HistorySagas() {

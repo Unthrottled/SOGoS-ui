@@ -9,11 +9,11 @@ export type FullRangeAndFeed = {
   timeRange: DateRange,
 }
 
-export function* capstoneHistorySaga(fullRangeAndFeed: FullRangeAndFeed) {
+export function* capstoneHistorySaga(selectedDateRange: DateRange,
+                                     fullRangeAndFeed: FullRangeAndFeed) {
   const firstBefore: Activity = yield call(getFirstBefore, fullRangeAndFeed);
-  const firstAfter: Activity = yield call(getFirstBefore, fullRangeAndFeed);
-  console.log(firstBefore, firstAfter);
-
+  const firstAfter: Activity = yield call(getFirstAfter, fullRangeAndFeed);
+  console.log(selectedDateRange, firstBefore, firstAfter);
   // update state with first before and after
 }
 
