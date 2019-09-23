@@ -13,10 +13,9 @@ import {withRouter} from "react-router-dom";
 import {selectStrategyState, selectTacticalActivityState, selectUserState} from "../reducers";
 import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import type {TacticalActivity} from "../types/TacticalModels";
-import {GoalIcon} from "./GoalIcon";
 import {Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
-import {createdObjective, updatedObjective} from "../actions/StrategyActions";
+import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
 const useStyles = makeStyles(theme => (
@@ -106,15 +105,15 @@ const ObjectiveActivityAssociationDashboard = ({
   const associatedActivityDictionary = (rememberedObjective.associatedActivities || []).reduce((accum, activity) => {
     accum[activity] = true;
     return accum;
-  },{});
-  const selectedActivites = tacticalTacticalActivites.reduce((accum, activity)=> {
+  }, {});
+  const selectedActivites = tacticalTacticalActivites.reduce((accum, activity) => {
     accum[activity.id] = !!associatedActivityDictionary[activity.id];
     return accum;
-  },{});
+  }, {});
 
 
   const [activitySwitches, setActivitySwitches] = useState(selectedActivites);
-  const toggleActivity = (activityId)=>{
+  const toggleActivity = (activityId) => {
     activitySwitches[activityId] = !activitySwitches[activityId];
     setActivitySwitches({
       ...activitySwitches
@@ -126,7 +125,7 @@ const ObjectiveActivityAssociationDashboard = ({
       ...rememberedObjective,
       associatedActivities: objectToKeyValueArray(activitySwitches)
         .filter(kv => kv.value)
-        .map(kv=>kv.key)
+        .map(kv => kv.key)
     };
     dispatch(updatedObjective(objective));
     history.push('/strategy/objectives/')

@@ -9,20 +9,13 @@ import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
 import {connect} from "react-redux";
 import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
-import {
-  selectConfigurationState,
-  selectStrategyState,
-  selectTacticalActivityState,
-  selectTacticalState
-} from "../reducers";
+import {selectConfigurationState, selectTacticalActivityState, selectTacticalState} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
 import {Cancel} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
-import {GoalIcon} from "./GoalIcon";
 import {objectToArray} from "../miscellanous/Tools";
-import type {Objective} from "../types/StrategyModels";
 import Tooltip from "@material-ui/core/Tooltip";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";

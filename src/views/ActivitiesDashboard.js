@@ -12,7 +12,6 @@ import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
-import {GoalIcon} from "./GoalIcon";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";

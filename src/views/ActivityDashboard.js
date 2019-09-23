@@ -13,7 +13,6 @@ import ReactSelect from 'react-select/creatable';
 import {withRouter} from "react-router-dom";
 import {components} from "./MultiSelectComponents";
 import {ColorPicker} from "./ColorPicker";
-import {MountainIcon} from "./MountainIcon";
 import {PopupModal} from "./PopupModal";
 import {
   createCreatedTacticalActivityEvent,
