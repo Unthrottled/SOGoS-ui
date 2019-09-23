@@ -9,6 +9,10 @@ import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import type {TacticalActivity} from "../types/TacticalModels";
 
+export const getMeaningFullName = (activityId, tacticalActivities) => {
+  const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
+  return (tacticalActivity && tacticalActivity.name) || activityId
+};
 
 const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
@@ -69,11 +73,6 @@ const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
       return accum;
     }, []);
 
-  const getMeaningFullName = (activityId) => {
-    const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
-    return (tacticalActivity && tacticalActivity.name) || activityId
-  };
-
   useEffect(() => {
     if (activityFeed.length > 0) {
       const selection = select('#pieBoi');
@@ -108,7 +107,7 @@ const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
         .attr('cursor','pointer')
         .attr("d", arcThing)
         .append("title")
-        .text(d => `${getMeaningFullName(d.data.name)}: ${d.data.value.toLocaleString()}`);
+        .text(d => `${getMeaningFullName(d.data.name, tacticalActivities)}: ${d.data.value.toLocaleString()}`);
     }
   });
 

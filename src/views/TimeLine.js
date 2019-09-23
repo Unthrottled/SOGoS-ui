@@ -5,9 +5,10 @@ import {scaleLinear} from 'd3-scale';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import {getActivityName} from "../types/ActivityModels";
-import {selectHistoryState} from "../reducers";
+import {selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
+import {getMeaningFullName} from "./PieFlavored";
 
 
 const withStyles = makeStyles(__ => ({
@@ -35,7 +36,7 @@ const withStyles = makeStyles(__ => ({
   }
 }));
 
-const TimeLine = ({activityFeed, relativeToTime}) => {
+const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
   const classes = withStyles();
 
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
@@ -152,7 +153,8 @@ const TimeLine = ({activityFeed, relativeToTime}) => {
       mini.append("g").selectAll(".laneText")
         .data(lanes)
         .enter().append("text")
-        .text(d => d)
+        .attr('font-size','.75em')
+        .text(d => getMeaningFullName(d, tacticalActivities))
         .attr("x", -m[1])
         .attr("y", (d, i) => y1(i + .5))
         .attr("dy", ".5ex")
@@ -196,9 +198,11 @@ const TimeLine = ({activityFeed, relativeToTime}) => {
 
 const mapStateToProps = state => {
   const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
+    tacticalActivities: activities,
   }
 };
 export default connect(mapStateToProps)(TimeLine);
