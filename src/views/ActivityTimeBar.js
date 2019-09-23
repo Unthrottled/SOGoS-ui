@@ -5,11 +5,12 @@ import Slide from "@material-ui/core/Slide";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
-import {ActivityTimedType, ActivityType, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
+import {ActivityTimedType, ActivityType, getActivityID, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
 import {blue} from "@material-ui/core/colors";
 import {selectActivityState, selectTacticalState} from "../reducers";
+import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -29,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     cursor: 'pointer',
     paddingRight: theme.spacing(1)
+  },
+  activityIcon: {
+    marginLeft: theme.spacing(1),
+    opacity: 0.75,
   },
 }));
 
@@ -51,6 +56,7 @@ const ActivityTimeBar = ({
                            currentActivity,
                            previousActivity,
                            pomodoroSettings,
+                           activities,
                            dispatch: dispetch
                          }) => {
   const classes = useStyles();
@@ -109,10 +115,21 @@ const ActivityTimeBar = ({
     return timerBarClasses.join(' ');
   };
 
+  const tacticalActivity = activities[getActivityID(currentActivity)];
+
   const isTimeBarActivity = shouldTime && !(isRecovery && timedType === ActivityTimedType.STOP_WATCH);
   return isTimeBarActivity ? (
     <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
+        {
+          tacticalActivity &&
+          <div className={classes.activityIcon}>
+            <TacticalActivityIcon tacticalActivity={tacticalActivity} size={{
+              width: '50px',
+              height: '50px',
+            }}/>
+          </div>
+        }
         <div style={{flexGrow: 1, textAlign: "center"}}>
           {
             isTimer ?
@@ -139,12 +156,13 @@ const ActivityTimeBar = ({
 
 const mapStateToProps = state => {
   const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
-  const {pomodoro: {settings}} = selectTacticalState(state);
+  const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
   return {
     shouldTime,
     currentActivity,
     previousActivity,
-    pomodoroSettings: settings
+    pomodoroSettings: settings,
+    activities
   }
 };
 
