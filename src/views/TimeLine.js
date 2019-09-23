@@ -4,37 +4,36 @@ import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
-import {getActivityName} from "../types/ActivityModels";
+import {ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
 import {selectActivityState, selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {getMeaningFullName} from "./PieFlavored";
+import {getActivityBackgroundColor} from "../types/TacticalModels";
 
 
 const withStyles = makeStyles(__ => ({
-  miniItem0: {
-    fill: 'darksalmon',
+  timeBar: {
     fillOpacity: .7,
     strokeWidth: 6,
   },
-
-  miniItem1: {
-    fill: 'darkolivegreen',
-    fillOpacity: .7,
-    strokeWidth: 6,
-  },
-
-  miniItem2: {
-    fill: 'slategray',
-    fillOpacity: .7,
-    strokeWidth: 6,
-  },
-  miniItem3: {
-    fill: 'purple',
-    fillOpacity: .7,
-    strokeWidth: 6,
-  }
 }));
+
+export const constructColorMappings = tacticalActivities => {
+  const defaultColors = {};
+  defaultColors[ActivityStrategy.GENERIC] = 'lime';
+  defaultColors[RECOVERY] = 'skyblue';
+  return {
+    ...objectToKeyValueArray(tacticalActivities)
+      .map(kv => ({key: kv.key, value: getActivityBackgroundColor(kv.value)}))
+      .filter(kv => !!kv.value)
+      .reduce((accum, idToColor) => {
+        accum[idToColor.key] = idToColor.value;
+        return accum;
+      }, {}),
+    ...defaultColors,
+  };
+};
 
 const TimeLine = ({
                     activityFeed,
@@ -88,11 +87,11 @@ const TimeLine = ({
     start: activityProjection.currentActivity.antecedenceTime,
     stop: relativeToTime > meow ? meow : relativeToTime,
     spawn: {
-      start: activityProjection.currentActivity.antecedenceTime,
+      start: activityProjection.currentActivity,
       stop: "Meow"
     },
   });
-  
+
   useEffect(() => {
     if (modifiedFeed.length) {
       const selection = select('#timeBoi');
@@ -147,6 +146,8 @@ const TimeLine = ({
         return keyValue.value
       });
 
+      const colorToActivity = constructColorMappings(tacticalActivities);
+
       mini.append("g").selectAll(".laneLines")
         .data(items)
         .enter().append("line")
@@ -170,7 +171,9 @@ const TimeLine = ({
       mini.append("g").selectAll("miniItems")
         .data(items)
         .enter().append("rect")
-        .attr("class", d => classes["miniItem" + d.lane])
+        .attr('fill',d => colorToActivity[(getActivityID(d.spawn.start))])
+        .attr('opacity',0.7)
+        .attr("class", () => classes["timebar"])
         .attr("x", d => x(d.start))
         .attr("y", d => y1(d.lane) + 10)
         .attr("width", d => x(d.stop - d.start))

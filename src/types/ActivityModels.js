@@ -36,8 +36,10 @@ const getActivityContent = (activity: Activity): ActivityContent => (activity &&
 export const getTimedType = (activity: Activity) => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 export const getActivityType = (activity: Activity) => getActivityContent(activity).type || ActivityType.PASSIVE;
 export const getActivityName = (activity: Activity) => getActivityContent(activity).name;
-export const getActivityObjectiveID = (activity: Activity) => getActivityContent(activity).objectiveID || ActivityStrategy.GENERIC;
-export const getActivityID = (activity: Activity) => getActivityContent(activity).activityID || ActivityStrategy.GENERIC;
+export const getActivityID = (activity: Activity) =>
+  getActivityContent(activity).activityID ||
+  (isActivityRecovery(activity) && RECOVERY) ||
+  ActivityStrategy.GENERIC;
 const getId = (activity: Activity) => getActivityContent(activity).uuid;
 
 export const activitiesEqual = (currentActivity: Activity, activity: Activity) => {
