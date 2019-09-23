@@ -39,6 +39,7 @@ const withStyles = makeStyles(__ => ({
 const TimeLine = ({
                     activityFeed,
                     relativeToTime,
+                    relativeFromTime,
                     tacticalActivities,
                     currentActivity
                   }) => {
@@ -106,7 +107,7 @@ const TimeLine = ({
         miniHeight = laneLength * 12 + 50,
         mainHeight = h - miniHeight - 50;
 
-      const timeBegin = modifiedFeed[modifiedFeed.length - 1].antecedenceTime;
+      const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
 
       var x = scaleLinear()
@@ -202,12 +203,13 @@ const TimeLine = ({
 };
 
 const mapStateToProps = state => {
-  const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
+  const {activityFeed, selectedHistoryRange: {to, from}} = selectHistoryState(state);
   const {activities} = selectTacticalActivityState(state);
   const {currentActivity} = selectActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
+    relativeFromTime: from,
     tacticalActivities: activities,
     currentActivity,
   }
