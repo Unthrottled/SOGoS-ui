@@ -5,7 +5,7 @@ import {scaleLinear} from 'd3-scale';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import {getActivityName} from "../types/ActivityModels";
-import {selectHistoryState, selectTacticalActivityState} from "../reducers";
+import {selectActivityState, selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {getMeaningFullName} from "./PieFlavored";
@@ -36,10 +36,15 @@ const withStyles = makeStyles(__ => ({
   }
 }));
 
-const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
+const TimeLine = ({
+                    activityFeed,
+                    relativeToTime,
+                    tacticalActivities,
+                    currentActivity
+                  }) => {
   const classes = withStyles();
-
-  const activityProjection = activityFeed.reduceRight((accum, activity) => {
+  const modifiedFeed = [currentActivity, ...activityFeed];
+  const activityProjection = modifiedFeed.reduceRight((accum, activity) => {
     if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
       accum.currentActivity = activity;
     } else if (areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
@@ -88,7 +93,7 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
   });
 
   useEffect(() => {
-    if (activityFeed.length) {
+    if (modifiedFeed.length) {
       const selection = select('#timeBoi');
 
       const binsToArray = objectToKeyValueArray(bins);
@@ -101,7 +106,7 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
         miniHeight = laneLength * 12 + 50,
         mainHeight = h - miniHeight - 50;
 
-      const timeBegin = activityFeed[activityFeed.length - 1].antecedenceTime;
+      const timeBegin = modifiedFeed[modifiedFeed.length - 1].antecedenceTime;
       const timeEnd = relativeToTime;
 
       var x = scaleLinear()
@@ -132,10 +137,10 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
         .attr("class", "mini");
 
       const items = binsToArray.flatMap((keyValue, index) => {
-        keyValue.value.forEach((activity)=>{
+        keyValue.value.forEach((activity) => {
           activity.lane = index;
-          activity.start =  activity.start - timeBegin;
-          activity.stop =  activity.stop - timeBegin;
+          activity.start = activity.start - timeBegin;
+          activity.stop = activity.stop - timeBegin;
           // activity.id = keyValue.key;
         });
         return keyValue.value
@@ -153,7 +158,7 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
       mini.append("g").selectAll(".laneText")
         .data(lanes)
         .enter().append("text")
-        .attr('font-size','.75em')
+        .attr('font-size', '.75em')
         .text(d => getMeaningFullName(d, tacticalActivities))
         .attr("x", -m[1])
         .attr("y", (d, i) => y1(i + .5))
@@ -161,14 +166,14 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
         .attr("text-anchor", "end")
         .attr("class", "laneText");
 
-    mini.append("g").selectAll("miniItems")
-      .data(items)
-      .enter().append("rect")
-      .attr("class", d => classes["miniItem" + d.lane])
-      .attr("x", d => x(d.start))
-      .attr("y", d => y1(d.lane) + 10)
-      .attr("width", d => x(d.stop - d.start))
-      .attr("height", () => .8 * y1(1));
+      mini.append("g").selectAll("miniItems")
+        .data(items)
+        .enter().append("rect")
+        .attr("class", d => classes["miniItem" + d.lane])
+        .attr("x", d => x(d.start))
+        .attr("y", d => y1(d.lane) + 10)
+        .attr("width", d => x(d.stop - d.start))
+        .attr("height", () => .8 * y1(1));
 
       //mini labels
       mini.append("g").selectAll(".miniLabels")
@@ -199,10 +204,12 @@ const TimeLine = ({activityFeed, relativeToTime, tacticalActivities}) => {
 const mapStateToProps = state => {
   const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
   const {activities} = selectTacticalActivityState(state);
+  const {currentActivity} = selectActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
     tacticalActivities: activities,
+    currentActivity,
   }
 };
 export default connect(mapStateToProps)(TimeLine);
