@@ -93,8 +93,6 @@ const TimeLine = ({
     },
   });
   
-  console.log(bins);
-
   useEffect(() => {
     if (modifiedFeed.length) {
       const selection = select('#timeBoi');
