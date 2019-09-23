@@ -3,13 +3,14 @@ import {useEffect} from 'react';
 import {select} from 'd3-selection';
 import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
 import {connect} from "react-redux";
-import {selectHistoryState} from "../reducers";
+import {selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {getActivityName} from "../types/ActivityModels";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
+import type {TacticalActivity} from "../types/TacticalModels";
 
 
-const PieFlavored = ({activityFeed, relativeToTime}) => {
+const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
       accum.trackedTime = activity.antecedenceTime
@@ -68,8 +69,13 @@ const PieFlavored = ({activityFeed, relativeToTime}) => {
       return accum;
     }, []);
 
+  const getMeaningFullName = (activityId) => {
+    const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
+    return (tacticalActivity && tacticalActivity.name) || activityId
+  };
+
   useEffect(() => {
-    if(activityFeed.length > 0){
+    if (activityFeed.length > 0) {
       const selection = select('#pieBoi');
       const width = 200;
       const height = 200;
@@ -92,34 +98,17 @@ const PieFlavored = ({activityFeed, relativeToTime}) => {
 
       const radius = Math.min(width, height) / 2;
       const arcThing = arc()
-        .innerRadius(radius * 0.67)
+        .innerRadius(radius * 0.7)
         .outerRadius(radius - 1);
 
       pieSVG.selectAll("path")
         .data(arcs)
         .join("path")
         .attr("fill", d => color(d.data.value))
+        .attr('cursor','pointer')
         .attr("d", arcThing)
         .append("title")
-        .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
-
-      pieSVG.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 12)
-        .attr("text-anchor", "middle")
-        .selectAll("text")
-        .data(arcs)
-        .join("text")
-        .attr("transform", d => `translate(${arcThing.centroid(d)})`)
-        .call(text => text.append("tspan")
-          .attr("y", "-0.4em")
-          .attr("font-weight", "bold")
-          .text(d => d.data.name))
-        .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-          .attr("x", 0)
-          .attr("y", "0.7em")
-          .attr("fill-opacity", 0.7)
-          .text(d => d.data.value.toLocaleString()));
+        .text(d => `${getMeaningFullName(d.data.name)}: ${d.data.value.toLocaleString()}`);
     }
   });
 
@@ -134,9 +123,11 @@ const PieFlavored = ({activityFeed, relativeToTime}) => {
 
 const mapStateToProps = state => {
   const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
+    tacticalActivities: activities
   }
 };
 export default connect(mapStateToProps)(PieFlavored);
