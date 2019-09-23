@@ -92,6 +92,8 @@ const TimeLine = ({
       stop: "Meow"
     },
   });
+  
+  console.log(bins);
 
   useEffect(() => {
     if (modifiedFeed.length) {

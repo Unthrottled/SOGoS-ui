@@ -8,7 +8,7 @@ import {
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {selectHistoryState, selectUserState} from "../../reducers";
 import type {HistoryState} from "../../reducers/HistoryReducer";
-import {binarySearch} from "../../miscellanous/Tools";
+import {reverseBinarySearch} from "../../miscellanous/Tools";
 import type {Activity} from "../../types/ActivityModels";
 import type {UserState} from "../../reducers/UserReducer";
 
@@ -16,7 +16,7 @@ export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
 
 const meow = new Date();
-const SEVEN_DAYS = 3600000;
+const SEVEN_DAYS = 360000;
 // const SEVEN_DAYS = 604800000;
 const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
 
@@ -116,11 +116,11 @@ export function* updateFullFeed(to: number, from: number): Activity[] {
 }
 
 export function* updateSelection(fullFeed: Activity[], to: number, from: number) {
-  const newFrom = Math.abs(binarySearch(fullFeed, (activity: Activity) => {
+  const newFrom = Math.abs(reverseBinarySearch(fullFeed, (activity: Activity) => {
     return from - activity.antecedenceTime
   }));
   const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
-  const newTo = Math.abs(binarySearch(fullFeed, (activity: Activity) => {
+  const newTo = Math.abs(reverseBinarySearch(fullFeed, (activity: Activity) => {
     return to - activity.antecedenceTime
   }));
   yield put(createUpdatedHistorySelectionEvent({

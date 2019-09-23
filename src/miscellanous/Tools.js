@@ -10,22 +10,22 @@ export const objectToKeyValueArray = (object): KeyValue[] => Object.keys(object 
   value: object[key],
 }));
 
-export const binarySearch = (list, comparator) => {
-  return binarySearchRecursion(list, 0, list.length, comparator)
+export const reverseBinarySearch = (list, comparator) => {
+  return reverseBinarySearchRecursion(list, 0, list.length, comparator)
 };
 
-const binarySearchRecursion = (list, start, stop, comparator) => {
+const reverseBinarySearchRecursion = (list, start, stop, comparator) => {
   if(stop <= start) {
-    return -start;
+    return -stop;
   } else {
     const middleIndex = Math.floor((stop + start)/2);
     const compareValue = comparator(list[middleIndex]);
     if (compareValue === 0){
       return middleIndex;
     } else if(compareValue > 0){
-      return binarySearchRecursion(list, start, middleIndex - 1, comparator);
+      return reverseBinarySearchRecursion(list, start, middleIndex - 1, comparator);
     } else {
-      return binarySearchRecursion(list, middleIndex + 1, stop, comparator)
+      return reverseBinarySearchRecursion(list, middleIndex + 1, stop, comparator)
     }
   }
 };
