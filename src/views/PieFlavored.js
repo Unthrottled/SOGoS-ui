@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {useEffect} from 'react';
 import {select} from 'd3-selection';
-import {arc, interpolateSpectral, pie, quantize, scaleOrdinal} from 'd3'
+import {arc, pie} from 'd3'
 import {connect} from "react-redux";
 import {selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {getActivityName} from "../types/ActivityModels";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import type {TacticalActivity} from "../types/TacticalModels";
+import {constructColorMappings} from "./TimeLine";
 
 export const getMeaningFullName = (activityId, tacticalActivities) => {
   const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
@@ -91,20 +92,20 @@ const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
         .value(d => d.value);
 
       const arcs = pieFlavored(pieData);
-      const color = scaleOrdinal()
-        .domain(pieData.map(d => d.value))
-        .range(quantize(t => interpolateSpectral(t * 0.8 + 0.1), pieData.length).reverse());
 
       const radius = Math.min(width, height) / 2;
       const arcThing = arc()
         .innerRadius(radius * 0.7)
         .outerRadius(radius - 1);
 
+      const idToColor = constructColorMappings(tacticalActivities);
+
       pieSVG.selectAll("path")
         .data(arcs)
         .join("path")
-        .attr("fill", d => color(d.data.value))
-        .attr('cursor','pointer')
+        .attr("fill", d => idToColor[d.data.name])
+        .attr('opacity', 0.7)
+        .attr('cursor', 'pointer')
         .attr("d", arcThing)
         .append("title")
         .text(d => `${getMeaningFullName(d.data.name, tacticalActivities)}: ${d.data.value.toLocaleString()}`);
