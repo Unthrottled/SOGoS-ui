@@ -12,6 +12,8 @@ export const RESUMED_NON_TIMED_ACTIVITY = 'RESUMED_NON_TIMED_ACTIVITY';
 export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 
+export const CAPSTONED_TACTICAL_ACTIVITIES: 'CAPSTONED_TACTICAL_ACTIVITIES' = 'CAPSTONED_TACTICAL_ACTIVITIES';
+
 export const CREATED = 'CREATED';
 export const COMPLETED = 'COMPLETED';
 export const UPDATED = 'UPDATED';
@@ -21,6 +23,17 @@ export type ActivityCacheEvent = {
   cachedActivity: CachedActivity,
   userGUID: string,
 };
+
+export const createCapstoneActivitesEvent = (
+  oldestActivity: Activity,
+  newestActivity: Activity,
+) => ({
+  type: CAPSTONED_TACTICAL_ACTIVITIES,
+  payload: {
+    oldestActivity,
+    newestActivity,
+  }
+});
 
 
 export const createStartedActivityEvent = (content: ActivityContent) => ({
