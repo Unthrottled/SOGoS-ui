@@ -2,6 +2,17 @@ import React, {useEffect, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import {TimeDisplay} from "./TimeDisplay";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+const useStyles = makeStyles(theme=>({
+  stopwatchContainer: {
+    display: 'inline-flex',
+    marginTop: theme.spacing(1.5),
+  },
+  actionButton: {
+    marginLeft: theme.spacing(1.5),
+  },
+}));
 
 export const PomodoroTimer = ({
                                 startTimeInSeconds,
@@ -47,12 +58,13 @@ export const PomodoroTimer = ({
     setRememberedActivity(activityId);
   }
 
+  const classes = useStyles();
   return (
-    <div>
+    <div className={classes.stopwatchContainer}>
       <div>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
-      <div>
+      <div className={classes.actionButton}>
         {
           !hidePause && (isPaused ?
             (<div onClick={resumeTimer}>
