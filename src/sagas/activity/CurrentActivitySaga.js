@@ -1,6 +1,6 @@
 import {performGetWithoutSessionExtension} from "../APISagas";
 import {
-  createFoundPreviousActivityActivityEvent,
+  createFoundPreviousActivityActivityEvent, createInitializedCurrentActivityEvent,
   createResumedStartedNonTimedActivityEvent,
   createResumedStartedTimedActivityEvent
 } from "../../events/ActivityEvents";
@@ -18,13 +18,16 @@ import {
 } from "../../types/ActivityModels";
 import {INITIALIZED_SECURITY} from "../../events/SecurityEvents";
 
+export const isTimedActivity = activity =>
+  getActivityType(activity) === ActivityType.ACTIVE &&
+  getTimedType(activity) !== ActivityTimedType.NONE;
+
 export function* handleNewActivity(activity) {
-  const isTimedActivity =
-    getActivityType(activity) === ActivityType.ACTIVE &&
-    getTimedType(activity) !== ActivityTimedType.NONE;
-  if (isTimedActivity) {
+  const isTimed =
+    isTimedActivity(activity);
+  if (isTimed) {
     yield put(createResumedStartedTimedActivityEvent(activity));
-  } else if(activity) {
+  } else if (activity) {
     yield put(createResumedStartedNonTimedActivityEvent(activity));
   }
 }
@@ -38,7 +41,9 @@ export function* updateCurrentActivity(attempt: number = 10) {
     const {currentActivity} = yield select(selectActivityState);
     if (!activitiesEqual(currentActivity, activity)) {
       yield call(handleNewActivity, activity);
+      return { currentActivity, wasNew: true }
     }
+    return { currentActivity, wasNew: false };
   } catch (error) {
     yield call(handleError, attempt)
   }
@@ -49,7 +54,7 @@ export function* updatePreviousActivity(attempt: number = 10) {
     const {data: activity} = yield call(performGetWithoutSessionExtension, PREVIOUS_ACTIVITY_URL);
     yield put(createFoundPreviousActivityActivityEvent(activity));
   } catch (error) {
-    if(error.response.status !== 404){
+    if (error.response.status !== 404) {
       yield call(handleError, attempt, updatePreviousActivity)
     }
   }
@@ -81,9 +86,13 @@ export function* delayWork() {
 export function* currentActivitySaga() {
   yield take(RECEIVED_USER);
   yield call(updatePreviousActivity);
+  const {currentActivity, wasNew} = yield call(updateCurrentActivity);
+  if (!wasNew){
+    yield put(createInitializedCurrentActivityEvent(currentActivity));
+  }
   // todo: bring back when dashboards are sharable.
   // while (true) {
-    yield call(updateCurrentActivity);
+  // yield call(updateCurrentActivity);
   //   yield call(delayWork);
   // }
 }

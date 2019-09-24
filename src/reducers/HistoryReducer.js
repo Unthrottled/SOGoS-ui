@@ -1,5 +1,10 @@
 import {Action} from "redux";
-import {RESUMED_NON_TIMED_ACTIVITY, RESUMED_TIMED_ACTIVITY, STARTED_ACTIVITY} from "../events/ActivityEvents";
+import {
+  INITIALIZED_CURRENT_ACTIVITY,
+  RESUMED_NON_TIMED_ACTIVITY,
+  RESUMED_TIMED_ACTIVITY,
+  STARTED_ACTIVITY
+} from "../events/ActivityEvents";
 import {
   INITIALIZED_HISTORY,
   UPDATED_FULL_FEED,
@@ -65,9 +70,11 @@ const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Act
         selectedHistoryRange: newSelectionPayload.between,
         activityFeed: newSelectionPayload.activities,
       };
+
     case STARTED_ACTIVITY:
-    case RESUMED_TIMED_ACTIVITY :
-    case RESUMED_NON_TIMED_ACTIVITY :
+    case RESUMED_TIMED_ACTIVITY:
+    case RESUMED_NON_TIMED_ACTIVITY:
+    case INITIALIZED_CURRENT_ACTIVITY:
       return {
         ...state,
         activityFeed: [
