@@ -7,17 +7,24 @@ import {
   UPDATED_HISTORY_SELECTION
 } from "../events/HistoryEvents";
 import type {ActivityReceptionPayload, ActivityUpdatePayload} from "../events/HistoryEvents";
+import type {Activity} from "../types/ActivityModels";
 
 export type DateRange = {
   from: number,
   to: number,
 }
 
+export type CapstoneState = {
+  topActivity: Activity,
+  bottomActivity: Activity,
+};
+
 export type HistoryState = {
   activityFeed: any[],
   selectedHistoryRange: DateRange,
   fullFeed: any[],
-  fullHistoryRange: DateRange
+  fullHistoryRange: DateRange,
+  capstone: CapstoneState,
 }
 
 const DEFAULT_RANGE: DateRange = {
