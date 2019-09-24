@@ -1,17 +1,11 @@
 import {Action} from "redux";
-import {
-  INITIALIZED_CURRENT_ACTIVITY,
-  RESUMED_NON_TIMED_ACTIVITY,
-  RESUMED_TIMED_ACTIVITY,
-  STARTED_ACTIVITY
-} from "../events/ActivityEvents";
+import type {ActivityReceptionPayload, ActivityUpdatePayload} from "../events/HistoryEvents";
 import {
   INITIALIZED_HISTORY,
   UPDATED_FULL_FEED,
   UPDATED_HISTORY,
   UPDATED_HISTORY_SELECTION
 } from "../events/HistoryEvents";
-import type {ActivityReceptionPayload, ActivityUpdatePayload} from "../events/HistoryEvents";
 import type {Activity} from "../types/ActivityModels";
 
 export type DateRange = {
@@ -69,18 +63,6 @@ const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Act
         ...state,
         selectedHistoryRange: newSelectionPayload.between,
         activityFeed: newSelectionPayload.activities,
-      };
-
-    case STARTED_ACTIVITY:
-    case RESUMED_TIMED_ACTIVITY:
-    case RESUMED_NON_TIMED_ACTIVITY:
-    case INITIALIZED_CURRENT_ACTIVITY:
-      return {
-        ...state,
-        activityFeed: [
-          action.payload,
-          ...state.activityFeed,
-        ]
       };
     default:
       return state

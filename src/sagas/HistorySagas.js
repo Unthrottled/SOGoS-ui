@@ -1,10 +1,21 @@
 import {all, call, fork, take, takeEvery} from 'redux-saga/effects'
 import {ADJUSTED_HISTORY, INITIALIZED_HISTORY, VIEWED_HISTORY} from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
-import {historyAdjustmentSaga, historyInitializationSaga, historyObservationSaga} from "./history/ActivityHistorySagas";
+import {
+  currentActivityHistorySaga,
+  historyAdjustmentSaga,
+  historyInitializationSaga,
+  historyObservationSaga
+} from "./history/ActivityHistorySagas";
 import type {FullRangeAndFeed} from "./history/CapstoneHistorySaga";
 import {capstoneHistorySaga, getFullHistory} from "./history/CapstoneHistorySaga";
 import type {DateRange} from "../reducers/HistoryReducer";
+import {
+  INITIALIZED_CURRENT_ACTIVITY,
+  RESUMED_NON_TIMED_ACTIVITY,
+  RESUMED_TIMED_ACTIVITY,
+  STARTED_ACTIVITY
+} from "../events/ActivityEvents";
 
 export function* initializeActivityFeedSaga() {
   const {foundUser} = yield all({
@@ -37,8 +48,16 @@ export function* historyInitializationCapstoneSaga({payload}) {
   yield call(capstoneHistorySaga, full.between, fullRangeAndActivities);
 }
 
+export function* listenToCurrentActivityEvents() {
+  yield takeEvery(STARTED_ACTIVITY, currentActivityHistorySaga);
+  yield takeEvery(RESUMED_TIMED_ACTIVITY, currentActivityHistorySaga);
+  yield takeEvery(RESUMED_NON_TIMED_ACTIVITY, currentActivityHistorySaga);
+  yield takeEvery(INITIALIZED_CURRENT_ACTIVITY, currentActivityHistorySaga);
+}
+
 export default function* HistorySagas() {
   yield all([
     listenToActivityEvents(),
+    listenToCurrentActivityEvents(),
   ]);
 }
