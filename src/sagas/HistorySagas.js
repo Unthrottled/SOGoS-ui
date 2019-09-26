@@ -7,20 +7,11 @@ import {
   VIEWED_HISTORY
 } from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
-import {
-  historyAdjustmentSaga,
-  historyInitializationSaga,
-  historyObservationSaga
-} from "./history/ActivityHistorySagas";
+import {historyAdjustmentSaga, historyInitializationSaga, historyObservationSaga} from "./history/ActivityHistorySagas";
 import type {FullRangeAndFeed} from "./history/CapstoneHistorySaga";
 import {capstoneHistorySaga, getFullHistory} from "./history/CapstoneHistorySaga";
 import type {DateRange} from "../reducers/HistoryReducer";
-import {
-  INITIALIZED_CURRENT_ACTIVITY,
-  RESUMED_NON_TIMED_ACTIVITY,
-  RESUMED_TIMED_ACTIVITY,
-  STARTED_ACTIVITY
-} from "../events/ActivityEvents";
+import {STARTED_ACTIVITY} from "../events/ActivityEvents";
 import {
   apiAfterCapstoneSaga,
   apiBeforeCapstoneSaga,

@@ -22,7 +22,7 @@ const reverseBinarySearchRecursion = (list, start, stop, comparator) => {
     const compareValue = comparator(list[middleIndex]);
     if (compareValue === 0){
       return middleIndex;
-    } else if(compareValue > 0){
+    } else if(compareValue < 0){ // current value is small move to the bigger section (the front)
       return reverseBinarySearchRecursion(list, start, middleIndex - 1, comparator);
     } else {
       return reverseBinarySearchRecursion(list, middleIndex + 1, stop, comparator)

@@ -33,11 +33,31 @@ export function* capstoneHistorySaga(selectedDateRange: DateRange,
   }));
 }
 
+const getBeforeIndex = (index) => {
+  if(index > -1){
+    return index + 1;
+  } else {
+    return Math.abs(index)  
+  }
+};
+
+//todo: this
+const getAfterIndex = (index) => {
+  if(index > -1){
+    return index - 1;
+  } else {
+    return Math.abs(index) - 1
+  }
+};
+
 export function* getFirstBefore(selectedFromDate: number,
                                 {activities, timeRange: {from}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedFromDate);
-  if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
+  console.log(reverseBinarySearch([2], (a) =>a - 2 ));
+  const updatedActivityIndex = getBeforeIndex(activityIndex);
+  if (updatedActivityIndex > activities.length - 1) {
+    console.log("before from api");
     const oldestTime = activities.length ? activities[activities.length - 1].antecedenceTime : from;
     const {data} = yield call(findFirstActivityBeforeTime, oldestTime);
     if(data) {
@@ -45,7 +65,8 @@ export function* getFirstBefore(selectedFromDate: number,
       return yield findOldestTimedActivity(data)
     }
   }
-  return activities[activities.length - 1];
+  console.log("before from feed");
+  return activities[updatedActivityIndex];
 }
 
 export function* findOldestTimedActivity(activity: Activity){

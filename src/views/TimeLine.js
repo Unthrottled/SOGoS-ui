@@ -40,7 +40,8 @@ const TimeLine = ({
                     relativeToTime,
                     relativeFromTime,
                     tacticalActivities,
-                    currentActivity
+                    currentActivity,
+                    bottomActivity,
                   }) => {
   const classes = withStyles();
   const modifiedFeed = [currentActivity, ...activityFeed];
@@ -92,6 +93,8 @@ const TimeLine = ({
     },
   });
 
+  console.log(bins);
+
   useEffect(() => {
     if (modifiedFeed.length) {
       const selection = select('#timeBoi');
@@ -140,6 +143,7 @@ const TimeLine = ({
         keyValue.value.forEach((activity) => {
           activity.lane = index;
           activity.start = activity.start - timeBegin;
+          activity.start = activity.start < 0 ? 0 : activity.start;
           activity.stop = activity.stop - timeBegin;
           // activity.id = keyValue.key;
         });
@@ -206,7 +210,7 @@ const TimeLine = ({
 };
 
 const mapStateToProps = state => {
-  const {activityFeed, selectedHistoryRange: {to, from}} = selectHistoryState(state);
+  const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
   const {activities} = selectTacticalActivityState(state);
   const {currentActivity} = selectActivityState(state);
   return {
@@ -215,6 +219,7 @@ const mapStateToProps = state => {
     relativeFromTime: from,
     tacticalActivities: activities,
     currentActivity,
+    bottomActivity,
   }
 };
 export default connect(mapStateToProps)(TimeLine);
