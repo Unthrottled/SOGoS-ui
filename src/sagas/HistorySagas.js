@@ -60,9 +60,6 @@ export function* historyInitializationCapstoneSaga({payload}) {
 
 export function* listenToCurrentActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, currentActivityHistorySaga);
-  yield takeEvery(RESUMED_TIMED_ACTIVITY, currentActivityHistorySaga);
-  yield takeEvery(RESUMED_NON_TIMED_ACTIVITY, currentActivityHistorySaga);
-  yield takeEvery(INITIALIZED_CURRENT_ACTIVITY, currentActivityHistorySaga);
 }
 
 export function* listenToCapstoneEvents() {

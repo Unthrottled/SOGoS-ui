@@ -27,7 +27,6 @@ export function* capstoneHistorySaga(selectedDateRange: DateRange,
     timeRange: historyState.fullHistoryRange,
   });
   const firstAfter: Activity = maybeAfter || firstBefore;
-  console.log("New capstones", "before", firstBefore, "after", firstAfter);
   yield put(createUpdatedCapstonesEvent({
     beforeCapstone: firstBefore,
     afterCapstone: firstAfter,
@@ -39,7 +38,6 @@ export function* getFirstBefore(selectedFromDate: number,
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedFromDate);
   if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
-    console.log("great I gotta talk to the API, with the from date as a parameter");
     const oldestTime = activities.length ? activities[activities.length - 1].antecedenceTime : from;
     const {data} = yield call(findFirstActivityBeforeTime, oldestTime);
     if(data) {
@@ -47,7 +45,6 @@ export function* getFirstBefore(selectedFromDate: number,
       return yield findOldestTimedActivity(data)
     }
   }
-  console.log("Looks Like I can do stuff with what I got");
   return activities[activities.length - 1];
 }
 
@@ -77,7 +74,6 @@ export function* getFirstAfter(selectedToRange: number,
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedToRange);
   if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
-    console.log("great I gotta talk to the API, with the to date as a parameter");
     const youngestTime = activities.length ? activities[0].antecedenceTime : to;
     const {data} = yield call(findFirstActivityAfterTime, youngestTime);
     if(data) {
@@ -86,7 +82,6 @@ export function* getFirstAfter(selectedToRange: number,
     }
   }
 
-  console.log("Looks Like I can do stuff with what I got");
   return activities[0];
 }
 

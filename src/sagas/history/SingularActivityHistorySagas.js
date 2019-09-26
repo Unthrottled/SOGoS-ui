@@ -19,8 +19,8 @@ export function* apiBeforeCapstoneSaga({payload}){
     }
   }));
 }
-export function* apiAfterCapstoneSaga({payload}){
-  const activity: Activity = payload;
+
+export function* addActivityAfter(activity) {
   const historyState: HistoryState = yield select(selectHistoryState);
   yield put(createUpdatedFullFeedEvent({
     activities: [
@@ -34,6 +34,11 @@ export function* apiAfterCapstoneSaga({payload}){
   }));
 }
 
+export function* apiAfterCapstoneSaga({payload}){
+  const activity: Activity = payload;
+  yield call(addActivityAfter, activity);
+}
+
 export function* currentActivityHistorySaga({payload}) {
-  yield call(console.log, payload);
+  yield call(addActivityAfter, payload);
 }
