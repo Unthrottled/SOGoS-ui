@@ -1,7 +1,11 @@
-import {call, select, take} from 'redux-saga/effects';
+import {put, call, select, take} from 'redux-saga/effects';
 import type {DateRange, HistoryState} from "../../reducers/HistoryReducer";
 import {selectHistoryState, selectUserState} from "../../reducers";
-import {UPDATED_FULL_FEED} from "../../events/HistoryEvents";
+import {
+  createFoundAfterCapstoneEvent,
+  createFoundBeforeCapstoneEvent,
+  UPDATED_FULL_FEED
+} from "../../events/HistoryEvents";
 import type {Activity} from "../../types/ActivityModels";
 import {reverseBinarySearch} from "../../miscellanous/Tools";
 import type {UserState} from "../../reducers/UserReducer";
@@ -16,13 +20,13 @@ export function* capstoneHistorySaga(selectedDateRange: DateRange,
                                      fullRangeAndFeed: FullRangeAndFeed) {
   const firstBefore: Activity = yield call(getFirstBefore, selectedDateRange.from, fullRangeAndFeed);
   const firstAfter: Activity = yield call(getFirstAfter, selectedDateRange.to, fullRangeAndFeed);
-  console.log("New capstones", firstBefore, firstAfter);
+  console.log("New capstones", "before", firstBefore, "after", firstAfter);
   // update state with first before and after
   // update range
 }
 
 export function* getFirstBefore(selectedFromDate: number,
-                                {activities, timeRange: {from, to}}: FullRangeAndFeed) {
+                                {activities, timeRange: {from}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedFromDate);
   if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
@@ -30,6 +34,7 @@ export function* getFirstBefore(selectedFromDate: number,
     const oldestTime = activities.length ? activities[activities.length - 1].antecedenceTime : from;
     const {data} = yield call(findFirstActivityBeforeTime, oldestTime);
     if(data) {
+      yield put(createFoundBeforeCapstoneEvent(data));
       return data
     }
   }
@@ -38,7 +43,7 @@ export function* getFirstBefore(selectedFromDate: number,
 }
 
 export function* getFirstAfter(selectedToRange: number,
-                               {activities, timeRange: {from, to}}: FullRangeAndFeed) {
+                               {activities, timeRange: {to}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedToRange);
   if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
@@ -46,6 +51,7 @@ export function* getFirstAfter(selectedToRange: number,
     const youngestTime = activities.length ? activities[0].antecedenceTime : to;
     const {data} = yield call(findFirstActivityAfterTime, youngestTime);
     if(data) {
+      yield put(createFoundAfterCapstoneEvent(data));
       return data
     }
   }

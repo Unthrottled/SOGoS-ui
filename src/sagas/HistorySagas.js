@@ -1,8 +1,13 @@
 import {all, call, fork, take, takeEvery} from 'redux-saga/effects'
-import {ADJUSTED_HISTORY, INITIALIZED_HISTORY, VIEWED_HISTORY} from "../events/HistoryEvents";
+import {
+  ADJUSTED_HISTORY,
+  FOUND_AFTER_CAPSTONE,
+  FOUND_BEFORE_CAPSTONE,
+  INITIALIZED_HISTORY,
+  VIEWED_HISTORY
+} from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
 import {
-  currentActivityHistorySaga,
   historyAdjustmentSaga,
   historyInitializationSaga,
   historyObservationSaga
@@ -16,6 +21,11 @@ import {
   RESUMED_TIMED_ACTIVITY,
   STARTED_ACTIVITY
 } from "../events/ActivityEvents";
+import {
+  apiAfterCapstoneSaga,
+  apiBeforeCapstoneSaga,
+  currentActivityHistorySaga
+} from "./history/SingularActivityHistorySagas";
 
 export function* initializeActivityFeedSaga() {
   const {foundUser} = yield all({
@@ -55,9 +65,15 @@ export function* listenToCurrentActivityEvents() {
   yield takeEvery(INITIALIZED_CURRENT_ACTIVITY, currentActivityHistorySaga);
 }
 
+export function* listenToCapstoneEvents() {
+  yield takeEvery(FOUND_BEFORE_CAPSTONE, apiBeforeCapstoneSaga);
+  yield takeEvery(FOUND_AFTER_CAPSTONE, apiAfterCapstoneSaga);
+}
+
 export default function* HistorySagas() {
   yield all([
     listenToActivityEvents(),
     listenToCurrentActivityEvents(),
+    listenToCapstoneEvents(),
   ]);
 }

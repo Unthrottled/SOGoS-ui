@@ -131,7 +131,3 @@ export function* updateSelection(fullFeed: Activity[], to: number, from: number)
     activities: fullFeed.slice(newTo, safeFrom)
   }))
 }
-
-export function* currentActivityHistorySaga({payload}) {
-  yield call(console.log, payload);
-}
