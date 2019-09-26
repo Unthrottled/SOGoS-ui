@@ -10,6 +10,8 @@ import type {Activity} from "../../types/ActivityModels";
 import {reverseBinarySearch} from "../../miscellanous/Tools";
 import type {UserState} from "../../reducers/UserReducer";
 import {performPost} from "../APISagas";
+import {isTimedActivity} from "../activity/CurrentActivitySaga";
+import {shouldTime} from "../../miscellanous/Projection";
 
 export type FullRangeAndFeed = {
   activities: Activity[],
@@ -19,7 +21,11 @@ export type FullRangeAndFeed = {
 export function* capstoneHistorySaga(selectedDateRange: DateRange,
                                      fullRangeAndFeed: FullRangeAndFeed) {
   const firstBefore: Activity = yield call(getFirstBefore, selectedDateRange.from, fullRangeAndFeed);
-  const maybeAfter: Activity = yield call(getFirstAfter, selectedDateRange.to, fullRangeAndFeed);
+  const historyState: HistoryState = yield select(selectHistoryState);
+  const maybeAfter: Activity = yield call(getFirstAfter, selectedDateRange.to, {
+    activities: historyState.fullFeed,
+    timeRange: historyState.fullHistoryRange,
+  });
   const firstAfter: Activity = maybeAfter || firstBefore;
   console.log("New capstones", "before", firstBefore, "after", firstAfter);
   yield put(createUpdatedCapstonesEvent({
@@ -38,11 +44,32 @@ export function* getFirstBefore(selectedFromDate: number,
     const {data} = yield call(findFirstActivityBeforeTime, oldestTime);
     if(data) {
       yield put(createFoundBeforeCapstoneEvent(data));
-      return data
+      return yield findOldestTimedActivity(data)
     }
   }
   console.log("Looks Like I can do stuff with what I got");
   return activities[activities.length - 1];
+}
+
+export function* findOldestTimedActivity(activity: Activity){
+  if(shouldTime(activity)){
+    return activity;
+  } else {
+    let currentOldie = activity;
+    while (!shouldTime(currentOldie)){
+      const {data} = yield call(findFirstActivityBeforeTime, currentOldie.antecedenceTime);
+      if(data) {
+        yield put(createFoundBeforeCapstoneEvent(data));
+        currentOldie = data;
+        if(isTimedActivity(data)){
+          break
+        }
+      } else {
+        break
+      }
+    }
+    return currentOldie;
+  }
 }
 
 export function* getFirstAfter(selectedToRange: number,
