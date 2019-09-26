@@ -1,7 +1,11 @@
 import {Action} from "redux";
-import type {ActivityReceptionPayload, ActivityUpdatePayload} from "../events/HistoryEvents";
+import type {
+  ActivityReceptionPayload,
+  ActivityUpdatePayload,
+  CapstoneActivityUpdatePayload
+} from "../events/HistoryEvents";
 import {
-  INITIALIZED_HISTORY,
+  INITIALIZED_HISTORY, UPDATED_CAPSTONES,
   UPDATED_FULL_FEED,
   UPDATED_HISTORY,
   UPDATED_HISTORY_SELECTION
@@ -67,6 +71,15 @@ const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Act
         ...state,
         selectedHistoryRange: newSelectionPayload.between,
         activityFeed: newSelectionPayload.activities,
+      };
+    case UPDATED_CAPSTONES:
+      const newCapstones: CapstoneActivityUpdatePayload = action.payload;
+      return {
+        ...state,
+        capstone: {
+          topActivity: newCapstones.afterCapstone,
+          bottomActivity: newCapstones.beforeCapstone,
+        }
       };
     default:
       return state
