@@ -36,6 +36,10 @@ export const INITIAL_HISTORY_STATE: HistoryState = {
   fullFeed: [],
   selectedHistoryRange: DEFAULT_RANGE,
   fullHistoryRange: DEFAULT_RANGE,
+  capstone: {
+    topActivity: {},
+    bottomActivity: {},
+  }
 };
 
 const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Action = {}): HistoryState => {

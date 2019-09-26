@@ -3,7 +3,7 @@ import type {DateRange, HistoryState} from "../../reducers/HistoryReducer";
 import {selectHistoryState, selectUserState} from "../../reducers";
 import {
   createFoundAfterCapstoneEvent,
-  createFoundBeforeCapstoneEvent,
+  createFoundBeforeCapstoneEvent, createUpdatedCapstonesEvent,
   UPDATED_FULL_FEED
 } from "../../events/HistoryEvents";
 import type {Activity} from "../../types/ActivityModels";
@@ -19,10 +19,13 @@ export type FullRangeAndFeed = {
 export function* capstoneHistorySaga(selectedDateRange: DateRange,
                                      fullRangeAndFeed: FullRangeAndFeed) {
   const firstBefore: Activity = yield call(getFirstBefore, selectedDateRange.from, fullRangeAndFeed);
-  const firstAfter: Activity = yield call(getFirstAfter, selectedDateRange.to, fullRangeAndFeed);
+  const maybeAfter: Activity = yield call(getFirstAfter, selectedDateRange.to, fullRangeAndFeed);
+  const firstAfter: Activity = maybeAfter || firstBefore;
   console.log("New capstones", "before", firstBefore, "after", firstAfter);
-  // update state with first before and after
-  // update range
+  yield put(createUpdatedCapstonesEvent({
+    beforeCapstone: firstBefore,
+    afterCapstone: firstAfter,
+  }));
 }
 
 export function* getFirstBefore(selectedFromDate: number,
