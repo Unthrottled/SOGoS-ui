@@ -4,7 +4,8 @@ import {select} from 'd3-selection';
 import {arc, pie} from 'd3'
 import {connect} from "react-redux";
 import {selectHistoryState, selectTacticalActivityState} from "../reducers";
-import {getActivityName} from "../types/ActivityModels";
+import type {Activity} from "../types/ActivityModels";
+import {activitiesEqual, getActivityName} from "../types/ActivityModels";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import type {TacticalActivity} from "../types/TacticalModels";
@@ -15,7 +16,12 @@ export const getMeaningFullName = (activityId, tacticalActivities) => {
   return (tacticalActivity && tacticalActivity.name) || activityId
 };
 
-const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
+const PieFlavored = ({ activityFeed,
+                       relativeToTime,
+                       relativeFromTime,
+                       tacticalActivities,
+                       bottomActivity,
+                     }) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
       accum.trackedTime = activity.antecedenceTime
@@ -64,6 +70,25 @@ const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
     duration,
     spawn: activityProjection.currentActivity,
   });
+
+  const bottomCapActivity: Activity = bottomActivity;
+  const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
+  if(!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope){
+    const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
+    if (!bins[bottomActivityIdentifier]) {
+      bins[bottomActivityIdentifier] = []
+    }
+    const bottomCapActivityName = getActivityName(bottomCapActivity);
+    const bottomTime = bottomCapActivity.antecedenceTime < relativeFromTime ? relativeFromTime : bottomCapActivity.antecedenceTime;
+    const bottomDuration = lastActivityInScope.antecedenceTime - bottomTime;
+    bins[bottomActivityIdentifier].push({
+      activityName: bottomCapActivityName,
+      activityIdentifier: bottomActivityIdentifier,
+      duration: bottomDuration,
+      spawn: bottomActivity,
+    });
+  }
+  
 
   const pieData = objectToKeyValueArray(bins)
     .reduce((accum, keyValue) => {
@@ -122,12 +147,14 @@ const PieFlavored = ({activityFeed, relativeToTime, tacticalActivities}) => {
 };
 
 const mapStateToProps = state => {
-  const {activityFeed, selectedHistoryRange: {to}} = selectHistoryState(state);
+  const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
-    tacticalActivities: activities
+    relativeFromTime: from,
+    tacticalActivities: activities,
+    bottomActivity,
   }
 };
 export default connect(mapStateToProps)(PieFlavored);
