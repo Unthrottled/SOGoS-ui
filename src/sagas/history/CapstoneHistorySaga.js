@@ -56,15 +56,12 @@ export function* getFirstBefore(selectedFromDate: number,
     (activity: Activity) => activity.antecedenceTime - selectedFromDate);
   const updatedActivityIndex = getBeforeIndex(activityIndex);
   if (updatedActivityIndex > activities.length - 1) {
-    console.log("before from api");
-    const oldestTime = activities.length ? activities[activities.length - 1].antecedenceTime : from;
-    const {data} = yield call(findFirstActivityBeforeTime, oldestTime);
+    const {data} = yield call(findFirstActivityBeforeTime, from);
     if(data) {
       yield put(createFoundBeforeCapstoneEvent(data));
       return yield findOldestTimedActivity(data)
     }
   }
-  console.log("before from feed");
   return activities[updatedActivityIndex];
 }
 
@@ -94,17 +91,13 @@ export function* getFirstAfter(selectedToRange: number,
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedToRange);
   const updatedActivityIndex = getAfterIndex(activityIndex);
-  console.log(activityIndex, updatedActivityIndex);
   if (updatedActivityIndex < 0) {
-    console.log("after from api");
-    const youngestTime = activities.length ? activities[0].antecedenceTime : to;
-    const {data} = yield call(findFirstActivityAfterTime, youngestTime);
+    const {data} = yield call(findFirstActivityAfterTime, to);
     if(data) {
       yield put(createFoundAfterCapstoneEvent(data));
       return data
     }
   }
-  console.log("after from feed");
   return activities[updatedActivityIndex];
 }
 
