@@ -117,11 +117,13 @@ export function* updateFullFeed(to: number, from: number): Activity[] {
 
 export function* updateSelection(fullFeed: Activity[], to: number, from: number) {
   const fromRaw = reverseBinarySearch(fullFeed, (activity: Activity) =>
-    from - activity.antecedenceTime);
+    activity.antecedenceTime - from);
+  console.log('from raw', fromRaw);
   const newFrom = fromRaw < 0 ? Math.abs(fromRaw + 1) : fromRaw;
   const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
   const toRaw = reverseBinarySearch(fullFeed, (activity: Activity) =>
-    to - activity.antecedenceTime);
+    activity.antecedenceTime - to);
+  console.log('to raw', toRaw);
   const newTo = toRaw < 0 ? Math.abs(toRaw + 1) : toRaw;
   yield put(createUpdatedHistorySelectionEvent({
     between: {

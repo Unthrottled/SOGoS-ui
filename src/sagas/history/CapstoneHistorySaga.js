@@ -54,7 +54,6 @@ export function* getFirstBefore(selectedFromDate: number,
                                 {activities, timeRange: {from}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedFromDate);
-  console.log(reverseBinarySearch([2], (a) =>a - 2 ));
   const updatedActivityIndex = getBeforeIndex(activityIndex);
   if (updatedActivityIndex > activities.length - 1) {
     console.log("before from api");
@@ -94,7 +93,10 @@ export function* getFirstAfter(selectedToRange: number,
                                {activities, timeRange: {to}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) => activity.antecedenceTime - selectedToRange);
-  if (activityIndex < 0 && (activityIndex === -1 || activityIndex === -(activityIndex.length + 1))) {
+  const updatedActivityIndex = getAfterIndex(activityIndex);
+  console.log(activityIndex, updatedActivityIndex);
+  if (updatedActivityIndex < 0) {
+    console.log("after from api");
     const youngestTime = activities.length ? activities[0].antecedenceTime : to;
     const {data} = yield call(findFirstActivityAfterTime, youngestTime);
     if(data) {
@@ -102,8 +104,8 @@ export function* getFirstAfter(selectedToRange: number,
       return data
     }
   }
-
-  return activities[0];
+  console.log("after from feed");
+  return activities[updatedActivityIndex];
 }
 
 export const constructActivityBeforeURL = (guid: string) => `/api/history/${guid}/first/before`;
