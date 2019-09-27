@@ -4,7 +4,7 @@ import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
-import {ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
+import {activitiesEqual, ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
 import {selectActivityState, selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
@@ -45,6 +45,10 @@ const TimeLine = ({
                   }) => {
   const classes = withStyles();
   const modifiedFeed = [currentActivity, ...activityFeed];
+  if(!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity)){
+    modifiedFeed.push(bottomActivity)
+  }
+
   const activityProjection = modifiedFeed.reduceRight((accum, activity) => {
     if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
       accum.currentActivity = activity;
