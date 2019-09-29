@@ -11,21 +11,20 @@ export const objectToKeyValueArray = (object): KeyValue[] => Object.keys(object 
 }));
 
 export const reverseBinarySearch = (list, comparator) => {
-  return reverseBinarySearchRecursion(list, 0, list.length, comparator)
-};
+  let low = 0;
+  let high = list.length - 1;
 
-const reverseBinarySearchRecursion = (list, start, stop, comparator) => {
-  if(stop <= start) {
-    return -(stop + 1);
-  } else {
-    const middleIndex = Math.floor((stop + start)/2);
-    const compareValue = comparator(list[middleIndex]);
-    if (compareValue === 0){
-      return middleIndex;
-    } else if(compareValue < 0){ // current value is small move to the bigger section (the front)
-      return reverseBinarySearchRecursion(list, start, middleIndex - 1, comparator);
-    } else {
-      return reverseBinarySearchRecursion(list, middleIndex + 1, stop, comparator)
-    }
+  while (low <= high) {
+    const mid = (low + high) >>> 1;
+    const midVal = list[mid];
+    const cmp = comparator(midVal);
+
+    if (cmp < 0)
+      low = mid + 1;
+    else if (cmp > 0)
+      high = mid - 1;
+    else
+      return mid; // key found
   }
+  return -(low + 1);  // key not found
 };

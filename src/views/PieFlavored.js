@@ -24,7 +24,7 @@ const PieFlavored = ({ activityFeed,
                      }) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
-      accum.trackedTime = activity.antecedenceTime
+      accum.trackedTime = activity.antecedenceTime < relativeFromTime ? relativeFromTime : activity.antecedenceTime
     }
 
     if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
@@ -33,7 +33,8 @@ const PieFlavored = ({ activityFeed,
       // Different Type: Create workable chunk and start next activity.
       const currentActivity = accum.currentActivity;
       accum.currentActivity = activity;
-      const duration = activity.antecedenceTime - accum.trackedTime;
+      const adjustedAntecedenceTime = activity.antecedenceTime < relativeFromTime ? relativeFromTime : activity.antecedenceTime;
+      const duration = adjustedAntecedenceTime - accum.trackedTime;
       accum.trackedTime = activity.antecedenceTime;
       const activityName = getActivityName(currentActivity);
       const activityIdentifier = getActivityIdentifier(currentActivity);
@@ -73,13 +74,17 @@ const PieFlavored = ({ activityFeed,
 
   const bottomCapActivity: Activity = bottomActivity;
   const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
+  // console.log(lastActivityInScope, bottomCapActivity);
   if(!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope){
     const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
     if (!bins[bottomActivityIdentifier]) {
       bins[bottomActivityIdentifier] = []
     }
     const bottomCapActivityName = getActivityName(bottomCapActivity);
-    const bottomTime = bottomCapActivity.antecedenceTime < relativeFromTime ? relativeFromTime : bottomCapActivity.antecedenceTime;
+    // console.log("relativeFromTime", relativeFromTime, "antecedence", bottomCapActivity.antecedenceTime, "dy", bottomCapActivity.antecedenceTime < relativeFromTime);
+    const bottomTime = bottomCapActivity.antecedenceTime < relativeFromTime ?
+      relativeFromTime :
+      bottomCapActivity.antecedenceTime;
     const bottomDuration = lastActivityInScope.antecedenceTime - bottomTime;
     bins[bottomActivityIdentifier].push({
       activityName: bottomCapActivityName,
@@ -87,6 +92,8 @@ const PieFlavored = ({ activityFeed,
       duration: bottomDuration,
       spawn: bottomActivity,
     });
+    console.log(bottomCapActivityName);
+    console.log(getActivityName(activityFeed[activityFeed.length - 1]));
   }
   
 
@@ -98,6 +105,8 @@ const PieFlavored = ({ activityFeed,
       });
       return accum;
     }, []);
+
+  // console.log(pieData);
 
   useEffect(() => {
     if (activityFeed.length > 0) {

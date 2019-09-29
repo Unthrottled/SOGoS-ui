@@ -99,8 +99,6 @@ const TimeLine = ({
     },
   });
 
-  console.log(bins);
-
   useEffect(() => {
     if (modifiedFeed.length) {
       const selection = select('#timeBoi');
@@ -151,7 +149,6 @@ const TimeLine = ({
           activity.start = activity.start - timeBegin;
           activity.start = activity.start < 0 ? 0 : activity.start;
           activity.stop = activity.stop - timeBegin;
-          // activity.id = keyValue.key;
         });
         return keyValue.value
       });

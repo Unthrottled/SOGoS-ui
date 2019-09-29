@@ -15,10 +15,10 @@ import type {UserState} from "../../reducers/UserReducer";
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
 
-const meow = new Date();
 const SEVEN_DAYS = 360000;
+const meow = new Date(1569231600000 + (SEVEN_DAYS * 10));
 // const SEVEN_DAYS = 604800000;
-const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
+const meowMinusSeven = new Date(meow.getTime() - (SEVEN_DAYS * 10));
 
 export function* archiveFetchSaga(guid,
                                   fromDate: number,
@@ -116,11 +116,11 @@ export function* updateFullFeed(to: number, from: number): Activity[] {
 
 export function* updateSelection(fullFeed: Activity[], to: number, from: number) {
   const fromRaw = reverseBinarySearch(fullFeed, (activity: Activity) =>
-    activity.antecedenceTime - from);
+    from - activity.antecedenceTime);
   const newFrom = fromRaw < 0 ? Math.abs(fromRaw + 1) : fromRaw;
   const safeFrom = newFrom >= fullFeed.length ? fullFeed.length : newFrom + 1;
   const toRaw = reverseBinarySearch(fullFeed, (activity: Activity) =>
-    activity.antecedenceTime - to);
+    to - activity.antecedenceTime);
   const newTo = toRaw < 0 ? Math.abs(toRaw + 1) : toRaw;
   yield put(createUpdatedHistorySelectionEvent({
     between: {
