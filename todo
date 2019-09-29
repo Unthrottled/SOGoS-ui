@@ -11,6 +11,8 @@ Mile-Stones after MVP:
 - Sharable dashboard.
     - auto-sync
 - On-boarding Experience
+- Better Relative time fetching
+    - Could choose a segment that has not been fetched from current time eg. now is 9/29 and you could ask for 9/23 to 9/24 (not what I was expecting)
 
 
 Edge Cases

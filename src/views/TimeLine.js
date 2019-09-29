@@ -44,8 +44,10 @@ const TimeLine = ({
                     bottomActivity,
                   }) => {
   const classes = withStyles();
-  const modifiedFeed = [currentActivity, ...activityFeed];
-  if(!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity)){
+  const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
+  currentActivity.antecedenceTime <= relativeToTime ? [currentActivity] : []),
+    ...activityFeed];
+  if (!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity)) {
     modifiedFeed.push(bottomActivity)
   }
 
@@ -105,7 +107,7 @@ const TimeLine = ({
 
       const binsToArray = objectToKeyValueArray(bins);
       const lanes = binsToArray.map(kV => kV.key);
-      
+
       const laneLength = lanes.length;
       const m = [20, 15, 15, 120], //top right bottom left
         w = 1500 - m[1] - m[3],
@@ -179,8 +181,8 @@ const TimeLine = ({
       mini.append("g").selectAll("miniItems")
         .data(items)
         .enter().append("rect")
-        .attr('fill',d => colorToActivity[(getActivityID(d.spawn.start))])
-        .attr('opacity',0.7)
+        .attr('fill', d => colorToActivity[(getActivityID(d.spawn.start))])
+        .attr('opacity', 0.7)
         .attr("class", () => classes["timebar"])
         .attr("x", d => x(d.start))
         .attr("y", d => y1(d.lane) + 10)
