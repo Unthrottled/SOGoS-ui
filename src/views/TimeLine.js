@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
+import {axisTop} from 'd3'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import {activitiesEqual, ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
@@ -107,7 +108,7 @@ const TimeLine = ({
       const lanes = binsToArray.map(kV => kV.key);
 
       const laneLength = lanes.length;
-      const m = [20, 15, 15, 120], //top right bottom left
+      const m = [40, 15, 15, 120], //top right bottom left
         w = 1500 - m[1] - m[3],
         h = 500 - m[0] - m[2],
         miniHeight = laneLength * 12 + 50,
@@ -116,10 +117,10 @@ const TimeLine = ({
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
 
-      var x = scaleLinear()
+      const x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
         .range([0, w]);
-      var y1 = scaleLinear()
+      const y1 = scaleLinear()
         .domain([0, laneLength])
         .range([0, h]);
 
@@ -131,13 +132,40 @@ const TimeLine = ({
         .style("width", '100%')
       ;
 
+      const ticks = 20;
+      const steppyBoi = (timeEnd - timeBegin) / ticks;
+      const axis = axisTop(x)
+        .tickFormat((d, i) => {
+          const dateBoi = new Date(relativeFromTime + (steppyBoi * i));
+          const trailingZero = number => number / 10 < 1 ? 0 : '';
+          const convertToPretty = numberDude => `${trailingZero(numberDude)}${numberDude}`;
+          const hours = convertToPretty(dateBoi.getHours());
+          const minutes = convertToPretty(dateBoi.getMinutes());
+          const seconds = convertToPretty(dateBoi.getSeconds());
+          const day = convertToPretty(dateBoi.getDay());
+          const month = convertToPretty(dateBoi.getMonth());
+          return `${hours}:${minutes}`;
+        })
+      ;
+
+      timeSVG.append("g")
+        .attr("transform", "translate(0," + m[0] + ")")
+        .call(axis)
+        .attr('font-size', 'large');
+
+      timeSVG.append("text")
+        .attr("transform",
+          "translate(" + 0 + " ," + m[0] + ")")
+        .style("text-anchor", "left")
+        .text("Date");
+
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
         .append("rect")
         .attr("width", w)
         .attr("height", mainHeight);
 
-      var mini = timeSVG.append("g")
+      const mini = timeSVG.append("g")
         .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
         .attr("width", w)
         .attr("height", h)
