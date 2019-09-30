@@ -110,26 +110,30 @@ const TimeLine = ({
       const lanes = binsToArray.map(kV => kV.key);
 
       const laneLength = lanes.length;
-      const m = [40, 15, 15, 120], //top right bottom left
-        w = 1500 - m[1] - m[3],
-        h = 500 - m[0] - m[2],
-        miniHeight = laneLength * 12 + 50,
-        mainHeight = h - miniHeight - 50;
+      const margin = {
+        left: 15,
+        right: 15,
+        top: 40,
+        bottom: 150,
+      };
+
+      const width = 1500 - margin.left - margin.right;
+      const height = 800 - margin.top - margin.bottom;
 
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
 
       const x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
-        .range([0, w]);
+        .range([0, width]);
       const y1 = scaleLinear()
         .domain([0, laneLength])
-        .range([0, h]);
+        .range([0, height]);
 
       selection.select('svg').remove();
 
       const timeSVG = selection.append('svg')
-        .attr("viewBox", [0, 0, w, h])
+        .attr("viewBox", [0, 0, width, height])
         .style("height", '100%')
         .style("width", '100%')
       ;
@@ -151,20 +155,20 @@ const TimeLine = ({
       ;
 
       timeSVG.append("g")
-        .attr("transform", "translate(0," + m[0] + ")")
+        .attr("transform", `translate(0,${margin.top})`)
         .call(axis)
         .attr('font-size', 'large');
 
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
         .append("rect")
-        .attr("width", w)
-        .attr("height", mainHeight);
+        .attr("width", width)
+        .attr("height", height);
 
-      const mini = timeSVG.append("g")
-        .attr("transform", "translate(" + 0 + "," + (m[0]) + ")")
-        .attr("width", w)
-        .attr("height", h)
+      const timeLanes = timeSVG.append("g")
+        .attr("transform", `translate(0,${margin.top})`)
+        .attr("width", width)
+        .attr("height", height)
         .attr("class", "mini");
 
       const items = binsToArray.flatMap((keyValue, index) => {
@@ -179,18 +183,21 @@ const TimeLine = ({
 
       const colorToActivity = constructColorMappings(tacticalActivities);
 
-      mini.append("g").selectAll(".laneLines")
+      timeLanes.append("g")
+        .selectAll(".laneLines")
         .data(items)
         .enter().append("line")
         .attr("x1", 0)
         .attr("y1", d => y1(d.lane))
-        .attr("x2", w)
+        .attr("x2", width)
         .attr("y2", d => y1(d.lane))
         .attr("stroke", "lightgray");
 
-      mini.append("g").selectAll("miniItems")
+      timeSVG.append("g")
+        .selectAll(".timeBar")
         .data(items)
         .enter().append("rect")
+        .attr("transform", `translate(0,${margin.top})`)
         .attr('fill', d => colorToActivity[(getActivityID(d.spawn.start))])
         .attr('opacity', 0.7)
         .attr("class", () => classes["timebar"])

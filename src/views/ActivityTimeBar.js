@@ -166,7 +166,7 @@ const ActivityTimeBar = ({
         </div>
         {
           isTimer && (name !== RECOVERY) &&
-          (<div> <StopWatchIcon/>: {numberOfCompletedPomodoro}</div>)
+          (<div>{numberOfCompletedPomodoro}<StopWatchIcon/> </div>)
         }
         <div onClick={stopActivity} className={classes.close}>
           <Close/>
