@@ -1,8 +1,7 @@
 Immediate things need to be done:
 ----
-- Time tasks and associate tasks with objectives.
-    - Fix dashboard
-        - relative time and not having an activity that starts in scope
+- Better Relative time fetching
+    - Could choose a segment that has not been fetched from current time eg. now is 9/29 and you could ask for 9/23 to 9/24 (not what I was expecting)
 - Pomodoro Count
 - Make Pretty.
 
@@ -11,8 +10,6 @@ Mile-Stones after MVP:
 - Sharable dashboard.
     - auto-sync
 - On-boarding Experience
-- Better Relative time fetching
-    - Could choose a segment that has not been fetched from current time eg. now is 9/29 and you could ask for 9/23 to 9/24 (not what I was expecting)
 
 
 Edge Cases

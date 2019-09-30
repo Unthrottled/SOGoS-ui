@@ -49,8 +49,6 @@ const getAfterIndex = (index) => {
   }
 };
 
-//look into this behaving badly 09/23/2019 045523a - 09/23/2019 064023a
-//with 09/23/2019 044023a - 09/23/2019 064023a (when reducing time of titties)
 export function* getFirstBefore(selectedFromDate: number,
                                 {activities, timeRange: {from}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
