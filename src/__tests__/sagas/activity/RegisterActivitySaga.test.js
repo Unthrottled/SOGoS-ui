@@ -16,7 +16,7 @@ import {isOnline} from "../../../sagas/NetworkSagas";
 import {performPost} from "../../../sagas/APISagas";
 import {selectUserState} from "../../../reducers";
 import type {UserState} from "../../../reducers/UserReducer";
-import {createCachedDataEvent, createSyncedDataEvent} from "../../../events/UserEvents";
+import {createCachedDataEvent} from "../../../events/UserEvents";
 
 
 describe('RegisterActivitySagas', () => {

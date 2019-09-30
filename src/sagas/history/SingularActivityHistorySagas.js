@@ -1,4 +1,4 @@
-import {put, call, select} from "@redux-saga/core/effects";
+import {call, put, select} from "@redux-saga/core/effects";
 import type {Activity} from "../../types/ActivityModels";
 import {selectHistoryState} from "../../reducers";
 import type {HistoryState} from "../../reducers/HistoryReducer";

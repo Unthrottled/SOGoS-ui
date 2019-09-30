@@ -13,11 +13,10 @@ import type {HistoryState} from "./HistoryReducer";
 import HistoryReducer from "./HistoryReducer";
 import type {StrategyState} from "./StrategyReducer";
 import StrategyReducer from "./StrategyReducer";
-import TacticalReducer from "./TacticalReducer";
 import type {PomodoroState, TacticalActivityState, TacticalState} from "./TacticalReducer";
-import MiscReducer from "./MiscReducer";
+import TacticalReducer from "./TacticalReducer";
 import type {MiscState} from "./MiscReducer";
-import type {PomodoroSettings} from "../types/TacticalModels";
+import MiscReducer from "./MiscReducer";
 
 const rootReducer = combineReducers({
   security: securityReducer,

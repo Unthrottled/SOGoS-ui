@@ -1,9 +1,10 @@
-import {put, call, select, take} from 'redux-saga/effects';
+import {call, put, select, take} from 'redux-saga/effects';
 import type {DateRange, HistoryState} from "../../reducers/HistoryReducer";
 import {selectHistoryState, selectUserState} from "../../reducers";
 import {
   createFoundAfterCapstoneEvent,
-  createFoundBeforeCapstoneEvent, createUpdatedCapstonesEvent,
+  createFoundBeforeCapstoneEvent,
+  createUpdatedCapstonesEvent,
   UPDATED_FULL_FEED
 } from "../../events/HistoryEvents";
 import type {Activity} from "../../types/ActivityModels";

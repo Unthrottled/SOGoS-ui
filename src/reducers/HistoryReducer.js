@@ -5,7 +5,8 @@ import type {
   CapstoneActivityUpdatePayload
 } from "../events/HistoryEvents";
 import {
-  INITIALIZED_HISTORY, UPDATED_CAPSTONES,
+  INITIALIZED_HISTORY,
+  UPDATED_CAPSTONES,
   UPDATED_FULL_FEED,
   UPDATED_HISTORY,
   UPDATED_HISTORY_SELECTION

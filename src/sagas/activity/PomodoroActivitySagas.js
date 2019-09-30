@@ -1,5 +1,5 @@
 import {selectActivityState} from "../../reducers";
-import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
+import {put, select, take} from 'redux-saga/effects'
 import type {ActivityState} from "../../reducers/ActivityReducer";
 import {createInitializedPomodoroEvent} from "../../events/ActivityEvents";
 import {INITIALIZED_APPLICATION} from "../../events/ApplicationLifecycleEvents";

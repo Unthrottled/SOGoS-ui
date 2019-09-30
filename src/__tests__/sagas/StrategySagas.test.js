@@ -1,4 +1,4 @@
-import {all, fork, take, takeEvery} from 'redux-saga/effects'
+import {fork, take, takeEvery} from 'redux-saga/effects'
 import sagaHelper from "redux-saga-testing";
 import {RECEIVED_USER} from "../../events/UserEvents";
 import {VIEWED_OBJECTIVES} from "../../events/StrategyEvents";

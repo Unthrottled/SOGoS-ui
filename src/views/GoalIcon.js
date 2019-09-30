@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import type {Objective} from "../types/StrategyModels";
-import {MountainIcon} from "./MountainIcon";
 import type {SizeType} from "./MountainIcon";
+import {MountainIcon} from "./MountainIcon";
 
 type GoalProps = {
   objective: Objective,

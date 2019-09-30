@@ -3,7 +3,9 @@ import {selectTacticalState, selectUserState} from "../../reducers";
 import {
   createCachedSettingsEvent,
   createFailureToRegisterPomodoroSettingsEvent,
-  createRegisteredPomodoroSettingsEvent, createSyncedSettingsEvent, createUpdatedPomodoroSettingsEvent
+  createRegisteredPomodoroSettingsEvent,
+  createSyncedSettingsEvent,
+  createUpdatedPomodoroSettingsEvent
 } from "../../events/TacticalEvents";
 import {createCachedDataEvent, createSyncedDataEvent} from "../../events/UserEvents";
 import {isOnline} from "../NetworkSagas";

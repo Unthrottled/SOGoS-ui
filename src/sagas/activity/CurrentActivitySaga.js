@@ -1,6 +1,7 @@
 import {performGetWithoutSessionExtension} from "../APISagas";
 import {
-  createFoundPreviousActivityActivityEvent, createInitializedCurrentActivityEvent,
+  createFoundPreviousActivityActivityEvent,
+  createInitializedCurrentActivityEvent,
   createResumedStartedNonTimedActivityEvent,
   createResumedStartedTimedActivityEvent
 } from "../../events/ActivityEvents";
