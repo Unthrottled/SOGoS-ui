@@ -7,6 +7,7 @@ import {FOUND_WIFI} from "../events/NetworkEvents";
 import {activitySyncSaga} from "./activity/ActivitySyncSaga";
 import {activityNotificationSaga} from "./activity/ActivityNotificationSaga";
 import {REQUESTED_SYNC} from "../events/UserEvents";
+import {pomodoroActivityInitializationSaga} from "./activity/PomodoroActivitySagas";
 
 function* listenToActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, registerActivitySaga);
@@ -15,6 +16,7 @@ function* listenToActivityEvents() {
   yield takeEvery(STARTED_TIMED_ACTIVITY, activityNotificationSaga);
   yield fork(activityLogonSaga);
   yield fork(currentActivitySaga);
+  yield fork(pomodoroActivityInitializationSaga);
 }
 
 export default function* rootSaga() {

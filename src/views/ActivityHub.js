@@ -2,8 +2,8 @@ import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import React, {useState} from "react";
-import StopWatch from '@material-ui/icons/AvTimer';
-import Timer from '@material-ui/icons/Timer';
+import StopWatch from '@material-ui/icons/Timer';
+import Timer from '@material-ui/icons/AvTimer';
 import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
@@ -94,7 +94,8 @@ const ActivityHub = ({
       name,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: loadDuration,
+      duration: 5000,
+      // duration: loadDuration,
       uuid: uuid(),
     }));
   };

@@ -1,6 +1,6 @@
 import {Action} from "redux";
 import {
-  CACHED_ACTIVITY, FOUND_PREVIOUS_ACTIVITY,
+  CACHED_ACTIVITY, COMPLETED_POMODORO, FOUND_PREVIOUS_ACTIVITY, INITIALIZED_POMODORO,
   RESUMED_NON_TIMED_ACTIVITY,
   RESUMED_TIMED_ACTIVITY,
   STARTED_NON_TIMED_ACTIVITY,
@@ -10,10 +10,16 @@ import {
 import type {Activity} from "../types/ActivityModels";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 
+export type RememberedPomodoro = {
+  dateCounted: number,
+  count: number,
+}
+
 export type ActivityState = {
   shouldTime: boolean,
   currentActivity: Activity,
   previousActivity: Activity,
+  completedPomodoro: RememberedPomodoro,
   cache: any,
 }
 
@@ -25,12 +31,29 @@ export const INITIAL_ACTIVITY_STATE: ActivityState = {
   previousActivity: {
     content: {}
   },
+  completedPomodoro: {
+    date: 0,
+    count: 0,
+  },
   cache: {},
 };
 
 
 const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE, action: Action) => {
   switch (action.type) {
+    case INITIALIZED_POMODORO:
+      return {
+        ...state,
+        completedPomodoro: action.payload
+      };
+    case COMPLETED_POMODORO:
+      return {
+        ...state,
+        completedPomodoro: {
+          ...state.completedPomodoro,
+          count: state.completedPomodoro.count + 1,
+        }
+      };
     case STARTED_TIMED_ACTIVITY :
     case RESUMED_TIMED_ACTIVITY :
       return {

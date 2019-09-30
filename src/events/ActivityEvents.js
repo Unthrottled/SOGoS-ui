@@ -1,5 +1,6 @@
 import type {Activity, ActivityContent, ActivityRegistryFailure, CachedActivity} from "../types/ActivityModels";
 import {ActivityTimedType} from "../types/ActivityModels";
+import type {RememberedPomodoro} from "../reducers/ActivityReducer";
 
 export const STARTED_ACTIVITY = 'STARTED_ACTIVITY';
 export const CACHED_ACTIVITY = 'CACHED_ACTIVITY';
@@ -12,6 +13,9 @@ export const RESUMED_NON_TIMED_ACTIVITY = 'RESUMED_NON_TIMED_ACTIVITY';
 export const REGISTERED_ACTIVITY_START = 'REGISTERED_ACTIVITY_START';
 export const FAILED_TO_REGISTER_ACTIVITY_START = 'FAILED_TO_REGISTER_ACTIVITY_START';
 export const INITIALIZED_CURRENT_ACTIVITY = 'INITIALIZED_CURRENT_ACTIVITY';
+
+export const INITIALIZED_POMODORO = 'INITIALIZED_POMODORO';
+export const COMPLETED_POMODORO = 'COMPLETED_POMODORO';
 
 export const CAPSTONED_ACTIVITIES: 'CAPSTONED_ACTIVITIES' = 'CAPSTONED_ACTIVITIES';
 
@@ -36,6 +40,14 @@ export const createCapstoneActivitesEvent = (
   }
 });
 
+export const createCompletedPomodoroEvent = () => ({
+  type: COMPLETED_POMODORO,
+});
+
+export const createInitializedPomodoroEvent = (rememberedPomodoro: RememberedPomodoro) => ({
+  type: INITIALIZED_POMODORO,
+  payload: rememberedPomodoro,
+});
 
 export const createStartedActivityEvent = (content: ActivityContent) => ({
   type: STARTED_ACTIVITY,

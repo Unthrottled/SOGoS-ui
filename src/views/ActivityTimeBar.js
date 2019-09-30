@@ -11,6 +11,8 @@ import Stopwatch from "./Stopwatch";
 import {blue} from "@material-ui/core/colors";
 import {selectActivityState, selectTacticalState} from "../reducers";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
+import StopWatchIcon from '@material-ui/icons/AvTimer';
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -57,6 +59,7 @@ const ActivityTimeBar = ({
                            previousActivity,
                            pomodoroSettings,
                            activities,
+                           numberOfCompletedPomodoro,
                            dispatch: dispetch
                          }) => {
   const classes = useStyles();
@@ -75,7 +78,8 @@ const ActivityTimeBar = ({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: pomodoroSettings.shortRecoveryDuration,
+      duration: 5000,
+      // duration: pomodoroSettings.shortRecoveryDuration,
       uuid: uuid(),
     }));
   };
@@ -89,18 +93,31 @@ const ActivityTimeBar = ({
     }));
   };
 
+   const completedPomodoro = () => {
+     if (name === RECOVERY) {
+       resumePreviousActivity();
+     } else {
+       startRecovery();
+       dispetch(createCompletedPomodoroEvent())
+     }
+   };
+
+  function resumePreviousActivity() {
+    dispetch(startTimedActivity({
+      ...previousActivity.content,
+      ...(previousActivity.content.duration ? {
+        duration: 5000
+        // duration: pomodoroSettings.loadDuration
+      } : {}),
+      uuid: uuid(),
+    }));
+  }
+
   const startRecoveryOrResume = () => {
     if (name === RECOVERY) {
-      dispetch(startTimedActivity({
-        ...previousActivity.content,
-        ...(previousActivity.content.duration ? {
-          duration: pomodoroSettings.loadDuration
-        } : {}),
-        uuid: uuid(),
-      }));
-
+      resumePreviousActivity();
     } else {
-      startRecovery()
+      startRecovery();
     }
   };
 
@@ -135,7 +152,7 @@ const ActivityTimeBar = ({
             isTimer ?
               (
                 <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
-                               onComplete={startRecoveryOrResume}
+                               onComplete={completedPomodoro}
                                onPause={startPausedRecovery}
                                onBreak={startRecovery}
                                hidePause={isRecovery}
@@ -147,6 +164,10 @@ const ActivityTimeBar = ({
                          activityId={activityId}/>
           }
         </div>
+        {
+          isTimer && (name !== RECOVERY) &&
+          (<div> <StopWatchIcon/>: {numberOfCompletedPomodoro}</div>)
+        }
         <div onClick={stopActivity} className={classes.close}>
           <Close/>
         </div>
@@ -155,14 +176,15 @@ const ActivityTimeBar = ({
 };
 
 const mapStateToProps = state => {
-  const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
+  const {currentActivity, previousActivity, shouldTime, completedPomodoro: {count}} = selectActivityState(state);
   const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
   return {
     shouldTime,
     currentActivity,
     previousActivity,
     pomodoroSettings: settings,
-    activities
+    activities,
+    numberOfCompletedPomodoro: count
   }
 };
 
