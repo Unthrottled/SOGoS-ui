@@ -55,7 +55,7 @@ const getAfterIndex = (index) => {
 export function* getFirstBefore(selectedFromDate: number,
                                 {activities, timeRange: {from}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
-    (activity: Activity) => selectedFromDate - activity.antecedenceTime);
+    (activity: Activity) =>  activity.antecedenceTime - selectedFromDate);
   const updatedActivityIndex = getBeforeIndex(activityIndex);
   if (updatedActivityIndex > activities.length - 1) {
     const {data} = yield call(findFirstActivityBeforeTime, from);
@@ -91,7 +91,7 @@ export function* findOldestTimedActivity(activity: Activity){
 export function* getFirstAfter(selectedToRange: number,
                                {activities, timeRange: {to}}: FullRangeAndFeed) {
   const activityIndex = reverseBinarySearch(activities,
-    (activity: Activity) => selectedToRange - activity.antecedenceTime);
+    (activity: Activity) =>  activity.antecedenceTime - selectedToRange);
   const updatedActivityIndex = getAfterIndex(activityIndex);
   if (updatedActivityIndex < 0) {
     const {data} = yield call(findFirstActivityAfterTime, to);
