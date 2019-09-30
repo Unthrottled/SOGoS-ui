@@ -74,14 +74,12 @@ const PieFlavored = ({ activityFeed,
 
   const bottomCapActivity: Activity = bottomActivity;
   const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
-  // console.log(lastActivityInScope, bottomCapActivity);
   if(!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope){
     const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
     if (!bins[bottomActivityIdentifier]) {
       bins[bottomActivityIdentifier] = []
     }
     const bottomCapActivityName = getActivityName(bottomCapActivity);
-    // console.log("relativeFromTime", relativeFromTime, "antecedence", bottomCapActivity.antecedenceTime, "dy", bottomCapActivity.antecedenceTime < relativeFromTime);
     const bottomTime = bottomCapActivity.antecedenceTime < relativeFromTime ?
       relativeFromTime :
       bottomCapActivity.antecedenceTime;
@@ -92,8 +90,6 @@ const PieFlavored = ({ activityFeed,
       duration: bottomDuration,
       spawn: bottomActivity,
     });
-    console.log(bottomCapActivityName);
-    console.log(getActivityName(activityFeed[activityFeed.length - 1]));
   }
   
 
@@ -106,7 +102,6 @@ const PieFlavored = ({ activityFeed,
       return accum;
     }, []);
 
-  // console.log(pieData);
 
   useEffect(() => {
     if (activityFeed.length > 0) {

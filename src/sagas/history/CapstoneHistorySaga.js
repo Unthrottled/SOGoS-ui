@@ -37,16 +37,15 @@ const getBeforeIndex = (index) => {
   if(index > -1){
     return index + 1;
   } else {
-    return Math.abs(index)  
+    return Math.abs(index + 1)
   }
 };
 
-//todo: this
 const getAfterIndex = (index) => {
   if(index > -1){
     return index - 1;
   } else {
-    return Math.abs(index) - 1
+    return Math.abs(index) - 2 // todo: this does not seem right
   }
 };
 
