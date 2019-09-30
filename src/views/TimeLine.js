@@ -47,7 +47,7 @@ const TimeLine = ({
   const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
   currentActivity.antecedenceTime <= relativeToTime ? [currentActivity] : []),
     ...activityFeed];
-  if (!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity)) {
+  if (!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity) && bottomActivity) {
     modifiedFeed.push(bottomActivity)
   }
 

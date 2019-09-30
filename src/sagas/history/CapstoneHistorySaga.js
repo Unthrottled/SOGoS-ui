@@ -61,7 +61,8 @@ export function* getFirstBefore(selectedFromDate: number,
       return yield findOldestTimedActivity(data)
     }
   }
-  return activities[updatedActivityIndex];
+  const safeBefore = updatedActivityIndex >= activities.length ? activities.length - 1 : updatedActivityIndex;
+  return activities[safeBefore];
 }
 
 export function* findOldestTimedActivity(activity: Activity){
@@ -97,7 +98,8 @@ export function* getFirstAfter(selectedToRange: number,
       return data
     }
   }
-  return activities[updatedActivityIndex];
+  const safeAfter = updatedActivityIndex < 0 ? 0 : updatedActivityIndex;
+  return activities[safeAfter];
 }
 
 export const constructActivityBeforeURL = (guid: string) => `/api/history/${guid}/first/before`;
