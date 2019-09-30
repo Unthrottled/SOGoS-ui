@@ -36,6 +36,25 @@ export const constructColorMappings = tacticalActivities => {
   };
 };
 
+export const responsivefy = svg => {
+  const resize = () => {
+    const targetWidth = parseInt(container.style("width"));
+    svg.attr("width", targetWidth);
+    svg.attr("height", Math.round(targetWidth / aspect));
+  };
+
+  const container = select(svg.node().parentNode),
+    width = parseInt(svg.style("width")),
+    height = parseInt(svg.style("height")),
+    aspect = width / height;
+
+  svg.attr("viewBox", `0 0 ${width}  ${height}`)
+    .attr("perserveAspectRatio", "xMinYMid")
+    .call(resize);
+
+  select(window).on("resize." + container.attr("id"), resize);
+};
+
 const TimeLine = ({
                     activityFeed,
                     relativeToTime,
@@ -117,8 +136,8 @@ const TimeLine = ({
         bottom: 150,
       };
 
-      const width = 1500 - margin.left - margin.right;
-      const height = 800 - margin.top - margin.bottom;
+      const width = 2500 - margin.left - margin.right;
+      const height = 1000 - margin.top - margin.bottom;
 
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
@@ -133,9 +152,9 @@ const TimeLine = ({
       selection.select('svg').remove();
 
       const timeSVG = selection.append('svg')
-        .attr("viewBox", [0, 0, width, height])
-        .style("height", '100%')
-        .style("width", '100%')
+        .attr('width', width)
+        .attr('height', height)
+        .call(responsivefy)
       ;
 
       const ticks = 20;

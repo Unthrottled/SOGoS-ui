@@ -91,7 +91,8 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 240,
+    minHeight: 240,
+    maxHeight: 500,
   },
   form: {
     display: 'flex',
@@ -191,18 +192,12 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
               <DoneIcon/>
             </Fab>
           </form>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
                 <TimeLine/>
               </div>
-            </Grid>
-            <Grid item xs={12} md={8} lg={9}>
               <div className={fixedHeightPaper}>
                 <PieFlavored/>
               </div>
-            </Grid>
-          </Grid>
         </Container>
       </main>
     </LoggedInLayout>

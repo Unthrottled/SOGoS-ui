@@ -16,6 +16,26 @@ export const getMeaningFullName = (activityId, tacticalActivities) => {
   return (tacticalActivity && tacticalActivity.name) || activityId
 };
 
+export const responsivefy = svg => {
+  const container = select(svg.node().parentNode),
+    width = parseInt(svg.style("width")),
+    height = parseInt(svg.style("height")),
+    aspect = width / height;
+
+  svg.attr("viewBox", `-${width/2} -${height/2} ${width}  ${height}`)
+    .attr("perserveAspectRatio", "xMinYMid")
+    .call(resize);
+
+  select(window).on("resize." + container.attr("id"), resize);
+
+  function resize() {
+    const targetWidth = parseInt(container.style("width"));
+    svg.attr("width", targetWidth);
+    const heightBoi = Math.round(targetWidth / aspect);
+    svg.attr("height", heightBoi);
+  }
+};
+
 const PieFlavored = ({ activityFeed,
                        relativeToTime,
                        relativeFromTime,
@@ -108,14 +128,15 @@ const PieFlavored = ({ activityFeed,
   useEffect(() => {
     if (activityFeed.length > 0) {
       const selection = select('#pieBoi');
-      const width = 200;
-      const height = 200;
+      const width = 300;
+      const height = 300;
 
       selection.select('svg').remove();
 
       const pieSVG = selection.append('svg')
         .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .style("height", '100%');
+        .call(responsivefy)
+        .append('g');
 
       const pieFlavored = pie()
         .padAngle(0.005)
