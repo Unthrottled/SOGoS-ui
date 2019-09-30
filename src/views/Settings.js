@@ -9,7 +9,7 @@ import Fab from "@material-ui/core/Fab";
 import {Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
-import {selectTacticalState} from "../reducers";
+import {selectPomodoroState, selectTacticalState} from "../reducers";
 import {viewedSettings} from "../actions/TacticalActions";
 
 const useStyles = makeStyles(theme => ({
@@ -213,7 +213,7 @@ const SettingsBoard = ({
 };
 
 const mapStateToProps = state => {
-  const {pomodoro: {settings}} = selectTacticalState(state);
+  const {settings} = selectPomodoroState(state);
   return {
     pomodoroSettings: settings,
   }
