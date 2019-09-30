@@ -21,12 +21,13 @@ export const responsivefy = svg => {
     width = parseInt(svg.style("width")),
     height = parseInt(svg.style("height")),
     aspect = width / height;
-
-  svg.attr("viewBox", `-${width/2} -${height/2} ${width}  ${height}`)
+  svg
     .attr("perserveAspectRatio", "xMinYMid")
     .call(resize);
 
-  select(window).on("resize." + container.attr("id"), resize);
+  const attr = container.attr("id");
+  console.log(attr);
+  select(window).on("resize." + attr, resize);
 
   function resize() {
     const targetWidth = parseInt(container.style("width"));
@@ -111,7 +112,7 @@ const PieFlavored = ({ activityFeed,
       spawn: bottomActivity,
     });
   }
-  
+
 
   const pieData = objectToKeyValueArray(bins)
     .reduce((accum, keyValue) => {
@@ -122,7 +123,7 @@ const PieFlavored = ({ activityFeed,
       return accum;
     }, []);
 
-  
+
   const totalTime = pieData.reduceRight((accum, b)=> accum + b.value, 0);
 
   useEffect(() => {
@@ -166,10 +167,13 @@ const PieFlavored = ({ activityFeed,
   });
 
   return (
-    <div style={{
-      height: '100%',
-    }} id={'pieBoi'}>
+    <div>
+      <div style={{
+        maxWidth: '300px',
+        margin: 'auto',
+      }} id={'pieBoi'}>
 
+      </div>
     </div>
   );
 };

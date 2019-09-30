@@ -48,7 +48,8 @@ export const responsivefy = svg => {
     height = parseInt(svg.style("height")),
     aspect = width / height;
 
-  svg.attr("viewBox", `0 0 ${width}  ${height}`)
+  svg
+    .attr("viewBox", `0 0 ${width}  ${height}`)
     .attr("perserveAspectRatio", "xMinYMid")
     .call(resize);
 
@@ -166,9 +167,6 @@ const TimeLine = ({
           const convertToPretty = numberDude => `${trailingZero(numberDude)}${numberDude}`;
           const hours = convertToPretty(dateBoi.getHours());
           const minutes = convertToPretty(dateBoi.getMinutes());
-          const seconds = convertToPretty(dateBoi.getSeconds());
-          const day = convertToPretty(dateBoi.getDay());
-          const month = convertToPretty(dateBoi.getMonth());
           return `${hours}:${minutes}`;
         })
       ;
@@ -234,10 +232,13 @@ const TimeLine = ({
   });
 
   return (
-    <div style={{
-      height: '100%',
-    }} id={'timeBoi'}>
+    <div style={{height:'100%'}}>
+      <div style={{
+        height: '100%',
+        margin: 'auto 0',
+      }} id={'timeBoi'}>
 
+      </div>
     </div>
   );
 };

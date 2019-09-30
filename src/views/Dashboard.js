@@ -4,7 +4,6 @@ import LoggedInLayout from "./LoggedInLayout";
 import clsx from 'clsx';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import PieFlavored from "./PieFlavored";
 import TimeLine from "./TimeLine";
 import {viewedActivityFeed} from "../actions/HistoryActions";
@@ -192,12 +191,12 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
               <DoneIcon/>
             </Fab>
           </form>
-              <div className={fixedHeightPaper}>
-                <TimeLine/>
-              </div>
-              <div className={fixedHeightPaper}>
-                <PieFlavored/>
-              </div>
+          <div className={fixedHeightPaper}>
+            <TimeLine/>
+          </div>
+          <div className={fixedHeightPaper}>
+            <PieFlavored/>
+          </div>
         </Container>
       </main>
     </LoggedInLayout>
