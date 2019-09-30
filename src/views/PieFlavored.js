@@ -102,6 +102,8 @@ const PieFlavored = ({ activityFeed,
       return accum;
     }, []);
 
+  
+  const totalTime = pieData.reduceRight((accum, b)=> accum + b.value, 0);
 
   useEffect(() => {
     if (activityFeed.length > 0) {
@@ -137,7 +139,8 @@ const PieFlavored = ({ activityFeed,
         .attr('cursor', 'pointer')
         .attr("d", arcThing)
         .append("title")
-        .text(d => `${getMeaningFullName(d.data.name, tacticalActivities)}: ${d.data.value.toLocaleString()}`);
+        .text(d =>
+          `${getMeaningFullName(d.data.name, tacticalActivities)}: ${((d.data.value / totalTime) * 100).toFixed(2)}%`);
     }
   });
 
