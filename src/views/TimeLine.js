@@ -9,8 +9,8 @@ import {activitiesEqual, ActivityStrategy, getActivityID, getActivityName, RECOV
 import {selectActivityState, selectHistoryState, selectTacticalActivityState} from "../reducers";
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
-import {getMeaningFullName} from "./PieFlavored";
 import {getActivityBackgroundColor} from "../types/TacticalModels";
+import {getMeaningFullName} from "./PieFlavored";
 
 
 const withStyles = makeStyles(__ => ({
@@ -96,7 +96,9 @@ const TimeLine = ({
     stop: relativeToTime > meow ? meow : relativeToTime,
     spawn: {
       start: activityProjection.currentActivity,
-      stop: "Meow"
+      stop: {
+        antecedenceTime: meow.valueOf(),
+      }
     },
   });
 
@@ -153,12 +155,6 @@ const TimeLine = ({
         .call(axis)
         .attr('font-size', 'large');
 
-      timeSVG.append("text")
-        .attr("transform",
-          "translate(" + 0 + " ," + m[0] + ")")
-        .style("text-anchor", "left")
-        .text("Date");
-
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
         .append("rect")
@@ -166,7 +162,7 @@ const TimeLine = ({
         .attr("height", mainHeight);
 
       const mini = timeSVG.append("g")
-        .attr("transform", "translate(" + m[3] + "," + (m[0]) + ")")
+        .attr("transform", "translate(" + 0 + "," + (m[0]) + ")")
         .attr("width", w)
         .attr("height", h)
         .attr("class", "mini");
@@ -186,22 +182,11 @@ const TimeLine = ({
       mini.append("g").selectAll(".laneLines")
         .data(items)
         .enter().append("line")
-        .attr("x1", m[1])
+        .attr("x1", 0)
         .attr("y1", d => y1(d.lane))
         .attr("x2", w)
         .attr("y2", d => y1(d.lane))
         .attr("stroke", "lightgray");
-
-      mini.append("g").selectAll(".laneText")
-        .data(lanes)
-        .enter().append("text")
-        .attr('font-size', '.75em')
-        .text(d => getMeaningFullName(d, tacticalActivities))
-        .attr("x", -m[1])
-        .attr("y", (d, i) => y1(i + .5))
-        .attr("dy", ".5ex")
-        .attr("text-anchor", "end")
-        .attr("class", "laneText");
 
       mini.append("g").selectAll("miniItems")
         .data(items)
@@ -212,22 +197,13 @@ const TimeLine = ({
         .attr("x", d => x(d.start))
         .attr("y", d => y1(d.lane) + 10)
         .attr("width", d => x(d.stop - d.start))
-        .attr("height", () => .8 * y1(1));
-
-      //mini labels
-      mini.append("g").selectAll(".miniLabels")
-        .data(items)
-        .enter().append("text")
-        .text(d => d.id)
-        .attr("x", d => x(d.start))
-        .attr("y", d => y1(d.lane + .5))
-        .attr("dy", ".5ex");
-
-      mini.append("g")
-        .attr("class", "x brush")
-        .selectAll("rect")
-        .attr("y", 1)
-        .attr("height", miniHeight - 1);
+        .attr("height", () => .8 * y1(1))
+        .append("title")
+        .text(d => {
+          const meaningFullName = getMeaningFullName(d.activityIdentifier, tacticalActivities);
+          const minutes = (d.spawn.stop.antecedenceTime - d.spawn.start.antecedenceTime) / 60000;
+          return `${meaningFullName}: ${minutes.toFixed(2)} minutes`;
+        });
     }
   });
 
