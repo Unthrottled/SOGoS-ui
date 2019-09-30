@@ -78,8 +78,9 @@ const ActivityTimeBar = ({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.TIMER,
-      duration: 5000,
-      // duration: pomodoroSettings.shortRecoveryDuration,
+      duration: (numberOfCompletedPomodoro + 1) % 4 === 0 ?
+        pomodoroSettings.longRecoveryDuration :
+        pomodoroSettings.shortRecoveryDuration,
       uuid: uuid(),
     }));
   };
@@ -106,8 +107,7 @@ const ActivityTimeBar = ({
     dispetch(startTimedActivity({
       ...previousActivity.content,
       ...(previousActivity.content.duration ? {
-        duration: 5000
-        // duration: pomodoroSettings.loadDuration
+        duration: pomodoroSettings.loadDuration
       } : {}),
       uuid: uuid(),
     }));
