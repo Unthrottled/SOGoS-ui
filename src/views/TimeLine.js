@@ -56,6 +56,15 @@ export const responsivefy = svg => {
   select(window).on("resize." + container.attr("id"), resize);
 };
 
+const NINETY_MINUTES = 5400000;
+const getTimeUnit = (milliseconds: number) => {
+  if((milliseconds/NINETY_MINUTES) > 1) {
+    return `${(milliseconds / 3600000).toFixed(2)} hours`
+  } else {
+    return `${(milliseconds / 60000).toFixed(2)} minutes`
+  }
+};
+
 const TimeLine = ({
                     activityFeed,
                     relativeToTime,
@@ -225,8 +234,8 @@ const TimeLine = ({
         .append("title")
         .text(d => {
           const meaningFullName = getMeaningFullName(d.activityIdentifier, tacticalActivities);
-          const minutes = (d.spawn.stop.antecedenceTime - d.spawn.start.antecedenceTime) / 60000;
-          return `${meaningFullName}: ${minutes.toFixed(2)} minutes`;
+          const millisecondsDuration = (d.spawn.stop.antecedenceTime - d.spawn.start.antecedenceTime);
+          return `${meaningFullName}: ${getTimeUnit(millisecondsDuration)} `;
         });
     }
   });

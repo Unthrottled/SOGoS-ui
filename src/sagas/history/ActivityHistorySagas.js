@@ -15,10 +15,12 @@ import type {UserState} from "../../reducers/UserReducer";
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
 
-const meow = new Date();
-const SEVEN_DAYS = 1800000;
+const meow = new Date(1569404113000);
+// const meow = new Date();
+// const SEVEN_DAYS = 1800000;
 // const SEVEN_DAYS = 604800000;
-const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
+// const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
+const meowMinusSeven = new Date(1569186313000);
 
 export function* archiveFetchSaga(guid,
                                   fromDate: number,

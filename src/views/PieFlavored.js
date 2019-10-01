@@ -25,9 +25,7 @@ export const responsivefy = svg => {
     .attr("perserveAspectRatio", "xMinYMid")
     .call(resize);
 
-  const attr = container.attr("id");
-  console.log(attr);
-  select(window).on("resize." + attr, resize);
+  select(window).on("resize." + container.attr("id"), resize);
 
   function resize() {
     const targetWidth = parseInt(container.style("width"));
