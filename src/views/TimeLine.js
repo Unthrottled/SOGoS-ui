@@ -130,6 +130,8 @@ const TimeLine = ({
       }
     },
   });
+  
+  console.log(bins);
 
   useEffect(() => {
     if (modifiedFeed.length) {
