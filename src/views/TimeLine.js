@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
-import {axisTop} from 'd3'
+import {axisTop, brushX, event} from 'd3'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import {activitiesEqual, ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {getActivityBackgroundColor} from "../types/TacticalModels";
 import {getMeaningFullName} from "./PieFlavored";
+import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 
 
 const withStyles = makeStyles(__ => ({
@@ -58,7 +59,7 @@ export const responsivefy = svg => {
 
 const NINETY_MINUTES = 5400000;
 const getTimeUnit = (milliseconds: number) => {
-  if((milliseconds/NINETY_MINUTES) > 1) {
+  if ((milliseconds / NINETY_MINUTES) > 1) {
     return `${(milliseconds / 3600000).toFixed(2)} hours`
   } else {
     return `${(milliseconds / 60000).toFixed(2)} minutes`
@@ -72,6 +73,7 @@ const TimeLine = ({
                     tacticalActivities,
                     currentActivity,
                     bottomActivity,
+                    dispatch,
                   }) => {
   const classes = withStyles();
   const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
@@ -151,6 +153,7 @@ const TimeLine = ({
 
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
+      console.log("dis my stuff", new Date(timeBegin), new Date(timeEnd));
 
       const x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
@@ -237,11 +240,32 @@ const TimeLine = ({
           const millisecondsDuration = (d.spawn.stop.antecedenceTime - d.spawn.start.antecedenceTime);
           return `${meaningFullName}: ${getTimeUnit(millisecondsDuration)} `;
         });
+
+      const brushEnd = (bBoi, bBoiSelection) => {
+        if (!event.sourceEvent || !event.selection) return;
+        bBoi.clear(bBoiSelection);
+        const [newFrom, newTo] = event.selection
+          .map(x.invert)
+          .map(n => n >>> 1)
+          .map(n => n + relativeFromTime)
+        ;
+        
+        console.log(new Date(newFrom), new Date(newTo));
+
+        dispatch(createAdjustedHistoryTimeFrame(newFrom, newTo));
+      };
+
+      const bBoi = brushX().extent([[0, 0], [width, height]]);
+      const bBoiSelection = timeSVG.append('g');
+      bBoiSelection
+        .attr('class', 'brush')
+        .call(bBoi.on('end', () => brushEnd(bBoi, bBoiSelection)))
+
     }
   });
 
   return (
-    <div style={{height:'100%'}}>
+    <div style={{height: '100%'}}>
       <div style={{
         height: '100%',
         margin: 'auto 0',
