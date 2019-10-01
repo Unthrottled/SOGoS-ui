@@ -130,8 +130,6 @@ const TimeLine = ({
       }
     },
   });
-  
-  console.log(bins);
 
   useEffect(() => {
     if (modifiedFeed.length) {
@@ -145,7 +143,7 @@ const TimeLine = ({
         left: 15,
         right: 15,
         top: 40,
-        bottom: 150,
+        bottom: 15,
       };
 
       const width = 2500 - margin.left - margin.right;
@@ -158,7 +156,7 @@ const TimeLine = ({
         .domain([0, timeEnd - timeBegin])
         .range([0, width]);
       const y1 = scaleLinear()
-        .domain([0, laneLength])
+        .domain([0, laneLength + 1])
         .range([0, height]);
 
       selection.select('svg').remove();
@@ -213,12 +211,12 @@ const TimeLine = ({
 
       timeLanes.append("g")
         .selectAll(".laneLines")
-        .data(items)
+        .data(Array(binsToArray.length + 1).fill(0))
         .enter().append("line")
         .attr("x1", 0)
-        .attr("y1", d => y1(d.lane))
+        .attr("y1", (d, i) => y1(i))
         .attr("x2", width)
-        .attr("y2", d => y1(d.lane))
+        .attr("y2", (d, i) => y1(i))
         .attr("stroke", "lightgray");
 
       timeSVG.append("g")
