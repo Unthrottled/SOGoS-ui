@@ -153,7 +153,6 @@ const TimeLine = ({
 
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
-      console.log("dis my stuff", new Date(timeBegin), new Date(timeEnd));
 
       const x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
@@ -246,12 +245,8 @@ const TimeLine = ({
         bBoi.clear(bBoiSelection);
         const [newFrom, newTo] = event.selection
           .map(x.invert)
-          .map(n => n >>> 1)
           .map(n => n + relativeFromTime)
         ;
-        
-        console.log(new Date(newFrom), new Date(newTo));
-
         dispatch(createAdjustedHistoryTimeFrame(newFrom, newTo));
       };
 
