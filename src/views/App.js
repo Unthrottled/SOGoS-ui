@@ -20,6 +20,8 @@ import TacticalDashboard from "./TacticalDashboard";
 import ActivitiesDashboard from "./ActivitiesDashboard";
 import ActivityDashboard from "./ActivityDashboard";
 import ObjectiveActivityAssociationDashboard from "./ObjectiveActivityAssociationDashboard";
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {

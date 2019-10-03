@@ -7,11 +7,11 @@ import Container from "@material-ui/core/Container";
 import PieFlavored from "./PieFlavored";
 import TimeLine from "./TimeLine";
 import {viewedActivityFeed} from "../actions/HistoryActions";
-import {TextField} from "@material-ui/core";
-import DoneIcon from "@material-ui/icons/Done";
-import Fab from "@material-ui/core/Fab";
+import moment from 'moment';
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
+import { DateRangePicker } from 'react-dates';
+import {START_DATE} from "react-dates/esm/constants";
 
 const drawerWidth = 240;
 
@@ -105,21 +105,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const pad = number => {
-  if (number < 10) {
-    return '0' + number;
-  }
-  return number;
-};
-
-const getDateString = (date: Date) => {
-  return date.getFullYear() +
-    '-' + pad(date.getMonth() + 1) +
-    '-' + pad(date.getDate()) +
-    'T' + pad(date.getHours()) +
-    ':' + pad(date.getMinutes()) +
-    ':' + pad(date.getSeconds());
-};
 
 const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
   const classes = useStyles();
@@ -130,24 +115,15 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
     dispatch(viewedActivityFeed());
   }, [didMountState]);
 
-  const meow = getDateString(new Date(selectedTo));
-  const meowMinusSeven = getDateString(new Date(selectedFrom));
+  const meow = moment.unix(selectedTo/1000);
+  const meowMinusSeven = moment.unix(selectedFrom/1000);
 
-  const [to, setTo] = useState();
-  const [from, setFrom] = useState();
+  const [focusedInput, setFocusedInput] = useState(null);
 
-  const adjustTo = (value) => {
-    setTo(value.target.value);
-  };
-
-  const adjustFrom = (value) => {
-    setFrom(value.target.value);
-  };
-
-  const submitTimeFrame = () => {
+  const submitTimeFrame = (to, from) => {
     dispatch(createAdjustedHistoryTimeFrame(
-      new Date(from || selectedFrom).valueOf(),
-      new Date(to || selectedTo).valueOf()
+      new Date(from).valueOf(),
+      new Date(to).valueOf()
     ));
   };
 
@@ -156,40 +132,20 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg" className={classes.container}>
-          <form className={classes.form} noValidate>
-            {
-              selectedTo ? (<div>
-                <TextField
-                  id="datetime-local"
-                  label="From"
-                  type="datetime-local"
-                  defaultValue={meowMinusSeven}
-                  className={classes.textField}
-                  onChange={adjustFrom}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-                <TextField
-                  id="datetime-local"
-                  label="To"
-                  type="datetime-local"
-                  defaultValue={meow}
-                  className={classes.textField}
-                  onChange={adjustTo}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </div>) : null
-            }
-            <Fab color={'primary'}
-                 className={classes.save}
-                 onClick={submitTimeFrame}
-            >
-              <DoneIcon/>
-            </Fab>
-          </form>
+          <div className={classes.form} noValidate>
+            <DateRangePicker
+              startDate={meowMinusSeven}
+              startDateId="steve"
+              endDate={meow}
+              minDate={moment.unix(0)}
+              maxDate={moment()}
+              isOutsideRange={(date)=> moment().isSameOrBefore(date, 'day')}
+              endDateId="jerry"
+              onDatesChange={({startDate, endDate}) => submitTimeFrame(startDate, endDate)}
+              focusedInput={focusedInput}
+              onFocusChange={setFocusedInput}
+            />
+          </div>
           <div className={fixedHeightPaper}>
             <TimeLine/>
           </div>

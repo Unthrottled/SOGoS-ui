@@ -11,7 +11,7 @@ export function* pomodoroActivityInitializationSaga() {
   const {completedPomodoro}: ActivityState = yield select(selectActivityState);
   const meow = new Date().valueOf();
   const todaysDay = (meow / ONE_DAY) >>> 1;
-  const rememberedDay = (completedPomodoro.dateCounted / ONE_DAY) >>> 1;
+  const rememberedDay = Math.floor((completedPomodoro.dateCounted / ONE_DAY));
   if(todaysDay !== rememberedDay){
     yield put(createInitializedPomodoroEvent({
       dateCounted: meow,
