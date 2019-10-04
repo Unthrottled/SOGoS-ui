@@ -119,7 +119,7 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
 
   const [focusedInput, setFocusedInput] = useState(null);
 
-  const submitTimeFrame = (to, from) => {
+  const submitTimeFrame = (from, to) => {
     dispatch(createAdjustedHistoryTimeFrame(
       new Date(from).valueOf(),
       new Date(to).valueOf()
