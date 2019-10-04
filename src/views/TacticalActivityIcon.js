@@ -5,11 +5,11 @@ import type {TacticalActivity} from "../types/TacticalModels";
 import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
 
 type TacticalActivityIconProps = {
-  tacticalActivity: TacticalActivity,
+  tacticalActivity?: TacticalActivity,
   size?: SizeType,
 }
 export const TacticalActivityIcon = ({tacticalActivity, size}: TacticalActivityIconProps) => {
-  const iconCustomization = tacticalActivity.iconCustomization;
+  const iconCustomization = (tacticalActivity || {}).iconCustomization;
   const backgroundColor = (iconCustomization && iconCustomization.background) || defaultBackground;
   const lineColor = (iconCustomization && iconCustomization.line) || defaultLine;
   return (

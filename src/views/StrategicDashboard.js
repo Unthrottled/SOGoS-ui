@@ -2,13 +2,13 @@ import React from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {Card, makeStyles} from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {GoalIcon} from "./GoalIcon";
 
-const useStyles = makeStyles(theme =>({
+const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 345,
     margin: 'auto',
