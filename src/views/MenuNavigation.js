@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from "@material-ui/core/IconButton";
 import {Link} from "react-router-dom";
 import {makeStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import MailIcon from '@material-ui/icons/Mail';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.secondary.main,
     position: 'fixed',
     height: '100%',
+    width: '200px'
   },
   fullList: {
     width: 'auto',
@@ -47,6 +50,7 @@ const MenuNavigation = () => {
     {
       title: 'Settings',
       path: '/settings',
+      icon: (<SettingsIcon/>),
     },
   ];
   const classes = useStyles();
@@ -57,6 +61,7 @@ const MenuNavigation = () => {
 
   const getListItem = (index, topic) => {
     return <ListItem button style={{backgroundColor: index % 2 === 0 ? 'rgba(10,10,10, .05)' : 'rgba(0,0,0,0)'}}>
+      <ListItemIcon>{topic.icon || (<MailIcon/>)}</ListItemIcon>
       <ListItemText primary={topic.title}/>
     </ListItem>;
   };
@@ -78,7 +83,6 @@ const MenuNavigation = () => {
             </a>)
         ))}
       </List>
-      <Divider/>
     </div>
   );
   return (
