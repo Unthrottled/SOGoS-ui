@@ -5,11 +5,11 @@ import type {SizeType} from "./MountainIcon";
 import {MountainIcon} from "./MountainIcon";
 
 type GoalProps = {
-  objective: Objective,
+  objective?: Objective,
   size?: SizeType,
 }
 export const GoalIcon = ({objective, size}: GoalProps) => {
-  const iconCustomization = objective.iconCustomization;
+  const iconCustomization = (objective || {}).iconCustomization;
   const skyColor = (iconCustomization && iconCustomization.background) || {
     hex: '#86a4f3',
     opacity: 1,
