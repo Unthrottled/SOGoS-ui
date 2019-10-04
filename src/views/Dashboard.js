@@ -11,7 +11,6 @@ import moment from 'moment';
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
 import { DateRangePicker } from 'react-dates';
-import {START_DATE} from "react-dates/esm/constants";
 
 const drawerWidth = 240;
 
