@@ -31,16 +31,21 @@ const useStyles = makeStyles(theme => ({
     left: theme.spacing(1),
     margin: theme.spacing(1),
   },
+  hubRoot: {
+    position: 'absolute',
+    top: theme.spacing(7),
+  },
   container: {
     background: 'rgba(0,0,0,0.2)',
-    position: 'absolute',
+    position: 'fixed',
     top: '0',
     width: '100%',
     height: '100%',
     zIndex: '9001',
+    overflow: 'auto',
   },
   contents: {
-    top: '20%',
+    top: '5%',
     height: '100%',
     position: 'relative',
   },
@@ -157,7 +162,7 @@ const ActivityHub = ({
   }
 
   return (
-    <div>
+    <div className={classes.hubRoot}>
       <SpeedDial
         ariaLabel="SpeedDial example"
         className={classes.speedDial}
@@ -185,6 +190,13 @@ const ActivityHub = ({
       <Grow in={strategyOpen}>
         <div className={classes.container}>
           <div className={classes.contents}>
+            <IconButton
+              className={classes.cancel}
+              onClick={closeStrategy}
+              color={'inherit'}>
+              <Cancel className={classes.cancelIcon}/>
+            </IconButton>
+            <br/>
             {
               objectToArray(activities).map((activity: TacticalActivity) => (
                 <Tooltip key={`tip_${activity.id}`}
@@ -209,13 +221,6 @@ const ActivityHub = ({
               onClick={invokeGenericAction}
               color={'inherit'}>
               {selectedIcon}
-            </IconButton>
-            <br/>
-            <IconButton
-              className={classes.cancel}
-              onClick={closeStrategy}
-              color={'inherit'}>
-              <Cancel className={classes.cancelIcon}/>
             </IconButton>
           </div>
         </div>

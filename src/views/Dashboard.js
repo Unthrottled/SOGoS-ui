@@ -129,7 +129,6 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
   return (
     <LoggedInLayout>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer}/>
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.form} noValidate>
             <DateRangePicker
