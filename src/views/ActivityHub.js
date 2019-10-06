@@ -36,13 +36,17 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(7),
   },
   container: {
-    background: 'rgba(0,0,0,0.2)',
+    background: 'rgba(0,0,0,0.5)',
     position: 'fixed',
     top: '0',
     width: '100%',
     height: '100%',
     zIndex: '9001',
     overflow: 'auto',
+  },
+  toolTip: {
+    zIndex: '9200',
+    fontSize: '1.5em'
   },
   contents: {
     top: '5%',
@@ -57,6 +61,9 @@ const useStyles = makeStyles(theme => ({
   },
   cancelIcon: {
     fontSize: '1.25em',
+    color: 'red',
+    background: 'rgba(240, 0,0,0.25)',
+    borderRadius: '50%',
   },
   bigIcon: {
     fontSize: "150px",
@@ -203,6 +210,7 @@ const ActivityHub = ({
                 <Tooltip key={`tip_${activity.id}`}
                          open={showToolTips}
                          placement={'top'}
+                         PopperProps={{className: classes.toolTip}}
                          title={activity.name}>
                   <IconButton color={'inherit'}
                               className={classes.goalIcon}
