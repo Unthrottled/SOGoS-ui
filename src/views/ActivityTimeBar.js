@@ -49,6 +49,10 @@ export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
       duration: Math.max(previousActivity.content.duration +
         (previousActivity.antecedenceTime - currentActivity.antecedenceTime), 0)
     } : {}),
+    ...(previousActivity.content.workStartedWomboCombo ? {
+      workStartedWomboCombo: Math.max(new Date().valueOf() -
+        (currentActivity.antecedenceTime - previousActivity.content.workStartedWomboCombo ), 0)
+    } : {}),
     uuid: uuid(),
   }));
 };
