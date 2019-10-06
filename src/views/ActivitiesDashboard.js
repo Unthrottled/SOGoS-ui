@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
-import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import EditIcon from '@material-ui/icons/Edit'
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import {Card, CardHeader} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import CardContent from "@material-ui/core/CardContent";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   objectiveSummary: {},
 }));
 
-const ActivitiesDashboard = ({activities, fullName, dispatch}) => {
+const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
@@ -58,35 +58,31 @@ const ActivitiesDashboard = ({activities, fullName, dispatch}) => {
         </Button>
       </Link>
       <div className={classes.root}>
-        {
-          allTacticalActivites.map(tacticalActivity => (
-            <ExpansionPanel key={tacticalActivity.id} className={classes.objective}>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon className={classes.objective}/>}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+        <Grid container spacing={4}>
+          {
+            allTacticalActivites.map(tacticalActivity => (
+              <Grid item xs={3}
+                    key={tacticalActivity.id}
               >
-                <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                      size={{
-                                        width: '75px',
-                                        height: '75px',
-                                      }}/>
-                <Typography className={classes.heading}>{tacticalActivity.name}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <div>
-                  <Link to={`./${tacticalActivity.id}`} style={{textDecoration: 'none'}}>
-                    <Button variant={'outlined'}
-                            color={'secondary'}
-                            className={classes.button}>
-                      <AddIcon/> Edit Activity
-                    </Button>
-                  </Link>
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          ))
-        }
+                <Card>
+                  <CardHeader avatar={
+                    (<TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                           size={{
+                                             width: '75px',
+                                             height: '75px',
+                                           }}/>)}
+                              title={tacticalActivity.name}
+                              action={
+                                <IconButton onClick={()=>history.push(`./${tacticalActivity.id}`)}>
+                                  <EditIcon/>
+                                </IconButton>
+                              }
+                  />
+                </Card>
+              </Grid>
+            ))
+          }
+        </Grid>
       </div>
     </LoggedInLayout>
   );
@@ -101,4 +97,4 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(ActivitiesDashboard);
+export default connect(mapStateToProps)(withRouter(ActivitiesDashboard));
