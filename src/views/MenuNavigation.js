@@ -12,6 +12,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import {StrategyIcon} from "./StrategyIcon";
+import {TacticalIcon} from "./TacticalIcon";
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -44,6 +45,7 @@ const MenuNavigation = () => {
     {
       title: 'Tactics',
       path: '/tactical/',
+      icon: (<TacticalIcon size={{width: '24px', height: '24px',}}/>),
     },
     {
       title: 'Tits',
