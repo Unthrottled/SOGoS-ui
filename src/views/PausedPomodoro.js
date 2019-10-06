@@ -15,7 +15,7 @@ import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    background: 'rgba(0,0,0,0.5)',
+    background: 'rgba(0,0,0,0.75)',
     position: 'fixed',
     top: '0',
     width: '100%',

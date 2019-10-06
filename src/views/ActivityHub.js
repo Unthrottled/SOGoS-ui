@@ -13,10 +13,9 @@ import {selectConfigurationState, selectTacticalActivityState, selectTacticalSta
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
 import IconButton from "@material-ui/core/IconButton";
-import {Cancel} from "@material-ui/icons";
+import {Cancel, KeyboardArrowDown} from "@material-ui/icons";
 import {Grow} from "@material-ui/core";
 import {objectToArray} from "../miscellanous/Tools";
-import Tooltip from "@material-ui/core/Tooltip";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 
@@ -36,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(7),
   },
   container: {
-    background: 'rgba(0,0,0,0.5)',
+    background: 'rgba(0,0,0,0.75)',
     position: 'fixed',
     top: '0',
     width: '100%',
@@ -46,7 +45,14 @@ const useStyles = makeStyles(theme => ({
   },
   toolTip: {
     zIndex: '9200',
-    fontSize: '1.5em'
+    margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  toolTipInner: {
+    display: 'inline-block',
+    fontSize: '1.5em',
   },
   contents: {
     top: '5%',
@@ -71,9 +77,12 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.primary.main,
     borderRadius: '50%',
   },
-  goalIcon: {
-    marginTop: theme.spacing(5)
-  }
+  activityIcon: {},
+  activityContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  },
 }));
 
 const ActivityHub = ({
@@ -205,27 +214,29 @@ const ActivityHub = ({
               <Cancel className={classes.cancelIcon}/>
             </IconButton>
             <br/>
-            {
-              objectToArray(activities).map((activity: TacticalActivity) => (
-                <Tooltip key={`tip_${activity.id}`}
-                         open={showToolTips}
-                         placement={'top'}
-                         PopperProps={{className: classes.toolTip}}
-                         title={activity.name}>
-                  <IconButton color={'inherit'}
-                              className={classes.goalIcon}
-                              onClick={() => {
-                                selectedAction(activity);
-                                closeStrategy();
-                              }}>
-                    <TacticalActivityIcon tacticalActivity={activity} size={{
-                      height: '250px',
-                      width: '250px',
-                    }}/>
-                  </IconButton>
-                </Tooltip>
-              ))
-            }
+            <div className={classes.activityContainer}>
+              {
+                objectToArray(activities).map((activity: TacticalActivity) => (
+                  <div key={`tip_${activity.id}`}>
+                    <div className={classes.toolTip}>
+                      <span className={classes.toolTipInner}>{activity.name}</span>
+                      <KeyboardArrowDown style={{fontSize: '2em'}}/>
+                    </div>
+                    <IconButton color={'inherit'}
+                                className={classes.activityIcon}
+                                onClick={() => {
+                                  selectedAction(activity);
+                                  closeStrategy();
+                                }}>
+                      <TacticalActivityIcon tacticalActivity={activity} size={{
+                        height: '150px',
+                        width: '150px',
+                      }}/>
+                    </IconButton>
+                  </div>
+                ))
+              }
+            </div>
             <IconButton
               onClick={invokeGenericAction}
               color={'inherit'}>
