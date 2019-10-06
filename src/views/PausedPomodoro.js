@@ -10,28 +10,39 @@ import {ActivityTimedType, ActivityType, isActivityRecovery, RECOVERY} from "../
 import {startNonTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
 import IconButton from "@material-ui/core/IconButton";
+import {green} from "@material-ui/core/colors";
 
 
 const useStyles = makeStyles(theme => ({
   container: {
-    background: 'rgba(0,0,0,0.2)',
-    position: 'absolute',
+    background: 'rgba(0,0,0,0.5)',
+    position: 'fixed',
     top: '0',
     width: '100%',
+    zIndex: 10000,
     height: '100%',
   },
   contents: {
-    top: '50%',
+    top: '30%',
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  stopWatch: {
+    margin: 'auto',
   },
   icon: {
     fontSize: '5em',
+    color: green[800],
   },
   cancel: {
-    marginTop: theme.spacing(5),
   },
   cancelIcon: {
     fontSize: '1.25em',
+    color: 'red',
+    background: 'rgba(240, 0,0,0.25)',
+    borderRadius: '50%',
+    padding: theme.spacing(0.5),
   },
 }));
 
@@ -62,18 +73,25 @@ const PausedPomodoro = ({
   return isPausedPomodoro ? (
     <div className={classes.container}>
       <div className={classes.contents}>
-        <IconButton color={'inherit'} onClick={resumePreviousActivity}>
-          <PlayCircleFilled
-            id={'paused-pomodoro'}
-            className={classes.icon}/>
-        </IconButton>
-        <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
-                   activityId={activityId}/>
-        <IconButton
-          className={classes.cancel}
-          color={'inherit'} onClick={stopActivity}>
-          <Stop className={classes.cancelIcon}/>
-        </IconButton>
+        <div className={classes.stopWatch}>
+
+        </div>
+        <div className={classes.stopwatch}>
+          <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
+                     activityId={activityId}/>
+        </div>
+        <div className={classes.stopWatch}>
+          <IconButton color={'inherit'} onClick={resumePreviousActivity}>
+            <PlayCircleFilled
+              id={'paused-pomodoro'}
+              className={classes.icon}/>
+          </IconButton>
+          <IconButton
+            className={classes.cancel}
+            color={'inherit'} onClick={stopActivity}>
+            <Stop className={classes.cancelIcon}/>
+          </IconButton>
+        </div>
       </div>
     </div>
   ) : null;

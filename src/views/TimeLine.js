@@ -185,7 +185,7 @@ const TimeLine = ({
       timeSVG.append("g")
         .attr("transform", `translate(0,${margin.top})`)
         .call(axis)
-        .attr('font-size', 'large');
+        .attr('font-size', 'xx-large');
 
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
