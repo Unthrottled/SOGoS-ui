@@ -14,7 +14,7 @@ import type {UserState} from "../../reducers/UserReducer";
 
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
-const meow = new Date(1570381199000);
+const meow = new Date();
 
 // const meow = new Date(1569404113000);
 
