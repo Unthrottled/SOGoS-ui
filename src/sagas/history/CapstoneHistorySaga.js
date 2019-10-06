@@ -80,7 +80,6 @@ export const findOldestTimedActivityInCache= (activityIndex: number, activities:
     return undefined
   } else {
     const oldActivity = activities[activityIndex];
-    console.log(oldActivity);
     if(shouldTime(oldActivity)) {
       return oldActivity;
     } else {
