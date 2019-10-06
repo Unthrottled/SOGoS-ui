@@ -55,16 +55,39 @@ export function* getFirstBefore(selectedFromDate: number,
   const activityIndex = reverseBinarySearch(activities,
     (activity: Activity) =>  activity.antecedenceTime - selectedFromDate);
   const updatedActivityIndex = getBeforeIndex(activityIndex);
-  if (updatedActivityIndex > activities.length - 1) {
-    const {data} = yield call(findFirstActivityBeforeTime, from);
-    if(data) {
-      yield put(createFoundBeforeCapstoneEvent(data));
-      return yield findOldestTimedActivity(data)
+
+  if(updatedActivityIndex < activities.length - 1) {
+    // We might have the oldest timed event in cache.
+    const oldestActivity = findOldestTimedActivityInCache(updatedActivityIndex, activities);
+    if(oldestActivity) {
+      return oldestActivity
     }
   }
-  const safeBefore = updatedActivityIndex >= activities.length ? activities.length - 1 : updatedActivityIndex;
-  return activities[safeBefore];
+
+  // check the API see if it remembers anything
+  const {data} = yield call(findFirstActivityBeforeTime, from);
+  if(data) {
+    yield put(createFoundBeforeCapstoneEvent(data));
+    return yield findOldestTimedActivity(data)
+  }
+
+  // we have the oldest item in cache
+  return activities[activities.length - 1];
 }
+
+export const findOldestTimedActivityInCache= (activityIndex: number, activities: Activity[]) => {
+  if(activityIndex >= activities.length){
+    return undefined
+  } else {
+    const oldActivity = activities[activityIndex];
+    console.log(oldActivity);
+    if(shouldTime(oldActivity)) {
+      return oldActivity;
+    } else {
+      return findOldestTimedActivityInCache(activityIndex + 1, activities);
+    }
+  }
+};
 
 export function* findOldestTimedActivity(activity: Activity){
   if(shouldTime(activity)){
