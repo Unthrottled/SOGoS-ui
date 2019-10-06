@@ -167,6 +167,7 @@ const ActivityHub = ({
         ariaLabel="SpeedDial example"
         className={classes.speedDial}
         hidden={false}
+        transitionDuration={0}
         icon={<SpeedDialIcon/>}
         onClick={handleClick}
         open={open}
