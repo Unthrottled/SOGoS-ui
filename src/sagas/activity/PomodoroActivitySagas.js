@@ -4,7 +4,7 @@ import type {ActivityState} from "../../reducers/ActivityReducer";
 import {createInitializedPomodoroEvent} from "../../events/ActivityEvents";
 import {INITIALIZED_APPLICATION} from "../../events/ApplicationLifecycleEvents";
 
-const ONE_DAY = 24 * 60 * 60 * 1000;
+export const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export function* pomodoroActivityInitializationSaga() {
   yield take(INITIALIZED_APPLICATION);

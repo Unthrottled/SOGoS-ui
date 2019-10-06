@@ -11,9 +11,9 @@ import moment from 'moment';
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
 import { DateRangePicker } from 'react-dates';
+import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
 
 const drawerWidth = 240;
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -139,7 +139,7 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
               maxDate={moment()}
               isOutsideRange={(date)=> moment().isSameOrBefore(date, 'day')}
               endDateId="jerry"
-              onDatesChange={({startDate, endDate}) => submitTimeFrame(startDate, endDate)}
+              onDatesChange={({startDate, endDate}) => submitTimeFrame(startDate, endDate + ONE_DAY - 1000)}
               focusedInput={focusedInput}
               onFocusChange={setFocusedInput}
             />
