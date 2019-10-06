@@ -12,6 +12,7 @@ import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
 import { DateRangePicker } from 'react-dates';
 import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
+import {Typography} from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -79,8 +80,8 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
   },
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    // paddingTop: theme.spacing(4),
+    // paddingBottom: theme.spacing(4),
   },
   paper: {
     display: 'flex',
@@ -93,8 +94,8 @@ const useStyles = makeStyles(theme => ({
   },
   form: {
     display: 'flex',
-    flexWrap: 'wrap',
-    background: theme.palette.primary.dark,
+    flexDirection: 'column',
+    alignContent: 'center',
     margin: 'auto',
     padding: theme.spacing(3),
   },
@@ -131,6 +132,9 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.form} noValidate>
+            <Typography component={'h4'}
+                        variant={'h4'}
+                        gutterBottom>Activity Time Frame</Typography>
             <DateRangePicker
               startDate={meowMinusSeven}
               startDateId="steve"

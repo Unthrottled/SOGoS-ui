@@ -8,6 +8,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {GoalIcon} from "./GoalIcon";
 import Container from "@material-ui/core/Container";
+import {StrategyIcon} from "./StrategyIcon";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -16,7 +17,8 @@ const useStyles = makeStyles(theme => ({
   },
   headerContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
   },
   goalIcon: {
     padding: theme.spacing(2)
@@ -41,6 +43,7 @@ const StrategicDashboard = ({history}) => {
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
+          <StrategyIcon/>
         </Container>
       </div>
       <Card className={classes.card}>
@@ -56,8 +59,8 @@ const StrategicDashboard = ({history}) => {
               We all have things that we want to accomplish.
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Go here to choose your <strong>Top 5</strong> goals.
-              Ideally you want to have at most 3
+              Go here to choose your <strong>Top 3</strong> goals.
+              You can have up to 5 but limit to what is important.
             </Typography>
           </CardContent>
         </CardActionArea>

@@ -8,6 +8,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
+import {TacticalIcon} from "./TacticalIcon";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -16,7 +17,8 @@ const useStyles = makeStyles(theme => ({
   },
   headerContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
   },
   goalIcon: {
     padding: theme.spacing(2)
@@ -41,6 +43,7 @@ const TacticalDashboard = ({history}) => {
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
+          <TacticalIcon />
         </Container>
       </div>
       <Card className={classes.card}>
@@ -50,7 +53,7 @@ const TacticalDashboard = ({history}) => {
           </div>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              Activity Creation
+              Activity Hub
             </Typography>
             <Typography gutterBottom variant="body2" color="textSecondary" component="p">
               This is how you reach your goals.
