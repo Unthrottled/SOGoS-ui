@@ -10,6 +10,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
+import HomeIcon from '@material-ui/icons/Home';
+import {StrategyIcon} from "./StrategyIcon";
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -37,6 +39,7 @@ const MenuNavigation = () => {
     {
       title: 'Strategy',
       path: '/strategy/',
+      icon: (<StrategyIcon size={{width: '24px', height: '24px',}}/>),
     },
     {
       title: 'Tactics',
@@ -69,6 +72,7 @@ const MenuNavigation = () => {
   const menuTopics = [{
     title: 'Home',
     path: '/',
+    icon: (<HomeIcon/>),
   }, ...topics];
   const fullList = (
     <div className={classes.fullList}>
