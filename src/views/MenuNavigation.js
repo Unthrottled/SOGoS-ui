@@ -48,11 +48,6 @@ const MenuNavigation = () => {
       icon: (<TacticalIcon size={{width: '24px', height: '24px',}}/>),
     },
     {
-      title: 'Tits',
-      path: '/tits',
-
-    },
-    {
       title: 'Settings',
       path: '/settings',
       icon: (<SettingsIcon/>),

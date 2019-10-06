@@ -15,7 +15,6 @@ import ObjectiveDashboard from "./ObjectiveDashboard";
 import Settings from "./Settings";
 import ActivityTimer from "./ActivityTimeBar";
 import Dashboard from "./Dashboard";
-import {Tits} from "./Tits";
 import TacticalDashboard from "./TacticalDashboard";
 import ActivitiesDashboard from "./ActivitiesDashboard";
 import ActivityDashboard from "./ActivityDashboard";
@@ -62,7 +61,6 @@ function App({dispatch: dispetch, isInitialized}) {
       <div className="App">
         <div className={classes.content}>
           <Switch>
-            <PrivateRoute path={'/tits'} component={Tits}/>
             <Route path={'/login'} component={LoggedOut}/>
             <PrivateRoute path={'/settings'} component={Settings}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'} component={ObjectiveActivityAssociationDashboard}/>
