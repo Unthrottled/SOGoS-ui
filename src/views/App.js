@@ -21,6 +21,7 @@ import ActivityDashboard from "./ActivityDashboard";
 import ObjectiveActivityAssociationDashboard from "./ObjectiveActivityAssociationDashboard";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
+import HistoryDashboard from "./HistoryDashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -62,6 +63,10 @@ function App({dispatch: dispetch, isInitialized}) {
         <div className={classes.content}>
           <Switch>
             <Route path={'/login'} component={LoggedOut}/>
+
+            {/*todo: make this public*/}
+            <PrivateRoute path={'/:uuid/history'} component={HistoryDashboard}/>
+
             <PrivateRoute path={'/settings'} component={Settings}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'} component={ObjectiveActivityAssociationDashboard}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
