@@ -10,10 +10,9 @@ import {viewedActivityFeed} from "../actions/HistoryActions";
 import moment from 'moment';
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
-import { DateRangePicker } from 'react-dates';
+import {DateRangePicker} from 'react-dates';
 import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
 import {Typography} from "@material-ui/core";
-import {TacticalIcon} from "./TacticalIcon";
 import {Reach} from "./Reach";
 
 const drawerWidth = 240;
@@ -122,8 +121,8 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
     dispatch(viewedActivityFeed());
   }, [didMountState]);
 
-  const meow = moment.unix(selectedTo/1000);
-  const meowMinusSeven = moment.unix(selectedFrom/1000);
+  const meow = moment.unix(selectedTo / 1000);
+  const meowMinusSeven = moment.unix(selectedFrom / 1000);
 
   const [focusedInput, setFocusedInput] = useState(null);
 
@@ -138,40 +137,31 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
     <LoggedInLayout>
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
-          <Typography component={'h1'}
-                      variant={'h2'}
+          <Typography component={'h4'}
+                      variant={'h4'}
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            SOGoS
+            Activity Time Frame
           </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
-          </Typography>
-          <Reach />
-        </Container>
-      </div>
-      <main className={classes.content}>
-        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.form} noValidate>
-            <Typography component={'h4'}
-                        variant={'h4'}
-                        gutterBottom>Activity Time Frame</Typography>
             <DateRangePicker
               startDate={meowMinusSeven}
               startDateId="steve"
               endDate={meow}
               minDate={moment.unix(0)}
               maxDate={moment()}
-              isOutsideRange={(date)=> moment().isSameOrBefore(date, 'day')}
+              isOutsideRange={(date) => moment().isSameOrBefore(date, 'day')}
               endDateId="jerry"
               onDatesChange={({startDate, endDate}) => submitTimeFrame(startDate, endDate + ONE_DAY - 1000)}
               focusedInput={focusedInput}
               onFocusChange={setFocusedInput}
             />
           </div>
+        </Container>
+      </div>
+      <main className={classes.content}>
+        <Container maxWidth="lg" className={classes.container}>
           <div className={fixedHeightPaper}>
             <TimeLine/>
           </div>

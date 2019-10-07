@@ -16,7 +16,6 @@ import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "./GoalIcon";
 import Container from "@material-ui/core/Container";
-import {TacticalIcon} from "./TacticalIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,7 +70,7 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
-          <GoalIcon />
+          <GoalIcon/>
         </Container>
       </div>
       {

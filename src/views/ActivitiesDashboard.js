@@ -16,8 +16,6 @@ import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import {TacticalIcon} from "./TacticalIcon";
-import {ActivityIcon} from "./ActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,7 +81,7 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
-          <TacticalActivityIcon />
+          <TacticalActivityIcon/>
         </Container>
       </div>
       <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>

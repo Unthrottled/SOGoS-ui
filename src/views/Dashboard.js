@@ -3,9 +3,13 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
-import {selectHistoryState, selectUserState} from "../reducers";
-import {Typography} from "@material-ui/core";
+import {selectUserState} from "../reducers";
+import {Card, Typography} from "@material-ui/core";
 import {Reach} from "./Reach";
+import Grid from "@material-ui/core/Grid";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import {withRouter} from "react-router-dom";
+import {StrategyIcon} from "./StrategyIcon";
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -19,8 +23,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const placesToGo = [
+  {
+    name: 'Yeet',
+    description: 'fam ravioli',
+    icon: <StrategyIcon/>,
+    navigator: (history, guid) => () => history.push(`./${guid}/history`)
+  }
+];
 
-const Dashboard = () => {
+const Dashboard = ({
+                     fullName,
+                     guid,
+                     history
+                   }) => {
   const classes = useStyles();
 
   return (
@@ -35,7 +51,8 @@ const Dashboard = () => {
             SOGoS
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
+            Welcome{fullName ? ` ${fullName}` : ''}! short and leading about the collection below—its contents, the
+            creator, etc.
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
@@ -43,20 +60,46 @@ const Dashboard = () => {
         </Container>
       </div>
       <main className={classes.content}>
-
+        <Grid container justify={'center'}>
+          <Grid item>
+            <Grid container
+                  style={{flexGrow: 1}}
+                  justify={'center'}
+                  spacing={4}
+            >
+              {
+                placesToGo.map(placeToGo => (
+                  <Grid item
+                        key={placeToGo.name}
+                  >
+                    <Card>
+                      <CardActionArea onClick={placeToGo.navigator(history, guid)}>
+                        <div className={classes.content}>
+                          <div className={classes.activityName}>{placeToGo.name}</div>
+                          <div className={classes.description}>{placeToGo.description}</div>
+                          <div className={classes.activityAvatar}>
+                            {placeToGo.icon}
+                          </div>
+                        </div>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))
+              }
+            </Grid>
+          </Grid>
+        </Grid>
       </main>
     </LoggedInLayout>
   );
 };
 
 const mapStateToProps = state => {
-  const {information: {fullName}} = selectUserState(state);
-  const {selectedHistoryRange: {from, to}} = selectHistoryState(state);
+  const {information: {fullName, guid}} = selectUserState(state);
   return {
     fullName,
-    selectedFrom: from,
-    selectedTo: to
+    guid
   }
 };
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps)(withRouter(Dashboard));
