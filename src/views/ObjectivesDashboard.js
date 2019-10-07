@@ -15,6 +15,8 @@ import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "./GoalIcon";
+import Container from "@material-ui/core/Container";
+import {TacticalIcon} from "./TacticalIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,6 +37,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.contrastText,
   },
   objectiveSummary: {},
+  headerContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const MAX_OBJECTIVES = 5;
@@ -50,7 +57,23 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
 
   return (
     <LoggedInLayout>
-      <h3>What's up {fullName}?</h3>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h2'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Goal Setting
+          </Typography>
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+          <GoalIcon />
+        </Container>
+      </div>
       {
         allObjectives.length >= MAX_OBJECTIVES ? null :
           (
