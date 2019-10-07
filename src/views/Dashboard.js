@@ -10,25 +10,52 @@ import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {withRouter} from "react-router-dom";
 import {StrategyIcon} from "./StrategyIcon";
+import {TacticalIcon} from "./TacticalIcon";
+import HistoryIcon from '@material-ui/icons/History';
+import SettingsIcon from '@material-ui/icons/Settings';
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
-    overflow: 'auto',
   },
   headerContent: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
   },
+  placeIcon: {
+    padding: theme.spacing(2)
+  },
+  gridItem: {
+    padding: theme.spacing(1),
+  }
 }));
 
 const placesToGo = [
   {
-    name: 'Yeet',
-    description: 'fam ravioli',
+    name: 'History',
+    description: 'Look at all the shit you have done!',
+    icon: <HistoryIcon style={{fontSize: '100px'}}/>,
+    navigator: (history, guid) => () => history.push(`./${guid}/history/`)
+  },
+  {
+    name: 'Strategy',
+    description: 'What shit do I need to get together?',
     icon: <StrategyIcon/>,
-    navigator: (history, guid) => () => history.push(`./${guid}/history`)
+    navigator: (history, guid) => () => history.push(`./strategy/`)
+  },
+  {
+    name: 'Tactics',
+    description: 'How to do I get my shit together?',
+    icon: <TacticalIcon/>,
+    navigator: (history, guid) => () => history.push(`./tactical/`)
+  },
+  {
+    name: 'Settings',
+    description: 'Get your shit together.',
+    icon: <SettingsIcon style={{fontSize: '100px'}}/>,
+    navigator: (history, guid) => () => history.push(`./settings/`)
   }
 ];
 
@@ -65,22 +92,26 @@ const Dashboard = ({
             <Grid container
                   style={{flexGrow: 1}}
                   justify={'center'}
-                  spacing={4}
             >
               {
                 placesToGo.map(placeToGo => (
                   <Grid item
+                        className={classes.gridItem}
                         key={placeToGo.name}
                   >
                     <Card>
                       <CardActionArea onClick={placeToGo.navigator(history, guid)}>
-                        <div className={classes.content}>
-                          <div className={classes.activityName}>{placeToGo.name}</div>
-                          <div className={classes.description}>{placeToGo.description}</div>
-                          <div className={classes.activityAvatar}>
-                            {placeToGo.icon}
-                          </div>
+                        <div className={classes.placeIcon}>
+                          {placeToGo.icon}
                         </div>
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {placeToGo.name}
+                          </Typography>
+                          <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                            {placeToGo.description}
+                          </Typography>
+                        </CardContent>
                       </CardActionArea>
                     </Card>
                   </Grid>

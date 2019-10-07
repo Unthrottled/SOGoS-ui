@@ -13,7 +13,6 @@ import {selectHistoryState, selectUserState} from "../reducers";
 import {DateRangePicker} from 'react-dates';
 import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
 import {Typography} from "@material-ui/core";
-import {Reach} from "./Reach";
 
 const drawerWidth = 240;
 
@@ -81,8 +80,6 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
   },
   container: {
-    // paddingTop: theme.spacing(4),
-    // paddingBottom: theme.spacing(4),
   },
   paper: {
     display: 'flex',
