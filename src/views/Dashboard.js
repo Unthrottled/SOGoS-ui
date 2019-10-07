@@ -13,6 +13,8 @@ import {selectHistoryState, selectUserState} from "../reducers";
 import { DateRangePicker } from 'react-dates';
 import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
 import {Typography} from "@material-ui/core";
+import {TacticalIcon} from "./TacticalIcon";
+import {Reach} from "./Reach";
 
 const drawerWidth = 240;
 
@@ -102,7 +104,12 @@ const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-  }
+  },
+  headerContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 
@@ -129,6 +136,23 @@ const Dashboard = ({dispatch, selectedTo, selectedFrom}) => {
 
   return (
     <LoggedInLayout>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h2'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            SOGoS
+          </Typography>
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+          <Reach />
+        </Container>
+      </div>
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.form} noValidate>

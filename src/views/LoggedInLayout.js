@@ -8,7 +8,8 @@ import SnackBoi from "./SnackBoi";
 
 const useStyles = makeStyles(theme =>({
   container: {
-    height: '100%'
+    minHeight: '100%',
+    marginBottom: theme.spacing(9),
   },
 }));
 
