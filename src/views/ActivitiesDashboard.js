@@ -8,14 +8,12 @@ import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
-import EditIcon from '@material-ui/icons/Edit'
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
-import {Card, CardHeader} from "@material-ui/core";
+import {Card} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,7 +33,20 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   },
+  activityName: {
+    padding: theme.spacing(1),
+    fontSize: '1.25em',
+  },
+  activityAvatar: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+  },
   objectiveSummary: {},
+  content: {
+    padding: theme.spacing(2),
+    alignItems: 'center',
+    textAlign: 'center',
+  }
 }));
 
 const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
@@ -58,30 +69,37 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
         </Button>
       </Link>
       <div className={classes.root}>
-        <Grid container spacing={4}>
-          {
-            allTacticalActivites.map(tacticalActivity => (
-              <Grid item xs={3}
-                    key={tacticalActivity.id}
-              >
-                <Card>
-                  <CardHeader avatar={
-                    (<TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                           size={{
-                                             width: '75px',
-                                             height: '75px',
-                                           }}/>)}
-                              title={tacticalActivity.name}
-                              action={
-                                <IconButton onClick={()=>history.push(`./${tacticalActivity.id}`)}>
-                                  <EditIcon/>
-                                </IconButton>
-                              }
-                  />
-                </Card>
-              </Grid>
-            ))
-          }
+        <Grid container justify={'center'}>
+          <Grid item>
+            <Grid container
+                  style={{flexGrow: 1}}
+                  justify={'center'}
+                  spacing={4}
+            >
+              {
+                allTacticalActivites.map(tacticalActivity => (
+                  <Grid item
+                        key={tacticalActivity.id}
+                  >
+                    <Card>
+                      <CardActionArea onClick={() => history.push(`./${tacticalActivity.id}`)}>
+                        <div className={classes.content}>
+                          <div className={classes.activityName}>{tacticalActivity.name}</div>
+                          <div className={classes.activityAvatar}>
+                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                                  size={{
+                                                    width: '75px',
+                                                    height: '75px',
+                                                  }}/>
+                          </div>
+                        </div>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))
+              }
+            </Grid>
+          </Grid>
         </Grid>
       </div>
     </LoggedInLayout>
