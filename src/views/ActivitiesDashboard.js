@@ -14,6 +14,10 @@ import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import {TacticalIcon} from "./TacticalIcon";
+import {ActivityIcon} from "./ActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +26,11 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1)
+  },
+  headerContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
   },
   heading: {
     fontSize: theme.typography.pxToRem(20),
@@ -60,7 +69,23 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
 
   return (
     <LoggedInLayout>
-      <h3>What's up {fullName}?</h3>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h2'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Activity Hub
+          </Typography>
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+          <TacticalActivityIcon />
+        </Container>
+      </div>
       <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
         <Button variant={'contained'}
                 color={'primary'}
