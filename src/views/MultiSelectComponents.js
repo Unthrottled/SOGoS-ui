@@ -1,6 +1,6 @@
 import Chip from "@material-ui/core/Chip";
 import clsx from "clsx";
-import CancelIcon from "@material-ui/core/SvgIcon";
+import CancelIcon from "@material-ui/icons/Cancel";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -9,13 +9,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 export const MultiValue = props => (
   <Chip
-    tabIndex={-1}
     label={props.children}
     className={clsx(props.selectProps.classes.chip, {
       [props.selectProps.classes.chipFocused]: props.isFocused,
     })}
     onDelete={props.removeProps.onClick}
-    deleteIcon={<CancelIcon {...props.removeProps} />}
+    deleteIcon={<CancelIcon  />}
   />
 );
 export const NoOptionsMessage = props => (
