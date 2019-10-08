@@ -12,9 +12,12 @@ import {blue} from "@material-ui/core/colors";
 import {selectActivityState, selectTacticalState} from "../reducers";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
-import StopWatchIcon from '@material-ui/icons/AvTimer';
+import {TomatoIcon} from "./TomatoIcon";
 
 const useStyles = makeStyles(theme => ({
+  pomoCount: {
+    display: 'flex',
+  },
   timer: {
     position: 'fixed',
     bottom: 0,
@@ -51,7 +54,7 @@ export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
     } : {}),
     ...(previousActivity.content.workStartedWomboCombo ? {
       workStartedWomboCombo: Math.max(new Date().valueOf() -
-        (currentActivity.antecedenceTime - previousActivity.content.workStartedWomboCombo ), 0)
+        (currentActivity.antecedenceTime - previousActivity.content.workStartedWomboCombo), 0)
     } : {}),
     uuid: uuid(),
   }));
@@ -98,14 +101,14 @@ const ActivityTimeBar = ({
     }));
   };
 
-   const completedPomodoro = () => {
-     if (name === RECOVERY) {
-       resumePreviousActivity();
-     } else {
-       startRecovery();
-       dispetch(createCompletedPomodoroEvent())
-     }
-   };
+  const completedPomodoro = () => {
+    if (name === RECOVERY) {
+      resumePreviousActivity();
+    } else {
+      startRecovery();
+      dispetch(createCompletedPomodoroEvent())
+    }
+  };
 
   function resumePreviousActivity() {
     dispetch(startTimedActivity({
@@ -143,12 +146,18 @@ const ActivityTimeBar = ({
     <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
         {
-          tacticalActivity &&
+          isTimer &&
           <div className={classes.activityIcon}>
-            <TacticalActivityIcon tacticalActivity={tacticalActivity} size={{
-              width: '50px',
-              height: '50px',
-            }}/>
+            {
+              (tacticalActivity && <TacticalActivityIcon tacticalActivity={tacticalActivity} size={{
+                width: '50px',
+                height: '50px',
+              }}/>) || <TomatoIcon size={{
+                width: '50px',
+                height: '50px',
+              }}/>
+            }
+
           </div>
         }
         <div style={{flexGrow: 1, textAlign: "center"}}>
@@ -170,7 +179,10 @@ const ActivityTimeBar = ({
         </div>
         {
           isTimer && (name !== RECOVERY) &&
-          (<div>{numberOfCompletedPomodoro}<StopWatchIcon/> </div>)
+          (<div className={classes.pomoCount}>
+            <div style={{marginRight: '5px'}}>{numberOfCompletedPomodoro}: </div>
+            <TomatoIcon size={{width: 24, height: 24}}/>
+          </div>)
         }
         <div onClick={stopActivity} className={classes.close}>
           <Close/>
