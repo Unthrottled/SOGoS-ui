@@ -5,7 +5,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
-import Fab from "@material-ui/core/Fab";
 import {Paper, Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
@@ -14,6 +13,7 @@ import {viewedSettings} from "../actions/TacticalActions";
 import Container from "@material-ui/core/Container";
 import SettingsIcon from '@material-ui/icons/Settings';
 import withStyles from "@material-ui/core/styles/withStyles";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -35,6 +35,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
+  },
+  save: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+    padding: theme.spacing(2),
+  },
+  icon: {
+    fontSize: '1.5em',
   },
 }));
 
@@ -239,22 +247,23 @@ const SettingsBoard = ({
         <hr/>
         <div>
           <Typography>
-            Full Cycle Time (4 iterations):
-            {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
+            Full Cycle Time (4 iterations): {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
           </Typography>
         </div>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={saveSettings}
-        >
-          <SaveIcon/>
-        </Fab>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={discardChanges}
-        >
-          <CancelIcon/>
-        </Fab>
+        <div>
+          <IconButton color={'primary'}
+                      className={classes.save}
+                      onClick={saveSettings}
+          >
+            <SaveIcon className={classes.icon}/>
+          </IconButton>
+          <IconButton color={'primary'}
+                      className={classes.save}
+                      onClick={discardChanges}
+          >
+            <CancelIcon className={classes.icon}/>
+          </IconButton>
+        </div>
       </Paper>
     </LoggedInLayout>
   );
