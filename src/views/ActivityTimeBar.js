@@ -146,19 +146,19 @@ const ActivityTimeBar = ({
     <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
         {
-          isTimer &&
+          tacticalActivity &&
           <div className={classes.activityIcon}>
-            {
-              (tacticalActivity && <TacticalActivityIcon tacticalActivity={tacticalActivity} size={{
-                width: '50px',
-                height: '50px',
-              }}/>) || <TomatoIcon size={{
-                width: '50px',
-                height: '50px',
-              }}/>
-            }
-
+            <TacticalActivityIcon tacticalActivity={tacticalActivity} size={{
+              width: '50px',
+              height: '50px',
+            }}/>
           </div>
+        }
+        {
+          !tacticalActivity && isTimer && <TomatoIcon size={{
+            width: '50px',
+            height: '50px',
+          }}/>
         }
         <div style={{flexGrow: 1, textAlign: "center"}}>
           {
@@ -180,7 +180,7 @@ const ActivityTimeBar = ({
         {
           isTimer && (name !== RECOVERY) &&
           (<div className={classes.pomoCount}>
-            <div style={{marginRight: '5px'}}>{numberOfCompletedPomodoro}: </div>
+            <div style={{marginRight: '5px'}}>{numberOfCompletedPomodoro}:</div>
             <TomatoIcon size={{width: 24, height: 24}}/>
           </div>)
         }

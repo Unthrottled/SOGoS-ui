@@ -72,6 +72,12 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
   },
   bigIcon: {
+    fontSize: "175px",
+    padding: "25px",
+    background: theme.palette.primary.main,
+    borderRadius: '50%',
+  },
+  bigIconTomato: {
     padding: "30px",
     background: theme.palette.primary.main,
     borderRadius: '50%',
@@ -162,8 +168,7 @@ const ActivityHub = ({
         <TomatoIcon size={{width: 24, height: 24}}/>
       </div>,
       name: 'Start Timed Task', perform: () => baseAction(commenceTimedObjectiveActivity,
-
-        (<div className={classes.bigIcon}>
+        (<div className={classes.bigIconTomato}>
           <TomatoIcon size={{width: 100, height: 100}}/>
         </div>),
         commenceGenericTimedActivity)
