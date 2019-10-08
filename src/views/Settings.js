@@ -6,16 +6,18 @@ import Slider from "@material-ui/core/Slider";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import Fab from "@material-ui/core/Fab";
-import {Typography} from "@material-ui/core";
+import {Paper, Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
 import {selectPomodoroState} from "../reducers";
 import {viewedSettings} from "../actions/TacticalActions";
+import Container from "@material-ui/core/Container";
+import SettingsIcon from '@material-ui/icons/Settings';
+import withStyles from "@material-ui/core/styles/withStyles";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    background: theme.palette.primary.dark,
-    maxWidth: theme.spacing(50),
+    maxWidth: theme.spacing(75),
     margin: 'auto',
     padding: theme.spacing(3),
   },
@@ -27,14 +29,19 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
   menu: {
-    width: 200,
+    width: 350,
+  },
+  headerContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
   },
 }));
 
 const restMarks = [
   {
-    value: 0,
-    label: '0',
+    value: 0.5,
+    label: '0.5',
   },
   {
     value: 3,
@@ -59,10 +66,6 @@ const restMarks = [
 ];
 
 const recoveryMarks = [
-  {
-    value: 0,
-    label: '0',
-  },
   {
     value: 5,
     label: '5',
@@ -89,8 +92,8 @@ export const MINUTE_CONVERSION = 60000;
 
 const workMarks = [
   {
-    value: 0,
-    label: '0',
+    value: 5,
+    label: '5',
   },
   {
     value: 15,
@@ -109,6 +112,19 @@ const workMarks = [
     label: '90',
   },
 ];
+
+const SliderBoi = withStyles({
+  thumb: {
+    height: 20,
+    width: 20,
+    marginTop: -10,
+    marginLeft: -10,
+  },
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+})(Slider);
+
 const SettingsBoard = ({
                          history,
                          dispatch,
@@ -152,8 +168,33 @@ const SettingsBoard = ({
 
   return (
     <LoggedInLayout>
-      <div className={classes.container}>
-        <Slider
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h4'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Settings
+          </Typography>
+          <Typography variant="h6" align="center" color="textSecondary" paragraph>
+            Some short and leading about the collection below—its contents, the
+            creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+          <SettingsIcon style={{color: 'black', fontSize: '3em'}}/>
+        </Container>
+      </div>
+      <Paper className={classes.container}>
+        <Typography gutterBottom>
+          Pomodoro Settings
+        </Typography>
+        <hr/>
+        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+          Work Duration (minutes)
+        </Typography>
+        <SliderBoi
           id={'pomodoro-work-time'}
           label={'Working Duration (minutes)'}
           defaultValue={workTime}
@@ -165,7 +206,10 @@ const SettingsBoard = ({
           max={workMarks[workMarks.length - 1].value}
           valueLabelDisplay="auto"
         />
-        <Slider
+        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+          Short Break Duration (minutes)
+        </Typography>
+        <SliderBoi
           id={'pomodoro-recovery-time'}
           label={'Working Duration (minutes)'}
           defaultValue={recoveryTime}
@@ -177,7 +221,10 @@ const SettingsBoard = ({
           max={restMarks[restMarks.length - 1].value}
           valueLabelDisplay="auto"
         />
-        <Slider
+        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+          Long Break Duration (minutes)
+        </Typography>
+        <SliderBoi
           id={'pomodoro-long-recovery-time'}
           label={'Working Duration (minutes)'}
           defaultValue={longRecoveryTime}
@@ -189,6 +236,7 @@ const SettingsBoard = ({
           max={recoveryMarks[recoveryMarks.length - 1].value}
           valueLabelDisplay="auto"
         />
+        <hr/>
         <div>
           <Typography>
             Full Cycle Time (4 iterations):
@@ -207,7 +255,7 @@ const SettingsBoard = ({
         >
           <CancelIcon/>
         </Fab>
-      </div>
+      </Paper>
     </LoggedInLayout>
   );
 };
