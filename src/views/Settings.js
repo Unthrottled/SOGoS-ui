@@ -14,6 +14,7 @@ import Container from "@material-ui/core/Container";
 import SettingsIcon from '@material-ui/icons/Settings';
 import withStyles from "@material-ui/core/styles/withStyles";
 import IconButton from "@material-ui/core/IconButton";
+import {TomatoIcon} from "./TomatoIcon";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -195,6 +196,7 @@ const SettingsBoard = ({
         </Container>
       </div>
       <Paper className={classes.container}>
+        <TomatoIcon size={{width: 50, height: 50}}/>
         <Typography gutterBottom>
           Pomodoro Settings
         </Typography>
