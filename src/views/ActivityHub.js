@@ -3,7 +3,6 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import React, {useState} from "react";
 import StopWatch from '@material-ui/icons/Timer';
-import Timer from '@material-ui/icons/AvTimer';
 import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
 import {startTimedActivity} from "../actions/ActivityActions";
@@ -18,6 +17,7 @@ import {Grow} from "@material-ui/core";
 import {objectToArray} from "../miscellanous/Tools";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import {TomatoIcon} from "./TomatoIcon";
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing(7),
   },
   container: {
-    background: 'rgba(0,0,0,0.75)',
+    background: 'rgba(0,0,0,0.90)',
     position: 'fixed',
     top: '0',
     width: '100%',
@@ -72,8 +72,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
   },
   bigIcon: {
-    fontSize: "150px",
-    padding: "50px",
+    padding: "30px",
     background: theme.palette.primary.main,
     borderRadius: '50%',
   },
@@ -159,8 +158,14 @@ const ActivityHub = ({
 
   const actions = [
     {
-      icon: <Timer/>, name: 'Start Timed Task', perform: () => baseAction(commenceTimedObjectiveActivity,
-        (<Timer className={classes.bigIcon}/>),
+      icon: <div style={{marginTop: 5}}>
+        <TomatoIcon size={{width: 24, height: 24}}/>
+      </div>,
+      name: 'Start Timed Task', perform: () => baseAction(commenceTimedObjectiveActivity,
+
+        (<div className={classes.bigIcon}>
+          <TomatoIcon size={{width: 100, height: 100}}/>
+        </div>),
         commenceGenericTimedActivity)
     },
     {
@@ -236,6 +241,10 @@ const ActivityHub = ({
                   </div>
                 ))
               }
+            </div>
+            <div className={classes.toolTip}>
+              <span className={classes.toolTipInner}>Generic</span>
+              <KeyboardArrowDown style={{fontSize: '2em'}}/>
             </div>
             <IconButton
               onClick={invokeGenericAction}

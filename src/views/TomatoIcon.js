@@ -22,13 +22,10 @@ export const TomatoIcon = (props: Props) => {
   const usableSize = size || defaultSize;
 
 
-
   return (
-    <div>
-      <ReactSVG src={Tomato} beforeInjection={(svg) => {
-        svg.setAttribute('width', usableSize.width || defaultSize.width);
-        svg.setAttribute('height', usableSize.height || defaultSize.height);
-      }}/>
-    </div>
+    <ReactSVG src={Tomato} beforeInjection={(svg) => {
+      svg.setAttribute('width', usableSize.width || defaultSize.width);
+      svg.setAttribute('height', usableSize.height || defaultSize.height);
+    }}/>
   );
 };
