@@ -1,12 +1,16 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {SketchPicker} from "react-color";
-import Save from '@material-ui/icons/Save';
-import Cancel from '@material-ui/icons/Cancel';
+import {PhotoshopPicker} from "react-color";
 import Edit from '@material-ui/icons/Edit';
 import IconButton from "@material-ui/core/IconButton";
 import {Fade} from "@material-ui/core";
 import Popper from "@material-ui/core/Popper";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+const useStyles = makeStyles(theme => ({
+  pickerContainer: {
+  },
+}));
 
 export const ColorPicker = ({
                               onSelect,
@@ -30,6 +34,7 @@ export const ColorPicker = ({
     setSetSavedColor(currentColor);
     setOpen(true);
   };
+  const classes = useStyles();
   return (
     <div>
       <div style={{display: 'flex'}}>
@@ -45,10 +50,18 @@ export const ColorPicker = ({
               anchorEl={ancorElement} transition>
         {({TransitionProps}) => (
           <Fade {...TransitionProps}>
-            <div>
-              <SketchPicker
+            <div className={classes.pickerContainer}>
+              <PhotoshopPicker
                 color={currentColor.hex}
                 alpha={currentColor.opacity}
+                onCancel={() => {
+                  setOpen(false);
+                  onSelect(savedColor)
+                }}
+                onAccept={() => {
+                  setOpen(false);
+                  onSelect(currentColor)
+                }}
                 onChangeComplete={(color) => {
                   const brandNewColour = {
                     hex: color.hex,
@@ -57,18 +70,6 @@ export const ColorPicker = ({
                   setCurrentColor(brandNewColour);
                   onSelect(brandNewColour);
                 }}/>
-              <IconButton color={'inherit'} onClick={() => {
-                setOpen(false);
-                onSelect(currentColor)
-              }}>
-                <Save/>
-              </IconButton>
-              <IconButton color={'inherit'} onClick={() => {
-                setOpen(false);
-                onSelect(savedColor)
-              }}>
-                <Cancel/>
-              </IconButton>
             </div>
           </Fade>
         )
