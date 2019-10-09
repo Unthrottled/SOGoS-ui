@@ -13,81 +13,52 @@ import {withRouter} from "react-router-dom";
 import {selectStrategyState, selectTacticalActivityState, selectUserState} from "../reducers";
 import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import type {TacticalActivity} from "../types/TacticalModels";
-import {Switch} from "@material-ui/core";
+import {Card, Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
 import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 const useStyles = makeStyles(theme => (
   {
-    inputContainer: {
-      background: theme.palette.primary.main
-    },
     root: {
-      flexGrow: 1,
-      height: 250,
+      width: '100%',
+      textAlign: 'left',
     },
-    input: {
-      display: 'flex',
-      padding: 0,
-      height: 'auto',
+    button: {
+      margin: theme.spacing(1)
     },
-    valueContainer: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flex: 1,
-      alignItems: 'center',
-      overflow: 'hidden',
+    headerContent: {
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(6, 0, 6),
+      marginBottom: theme.spacing(1),
     },
-    chip: {
-      margin: theme.spacing(0.5, 0.25),
+    heading: {
+      fontSize: theme.typography.pxToRem(20),
+      margin: 'auto 0',
+      paddingLeft: '1rem',
+      fontWeight: theme.typography.fontWeightRegular,
     },
-    chipFocused: {
-      backgroundColor: emphasize(
-        theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
-        0.08,
-      ),
-    },
-    noOptionsMessage: {
-      padding: theme.spacing(1, 2),
-    },
-    singleValue: {
-      fontSize: 16,
-    },
-    placeholder: {
-      position: 'absolute',
-      left: 2,
-      bottom: 6,
-      fontSize: 16,
-    },
-    paper: {
-      position: 'absolute',
-      zIndex: 1,
-      marginTop: theme.spacing(1),
-      left: 0,
-      right: 0,
-    },
-    divider: {
-      height: theme.spacing(2),
-    },
-    keyResults: {
+    objective: {
       background: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
-      margin: theme.spacing(2),
-      borderRadius: theme.shape.borderRadius
     },
-    avatar: {
-      background: theme.palette.secondary.main,
-      color: theme.palette.secondary.contrastText,
+    activityName: {
+      padding: theme.spacing(1),
+      fontSize: '1.25em',
     },
-    save: {
-      position: 'relative',
-      top: theme.spacing(1),
-      right: theme.spacing(1),
+    activityAvatar: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
     },
-    textField: {
-      width: '100%',
-    },
+    objectiveSummary: {},
+    content: {
+      padding: theme.spacing(2),
+      alignItems: 'center',
+      textAlign: 'center',
+    }
   }
 ));
 
@@ -101,18 +72,18 @@ const ObjectiveActivityAssociationDashboard = ({
                                                }) => {
   const classes = useStyles();
   const rememberedObjective: Objective = objectives[objectiveId];
-  const tacticalTacticalActivites: TacticalActivity[] = objectToArray(activities);
+  const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
   const associatedActivityDictionary = (rememberedObjective.associatedActivities || []).reduce((accum, activity) => {
     accum[activity] = true;
     return accum;
   }, {});
-  const selectedActivites = tacticalTacticalActivites.reduce((accum, activity) => {
+  const selectedActivities = allTacticalActivities.reduce((accum, activity) => {
     accum[activity.id] = !!associatedActivityDictionary[activity.id];
     return accum;
   }, {});
 
 
-  const [activitySwitches, setActivitySwitches] = useState(selectedActivites);
+  const [activitySwitches, setActivitySwitches] = useState(selectedActivities);
   const toggleActivity = (activityId) => {
     activitySwitches[activityId] = !activitySwitches[activityId];
     setActivitySwitches({
@@ -138,40 +109,70 @@ const ObjectiveActivityAssociationDashboard = ({
 
   return (
     <LoggedInLayout>
-      <h3>What's up {fullName}?</h3>
-      <Typography>
-        Dis is objective id {objectiveId}
-      </Typography>
-      <div className={classes.inputContainer}>
-
-        <div className={classes.keyResults}>
-          <List>
-            {tacticalTacticalActivites.map((activity: TacticalActivity) => (
-              <ListItem key={activity.id}>
-                <ListItemAvatar>
-                  <TacticalActivityIcon tacticalActivity={activity} size={{
-                    width: '75px',
-                    height: '75px',
-                  }}/>
-                </ListItemAvatar>
-                <div> {activity.name} </div>
-                <Switch checked={activitySwitches[activity.id]} onChange={() => toggleActivity(activity.id)}/>
-              </ListItem>
-            ))}
-          </List>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h2'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Activity Hub
+          </Typography>
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+          <TacticalActivityIcon/>
+        </Container>
+      </div>
+      <div className={classes.root}>
+        <div className={classes.inputContainer}>
+          <Fab color={'primary'}
+               className={classes.save}
+               onClick={saveObjective}
+          >
+            <SaveIcon/>
+          </Fab>
+          <Fab color={'primary'}
+               className={classes.save}
+               onClick={discardChanges}
+          >
+            <CancelIcon/>
+          </Fab>
         </div>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={saveObjective}
-        >
-          <SaveIcon/>
-        </Fab>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={discardChanges}
-        >
-          <CancelIcon/>
-        </Fab>
+        <Grid container justify={'center'}>
+          <Grid item>
+            <Grid container
+                  style={{flexGrow: 1}}
+                  justify={'center'}
+                  spacing={4}
+            >
+              {
+                allTacticalActivities.map(tacticalActivity => (
+                  <Grid item
+                        key={tacticalActivity.id}
+                  >
+                    <Card>
+                        <div className={classes.content}>
+                          <div className={classes.activityName}>{tacticalActivity.name}</div>
+                          <div className={classes.activityAvatar}>
+                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                                  size={{
+                                                    width: '75px',
+                                                    height: '75px',
+                                                  }}/>
+                          </div>
+                          <Switch checked={activitySwitches[tacticalActivity.id]}
+                                  onChange={() => toggleActivity(tacticalActivity.id)}/>
+                        </div>
+                    </Card>
+                  </Grid>
+                ))
+              }
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
     </LoggedInLayout>
   );
