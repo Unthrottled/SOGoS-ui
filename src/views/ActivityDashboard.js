@@ -23,6 +23,9 @@ import {
 import type {TacticalActivity} from "../types/TacticalModels";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
+import {PersistActions} from "./PersistActions";
 
 const suggestions = [
   {label: 'Technical'},
@@ -38,8 +41,15 @@ const suggestions = [
 
 const useStyles = makeStyles(theme => (
   {
+    headerContent: {
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(6, 0, 6),
+      marginBottom: theme.spacing(1),
+    },
     inputContainer: {
-      background: theme.palette.primary.main
+      maxWidth: theme.spacing(75),
+      margin: 'auto',
+      padding: theme.spacing(3),
     },
     root: {
       flexGrow: 1,
@@ -179,11 +189,23 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
   const dismissCompletionWindow = () => setFinnaComplete(false);
   return (
     <LoggedInLayout>
-      <h3>What's up {fullName}?</h3>
-      <Typography>
-        Dis is activity id {activityId}
-      </Typography>
-      <div className={classes.inputContainer}>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h4'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Goal Setting
+          </Typography>
+          <Typography variant="h6" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+        </Container>
+      </div>
+      <Paper className={classes.inputContainer}>
         <ActivityIcon
           backgroundColor={backgroundColor}
           lineColor={lineColor}
@@ -217,18 +239,8 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
           onChange={handleChangeMulti}
           isMulti
         />
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={saveTacticalActivity}
-        >
-          <SaveIcon/>
-        </Fab>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={discardChanges}
-        >
-          <CancelIcon/>
-        </Fab>
+        <PersistActions onCancel={discardChanges}
+                        onSave={saveTacticalActivity}/>
         {
           rememberedTacticalObjective ? (
             <Fab color={'primary'}
@@ -249,7 +261,7 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
             </Fab>
           ) : null
         }
-      </div>
+      </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
                   positiveActionText={"Yes, Get rid of it"}
