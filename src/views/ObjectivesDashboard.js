@@ -16,11 +16,12 @@ import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "./GoalIcon";
 import Container from "@material-ui/core/Container";
+import {ActivityIcon} from "./ActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
     textAlign: 'left',
+    margin: `0 ${theme.spacing(2)}px`
   },
   button: {
     margin: theme.spacing(1)
@@ -101,32 +102,45 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                 <Typography className={classes.heading}>{objective.valueStatement}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <ul>
-                  {
-                    objective.keyResults.map(keyResult => (
-                      <li key={keyResult.id}>
-                        <Typography>
-                          {keyResult.valueStatement}
-                        </Typography>
-                      </li>
-                    ))
-                  }
-                </ul>
-                <div>
-                  <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
-                    <Button variant={'outlined'}
-                            color={'secondary'}
-                            className={classes.button}>
-                      <AddIcon/> Edit Objective
-                    </Button>
-                  </Link>
-                  <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
-                    <Button variant={'outlined'}
-                            color={'secondary'}
-                            className={classes.button}>
-                      <AddIcon/>Associate Activities
-                    </Button>
-                  </Link>
+                <div style={{display: 'flex', width: '100%'}}>
+                  <div style={{flexGrow: 2}}>
+                    <Typography gutterBottom>
+                      Key Completion Results:
+                    </Typography>
+                    <ul>
+                      {
+                        objective.keyResults.map(keyResult => (
+                          <li key={keyResult.id}>
+                            <Typography>
+                              {keyResult.valueStatement}
+                            </Typography>
+                          </li>
+                        ))
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <div style={{display: 'flex', flexDirection: 'column', textAlign: 'right'}}>
+                      <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
+                        <Button variant={'outlined'}
+                                color={'secondary'}
+                                className={classes.button}>
+                          <AddIcon/> Edit Objective
+                        </Button>
+                      </Link>
+                      <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
+                        <Button variant={'outlined'}
+                                color={'secondary'}
+                                style={{lineHeight: 1}}
+                                className={classes.button}>
+
+                          <ActivityIcon
+                            style={{marginRight: '5px'}}
+                            size={{width: '24px', height: '24px'}}/> Associate Activities
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
