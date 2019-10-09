@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {connect} from "react-redux";
@@ -119,7 +117,7 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ActivityDashboard = ({dispatch, activities, history, fullName, match: {params: {activityId}}}) => {
+const ActivityDashboard = ({dispatch, activities, history, match: {params: {activityId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
   const rememberedTacticalObjective = activities[activityId];
@@ -206,12 +204,22 @@ const ActivityDashboard = ({dispatch, activities, history, fullName, match: {par
         </Container>
       </div>
       <Paper className={classes.inputContainer}>
-        <ActivityIcon
-          backgroundColor={backgroundColor}
-          lineColor={lineColor}
-        />
-        <ColorPicker defaultColor={backgroundColor} onSelect={setBackgroundColor}/>
-        <ColorPicker defaultColor={lineColor} onSelect={setLineColor}/>
+        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+          <ActivityIcon
+            backgroundColor={backgroundColor}
+            lineColor={lineColor}
+          />
+          <div style={{display: 'flex-column', alignItems: 'center', justifyContent: 'center'}}>
+              <ColorPicker defaultColor={backgroundColor}
+                           onSelect={setBackgroundColor}
+                           label={'Background Color'}
+              />
+              <ColorPicker defaultColor={lineColor}
+                           onSelect={setLineColor}
+                           label={'Line Color'}
+              />
+          </div>
+        </div>
         <TextField
           className={classes.textField}
           label={'What is it you do?'}

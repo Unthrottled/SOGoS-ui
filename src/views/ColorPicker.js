@@ -8,7 +8,12 @@ import IconButton from "@material-ui/core/IconButton";
 import {Fade} from "@material-ui/core";
 import Popper from "@material-ui/core/Popper";
 
-export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
+export const ColorPicker = ({
+                              onSelect,
+                              onComplete,
+                              label,
+                              defaultColor,
+                            }) => {
   const [open, setOpen] = useState(false);
   const [ancorElement, setAnchorElement] = useState(null);
   const [currentColor, setCurrentColor] = useState(defaultColor || {
@@ -27,9 +32,14 @@ export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
   };
   return (
     <div>
-      <IconButton color={'inherit'} onClick={edit} hidden={open}>
-        <Edit/>
-      </IconButton>
+      <div style={{display: 'flex'}}>
+        {
+          label && <div style={{margin: 'auto 0'}}>{label}</div>
+        }
+        <IconButton color={'inherit'} onClick={edit} hidden={open}>
+          <Edit/>
+        </IconButton>
+      </div>
       <Popper open={open}
               placement={'bottom'}
               anchorEl={ancorElement} transition>
@@ -47,13 +57,13 @@ export const ColorPicker = ({onSelect, onComplete, defaultColor}) => {
                   setCurrentColor(brandNewColour);
                   onSelect(brandNewColour);
                 }}/>
-              <IconButton color={'inherit'} onClick={()=>{
+              <IconButton color={'inherit'} onClick={() => {
                 setOpen(false);
                 onSelect(currentColor)
               }}>
                 <Save/>
               </IconButton>
-              <IconButton color={'inherit'} onClick={()=>{
+              <IconButton color={'inherit'} onClick={() => {
                 setOpen(false);
                 onSelect(savedColor)
               }}>
