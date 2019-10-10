@@ -79,9 +79,13 @@ export const SingleValue = props => (
     {props.children}
   </Typography>
 );
-export const ValueContainer = props => <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+export const ValueContainer = props =>
+  <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
 export const Menu = props => (
-  <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+  <Paper square
+          style={{zIndex: 69}}
+         className={props.selectProps.classes.paper}
+         {...props.innerProps}>
     {props.children}
   </Paper>
 );

@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
-    background: theme.palette.secondary.main
+    zIndex: 69,
+    background: theme.palette.secondary.main,
   },
   recovery: {
     background: blue[500]

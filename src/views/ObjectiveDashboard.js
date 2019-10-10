@@ -278,7 +278,6 @@ const ObjectiveDashboard = ({
           onChange={handleChangeMulti}
           isMulti
         />
-        <div className={classes.keyResults}>
           <List>
             {keyResults.map((topic) => (
               <ListItem key={topic.id}>
@@ -302,7 +301,6 @@ const ObjectiveDashboard = ({
               </ListItem>
             ))}
           </List>
-        </div>
         <Button variant={'contained'}
                 color={'primary'}
                 onClick={addKeyResult}
