@@ -25,6 +25,8 @@ import {components} from "./MultiSelectComponents";
 import {ColorPicker} from "./ColorPicker";
 import {MountainIcon} from "./MountainIcon";
 import {PopupModal} from "./PopupModal";
+import Container from "@material-ui/core/Container";
+import Paper from "@material-ui/core/Paper";
 
 const suggestions = [
   {label: 'Technical'},
@@ -40,8 +42,15 @@ const suggestions = [
 
 const useStyles = makeStyles(theme => (
   {
+    headerContent: {
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(6, 0, 6),
+      marginBottom: theme.spacing(1),
+    },
     inputContainer: {
-      background: theme.palette.primary.main
+      maxWidth: theme.spacing(75),
+      margin: 'auto',
+      padding: theme.spacing(3),
     },
     root: {
       flexGrow: 1,
@@ -111,7 +120,12 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {params: {objectiveId}}}) => {
+const ObjectiveDashboard = ({
+                              dispatch,
+                              objectives,
+                              history,
+                              match: {params: {objectiveId}}
+                            }) => {
   const classes = useStyles();
   const theme = useTheme();
   const rememberedObjective = objectives[objectiveId];
@@ -201,13 +215,37 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
   const dismissCompletionWindow = () => setFinnaComplete(false);
   return (
     <LoggedInLayout>
-      <h3>What's up {fullName}?</h3>
-      <Typography>
-        Dis is objective id {objectiveId}
-      </Typography>
-      <div className={classes.inputContainer}>
-        <MountainIcon skyColor={skyColor}/>
-        <ColorPicker onSelect={setSkyColor}/>
+      <div className={classes.headerContent}>
+        <Container maxWidth={'sm'}>
+          <Typography component={'h1'}
+                      variant={'h4'}
+                      align={'center'}
+                      color={'textPrimary'}
+                      gutterBottom>
+            Goal Setting
+          </Typography>
+          <Typography variant="h6" align="center" color="textSecondary" paragraph>
+            Something short and leading about the collection below—its contents, the creator, etc.
+            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+            entirely.
+          </Typography>
+        </Container>
+      </div>
+      <Paper className={classes.inputContainer}>
+        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+          <MountainIcon skyColor={skyColor}/>
+          <div style={{
+            display: 'flex-column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 'auto 0',
+          }}>
+            <ColorPicker onSelect={setSkyColor}
+                         defaultColor={skyColor}
+                         label={'Background Color'}/>
+
+          </div>
+        </div>
         <TextField
           className={classes.textField}
           label={'What you do want to accomplish?'}
@@ -295,7 +333,7 @@ const ObjectiveDashboard = ({dispatch, objectives, history, fullName, match: {pa
             </Fab>
           ) : null
         }
-      </div>
+      </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
                   positiveActionText={"Yes, Get rid of it"}
