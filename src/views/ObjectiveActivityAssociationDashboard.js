@@ -4,10 +4,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
-import {emphasize, makeStyles} from '@material-ui/core/styles';
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import {withRouter} from "react-router-dom";
 import {selectStrategyState, selectTacticalActivityState, selectUserState} from "../reducers";
@@ -19,7 +16,6 @@ import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import CardActionArea from "@material-ui/core/CardActionArea";
 
 const useStyles = makeStyles(theme => (
   {
@@ -154,19 +150,19 @@ const ObjectiveActivityAssociationDashboard = ({
                         key={tacticalActivity.id}
                   >
                     <Card className={classes.activityCard}>
-                        <div className={classes.content}>
-                          <div className={classes.activityName}
-                               title={tacticalActivity.name}>{tacticalActivity.name}</div>
-                          <div className={classes.activityAvatar}>
-                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                                  size={{
-                                                    width: '75px',
-                                                    height: '75px',
-                                                  }}/>
-                          </div>
-                          <Switch checked={activitySwitches[tacticalActivity.id]}
-                                  onChange={() => toggleActivity(tacticalActivity.id)}/>
+                      <div className={classes.content}>
+                        <div className={classes.activityName}
+                             title={tacticalActivity.name}>{tacticalActivity.name}</div>
+                        <div className={classes.activityAvatar}>
+                          <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                                size={{
+                                                  width: '75px',
+                                                  height: '75px',
+                                                }}/>
                         </div>
+                        <Switch checked={activitySwitches[tacticalActivity.id]}
+                                onChange={() => toggleActivity(tacticalActivity.id)}/>
+                      </div>
                     </Card>
                   </Grid>
                 ))
