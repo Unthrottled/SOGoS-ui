@@ -1,7 +1,4 @@
 import React, {useState} from "react";
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
-import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
@@ -14,7 +11,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import Fab from "@material-ui/core/Fab";
 import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
@@ -28,6 +24,7 @@ import {PopupModal} from "./PopupModal";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
+import {PersistActions} from "./PersistActions";
 
 const suggestions = [
   {label: 'Technical'},
@@ -278,67 +275,44 @@ const ObjectiveDashboard = ({
           onChange={handleChangeMulti}
           isMulti
         />
-          <List>
-            {keyResults.map((topic) => (
-              <ListItem key={topic.id}>
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    <DoneIcon/>
-                  </Avatar>
-                </ListItemAvatar>
-                <TextField
-                  className={classes.textField}
-                  label={'How will you know you are successful?'}
-                  placeholder={'50% of my time awake is spent doing what I want.'}
-                  variant={'outlined'}
-                  margin={'normal'}
-                  {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
-                  onBlur={event => updateResult(topic.id, event.target.value)}
-                />
-                <IconButton onClick={()=> removeKeyResult(topic.id)}>
-                  <DeleteIcon/>
-                </IconButton>
-              </ListItem>
-            ))}
-          </List>
-        <Button variant={'contained'}
-                color={'primary'}
-                onClick={addKeyResult}
-                className={classes.button}>
-          <AddIcon/>Add Key Result
-        </Button>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={saveObjective}
-        >
-          <SaveIcon/>
-        </Fab>
-        <Fab color={'primary'}
-             className={classes.save}
-             onClick={discardChanges}
-        >
-          <CancelIcon/>
-        </Fab>
-        {
-          rememberedObjective ? (
-            <Fab color={'primary'}
-                 className={classes.save}
-                 onClick={() => setFinnaDelete(true)}
-            >
-              <DeleteIcon/>
-            </Fab>
-          ) : null
-        }
-        {
-          rememberedObjective ? (
-            <Fab color={'primary'}
-                 className={classes.save}
-                 onClick={() => setFinnaComplete(true)}
-            >
-              <CheckIcon/>
-            </Fab>
-          ) : null
-        }
+        <List>
+          {keyResults.map((topic) => (
+            <ListItem key={topic.id}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  <DoneIcon/>
+                </Avatar>
+              </ListItemAvatar>
+              <TextField
+                className={classes.textField}
+                label={'How will you know you are successful?'}
+                placeholder={'50% of my time awake is spent doing what I want.'}
+                variant={'outlined'}
+                margin={'normal'}
+                {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
+                onBlur={event => updateResult(topic.id, event.target.value)}
+              />
+              <IconButton onClick={() => removeKeyResult(topic.id)}>
+                <DeleteIcon/>
+              </IconButton>
+            </ListItem>
+          ))}
+        </List>
+        <div>
+          <Button variant={'contained'}
+                  color={'primary'}
+                  onClick={addKeyResult}
+                  className={classes.button}>
+            <AddIcon/>Add Key Result
+          </Button>
+        </div>
+        <PersistActions
+          {...{
+            ...(rememberedObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+            ...(rememberedObjective ? {onComplete: () => setFinnaComplete(true), completionTitle: 'Complete Objective'} : {}),
+          }}
+          onCancel={discardChanges}
+          onSave={saveObjective}/>
       </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
