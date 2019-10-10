@@ -53,7 +53,10 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     alignItems: 'center',
     textAlign: 'center',
-  }
+  },
+  activity: {
+    padding: theme.spacing(2),
+  },
 }));
 
 const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
@@ -97,11 +100,11 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
             <Grid container
                   style={{flexGrow: 1}}
                   justify={'center'}
-                  spacing={4}
             >
               {
                 allTacticalActivites.map(tacticalActivity => (
                   <Grid item
+                        className={classes.activity}
                         key={tacticalActivity.id}
                   >
                     <Card>

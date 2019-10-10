@@ -47,7 +47,9 @@ const useStyles = makeStyles(theme => (
     },
     activityName: {
       padding: theme.spacing(1),
-      fontSize: '1.25em',
+      maxWidth: 200,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     activityAvatar: {
       padding: theme.spacing(1),
@@ -58,7 +60,19 @@ const useStyles = makeStyles(theme => (
       padding: theme.spacing(2),
       alignItems: 'center',
       textAlign: 'center',
-    }
+    },
+    inputContainer: {
+      textAlign: 'center',
+    },
+    save: {
+      margin: theme.spacing(2),
+    },
+    activityCard: {
+      maxWidth: 250,
+    },
+    activity: {
+      padding: theme.spacing(2),
+    },
   }
 ));
 
@@ -127,35 +141,22 @@ const ObjectiveActivityAssociationDashboard = ({
         </Container>
       </div>
       <div className={classes.root}>
-        <div className={classes.inputContainer}>
-          <Fab color={'primary'}
-               className={classes.save}
-               onClick={saveObjective}
-          >
-            <SaveIcon/>
-          </Fab>
-          <Fab color={'primary'}
-               className={classes.save}
-               onClick={discardChanges}
-          >
-            <CancelIcon/>
-          </Fab>
-        </div>
         <Grid container justify={'center'}>
           <Grid item>
             <Grid container
                   style={{flexGrow: 1}}
                   justify={'center'}
-                  spacing={4}
             >
               {
                 allTacticalActivities.map(tacticalActivity => (
                   <Grid item
+                        className={classes.activity}
                         key={tacticalActivity.id}
                   >
-                    <Card>
+                    <Card className={classes.activityCard}>
                         <div className={classes.content}>
-                          <div className={classes.activityName}>{tacticalActivity.name}</div>
+                          <div className={classes.activityName}
+                               title={tacticalActivity.name}>{tacticalActivity.name}</div>
                           <div className={classes.activityAvatar}>
                             <TacticalActivityIcon tacticalActivity={tacticalActivity}
                                                   size={{
@@ -173,6 +174,21 @@ const ObjectiveActivityAssociationDashboard = ({
             </Grid>
           </Grid>
         </Grid>
+        <div className={classes.inputContainer}>
+          <Fab color={'primary'}
+               className={classes.save}
+               onClick={saveObjective}
+          >
+            <SaveIcon/>
+          </Fab>
+          <Fab color={'primary'}
+               className={classes.save}
+               onClick={discardChanges}
+          >
+            <CancelIcon/>
+          </Fab>
+        </div>
+
       </div>
     </LoggedInLayout>
   );
