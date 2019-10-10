@@ -1,11 +1,9 @@
 import React, {useState} from "react";
-import CheckIcon from '@material-ui/icons/Check';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ArchiveIcon from '@material-ui/icons/Archive';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
-import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
 import {withRouter} from "react-router-dom";
@@ -210,14 +208,14 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
             lineColor={lineColor}
           />
           <div style={{display: 'flex-column', alignItems: 'center', justifyContent: 'center'}}>
-              <ColorPicker defaultColor={backgroundColor}
-                           onSelect={setBackgroundColor}
-                           label={'Background Color'}
-              />
-              <ColorPicker defaultColor={lineColor}
-                           onSelect={setLineColor}
-                           label={'Line Color'}
-              />
+            <ColorPicker defaultColor={backgroundColor}
+                         onSelect={setBackgroundColor}
+                         label={'Background Color'}
+            />
+            <ColorPicker defaultColor={lineColor}
+                         onSelect={setLineColor}
+                         label={'Line Color'}
+            />
           </div>
         </div>
         <TextField
@@ -247,28 +245,17 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           onChange={handleChangeMulti}
           isMulti
         />
-        <PersistActions onCancel={discardChanges}
-                        onSave={saveTacticalActivity}/>
-        {
-          rememberedTacticalObjective ? (
-            <Fab color={'primary'}
-                 className={classes.save}
-                 onClick={() => setFinnaDelete(true)}
-            >
-              <DeleteIcon/>
-            </Fab>
-          ) : null
-        }
-        {
-          rememberedTacticalObjective ? (
-            <Fab color={'primary'}
-                 className={classes.save}
-                 onClick={() => setFinnaComplete(true)}
-            >
-              <CheckIcon/>
-            </Fab>
-          ) : null
-        }
+        <PersistActions
+          {...{
+            ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+            ...(rememberedTacticalObjective ? {
+              onComplete: () => setFinnaComplete(true),
+              completionTitle: 'Archive Activity',
+              completionIcon: ArchiveIcon,
+            } : {}),
+          }}
+          onCancel={discardChanges}
+          onSave={saveTacticalActivity}/>
       </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}

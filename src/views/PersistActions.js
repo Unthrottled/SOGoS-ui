@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 export const PersistActions = (props: Props) => {
   const classes = useStyles();
-  const CompletionIcon = props.completionIcon || CheckIcon
+  const CompletionIcon = props.completionIcon || CheckIcon;
   return (
     <div>
       <IconButton color={'primary'}
