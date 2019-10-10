@@ -56,7 +56,8 @@ export const ColorPicker = ({
                 alpha={currentColor.opacity}
                 onCancel={() => {
                   setOpen(false);
-                  onSelect(savedColor)
+                  onSelect(savedColor);
+                  setCurrentColor(savedColor);
                 }}
                 onAccept={() => {
                   setOpen(false);
