@@ -27,6 +27,7 @@ import {MountainIcon} from "./MountainIcon";
 import {PopupModal} from "./PopupModal";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
 
 const suggestions = [
   {label: 'Technical'},
@@ -161,8 +162,12 @@ const ObjectiveDashboard = ({
         antecedenceTime: new Date().getTime(),
       }
     ])
-
   };
+  const removeKeyResult = (idToRemove) => {
+    setKeyResults(keyResults
+      .filter(keyResult => keyResult.id !== idToRemove))
+  };
+
   const saveObjective = () => {
     const objective: Objective = {
       id: objectiveId,
@@ -291,6 +296,9 @@ const ObjectiveDashboard = ({
                   {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
                   onBlur={event => updateResult(topic.id, event.target.value)}
                 />
+                <IconButton onClick={()=> removeKeyResult(topic.id)}>
+                  <DeleteIcon/>
+                </IconButton>
               </ListItem>
             ))}
           </List>
