@@ -16,8 +16,6 @@ import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import {DndProvider} from "react-dnd";
-import HTML5Backend from 'react-dnd-html5-backend'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,33 +59,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ActivityCard = ({activity, classes, history}) => {
-
-  return (
-    <Grid item
-          className={classes.activity}
-          key={activity.id}
-    >
-      <Card>
-        <CardActionArea onClick={() => history.push(`./${activity.id}`)}>
-          <div className={classes.content}>
-            <div className={classes.activityName}>{activity.name}</div>
-            <div className={classes.activityAvatar}>
-              <TacticalActivityIcon tacticalActivity={activity}
-                                    size={{
-                                      width: '75px',
-                                      height: '75px',
-                                    }}/>
-            </div>
-          </div>
-        </CardActionArea>
-      </Card>
-    </Grid>
-  )
-};
-
-
-const ActivitiesDashboard = ({activities, dispatch, history}) => {
+const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
@@ -123,24 +95,38 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
         </Button>
       </Link>
       <div className={classes.root}>
-        <DndProvider backend={HTML5Backend}>
-          <Grid container justify={'center'}>
-            <Grid item>
-              <Grid container
-                    style={{flexGrow: 1}}
-                    justify={'center'}
-              >
-                {
-                  allTacticalActivites.map(tacticalActivity => <ActivityCard
-                    key={tacticalActivity.id}
-                    classes={classes}
-                    history={history}
-                    activity={tacticalActivity}/>)
-                }
-              </Grid>
+        <Grid container justify={'center'}>
+          <Grid item>
+            <Grid container
+                  style={{flexGrow: 1}}
+                  justify={'center'}
+            >
+              {
+                allTacticalActivites.map(tacticalActivity => (
+                  <Grid item
+                        className={classes.activity}
+                        key={tacticalActivity.id}
+                  >
+                    <Card>
+                      <CardActionArea onClick={() => history.push(`./${tacticalActivity.id}`)}>
+                        <div className={classes.content}>
+                          <div className={classes.activityName}>{tacticalActivity.name}</div>
+                          <div className={classes.activityAvatar}>
+                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                                  size={{
+                                                    width: '75px',
+                                                    height: '75px',
+                                                  }}/>
+                          </div>
+                        </div>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))
+              }
             </Grid>
           </Grid>
-        </DndProvider>
+        </Grid>
       </div>
     </LoggedInLayout>
   );
