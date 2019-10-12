@@ -78,7 +78,7 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Activity Hub
+            Activity Ranking
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
             Something short and leading about the collection below—its contents, the creator, etc.
@@ -95,7 +95,7 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
           <AddIcon/> Create Activity
         </Button>
       </Link>
-      <Link to={`./rank/dashboard`} style={{textDecoration: 'none'}}>
+      <Link to={`./rank`} style={{textDecoration: 'none'}}>
         <Button variant={'contained'}
                 color={'primary'}
                 className={classes.button}>
