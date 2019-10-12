@@ -21,8 +21,6 @@ import ActivityDashboard from "./ActivityDashboard";
 import ObjectiveActivityAssociationDashboard from "./ObjectiveActivityAssociationDashboard";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
 import HistoryDashboard from "./HistoryDashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({

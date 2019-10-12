@@ -6,19 +6,16 @@ import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
-import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
+import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import {Responsive, WidthProvider} from "react-grid-layout";
-const ResponsiveGridLayout = WidthProvider(Responsive);
-// import {SizeMe} from "react-sizeme";
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,8 +43,6 @@ const useStyles = makeStyles(theme => ({
   activityName: {
     padding: theme.spacing(1),
     fontSize: '1.25em',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
   },
   activityAvatar: {
     padding: theme.spacing(1),
@@ -55,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   },
   objectiveSummary: {},
   content: {
-    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     alignItems: 'center',
     textAlign: 'center',
   },
@@ -72,34 +67,6 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
   }, [didMountState]);
 
   const allTacticalActivites: TacticalActivity[] = objectToArray(activities);
-  const [layouts, setLayouts] = useState({});
-  const modifyLayouts = layouts => {
-    console.log(layouts);
-    const {changed, newLayouts} = objectToKeyValueArray(layouts)
-      .reduce((accum, {key, value}) => {
-
-        if(value.length) {
-          const byRow = value.reduce((accume, a) => {
-            if(!accume[a.y]) accume[a.y] = [];
-            accume[a.y].push(a);
-            return accume;
-          }, {});
-
-          const firstRow = byRow[0];
-
-
-          console.log(byRow, firstRow);
-
-        } else {
-          accum[key] = value
-        }
-
-        return accum;
-      }, {changed: false, newLayouts: {}});
-    if(changed) {
-      console.log("finna bust a nut", newLayouts);
-    }
-  };
 
   return (
     <LoggedInLayout>
@@ -127,48 +94,39 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
           <AddIcon/> Create Activity
         </Button>
       </Link>
-      <ResponsiveGridLayout className="layout"
-                            layouts={layouts}
-                            breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                            cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
-                            margin={[10, 10]}
-                            onLayoutChange={(_, layouts) => {
-                              modifyLayouts(layouts);
-                            }}
-      >
-
-        {
-          allTacticalActivites.map((tacticalActivity, index) => (
-            <div
-              key={tacticalActivity.id}
-              data-grid={{w: 1, h: 1, x: index, y: 0}}
-            >
-              <Card>
-                <CardActionArea
-                  // onClick={() => history.push(`./${tacticalActivity.id}`)}
-                >
-                  <div className={classes.content}>
-                    <div
-                      className={classes.activityName}
-                      title={tacticalActivity.name}
-                    >{tacticalActivity.name}</div>
-                    <div className={classes.activityAvatar}>
-                      <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                            size={{
-                                              width: '75px',
-                                              height: '75px',
-                                            }}/>
-                    </div>
-                  </div>
-                </CardActionArea>
-              </Card>
-            </div>
-          ))
-        }
-
-      </ResponsiveGridLayout>
       <div className={classes.root}>
-
+        <Grid container justify={'center'}>
+          <Grid item>
+            <Grid container
+                  style={{flexGrow: 1}}
+                  justify={'center'}
+            >
+              {
+                allTacticalActivites.map(tacticalActivity => (
+                  <Grid item
+                        className={classes.activity}
+                        key={tacticalActivity.id}
+                  >
+                    <Card>
+                      <CardActionArea onClick={() => history.push(`./${tacticalActivity.id}`)}>
+                        <div className={classes.content}>
+                          <div className={classes.activityName}>{tacticalActivity.name}</div>
+                          <div className={classes.activityAvatar}>
+                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                                  size={{
+                                                    width: '75px',
+                                                    height: '75px',
+                                                  }}/>
+                          </div>
+                        </div>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))
+              }
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
     </LoggedInLayout>
   );
