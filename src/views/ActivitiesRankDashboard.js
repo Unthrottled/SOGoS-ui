@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
-import SaveIcon from '@material-ui/icons/Save'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {
@@ -85,6 +85,8 @@ export const TacticalActivityList = ({tacticalActivities, classes}) => {
                                         }}/>
                 </div>
                 <div className={classes.activityName}>{tacticalActivity.name}</div>
+                <div style={{flexGrow: 1}}/>
+                <div>{tacticalActivity.rank + 1}</div>
               </div>
             </Card>
           </div>
@@ -128,7 +130,6 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
   const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
 
   const reorderActivities = dragResult => {
-    console.log(dragResult);
     const dragSourceIndex = dragResult.source.index;;
     const dragToIndex = dragResult.destination.index;
     if (dragSourceIndex !== dragToIndex) {
@@ -167,8 +168,10 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       </div>
       <Button variant={'contained'}
               color={'primary'}
-              className={classes.button}>
-        <SaveIcon/> Save Order
+              className={classes.button}
+              onClick={()=>history.push("../")}
+      >
+        <ArrowBackIcon/> Go back
       </Button>
       <div>
         <DragDropContext onDragEnd={reorderActivities}>
