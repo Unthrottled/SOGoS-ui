@@ -13,6 +13,8 @@ import {selectActivityState, selectTacticalState} from "../reducers";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
 import {TomatoIcon} from "./TomatoIcon";
+import {objectToArray} from "../miscellanous/Tools";
+import {mapTacticalActivitiesToID} from "./PieFlavored";
 
 const useStyles = makeStyles(theme => ({
   pomoCount: {
@@ -140,7 +142,8 @@ const ActivityTimeBar = ({
     return timerBarClasses.join(' ');
   };
 
-  const tacticalActivity = activities[getActivityID(currentActivity)];
+  const mappedTacticalActivities = mapTacticalActivitiesToID(activities);
+  const tacticalActivity = mappedTacticalActivities[getActivityID(currentActivity)];
 
   const isTimeBarActivity = shouldTime && !(isRecovery && timedType === ActivityTimedType.STOP_WATCH);
   return isTimeBarActivity ? (

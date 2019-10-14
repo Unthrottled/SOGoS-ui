@@ -6,10 +6,11 @@ import {connect} from "react-redux";
 import {selectHistoryState, selectTacticalActivityState} from "../reducers";
 import type {Activity} from "../types/ActivityModels";
 import {activitiesEqual, getActivityName} from "../types/ActivityModels";
-import {objectToKeyValueArray} from "../miscellanous/Tools";
+import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../miscellanous/Projection";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {constructColorMappings} from "./TimeLine";
+import {dictionaryReducer} from "../reducers/StrategyReducer";
 
 export const getMeaningFullName = (activityId, tacticalActivities) => {
   const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
@@ -34,6 +35,9 @@ export const responsivefy = svg => {
     svg.attr("height", heightBoi);
   }
 };
+
+export const mapTacticalActivitiesToID = tacticalActivities =>
+  objectToArray(tacticalActivities).reduce(dictionaryReducer, {});
 
 const PieFlavored = ({ activityFeed,
                        relativeToTime,
@@ -149,7 +153,9 @@ const PieFlavored = ({ activityFeed,
         .innerRadius(radius * 0.7)
         .outerRadius(radius - 1);
 
-      const idToColor = constructColorMappings(tacticalActivities);
+      const mappedTacticalActivities = mapTacticalActivitiesToID(tacticalActivities);
+
+      const idToColor = constructColorMappings(mappedTacticalActivities);
 
       pieSVG.selectAll("path")
         .data(arcs)
@@ -160,7 +166,7 @@ const PieFlavored = ({ activityFeed,
         .attr("d", arcThing)
         .append("title")
         .text(d =>
-          `${getMeaningFullName(d.data.name, tacticalActivities)}: ${((d.data.value / totalTime) * 100).toFixed(2)}%`);
+          `${getMeaningFullName(d.data.name, mappedTacticalActivities)}: ${((d.data.value / totalTime) * 100).toFixed(2)}%`);
     }
   });
 

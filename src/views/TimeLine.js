@@ -10,7 +10,7 @@ import {selectActivityState, selectHistoryState, selectTacticalActivityState} fr
 import {connect} from "react-redux";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {getActivityBackgroundColor} from "../types/TacticalModels";
-import {getMeaningFullName} from "./PieFlavored";
+import {getMeaningFullName, mapTacticalActivitiesToID} from "./PieFlavored";
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 
 
@@ -209,7 +209,8 @@ const TimeLine = ({
         return keyValue.value
       });
 
-      const colorToActivity = constructColorMappings(tacticalActivities);
+      const mappedTacticalActivities = mapTacticalActivitiesToID(tacticalActivities);
+      const colorToActivity = constructColorMappings(mappedTacticalActivities);
 
       timeLanes.append("g")
         .selectAll(".laneLines")
@@ -235,7 +236,7 @@ const TimeLine = ({
         .attr("height", () => .8 * y1(1))
         .append("title")
         .text(d => {
-          const meaningFullName = getMeaningFullName(d.activityIdentifier, tacticalActivities);
+          const meaningFullName = getMeaningFullName(d.activityIdentifier, mappedTacticalActivities);
           const millisecondsDuration = (d.spawn.stop.antecedenceTime - d.spawn.start.antecedenceTime);
           return `${meaningFullName}: ${getTimeUnit(millisecondsDuration)} `;
         });

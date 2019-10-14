@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(5),
   },
   cancelIcon: {
-    fontSize: '1.25em',
+    fontSize: '2.5em',
     color: 'red',
     background: 'rgba(240, 0,0,0.25)',
     borderRadius: '50%',
