@@ -3,10 +3,8 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
-import AddIcon from '@material-ui/icons/Add'
-import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
-import uuid from 'uuid/v4';
-import {Link, withRouter} from "react-router-dom";
+import SaveIcon from '@material-ui/icons/Save'
+import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
@@ -14,9 +12,9 @@ import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,14 +58,50 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
+export const TacticalActivityList = ({tacticalActivities, classes}) => {
+  return tacticalActivities.map((tacticalActivity, index) => (
+    <Draggable key={tacticalActivity.id}
+               draggableId={tacticalActivity.id}
+               index={index}>
+      {
+        provided => (
+          <div ref={provided.innerRef}
+               {...provided.draggableProps}
+               {...provided.dragHandleProps}
+               className={classes.activity}
+          >
+            <Card>
+              <div className={classes.content}>
+                <div className={classes.activityName}>{tacticalActivity.name}</div>
+                <div className={classes.activityAvatar}>
+                  <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                                        size={{
+                                          width: '75px',
+                                          height: '75px',
+                                        }}/>
+                </div>
+              </div>
+            </Card>
+          </div>
+        )
+      }
+    </Draggable>
+  ));
+};
+
+
+const ActivitiesDashboard = ({activities, dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
     dispatch(createViewedTacticalActivitesEvent());
   }, [didMountState]);
 
-  const allTacticalActivites: TacticalActivity[] = objectToArray(activities);
+  const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
+
+  const reorderActivities = dragResult => {
+
+  };
 
   return (
     <LoggedInLayout>
@@ -88,20 +122,26 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
           <TacticalActivityIcon/>
         </Container>
       </div>
-      <Link to={`./${uuid()}`} style={{textDecoration: 'none'}}>
-        <Button variant={'contained'}
-                color={'primary'}
-                className={classes.button}>
-          <AddIcon/> Create Activity
-        </Button>
-      </Link>
-      <Link to={`./rank`} style={{textDecoration: 'none'}}>
-        <Button variant={'contained'}
-                color={'primary'}
-                className={classes.button}>
-          <FormatListNumberedIcon/> Order Activities
-        </Button>
-      </Link>
+      <Button variant={'contained'}
+              color={'primary'}
+              className={classes.button}>
+        <SaveIcon/> Save Order
+      </Button>
+      <div>
+        <DragDropContext onDragEnd={reorderActivities}>
+          <Droppable droppableId={'activityList'}>
+            {
+              provided => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <TacticalActivityList tacticalActivities={allTacticalActivities}
+                                        classes={classes}/>
+                  {provided.placeholder}
+                </div>
+              )
+            }
+          </Droppable>
+        </DragDropContext>
+      </div>
       <div className={classes.root}>
         <Grid container justify={'center'}>
           <Grid item>
@@ -110,27 +150,6 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
                   justify={'center'}
             >
               {
-                allTacticalActivites.map(tacticalActivity => (
-                  <Grid item
-                        className={classes.activity}
-                        key={tacticalActivity.id}
-                  >
-                    <Card>
-                      <CardActionArea onClick={() => history.push(`./${tacticalActivity.id}`)}>
-                        <div className={classes.content}>
-                          <div className={classes.activityName}>{tacticalActivity.name}</div>
-                          <div className={classes.activityAvatar}>
-                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                                  size={{
-                                                    width: '75px',
-                                                    height: '75px',
-                                                  }}/>
-                          </div>
-                        </div>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))
               }
             </Grid>
           </Grid>
