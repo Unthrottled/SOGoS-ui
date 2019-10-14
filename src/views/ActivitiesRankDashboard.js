@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
-import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {createFetchedTacticalActivitesEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
@@ -52,9 +52,10 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     alignItems: 'center',
     textAlign: 'center',
+    display: 'flex',
   },
   activity: {
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(0.5)}px ${theme.spacing(2)}px`,
   },
 }));
 
@@ -72,14 +73,14 @@ export const TacticalActivityList = ({tacticalActivities, classes}) => {
           >
             <Card>
               <div className={classes.content}>
-                <div className={classes.activityName}>{tacticalActivity.name}</div>
                 <div className={classes.activityAvatar}>
                   <TacticalActivityIcon tacticalActivity={tacticalActivity}
                                         size={{
-                                          width: '75px',
-                                          height: '75px',
+                                          width: '45px',
+                                          height: '45px',
                                         }}/>
                 </div>
+                <div className={classes.activityName}>{tacticalActivity.name}</div>
               </div>
             </Card>
           </div>
@@ -100,6 +101,30 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
   const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
 
   const reorderActivities = dragResult => {
+    console.log(dragResult);
+    const fromIndex = dragResult.source.index;
+    const toIndex = dragResult.destination.index;
+    if (fromIndex !== toIndex) {
+      const meMeBigBoy = Math.max(fromIndex, toIndex);
+      const meMeSmallBoy = Math.min(fromIndex, toIndex);
+
+      const fromDude = allTacticalActivities[fromIndex];
+      fromDude.rank = toIndex;
+
+      if(meMeBigBoy === toIndex) {
+        Array(meMeBigBoy - meMeSmallBoy - 1)
+          .fill(meMeSmallBoy)
+          .map((_,index)=> index + meMeSmallBoy)
+          .forEach(toPromote => --allTacticalActivities[toPromote].rank)
+      } else {
+        Array(meMeBigBoy - meMeSmallBoy - 1)
+          .fill(meMeSmallBoy + 1)
+          .map((_,index)=> index + meMeSmallBoy + 1)
+          .forEach(toDemote => ++allTacticalActivities[toDemote].rank)
+      }
+
+      dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities))
+    }
 
   };
 

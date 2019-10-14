@@ -10,14 +10,21 @@ import {
   SYNCED_TACTICAL_ACTIVITIES,
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
-import {dictionaryReducer} from "./StrategyReducer";
 
+
+export const rankReducer = (accum, toIndex, index) => {
+  if(!toIndex.rank && toIndex.rank !== 0) {
+    toIndex.rank = index
+  }
+  accum[toIndex.rank] = toIndex;
+  return accum;
+};
 
 const updateStateWithActivities = (newActivities, state: TacticalState): TacticalState => {
   const tacticalActivities = [
     ...objectToArray(state.activity.activities),
     ...newActivities
-  ].reduce(dictionaryReducer, {});
+  ].reduce(rankReducer, {});
   return {
     ...state,
     activity: {
@@ -41,11 +48,11 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         ...state,
         activity: {
          ...state.activity,
-          activities: newActivities.reduce(dictionaryReducer, {}),
+          activities: newActivities.reduce(rankReducer, {}),
         }
       };
     case FOUND_ACTIVITIES:
-      const rememberedActivities = action.payload.reduce(dictionaryReducer, {});
+      const rememberedActivities = action.payload.reduce(rankReducer, {});
       return {
         ...state,
         activity: {
