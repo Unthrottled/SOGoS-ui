@@ -177,10 +177,11 @@ const ObjectiveDashboard = ({
     };
     if (!objectives[objective.id]) {
       dispatch(createdObjective(objective));
+      history.push(`/strategy/objectives/${objective.id}/tactics/association`)
     } else {
       dispatch(updatedObjective(objective));
+      history.push('/strategy/objectives/')
     }
-    history.push('/strategy/objectives/')
   };
 
   const discardChanges = () => {
