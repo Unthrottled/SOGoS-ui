@@ -15,6 +15,10 @@ export function* activityChangesSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityUpdateSaga, activityUpdateToCached);
 }
 
+export function* activityRankSaga({payload}){
+
+}
+
 export function* activityTerminationSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityDeleteSaga, activityDeleteToCached);
 }

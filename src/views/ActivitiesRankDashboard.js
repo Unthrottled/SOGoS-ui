@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
-import {createFetchedTacticalActivitesEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {createReRankedTacticalActivitiesEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
@@ -91,6 +91,29 @@ export const TacticalActivityList = ({tacticalActivities, classes}) => {
 };
 
 
+function promotActivities(dragSourceIndex, dragToIndex, allTacticalActivities) {
+  const wasPromotion = dragSourceIndex > dragToIndex;
+  if (wasPromotion) {
+    return Array(dragSourceIndex - dragToIndex)
+      .fill(0)
+      .map((_, index) => index + dragToIndex)
+      .map(toDemote => {
+        const activityToChange = allTacticalActivities[toDemote];
+        ++activityToChange.rank;
+        return activityToChange
+      })
+  } else {
+    return Array(dragToIndex - dragSourceIndex)
+      .fill(0)
+      .map((_, index) => index + dragSourceIndex + 1)
+      .map(toDemote => {
+        const activityToChange = allTacticalActivities[toDemote];
+        --activityToChange.rank;
+        return activityToChange
+      })
+  }
+}
+
 const ActivitiesDashboard = ({activities, dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
@@ -108,22 +131,12 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       const fromDude = allTacticalActivities[dragSourceIndex];
       fromDude.rank = dragToIndex;
 
-      const wasPromotion = dragSourceIndex > dragToIndex;
-      if(wasPromotion) {
-        Array(dragSourceIndex - dragToIndex)
-          .fill(0)
-          .map((_,index)=> index + dragToIndex)
-          .forEach(toDemote => ++allTacticalActivities[toDemote].rank)
-      } else {
-        Array(dragToIndex - dragSourceIndex)
-          .fill(0)
-          .map((_,index)=> index + dragSourceIndex + 1)
-          .forEach(toDemote => --allTacticalActivities[toDemote].rank)
-      }
+      const changedActivities = promotActivities(dragSourceIndex,
+        dragToIndex,
+        allTacticalActivities);
 
-      dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities))
+      dispatch(createReRankedTacticalActivitiesEvent(changedActivities))
     }
-
   };
 
   return (

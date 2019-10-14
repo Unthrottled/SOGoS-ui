@@ -11,6 +11,7 @@ export const UPDATED_ACTIVITY: 'UPDATED_ACTIVITY' = 'UPDATED_ACTIVITY';
 export const DELETED_ACTIVITY: 'DELETED_ACTIVITY' = 'DELETED_ACTIVITY';
 export const HID_ACTIVITY: 'HID_ACTIVITY' = 'HID_ACTIVITY';
 export const FOUND_ACTIVITIES: 'FOUND_ACTIVITIES' = 'FOUND_ACTIVITIES';
+export const RANKED_ACTIVITIES: 'RANKED_ACTIVITIES' = 'RANKED_ACTIVITIES';
 export const CACHED_TACTICAL_ACTIVITY: 'CACHED_TACTICAL_ACTIVITY' = 'CACHED_TACTICAL_ACTIVITY';
 export const VIEWED_ACTIVITIES: 'VIEWED_ACTIVITIES' = 'VIEWED_ACTIVITIES';
 export const SYNCED_TACTICAL_ACTIVITIES: 'SYNCED_TACTICAL_ACTIVITIES' = 'SYNCED_TACTICAL_ACTIVITIES';
@@ -61,19 +62,24 @@ export const createViewedTacticalActivitesEvent = () => ({
   type: VIEWED_ACTIVITIES,
 });
 
-export const createCachedTacticalActivityEvent = (objectiveCacheEvent: ActivityCacheEvent) => ({
+export const createCachedTacticalActivityEvent = (tacticalActivityCacheEvent: ActivityCacheEvent) => ({
   type: CACHED_TACTICAL_ACTIVITY,
-  payload: objectiveCacheEvent
+  payload: tacticalActivityCacheEvent
 });
 
-export const createFetchedTacticalActivitesEvent = (objectiveHistory: TacticalActivity[]) => ({
+export const createFetchedTacticalActivitesEvent = (tacticalActivityHistory: TacticalActivity[]) => ({
   type: FOUND_ACTIVITIES,
-  payload: objectiveHistory
+  payload: tacticalActivityHistory
 });
 
-export const createSyncedTacticalActivityEvent = (objective: TacticalActivity) => ({
+export const createReRankedTacticalActivitiesEvent = (tacticalActivityHistory: TacticalActivity[]) => ({
+  type: RANKED_ACTIVITIES,
+  payload: tacticalActivityHistory
+});
+
+export const createSyncedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: SYNCED_TACTICAL_ACTIVITY,
-  payload: objective,
+  payload: tacticalActivity,
 });
 
 export const createSyncedTacticalActivitiesEvent = (userGUID: string) => ({
@@ -81,22 +87,22 @@ export const createSyncedTacticalActivitiesEvent = (userGUID: string) => ({
   payload: userGUID,
 });
 
-export const createCreatedTacticalActivityEvent = (objective: TacticalActivity) => ({
+export const createCreatedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: CREATED_ACTIVITY,
-  payload: objective,
+  payload: tacticalActivity,
 });
 
-export const createUpdatedTacticalActivityEvent = (objective: TacticalActivity) => ({
+export const createUpdatedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: UPDATED_ACTIVITY,
-  payload: objective,
+  payload: tacticalActivity,
 });
 
-export const createDeletedTacticalActivityEvent = (objective: TacticalActivity) => ({
+export const createDeletedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: DELETED_ACTIVITY,
-  payload: objective,
+  payload: tacticalActivity,
 });
 
-export const createHideTacticalActivityEvent = (objective: TacticalActivity) => ({
+export const createHideTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: HID_ACTIVITY,
-  payload: objective,
+  payload: tacticalActivity,
 });
