@@ -3,9 +3,15 @@ import {isOnline} from "../NetworkSagas";
 import {performDelete, performPost, performPut} from "../APISagas";
 import {selectUserState} from "../../reducers";
 import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
-import {createCachedDataEvent} from "../../events/UserEvents";
+import {createCachedDataEvent, createSyncedDataEvent} from "../../events/UserEvents";
 import type {CachedTacticalActivity, TacticalActivity} from "../../types/TacticalModels";
-import {createCachedTacticalActivityEvent, createSyncedTacticalActivityEvent} from "../../events/TacticalEvents";
+import {
+  createCachedTacticalActivityEvent,
+  createSyncedTacticalActivitiesEvent,
+  createSyncedTacticalActivityEvent
+} from "../../events/TacticalEvents";
+import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
+import {BULK_ACTIVITY_UPLOAD_URL} from "./TacticalActivitySyncSaga";
 
 export function* activityCreationSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityCreateSaga, activityUploadToCached);
@@ -16,6 +22,16 @@ export function* activityChangesSaga({payload}) {
 }
 
 export function* activityRankSaga({payload}){
+  try {
+    yield call(performPut, BULK_ACTIVITY_UPLOAD_URL, payload);
+  } catch (e) {
+    yield put(createShowWarningNotificationEvent("Unable to update activity rank! Try again later, please."));
+    for (const tacticalActivity in payload) {
+      if(payload.hasOwnProperty(tacticalActivity)){
+        yield call(cacheTacticalActivitySaga, activityUpdateToCached(payload[tacticalActivity]))
+      }
+    }
+  }
 
 }
 

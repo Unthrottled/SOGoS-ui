@@ -12,7 +12,7 @@ import {FOUND_WIFI} from "../events/NetworkEvents";
 import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
 import {
   activityChangesSaga,
-  activityCreationSaga,
+  activityCreationSaga, activityRankSaga,
   activityTerminationSaga
 } from "./tactical/TacticalActivityCreationSagas";
 import {fetchSettings, settingsSyncSaga, updatePomodoroSaga} from "./tactical/PomodoroSettingsSagas";
@@ -44,7 +44,7 @@ function* listenForTacticalEvents() {
   yield takeEvery(REQUESTED_SYNC, tacticalActivitySyncSaga);
   yield takeEvery(CREATED_ACTIVITY, activityCreationSaga);
   yield takeEvery(UPDATED_ACTIVITY, activityChangesSaga);
-  yield takeEvery(RANKED_ACTIVITIES, activityChangesSaga);
+  yield takeEvery(RANKED_ACTIVITIES, activityRankSaga);
   yield takeEvery(DELETED_ACTIVITY, activityTerminationSaga);
 }
 

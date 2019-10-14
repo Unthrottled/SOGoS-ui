@@ -14,7 +14,7 @@ import {
 
 export const rankReducer = (accum, toIndex, index) => {
   if(!toIndex.rank && toIndex.rank !== 0) {
-    toIndex.rank = index
+    toIndex.rank = index;
   }
   accum[toIndex.rank] = toIndex;
   return accum;

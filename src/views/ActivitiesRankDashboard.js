@@ -6,7 +6,11 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
-import {createReRankedTacticalActivitiesEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {
+  createFetchedTacticalActivitesEvent,
+  createReRankedTacticalActivitiesEvent,
+  createViewedTacticalActivitesEvent
+} from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
@@ -125,7 +129,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
 
   const reorderActivities = dragResult => {
     console.log(dragResult);
-    const dragSourceIndex = dragResult.source.index;
+    const dragSourceIndex = dragResult.source.index;;
     const dragToIndex = dragResult.destination.index;
     if (dragSourceIndex !== dragToIndex) {
       const fromDude = allTacticalActivities[dragSourceIndex];
@@ -135,7 +139,10 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
         dragToIndex,
         allTacticalActivities);
 
-      dispatch(createReRankedTacticalActivitiesEvent(changedActivities))
+      changedActivities.push(fromDude);
+
+      dispatch(createReRankedTacticalActivitiesEvent(changedActivities));
+      dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities));
     }
   };
 
