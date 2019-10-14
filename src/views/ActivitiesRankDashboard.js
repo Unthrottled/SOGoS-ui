@@ -4,6 +4,8 @@ import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {
@@ -13,12 +15,16 @@ import {
 } from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
+import SettingsIcon from '@material-ui/icons/Settings';
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,7 +69,31 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TacticalActivityList = ({tacticalActivities, classes}) => {
+export const TacticalActivityList = ({
+                                       tacticalActivities,
+                                       moveItems,
+                                       classes
+                                     }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const sendToTheTop = (rank) => {
+    moveItems(rank, 0)
+  };
+
+  const sendToTheBottom = (rank) => {
+    console.log('yeet', rank, tacticalActivities.length - 1);
+    moveItems(rank, tacticalActivities.length - 1)
+  };
+
   return tacticalActivities.map((tacticalActivity, index) => (
     <Draggable key={tacticalActivity.id}
                draggableId={tacticalActivity.id}
@@ -87,6 +117,41 @@ export const TacticalActivityList = ({tacticalActivities, classes}) => {
                 <div className={classes.activityName}>{tacticalActivity.name}</div>
                 <div style={{flexGrow: 1}}/>
                 <div>{tacticalActivity.rank + 1}</div>
+                <div>
+                  <div>
+                    <IconButton
+                      aria-owns={open ? 'menu-appbar' : undefined}
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <SettingsIcon/>
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={() => {
+                        handleClose();
+                        sendToTheTop(tacticalActivity.rank)
+                      }}><ArrowUpwardIcon/> To the Top </MenuItem>
+                      <MenuItem onClick={() => {
+                        handleClose();
+                        sendToTheBottom(tacticalActivity.rank)
+                      }}><ArrowDownwardIcon/> To the Bottom</MenuItem>
+                    </Menu>
+                  </div>
+                </div>
               </div>
             </Card>
           </div>
@@ -129,9 +194,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
 
   const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
 
-  const reorderActivities = dragResult => {
-    const dragSourceIndex = dragResult.source.index;;
-    const dragToIndex = dragResult.destination.index;
+  function moveItems(dragSourceIndex, dragToIndex) {
     if (dragSourceIndex !== dragToIndex) {
       const fromDude = allTacticalActivities[dragSourceIndex];
       fromDude.rank = dragToIndex;
@@ -145,6 +208,12 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       dispatch(createReRankedTacticalActivitiesEvent(changedActivities));
       dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities));
     }
+  }
+
+  const reorderActivities = dragResult => {
+    const dragSourceIndex = dragResult.source.index;
+    const dragToIndex = dragResult.destination.index;
+    moveItems(dragSourceIndex, dragToIndex);
   };
 
   return (
@@ -169,7 +238,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       <Button variant={'contained'}
               color={'primary'}
               className={classes.button}
-              onClick={()=>history.push("../")}
+              onClick={() => history.push("../")}
       >
         <ArrowBackIcon/> Go back
       </Button>
@@ -180,6 +249,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
               provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   <TacticalActivityList tacticalActivities={allTacticalActivities}
+                                        moveItems={moveItems}
                                         classes={classes}/>
                   {provided.placeholder}
                 </div>
@@ -187,19 +257,6 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
             }
           </Droppable>
         </DragDropContext>
-      </div>
-      <div className={classes.root}>
-        <Grid container justify={'center'}>
-          <Grid item>
-            <Grid container
-                  style={{flexGrow: 1}}
-                  justify={'center'}
-            >
-              {
-              }
-            </Grid>
-          </Grid>
-        </Grid>
       </div>
     </LoggedInLayout>
   );
