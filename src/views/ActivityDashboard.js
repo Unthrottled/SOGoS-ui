@@ -22,6 +22,7 @@ import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import {PersistActions} from "./PersistActions";
+import {mapTacticalActivitiesToID} from "./PieFlavored";
 
 const suggestions = [
   {label: 'Technical'},
@@ -118,9 +119,10 @@ const useStyles = makeStyles(theme => (
 const ActivityDashboard = ({dispatch, activities, history, match: {params: {activityId}}}) => {
   const classes = useStyles();
   const theme = useTheme();
-  const rememberedTacticalObjective = activities[activityId];
+  const mappedTacticalActivities = mapTacticalActivitiesToID(activities);
+  const rememberedTacticalObjective = mappedTacticalActivities[activityId];
 
-  const currentTacticalActivity: TacticalActivity = activities[activityId] ||
+  const currentTacticalActivity: TacticalActivity = mappedTacticalActivities[activityId] ||
     {
       name: '',
       iconCustomization: {
@@ -142,7 +144,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
         line: lineColor,
       }
     };
-    if (!activities[tacticalActivity.id]) {
+    if (!mappedTacticalActivities[tacticalActivity.id]) {
       dispatch(createCreatedTacticalActivityEvent(tacticalActivity));
     } else {
       dispatch(createUpdatedTacticalActivityEvent(tacticalActivity));
