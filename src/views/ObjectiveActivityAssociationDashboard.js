@@ -15,7 +15,7 @@ import type {Objective} from "../types/StrategyModels";
 import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import List from "@material-ui/core/List";
 
 const useStyles = makeStyles(theme => (
   {
@@ -43,9 +43,7 @@ const useStyles = makeStyles(theme => (
     },
     activityName: {
       padding: theme.spacing(1),
-      maxWidth: 200,
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
+      flexGrow: 1,
     },
     activityAvatar: {
       padding: theme.spacing(1),
@@ -56,6 +54,11 @@ const useStyles = makeStyles(theme => (
       padding: theme.spacing(2),
       alignItems: 'center',
       textAlign: 'center',
+      display: 'flex',
+    },
+    activity: {
+      padding: `${theme.spacing(0.5)}px ${theme.spacing(2)}px`,
+      textAlign: 'center'
     },
     inputContainer: {
       textAlign: 'center',
@@ -65,9 +68,6 @@ const useStyles = makeStyles(theme => (
     },
     activityCard: {
       maxWidth: 250,
-    },
-    activity: {
-      padding: theme.spacing(2),
     },
   }
 ));
@@ -137,39 +137,37 @@ const ObjectiveActivityAssociationDashboard = ({
         </Container>
       </div>
       <div className={classes.root}>
-        <Grid container justify={'center'}>
-          <Grid item>
-            <Grid container
-                  style={{flexGrow: 1}}
-                  justify={'center'}
+        <List justify={'center'}>
+          <div>
+            <div
+              style={{flexGrow: 1}}
+
             >
               {
                 allTacticalActivities.map(tacticalActivity => (
-                  <Grid item
-                        className={classes.activity}
-                        key={tacticalActivity.id}
-                  >
-                    <Card className={classes.activityCard}>
+                  <div className={classes.activity}>
+                    <Card key={tacticalActivity.id}>
                       <div className={classes.content}>
-                        <div className={classes.activityName}
-                             title={tacticalActivity.name}>{tacticalActivity.name}</div>
                         <div className={classes.activityAvatar}>
                           <TacticalActivityIcon tacticalActivity={tacticalActivity}
                                                 size={{
-                                                  width: '75px',
-                                                  height: '75px',
+                                                  width: '45px',
+                                                  height: '45px',
                                                 }}/>
                         </div>
-                        <Switch checked={activitySwitches[tacticalActivity.id]}
-                                onChange={() => toggleActivity(tacticalActivity.id)}/>
+                        <div className={classes.activityName}>{tacticalActivity.name}</div>
+                        <div>
+                          <Switch checked={activitySwitches[tacticalActivity.id]}
+                                  onChange={() => toggleActivity(tacticalActivity.id)}/>
+                        </div>
                       </div>
                     </Card>
-                  </Grid>
+                  </div>
                 ))
               }
-            </Grid>
-          </Grid>
-        </Grid>
+            </div>
+          </div>
+        </List>
         <div className={classes.inputContainer}>
           <Fab color={'primary'}
                className={classes.save}

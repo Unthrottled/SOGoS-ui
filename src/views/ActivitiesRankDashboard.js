@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   },
   activityName: {
     padding: theme.spacing(1),
-    fontSize: '1.25em',
+    flexGrow: 1,
   },
   activityAvatar: {
     padding: theme.spacing(1),
@@ -103,7 +103,6 @@ export const TacticalActivityRankComponent = ({
                               }}/>
       </div>
       <div className={classes.activityName}>{tacticalActivity.name}</div>
-      <div style={{flexGrow: 1}}/>
       <div>{tacticalActivity.rank + 1}</div>
       <div>
         <div>
