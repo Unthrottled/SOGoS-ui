@@ -102,25 +102,23 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
 
   const reorderActivities = dragResult => {
     console.log(dragResult);
-    const fromIndex = dragResult.source.index;
-    const toIndex = dragResult.destination.index;
-    if (fromIndex !== toIndex) {
-      const meMeBigBoy = Math.max(fromIndex, toIndex);
-      const meMeSmallBoy = Math.min(fromIndex, toIndex);
+    const dragSourceIndex = dragResult.source.index;
+    const dragToIndex = dragResult.destination.index;
+    if (dragSourceIndex !== dragToIndex) {
+      const fromDude = allTacticalActivities[dragSourceIndex];
+      fromDude.rank = dragToIndex;
 
-      const fromDude = allTacticalActivities[fromIndex];
-      fromDude.rank = toIndex;
-
-      if(meMeBigBoy === toIndex) {
-        Array(meMeBigBoy - meMeSmallBoy - 1)
-          .fill(meMeSmallBoy)
-          .map((_,index)=> index + meMeSmallBoy)
-          .forEach(toPromote => --allTacticalActivities[toPromote].rank)
-      } else {
-        Array(meMeBigBoy - meMeSmallBoy - 1)
-          .fill(meMeSmallBoy + 1)
-          .map((_,index)=> index + meMeSmallBoy + 1)
+      const wasPromotion = dragSourceIndex > dragToIndex;
+      if(wasPromotion) {
+        Array(dragSourceIndex - dragToIndex)
+          .fill(0)
+          .map((_,index)=> index + dragToIndex)
           .forEach(toDemote => ++allTacticalActivities[toDemote].rank)
+      } else {
+        Array(dragToIndex - dragSourceIndex)
+          .fill(0)
+          .map((_,index)=> index + dragSourceIndex + 1)
+          .forEach(toDemote => --allTacticalActivities[toDemote].rank)
       }
 
       dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities))
