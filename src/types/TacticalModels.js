@@ -28,6 +28,7 @@ export const getActivityBackgroundColor = (tacticalActivity: TacticalActivity): 
 export type TacticalActivity = {
   id: string,
   name: string,
+  rank: number,
   iconCustomization: {
     background: ColorType,
     line: ColorType,

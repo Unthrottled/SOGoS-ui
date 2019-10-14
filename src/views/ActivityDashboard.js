@@ -129,6 +129,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
         background: defaultBackground,
         line: defaultLine
       },
+      rank: activities.length + 1,
     };
 
   const [tacticalActivityName, setTacticalActivityName] = useState(currentTacticalActivity.name);
@@ -138,6 +139,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
     const tacticalActivity: TacticalActivity = {
       id: activityId,
       name: tacticalActivityName,
+      rank: currentTacticalActivity.rank,
       antecedenceTime: new Date().getTime(),
       iconCustomization: {
         background: backgroundColor,
