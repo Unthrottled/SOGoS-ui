@@ -18,7 +18,6 @@ import type {TacticalActivity} from "../types/TacticalModels";
 import SettingsIcon from '@material-ui/icons/Settings';
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
@@ -69,11 +68,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TacticalActivityList = ({
-                                       tacticalActivities,
-                                       moveItems,
-                                       classes
-                                     }) => {
+
+export const TacticalActivityRankComponent = ({
+                                                tacticalActivities,
+                                                tacticalActivity,
+                                                moveItems,
+                                                classes
+                                              }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -90,10 +91,64 @@ export const TacticalActivityList = ({
   };
 
   const sendToTheBottom = (rank) => {
-    console.log('yeet', rank, tacticalActivities.length - 1);
     moveItems(rank, tacticalActivities.length - 1)
   };
+  return <Card>
+    <div className={classes.content}>
+      <div className={classes.activityAvatar}>
+        <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                              size={{
+                                width: '45px',
+                                height: '45px',
+                              }}/>
+      </div>
+      <div className={classes.activityName}>{tacticalActivity.name}</div>
+      <div style={{flexGrow: 1}}/>
+      <div>{tacticalActivity.rank + 1}</div>
+      <div>
+        <div>
+          <IconButton
+            aria-owns={open ? 'menu-appbar' : undefined}
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <SettingsIcon/>
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => {
+              handleClose();
+              sendToTheTop(tacticalActivity.rank)
+            }}><ArrowUpwardIcon/> To the Top </MenuItem>
+            <MenuItem onClick={() => {
+              handleClose();
+              sendToTheBottom(tacticalActivity.rank)
+            }}><ArrowDownwardIcon/> To the Bottom</MenuItem>
+          </Menu>
+        </div>
+      </div>
+    </div>
+  </Card>;
+};
 
+export const TacticalActivityList = ({
+                                       tacticalActivities,
+                                       moveItems,
+                                       classes
+                                     }) => {
   return tacticalActivities.map((tacticalActivity, index) => (
     <Draggable key={tacticalActivity.id}
                draggableId={tacticalActivity.id}
@@ -105,55 +160,10 @@ export const TacticalActivityList = ({
                {...provided.dragHandleProps}
                className={classes.activity}
           >
-            <Card>
-              <div className={classes.content}>
-                <div className={classes.activityAvatar}>
-                  <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                        size={{
-                                          width: '45px',
-                                          height: '45px',
-                                        }}/>
-                </div>
-                <div className={classes.activityName}>{tacticalActivity.name}</div>
-                <div style={{flexGrow: 1}}/>
-                <div>{tacticalActivity.rank + 1}</div>
-                <div>
-                  <div>
-                    <IconButton
-                      aria-owns={open ? 'menu-appbar' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleMenu}
-                      color="inherit"
-                    >
-                      <SettingsIcon/>
-                    </IconButton>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={() => {
-                        handleClose();
-                        sendToTheTop(tacticalActivity.rank)
-                      }}><ArrowUpwardIcon/> To the Top </MenuItem>
-                      <MenuItem onClick={() => {
-                        handleClose();
-                        sendToTheBottom(tacticalActivity.rank)
-                      }}><ArrowDownwardIcon/> To the Bottom</MenuItem>
-                    </Menu>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <TacticalActivityRankComponent tacticalActivity={tacticalActivity}
+                                           classes={classes}
+                                           moveItems={moveItems}
+                                           tacticalActivities={tacticalActivities}/>
           </div>
         )
       }
