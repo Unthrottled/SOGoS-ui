@@ -3,13 +3,9 @@ import {isOnline} from "../NetworkSagas";
 import {performDelete, performPost, performPut} from "../APISagas";
 import {selectUserState} from "../../reducers";
 import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
-import {createCachedDataEvent, createSyncedDataEvent} from "../../events/UserEvents";
+import {createCachedDataEvent} from "../../events/UserEvents";
 import type {CachedTacticalActivity, TacticalActivity} from "../../types/TacticalModels";
-import {
-  createCachedTacticalActivityEvent,
-  createSyncedTacticalActivitiesEvent,
-  createSyncedTacticalActivityEvent
-} from "../../events/TacticalEvents";
+import {createCachedTacticalActivityEvent, createSyncedTacticalActivityEvent} from "../../events/TacticalEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {BULK_ACTIVITY_UPLOAD_URL} from "./TacticalActivitySyncSaga";
 
@@ -21,13 +17,13 @@ export function* activityChangesSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityUpdateSaga, activityUpdateToCached);
 }
 
-export function* activityRankSaga({payload}){
+export function* activityRankSaga({payload}) {
   try {
     yield call(performPut, BULK_ACTIVITY_UPLOAD_URL, payload);
   } catch (e) {
     yield put(createShowWarningNotificationEvent("Unable to update activity rank! Try again later, please."));
     for (const tacticalActivity in payload) {
-      if(payload.hasOwnProperty(tacticalActivity)){
+      if (payload.hasOwnProperty(tacticalActivity)) {
         yield call(cacheTacticalActivitySaga, activityUpdateToCached(payload[tacticalActivity]))
       }
     }
@@ -82,8 +78,8 @@ export const activityCompleteToCached: (TacticalActivity) => CachedTacticalActiv
 });
 
 export function* activityAPIInteractionSaga(activity: TacticalActivity,
-                                             activitySaga,
-                                             cachedTacticalActivityFunction: (TacticalActivity)=>CachedTacticalActivity) {
+                                            activitySaga,
+                                            cachedTacticalActivityFunction: (TacticalActivity)=>CachedTacticalActivity) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(activitySaga, activity)
@@ -95,9 +91,9 @@ export function* activityAPIInteractionSaga(activity: TacticalActivity,
 export const TACTICAL_ACTIVITIES_URL = `/api/tactical/activity`;
 
 export function* activityUploadSaga(activity: TacticalActivity,
-                                     apiAction,
-                                     cachingFunction: (TacticalActivity) => CachedTacticalActivity,
-                                     urlFunction: (TacticalActivity)=> string = __ => TACTICAL_ACTIVITIES_URL) {
+                                    apiAction,
+                                    cachingFunction: (TacticalActivity) => CachedTacticalActivity,
+                                    urlFunction: (TacticalActivity)=> string = __ => TACTICAL_ACTIVITIES_URL) {
   try {
     yield call(apiAction, urlFunction(activity), activity);
     yield put(createSyncedTacticalActivityEvent(activity))

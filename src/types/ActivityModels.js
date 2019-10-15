@@ -17,6 +17,7 @@ export type ActivityContent = {
   name: string,
   timedType: ActivityTimedType,
   type: ActivityType,
+  paused: boolean,
 };
 export type Activity = {
   antecedenceTime: number,
@@ -36,6 +37,7 @@ const getActivityContent = (activity: Activity): ActivityContent => (activity &&
 export const getTimedType = (activity: Activity) => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 export const getActivityType = (activity: Activity) => getActivityContent(activity).type || ActivityType.PASSIVE;
 export const getActivityName = (activity: Activity) => getActivityContent(activity).name;
+export const isPausedActivity = (activity: Activity) => getActivityContent(activity).paused;
 export const getActivityID = (activity: Activity) =>
   getActivityContent(activity).activityID ||
   (isActivityRecovery(activity) && RECOVERY) ||

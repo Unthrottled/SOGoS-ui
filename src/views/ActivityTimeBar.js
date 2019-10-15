@@ -5,7 +5,14 @@ import Slide from "@material-ui/core/Slide";
 import Close from '@material-ui/icons/Close';
 import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
-import {ActivityTimedType, ActivityType, getActivityID, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
+import {
+  ActivityTimedType,
+  ActivityType,
+  getActivityID,
+  isActivityRecovery,
+  isPausedActivity,
+  RECOVERY
+} from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
 import {blue} from "@material-ui/core/colors";
@@ -100,6 +107,7 @@ const ActivityTimeBar = ({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
       timedType: ActivityTimedType.STOP_WATCH,
+      paused: true,
       uuid: uuid(),
     }));
   };
@@ -145,7 +153,7 @@ const ActivityTimeBar = ({
   const mappedTacticalActivities = mapTacticalActivitiesToID(activities);
   const tacticalActivity = mappedTacticalActivities[getActivityID(currentActivity)];
 
-  const isTimeBarActivity = shouldTime && !(isRecovery && timedType === ActivityTimedType.STOP_WATCH);
+  const isTimeBarActivity = shouldTime && !isPausedActivity(currentActivity);
   return isTimeBarActivity ? (
     <Slide direction={"up"} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>

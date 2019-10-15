@@ -6,7 +6,7 @@ import Stop from '@material-ui/icons/Stop';
 import {selectActivityState} from "../reducers";
 import Stopwatch from "./Stopwatch";
 import {getTime, resumeActivity} from "./ActivityTimeBar";
-import {ActivityTimedType, ActivityType, isActivityRecovery, RECOVERY} from "../types/ActivityModels";
+import {ActivityTimedType, ActivityType, isPausedActivity, RECOVERY} from "../types/ActivityModels";
 import {startNonTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
 import IconButton from "@material-ui/core/IconButton";
@@ -35,8 +35,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '5em',
     color: green[800],
   },
-  cancel: {
-  },
+  cancel: {},
   cancelIcon: {
     fontSize: '1.25em',
     color: 'red',
@@ -68,7 +67,7 @@ const PausedPomodoro = ({
   };
 
   const isPausedPomodoro = shouldTime &&
-    isActivityRecovery(currentActivity) &&
+    isPausedActivity(currentActivity) &&
     timedType === ActivityTimedType.STOP_WATCH;
   return isPausedPomodoro ? (
     <div className={classes.container}>
