@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
   },
   speedDial: {
-    position: 'relative',
     top: theme.spacing(1),
     left: theme.spacing(1),
     margin: theme.spacing(1),

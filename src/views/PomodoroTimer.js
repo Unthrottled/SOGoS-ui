@@ -4,6 +4,8 @@ import SwapVert from '@material-ui/icons/SwapVert';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import {TimeDisplay} from "./TimeDisplay";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import ActivitySelection from "./ActivitySelection";
+import StopWatch from '@material-ui/icons/Timer';
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -15,6 +17,12 @@ const useStyles = makeStyles(theme => ({
   },
   swappo: {
     marginRight: theme.spacing(1.5),
+  },
+  bigIcon: {
+    fontSize: "175px",
+    padding: "25px",
+    background: theme.palette.primary.main,
+    borderRadius: '50%',
   },
 }));
 
@@ -63,13 +71,17 @@ export const PomodoroTimer = ({
     setRememberedActivity(activityId);
   }
 
+  const [selectionOpen, setSelectionOpen] = useState(false);
+
   const classes = useStyles();
+  const closeSelection = () => setSelectionOpen(false);
+  const openSelection = () => setSelectionOpen(true);
   return (
     <div className={classes.stopwatchContainer}>
       {
         !hidePause &&
         (<div className={classes.swappo}
-              onClick={pivotActivity}>
+              onClick={openSelection}>
           <SwapVert/>
         </div>)
       }
@@ -87,5 +99,15 @@ export const PomodoroTimer = ({
             </div>))
         }
       </div>
+      <ActivitySelection open={selectionOpen}
+                         onClose={closeSelection}
+                         onActivitySelection={activity => {
+                           console.log(activity, "finna bust a nut");
+                           closeSelection();
+                           // pivotActivity(activity);
+                         }}
+                         onGenericActivitySelection={() => console.log("Genero")}
+                         genericIcon={<StopWatch className={classes.bigIcon}/>}
+      />
     </div>);
 };

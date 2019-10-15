@@ -20,7 +20,6 @@ import {selectActivityState, selectTacticalState} from "../reducers";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
 import {TomatoIcon} from "./TomatoIcon";
-import {objectToArray} from "../miscellanous/Tools";
 import {mapTacticalActivitiesToID} from "./PieFlavored";
 
 const useStyles = makeStyles(theme => ({
