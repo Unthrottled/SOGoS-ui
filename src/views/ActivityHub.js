@@ -11,13 +11,9 @@ import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
 import {selectConfigurationState, selectTacticalActivityState, selectTacticalState} from "../reducers";
 import {NOT_ASKED} from "../types/ConfigurationModels";
 import {receivedNotificationPermission} from "../actions/ConfigurationActions";
-import IconButton from "@material-ui/core/IconButton";
-import {Cancel, KeyboardArrowDown} from "@material-ui/icons";
-import {Grow} from "@material-ui/core";
-import {objectToArray} from "../miscellanous/Tools";
 import type {TacticalActivity} from "../types/TacticalModels";
-import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {TomatoIcon} from "./TomatoIcon";
+import ActivitySelection from "./ActivitySelection";
 
 
 const useStyles = makeStyles(theme => ({
@@ -94,7 +90,6 @@ const ActivityHub = ({
                        dispatch: dispetch,
                        loadDuration,
                        notificationsAllowed,
-                       activities,
                      }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -214,51 +209,15 @@ const ActivityHub = ({
             children={<div/>}/>
         ))}
       </SpeedDial>
-      <Grow in={strategyOpen}>
-        <div className={classes.container}>
-          <div className={classes.contents}>
-            <IconButton
-              className={classes.cancel}
-              onClick={closeStrategy}
-              color={'inherit'}>
-              <Cancel className={classes.cancelIcon}/>
-            </IconButton>
-            <br/>
-            <div className={classes.activityContainer}>
-              {
-                objectToArray(activities).map((activity: TacticalActivity) => (
-                  <div key={`tip_${activity.id}`}>
-                    <div className={classes.toolTip}>
-                      <span className={classes.toolTipInner}>{activity.name}</span>
-                      <KeyboardArrowDown style={{fontSize: '2em'}}/>
-                    </div>
-                    <IconButton color={'inherit'}
-                                className={classes.activityIcon}
-                                onClick={() => {
-                                  selectedAction(activity);
-                                  closeStrategy();
-                                }}>
-                      <TacticalActivityIcon tacticalActivity={activity} size={{
-                        height: '150px',
-                        width: '150px',
-                      }}/>
-                    </IconButton>
-                  </div>
-                ))
-              }
-            </div>
-            <div className={classes.toolTip}>
-              <span className={classes.toolTipInner}>Generic</span>
-              <KeyboardArrowDown style={{fontSize: '2em'}}/>
-            </div>
-            <IconButton
-              onClick={invokeGenericAction}
-              color={'inherit'}>
-              {selectedIcon}
-            </IconButton>
-          </div>
-        </div>
-      </Grow>
+      <ActivitySelection open={strategyOpen}
+                         onClose={closeStrategy}
+                         onActivitySelection={activity=>{
+                           selectedAction(activity);
+                           closeStrategy();
+                         }}
+                         onGenericActivitySelection={invokeGenericAction}
+                         genericIcon={selectedIcon}
+      />
     </div>
 
   );
