@@ -13,6 +13,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import {StrategyIcon} from "./StrategyIcon";
 import {TacticalIcon} from "./TacticalIcon";
+import {selectUserState} from "../reducers";
+import {connect} from "react-redux";
+import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -27,15 +30,14 @@ const useStyles = makeStyles(theme => ({
   fullList: {
     width: 'auto',
   },
-  menuButton: {
-  },
+  menuButton: {},
   grow: {
     flexGrow: 1,
   },
 }));
 
 
-const MenuNavigation = () => {
+const MenuNavigation = ({guid}) => {
   const topics = [
     {
       title: 'Strategy',
@@ -48,6 +50,11 @@ const MenuNavigation = () => {
       icon: (<TacticalIcon size={{width: '24px', height: '24px',}}/>),
     },
     {
+      title: 'History',
+      path: `/${guid}/history/`,
+      icon: (<HistoryIcon style={{fontSize: '24px'}}/>),
+    },
+    {
       title: 'Settings',
       path: '/settings',
       icon: (<SettingsIcon/>),
@@ -55,7 +62,7 @@ const MenuNavigation = () => {
   ];
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const toggleDrawer = (open)=>()=> {
+  const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
 
@@ -113,4 +120,12 @@ const MenuNavigation = () => {
   );
 };
 
-export default MenuNavigation;
+const mapStateToProps = state => {
+  const {information: {guid}} = selectUserState(state);
+  return {
+    guid
+  }
+};
+
+const connected: MenuNavigation = connect(mapStateToProps)(MenuNavigation);
+export default connected;
