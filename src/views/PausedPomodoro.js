@@ -3,19 +3,31 @@ import {connect} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import Stop from '@material-ui/icons/Stop';
-import {selectActivityState} from "../reducers";
+import {selectActivityState, selectTacticalActivityState} from "../reducers";
 import Stopwatch from "./Stopwatch";
 import {getTime, resumeActivity} from "./ActivityTimeBar";
-import {ActivityTimedType, ActivityType, isPausedActivity, RECOVERY} from "../types/ActivityModels";
+import {
+  ActivityTimedType,
+  ActivityType,
+  getActivityID,
+  getActivityName,
+  isPausedActivity,
+  RECOVERY
+} from "../types/ActivityModels";
 import {startNonTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
 import IconButton from "@material-ui/core/IconButton";
 import {green} from "@material-ui/core/colors";
+import {objectToArray} from "../miscellanous/Tools";
+import {dictionaryReducer} from "../reducers/StrategyReducer";
+import type {TacticalActivity} from "../types/TacticalModels";
+import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import SwapVert from '@material-ui/icons/SwapVert';
 
 
 const useStyles = makeStyles(theme => ({
   container: {
-    background: 'rgba(0,0,0,0.75)',
+    background: 'rgba(0,0,0,0.9)',
     position: 'fixed',
     top: '0',
     width: '100%',
@@ -43,16 +55,29 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
     padding: theme.spacing(0.5),
   },
+  pivotContainer: {
+    marginTop: theme.spacing(1),
+  },
+  pivotLabel: {
+    display: 'flex',
+    marginBottom: theme.spacing(1),
+    justifyContent: 'center',
+    fontSize: '1.5em',
+  },
 }));
 
 const PausedPomodoro = ({
                           shouldTime,
                           currentActivity,
                           previousActivity,
+                          activities,
                           dispatch: dispetch
                         }) => {
   const classes = useStyles();
   const {antecedenceTime, content: {uuid: activityId, timedType}} = currentActivity;
+
+  const mappedTacticalActivities = objectToArray(activities).reduce(dictionaryReducer, {});
+  const tacticalActivity: TacticalActivity = mappedTacticalActivities[getActivityID(currentActivity)];
 
   const stopActivity = () => {
     dispetch(startNonTimedActivity({
@@ -77,6 +102,7 @@ const PausedPomodoro = ({
         </div>
         <div className={classes.stopwatch}>
           <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
+                     fontSize={'2em'}
                      activityId={activityId}/>
         </div>
         <div className={classes.stopWatch}>
@@ -91,6 +117,17 @@ const PausedPomodoro = ({
             <Stop className={classes.cancelIcon}/>
           </IconButton>
         </div>
+        {
+          tacticalActivity && (
+            <div className={classes.pivotContainer}>
+              <div className={classes.pivotLabel}>
+                <SwapVert/>
+                <div>Pivoted to: {getActivityName(currentActivity)} </div>
+              </div>
+              <TacticalActivityIcon tacticalActivity={tacticalActivity}/>
+            </div>
+          )
+        }
       </div>
     </div>
   ) : null;
@@ -98,10 +135,12 @@ const PausedPomodoro = ({
 
 const mapStateToProps = state => {
   const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
     shouldTime,
     currentActivity,
     previousActivity,
+    activities,
   };
 };
 

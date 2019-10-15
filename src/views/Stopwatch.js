@@ -18,7 +18,8 @@ const Stopwatch = ({
                      startTimeInSeconds,
                      activityId,
                      onPause,
-                     onResume
+                     onResume,
+                     fontSize,
                    }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
@@ -59,10 +60,11 @@ const Stopwatch = ({
       <Pause/>
     </div>);
 
+  const actualFontSize = fontSize || '1em';
   const classes = useStyles();
   return (
     <div className={classes.stopwatchContainer}>
-      <div>
+      <div style={{fontSize: actualFontSize}}>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
       <div className={classes.actionButton}>
