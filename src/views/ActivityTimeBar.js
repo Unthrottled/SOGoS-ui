@@ -21,6 +21,7 @@ import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
 import {TomatoIcon} from "./TomatoIcon";
 import {mapTacticalActivitiesToID} from "./PieFlavored";
+import {buildCommenceActivityContents} from "./ActivityHub";
 
 const useStyles = makeStyles(theme => ({
   pomoCount: {
@@ -101,6 +102,15 @@ const ActivityTimeBar = ({
     }));
   };
 
+  const pivotActivity = (name, supplements) => {
+    console.log(name, supplements);
+    const activityContent = buildCommenceActivityContents(supplements, name);
+    return dispetch(startTimedActivity({
+      ...activityContent,
+      paused: true,
+    }));
+  };
+
   const startPausedRecovery = () => {
     dispetch(startTimedActivity({
       name: RECOVERY,
@@ -178,7 +188,7 @@ const ActivityTimeBar = ({
                 <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
                                onComplete={completedPomodoro}
                                onPause={startPausedRecovery}
-                               pivotActivity={startPausedRecovery}
+                               pivotActivity={pivotActivity}
                                onBreak={startRecovery}
                                hidePause={isRecovery}
                                onResume={startRecoveryOrResume}

@@ -85,6 +85,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+export const GENERIC_ACTIVITY_NAME = "GENERIC_ACTIVITY";
+
+export const buildCommenceActivityContents = (supplements, name) => ({
+  ...supplements,
+  name,
+  type: ActivityType.ACTIVE,
+  timedType: ActivityTimedType.STOP_WATCH,
+  uuid: uuid(),
+  workStartedWomboCombo: new Date().getTime(),
+});
 const ActivityHub = ({
                        dispatch: dispetch,
                        loadDuration,
@@ -95,14 +105,7 @@ const ActivityHub = ({
   const [strategyOpen, setStrategyOpen] = useState(false);
 
   const commenceActivity = (name, supplements) =>
-    dispetch(startTimedActivity({
-      ...supplements,
-      name,
-      type: ActivityType.ACTIVE,
-      timedType: ActivityTimedType.STOP_WATCH,
-      uuid: uuid(),
-      workStartedWomboCombo: new Date().getTime(),
-    }));
+    dispetch(startTimedActivity(buildCommenceActivityContents(supplements, name)));
 
   const commenceTimedActivity = (name, supplements) => {
     if (notificationsAllowed === NOT_ASKED) {
@@ -132,7 +135,7 @@ const ActivityHub = ({
   };
 
   const commenceGenericActivity = () => {
-    commenceActivity("GENERIC_ACTIVITY", {})
+    commenceActivity(GENERIC_ACTIVITY_NAME, {})
   };
 
   const handleClick = () => setOpen(!open);

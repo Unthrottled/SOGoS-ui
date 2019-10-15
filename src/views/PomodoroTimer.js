@@ -6,6 +6,7 @@ import {TimeDisplay} from "./TimeDisplay";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import ActivitySelection from "./ActivitySelection";
 import StopWatch from '@material-ui/icons/Timer';
+import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -102,11 +103,10 @@ export const PomodoroTimer = ({
       <ActivitySelection open={selectionOpen}
                          onClose={closeSelection}
                          onActivitySelection={activity => {
-                           console.log(activity, "finna bust a nut");
                            closeSelection();
-                           // pivotActivity(activity);
+                           pivotActivity(activity.name, {activityID: activity.id});
                          }}
-                         onGenericActivitySelection={() => console.log("Genero")}
+                         onGenericActivitySelection={() => pivotActivity(GENERIC_ACTIVITY_NAME, {})}
                          genericIcon={<StopWatch className={classes.bigIcon}/>}
       />
     </div>);
