@@ -77,7 +77,6 @@ const ObjectiveActivityAssociationDashboard = ({
                                                  objectives,
                                                  activities,
                                                  history,
-                                                 fullName,
                                                  match: {params: {objectiveId}}
                                                }) => {
   const classes = useStyles();
@@ -189,11 +188,9 @@ const ObjectiveActivityAssociationDashboard = ({
 };
 
 const mapStateToProps = state => {
-  const {information: {fullName}} = selectUserState(state);
   const {objectives} = selectStrategyState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
-    fullName,
     objectives,
     activities
   }
