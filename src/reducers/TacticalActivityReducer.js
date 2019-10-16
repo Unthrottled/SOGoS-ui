@@ -67,7 +67,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
             .filter(activity => activity.id !== action.payload.id)
             .reduce(rankReducer, {})
         }
-      }
+      };
     case FOUND_ACTIVITIES:
       const activeActivities = action.payload.filter(tactActivity => !tactActivity.hidden);
       const archivedActivities = action.payload.filter(tactActivity => tactActivity.hidden);
