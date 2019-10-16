@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
   hubRoot: {
     position: 'sticky',
     top: theme.spacing(1),
+    zIndex: 100,
   },
   container: {
     background: 'rgba(0,0,0,0.90)',

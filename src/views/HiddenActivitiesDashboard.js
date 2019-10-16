@@ -3,7 +3,11 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import {withRouter} from "react-router-dom";
-import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {
+  createHideTacticalActivityEvent,
+  createShowTacticalActivityEvent,
+  createViewedTacticalActivitesEvent
+} from "../events/TacticalEvents";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -59,9 +63,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 export const TacticalActivitySettingsComponent = ({
                                                     tacticalActivity,
+                                                    dispetch,
                                                     classes,
                                                     history,
                                                   }) => {
@@ -101,6 +105,7 @@ export const TacticalActivitySettingsComponent = ({
     >
       <MenuItem onClick={() => {
         handleClose();
+        dispetch(createShowTacticalActivityEvent(tacticalActivity))
       }}><VisibilityIcon className={classes.menuIcon}/> Show</MenuItem>
     </Menu>
   </div>);
@@ -137,6 +142,7 @@ const HiddenActivitiesDashboard = ({dispatch, history}) => {
           <TacticalActivitySettingsComponent
             tacticalActivity={tacticalActivity}
             history={history}
+            dispetch={dispatch}
             classes={classes}
           />
         )}

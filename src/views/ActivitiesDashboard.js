@@ -7,7 +7,7 @@ import AddIcon from '@material-ui/icons/Add'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
-import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
+import {createHideTacticalActivityEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -63,6 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 export const TacticalActivitySettingsComponent = ({
                                                     tacticalActivity,
+                                                    dispetch,
                                                     history,
                                                   }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -105,6 +106,7 @@ export const TacticalActivitySettingsComponent = ({
       }}>Edit </MenuItem>
       <MenuItem onClick={() => {
         handleClose();
+        dispetch(createHideTacticalActivityEvent(tacticalActivity))
       }}>Hide</MenuItem>
     </Menu>
   </div>);
@@ -162,6 +164,7 @@ const ActivitiesDashboard = ({dispatch, history}) => {
           <TacticalActivitySettingsComponent
             tacticalActivity={tacticalActivity}
             history={history}
+            dispetch={dispatch}
           />
         )}
       />
