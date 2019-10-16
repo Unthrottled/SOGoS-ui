@@ -7,7 +7,7 @@ import {
   CACHED_TACTICAL_ACTIVITY,
   CREATED_ACTIVITY,
   DELETED_ACTIVITY,
-  FOUND_ACTIVITIES,
+  FOUND_ACTIVITIES, RESTORED_ACTIVITY,
   SYNCED_TACTICAL_ACTIVITIES,
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
@@ -47,7 +47,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
     case UPDATED_ACTIVITY:
       const newActivity = [action.payload];
       return updateStateWithActivities(newActivity, state);
-    case DELETED_ACTIVITY:
+    case DELETED_ACTIVITY: //TODO: re rank when deleted.
       const {payload: deletedActivity} = action;
       const newActivities = objectToArray(state.activity.activities).filter(suspiciousActivity =>
         suspiciousActivity.id !== deletedActivity.id);
@@ -64,6 +64,16 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         activity: {
           ...state.activity,
           activities: objectToArray(state.activity.activities)
+            .filter(activity => activity.id !== action.payload.id)
+            .reduce(rankReducer, {})
+        }
+      };
+    case RESTORED_ACTIVITY:
+      return {
+        ...state,
+        activity: {
+          ...state.activity,
+          archivedActivities: objectToArray(state.activity.archivedActivities)
             .filter(activity => activity.id !== action.payload.id)
             .reduce(rankReducer, {})
         }
