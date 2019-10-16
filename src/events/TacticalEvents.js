@@ -12,6 +12,8 @@ export const DELETED_ACTIVITY: 'DELETED_ACTIVITY' = 'DELETED_ACTIVITY';
 export const HID_ACTIVITY: 'HID_ACTIVITY' = 'HID_ACTIVITY';
 export const UNHID_ACTIVITY: 'UNHID_ACTIVITY' = 'UNHID_ACTIVITY';
 export const FOUND_ACTIVITIES: 'FOUND_ACTIVITIES' = 'FOUND_ACTIVITIES';
+export const RESTORED_ACTIVITY: 'RESTORED_ACTIVITY' = 'RESTORED_ACTIVITY';
+export const ARCHIVED_ACTIVITY: 'ARCHIVED_ACTIVITY' = 'ARCHIVED_ACTIVITY';
 export const RANKED_ACTIVITIES: 'RANKED_ACTIVITIES' = 'RANKED_ACTIVITIES';
 export const CACHED_TACTICAL_ACTIVITY: 'CACHED_TACTICAL_ACTIVITY' = 'CACHED_TACTICAL_ACTIVITY';
 export const VIEWED_ACTIVITIES: 'VIEWED_ACTIVITIES' = 'VIEWED_ACTIVITIES';
@@ -105,6 +107,16 @@ export const createDeletedTacticalActivityEvent = (tacticalActivity: TacticalAct
 
 export const createHideTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: HID_ACTIVITY,
+  payload: tacticalActivity,
+});
+
+export const createArchivedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
+  type: ARCHIVED_ACTIVITY,
+  payload: tacticalActivity,
+});
+
+export const createRestoredTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
+  type: RESTORED_ACTIVITY,
   payload: tacticalActivity,
 });
 
