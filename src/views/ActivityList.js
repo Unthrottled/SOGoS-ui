@@ -66,11 +66,16 @@ const useStyles = makeStyles(theme => (
 
 type Props = {
   activities: any,
+  archivedActivities: any,
   actionComponent?: (TacticalActivity) => Component,
+  hidden?: boolean,
 };
 
 const ActivityList = (props: Props) => {
-  const allTacticalActivities: TacticalActivity[] = objectToArray(props.activities);
+  const allTacticalActivities: TacticalActivity[] = objectToArray(
+    props.hidden ? props.archivedActivities :
+      props.activities
+  );
   const classes = useStyles();
 
   return (
@@ -116,10 +121,11 @@ const ActivityList = (props: Props) => {
 
 const mapStateToProps = state => {
   const {objectives} = selectStrategyState(state);
-  const {activities} = selectTacticalActivityState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     objectives,
-    activities
+    activities,
+    archivedActivities,
   }
 };
 

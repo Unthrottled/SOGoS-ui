@@ -138,6 +138,7 @@ const HiddenActivitiesDashboard = ({dispatch, history}) => {
         </Container>
       </div>
       <ActivityList
+        hidden
         actionComponent={tacticalActivity => (
           <TacticalActivitySettingsComponent
             tacticalActivity={tacticalActivity}
