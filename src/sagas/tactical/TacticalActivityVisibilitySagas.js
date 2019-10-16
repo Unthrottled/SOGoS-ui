@@ -12,6 +12,7 @@ export function* tacticalActivityHiddenSaga({payload}) {
     ...payload,
     hidden: true,
   };
+  delete tacticalActivity.rank;
   yield put(createUpdatedTacticalActivityEvent(tacticalActivity));
   yield put(createArchivedTacticalActivityEvent(tacticalActivity));
 }

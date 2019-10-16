@@ -16,6 +16,7 @@ export type PomodoroState = {
 
 export type TacticalActivityState = {
   activities: TacticalActivity[],
+  archivedActivities: TacticalActivity[],
   cache: any,
 }
 
@@ -35,6 +36,7 @@ export const INITIAL_TACTICAL_STATE: TacticalState = {
   },
   activity: {
     activities: {},
+    archivedActivities: {},
     cache: {},
   }
 };

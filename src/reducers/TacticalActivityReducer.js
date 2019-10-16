@@ -3,6 +3,7 @@ import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import type {TacticalState} from "./TacticalReducer";
 import {INITIAL_TACTICAL_STATE} from "./TacticalReducer";
 import {
+  ARCHIVED_ACTIVITY,
   CACHED_TACTICAL_ACTIVITY,
   CREATED_ACTIVITY,
   DELETED_ACTIVITY,
@@ -10,6 +11,7 @@ import {
   SYNCED_TACTICAL_ACTIVITIES,
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
+import {dictionaryReducer} from "./StrategyReducer";
 
 
 export const rankReducer = (accum, toIndex, index) => {
@@ -23,13 +25,18 @@ export const rankReducer = (accum, toIndex, index) => {
 const updateStateWithActivities = (newActivities, state: TacticalState): TacticalState => {
   const tacticalActivities = [
     ...objectToArray(state.activity.activities),
-    ...newActivities
+    ...newActivities.filter(tactAct => !tactAct.hidden)
   ].reduce(rankReducer, {});
+  const archivedTacticalActivities = [
+    ...objectToArray(state.activity.archivedActivities),
+    ...newActivities.filter(tactAct => tactAct.hidden)
+  ].reduce(dictionaryReducer, {});
   return {
     ...state,
     activity: {
       ...state.activity,
-      activities: tacticalActivities
+      activities: tacticalActivities,
+      archivedActivities: archivedTacticalActivities,
     }
   };
 };
@@ -51,13 +58,26 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
           activities: newActivities.reduce(rankReducer, {}),
         }
       };
+    case ARCHIVED_ACTIVITY:
+      return {
+        ...state,
+        activity: {
+          ...state.activity,
+          activities: objectToArray(state.activity.activities)
+            .filter(activity => activity.id !== action.payload.id)
+            .reduce(rankReducer, {})
+        }
+      }
     case FOUND_ACTIVITIES:
-      const rememberedActivities = action.payload.reduce(rankReducer, {});
+      const activeActivities = action.payload.filter(tactActivity => !tactActivity.hidden);
+      const archivedActivities = action.payload.filter(tactActivity => tactActivity.hidden);
+      const rememberedActivities = activeActivities.reduce(rankReducer, {});
       return {
         ...state,
         activity: {
           ...state.activity,
           activities: rememberedActivities,
+          archivedActivities: archivedActivities.reduce(dictionaryReducer, {}),
         },
       };
     case CACHED_TACTICAL_ACTIVITY: {
