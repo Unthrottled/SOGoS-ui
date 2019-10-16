@@ -34,6 +34,7 @@ export type TacticalActivity = {
     line: ColorType,
   },
   categories: string[],
+  hidden: boolean,
 };
 
 export type CachedTacticalActivity = {

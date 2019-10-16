@@ -1,11 +1,22 @@
+import {call, put, select} from 'redux-saga/effects'
+import type {TacticalActivity} from "../../types/TacticalModels";
+import {createUpdatedTacticalActivityEvent} from "../../events/TacticalEvents";
 
 
 export function* tacticalActivityHiddenSaga({payload}) {
-  console.log(payload, "should hide this");
-}
+  const tacticalActivity: TacticalActivity = {
+    ...payload,
+    hidden: true,
+  };
 
+  yield put(createUpdatedTacticalActivityEvent(tacticalActivity));
+}
 export function* tacticalActivityShownSaga({payload}) {
 
-  console.log(payload, "should show this");
+  const tacticalActivity: TacticalActivity = {
+    ...payload,
+    hidden: false,
+  };
 
+  yield put(createUpdatedTacticalActivityEvent(tacticalActivity));
 }
