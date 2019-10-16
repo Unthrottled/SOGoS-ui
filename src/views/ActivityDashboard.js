@@ -148,10 +148,11 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
     };
     if (!mappedTacticalActivities[tacticalActivity.id]) {
       dispatch(createCreatedTacticalActivityEvent(tacticalActivity));
+      history.push(`/tactical/activities/${activityId}/strategy/association`)
     } else {
       dispatch(createUpdatedTacticalActivityEvent(tacticalActivity));
+      history.push('/tactical/activities/')
     }
-    history.push('/tactical/activities/')
   };
 
   const discardChanges = () => {

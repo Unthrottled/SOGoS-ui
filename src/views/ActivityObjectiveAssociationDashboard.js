@@ -16,6 +16,8 @@ import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
+import {dictionaryReducer} from "../reducers/StrategyReducer";
+import {GoalIcon} from "./GoalIcon";
 
 const useStyles = makeStyles(theme => (
   {
@@ -80,35 +82,39 @@ const ObjectiveActivityAssociationDashboard = ({
                                                  match: {params: {activityId}}
                                                }) => {
   const classes = useStyles();
-  const rememberedObjective: Objective = objectives[activityId];
-  const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
-  const associatedActivityDictionary = (rememberedObjective.associatedActivities || []).reduce((accum, activity) => {
-    accum[activity] = true;
+  const mappedTacticalObjectives = objectToArray(activities).reduce(dictionaryReducer, {});
+  const rememberedActivity: TacticalActivity = mappedTacticalObjectives[activityId];
+
+  const allObjectives = objectToArray(objectives);
+  const associatedObjectiveDictionary = allObjectives
+    .filter(objective => (objective.associatedActivities || []).indexOf(activityId) > -1)
+    .reduce((accum, objective) => {
+      accum[objective.id] = true;
+      return accum
+    }, {});
+
+  const selectedObjectives = allObjectives.reduce((accum, objective) => {
+    accum[objective.id] = !!associatedObjectiveDictionary[objective.id];
     return accum;
   }, {});
-  const selectedActivities = allTacticalActivities.reduce((accum, activity) => {
-    accum[activity.id] = !!associatedActivityDictionary[activity.id];
-    return accum;
-  }, {});
-
-
-  const [activitySwitches, setActivitySwitches] = useState(selectedActivities);
-  const toggleActivity = (activityId) => {
-    activitySwitches[activityId] = !activitySwitches[activityId];
+  const [objectiveSwitches, setActivitySwitches] = useState(selectedObjectives);
+  const toggleObjective = (objectiveId) => {
+    objectiveSwitches[objectiveId] = !objectiveSwitches[objectiveId];
     setActivitySwitches({
-      ...activitySwitches
+      ...objectiveSwitches
     });
   };
 
-  const saveObjective = () => {
-    const objective: Objective = {
-      ...rememberedObjective,
-      associatedActivities: objectToKeyValueArray(activitySwitches)
-        .filter(kv => kv.value)
-        .map(kv => kv.key)
-    };
-    dispatch(updatedObjective(objective));
-    history.push('/strategy/objectives/')
+  const saveActivity = () => {
+    // todo: go through all of the objectives and remove or add them
+    // const objective: Objective = {
+    //   ...rememberedObjective,
+    //   associatedActivities: objectToKeyValueArray(objectiveSwitches)
+    //     .filter(kv => kv.value)
+    //     .map(kv => kv.key)
+    // };
+    // dispatch(updatedObjective(objective));
+    // history.push('/strategy/objectives/')
   };
 
   const discardChanges = () => {
@@ -143,21 +149,21 @@ const ObjectiveActivityAssociationDashboard = ({
 
             >
               {
-                allTacticalActivities.map(tacticalActivity => (
+                allObjectives.map((objective: Objective) => (
                   <div className={classes.activity}>
-                    <Card key={tacticalActivity.id}>
+                    <Card key={objective.id}>
                       <div className={classes.content}>
                         <div className={classes.activityAvatar}>
-                          <TacticalActivityIcon tacticalActivity={tacticalActivity}
+                          <GoalIcon  objective={objective}
                                                 size={{
                                                   width: '45px',
                                                   height: '45px',
                                                 }}/>
                         </div>
-                        <div className={classes.activityName}>{tacticalActivity.name}</div>
+                        <div className={classes.activityName}>{objective.valueStatement}</div>
                         <div>
-                          <Switch checked={activitySwitches[tacticalActivity.id]}
-                                  onChange={() => toggleActivity(tacticalActivity.id)}/>
+                          <Switch checked={objectiveSwitches[objective.id]}
+                                  onChange={() => toggleObjective(objective.id)}/>
                         </div>
                       </div>
                     </Card>
@@ -170,7 +176,7 @@ const ObjectiveActivityAssociationDashboard = ({
         <div className={classes.inputContainer}>
           <Fab color={'primary'}
                className={classes.save}
-               onClick={saveObjective}
+               onClick={saveActivity}
           >
             <SaveIcon/>
           </Fab>
