@@ -9,14 +9,16 @@ import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
-import {selectTacticalActivityState, selectUserState} from "../reducers";
+import {selectTacticalActivityState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
-import {Card} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import ActivityList from "./ActivityList";
+import IconButton from "@material-ui/core/IconButton";
+import SettingsIcon from '@material-ui/icons/Settings';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,7 +62,58 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
+
+export const TacticalActivitySettingsComponent = ({
+                                                    tacticalActivity,
+                                                    history,
+                                                  }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (<div>
+    <IconButton
+      aria-owns={open ? 'menu-appbar' : undefined}
+      aria-haspopup="true"
+      onClick={handleMenu}
+      color="inherit"
+    >
+      <SettingsIcon/>
+    </IconButton>
+    <Menu
+      id="menu-appbar"
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={open}
+      onClose={handleClose}
+    >
+      <MenuItem onClick={() => {
+        handleClose();
+        history.push(`./${tacticalActivity.id}`)
+      }}>Edit </MenuItem>
+      <MenuItem onClick={() => {
+        handleClose();
+      }}>Hide</MenuItem>
+    </Menu>
+  </div>);
+};
+
+
+const ActivitiesDashboard = ({activities, dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
@@ -102,49 +155,21 @@ const ActivitiesDashboard = ({activities, fullName, dispatch, history}) => {
           <FormatListNumberedIcon/> Order Activities
         </Button>
       </Link>
-      <div className={classes.root}>
-        <Grid container justify={'center'}>
-          <Grid item>
-            <Grid container
-                  style={{flexGrow: 1}}
-                  justify={'center'}
-            >
-              {
-                allTacticalActivites.map(tacticalActivity => (
-                  <Grid item
-                        className={classes.activity}
-                        key={tacticalActivity.id}
-                  >
-                    <Card>
-                      <CardActionArea onClick={() => history.push(`./${tacticalActivity.id}`)}>
-                        <div className={classes.content}>
-                          <div className={classes.activityName}>{tacticalActivity.name}</div>
-                          <div className={classes.activityAvatar}>
-                            <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                                  size={{
-                                                    width: '75px',
-                                                    height: '75px',
-                                                  }}/>
-                          </div>
-                        </div>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))
-              }
-            </Grid>
-          </Grid>
-        </Grid>
-      </div>
+      <ActivityList
+        actionComponent={tacticalActivity => (
+          <TacticalActivitySettingsComponent
+            tacticalActivity={tacticalActivity}
+            history={history}
+          />
+        )}
+      />
     </LoggedInLayout>
   );
 };
 
 const mapStateToProps = state => {
-  const {information: {fullName}} = selectUserState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
-    fullName,
     activities,
   }
 };
