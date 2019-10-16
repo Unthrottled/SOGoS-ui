@@ -24,6 +24,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import HistoryDashboard from "./HistoryDashboard";
 import ActivitiesRankDashboard from "./ActivitiesRankDashboard";
 import ActivityObjectiveAssociationDashboard from "./ActivityObjectiveAssociationDashboard";
+import HiddenActivitiesDashboard from "./HiddenActivitiesDashboard";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -74,6 +75,7 @@ function App({dispatch: dispetch, isInitialized}) {
             <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
             <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
             <PrivateRoute path={'/tactical/activities/rank/dashboard'} component={ActivitiesRankDashboard}/>
+            <PrivateRoute path={'/tactical/activities/hidden'} component={HiddenActivitiesDashboard}/>
             <PrivateRoute path={'/tactical/activities/:activityId/strategy/association'} component={ActivityObjectiveAssociationDashboard}/>
             <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
             <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
