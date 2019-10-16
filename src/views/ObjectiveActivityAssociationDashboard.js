@@ -7,15 +7,15 @@ import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import {withRouter} from "react-router-dom";
-import {selectStrategyState, selectTacticalActivityState, selectUserState} from "../reducers";
+import {selectStrategyState, selectTacticalActivityState} from "../reducers";
 import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import type {TacticalActivity} from "../types/TacticalModels";
-import {Card, Switch} from "@material-ui/core";
+import {Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
 import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
-import List from "@material-ui/core/List";
+import ActivityList from "./ActivityList";
 
 const useStyles = makeStyles(theme => (
   {
@@ -136,37 +136,12 @@ const ObjectiveActivityAssociationDashboard = ({
         </Container>
       </div>
       <div className={classes.root}>
-        <List justify={'center'}>
-          <div>
-            <div
-              style={{flexGrow: 1}}
-
-            >
-              {
-                allTacticalActivities.map(tacticalActivity => (
-                  <div className={classes.activity}>
-                    <Card key={tacticalActivity.id}>
-                      <div className={classes.content}>
-                        <div className={classes.activityAvatar}>
-                          <TacticalActivityIcon tacticalActivity={tacticalActivity}
-                                                size={{
-                                                  width: '45px',
-                                                  height: '45px',
-                                                }}/>
-                        </div>
-                        <div className={classes.activityName}>{tacticalActivity.name}</div>
-                        <div>
-                          <Switch checked={activitySwitches[tacticalActivity.id]}
-                                  onChange={() => toggleActivity(tacticalActivity.id)}/>
-                        </div>
-                      </div>
-                    </Card>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        </List>
+        <ActivityList
+          actionComponent={tacticalActivity =>
+            <Switch checked={activitySwitches[tacticalActivity.id]}
+                    onChange={() => toggleActivity(tacticalActivity.id)}/>
+          }
+        />
         <div className={classes.inputContainer}>
           <Fab color={'primary'}
                className={classes.save}
