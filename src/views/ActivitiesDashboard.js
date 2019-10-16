@@ -7,16 +7,14 @@ import AddIcon from '@material-ui/icons/Add'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
-import {objectToArray} from "../miscellanous/Tools";
 import {createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
-import {selectTacticalActivityState} from "../reducers";
-import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import ActivityList from "./ActivityList";
 import IconButton from "@material-ui/core/IconButton";
 import SettingsIcon from '@material-ui/icons/Settings';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -113,15 +111,12 @@ export const TacticalActivitySettingsComponent = ({
 };
 
 
-const ActivitiesDashboard = ({activities, dispatch, history}) => {
+const ActivitiesDashboard = ({dispatch, history}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
     dispatch(createViewedTacticalActivitesEvent());
   }, [didMountState]);
-
-  const allTacticalActivites: TacticalActivity[] = objectToArray(activities);
-
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -145,14 +140,21 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
         <Button variant={'contained'}
                 color={'primary'}
                 className={classes.button}>
-          <AddIcon/> Create Activity
+          <AddIcon/> Create
         </Button>
       </Link>
       <Link to={`./rank/dashboard`} style={{textDecoration: 'none'}}>
         <Button variant={'contained'}
                 color={'primary'}
                 className={classes.button}>
-          <FormatListNumberedIcon/> Order Activities
+          <FormatListNumberedIcon/> Order
+        </Button>
+      </Link>
+      <Link to={`./hidden`} style={{textDecoration: 'none'}}>
+        <Button variant={'contained'}
+                color={'primary'}
+                className={classes.button}>
+          <VisibilityOffIcon/> Hidden
         </Button>
       </Link>
       <ActivityList
@@ -167,11 +169,8 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
   );
 };
 
-const mapStateToProps = state => {
-  const {activities} = selectTacticalActivityState(state);
-  return {
-    activities,
-  }
+const mapStateToProps = _ => {
+  return {}
 };
 
 export default connect(mapStateToProps)(withRouter(ActivitiesDashboard));
