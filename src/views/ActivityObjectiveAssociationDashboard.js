@@ -77,14 +77,10 @@ const useStyles = makeStyles(theme => (
 const ObjectiveActivityAssociationDashboard = ({
                                                  dispatch,
                                                  objectives,
-                                                 activities,
                                                  history,
                                                  match: {params: {activityId}}
                                                }) => {
   const classes = useStyles();
-  const mappedTacticalObjectives = objectToArray(activities).reduce(dictionaryReducer, {});
-  const rememberedActivity: TacticalActivity = mappedTacticalObjectives[activityId];
-
   const allObjectives = objectToArray(objectives);
   const associatedObjectiveDictionary = allObjectives
     .filter(objective => (objective.associatedActivities || []).indexOf(activityId) > -1)
@@ -106,19 +102,27 @@ const ObjectiveActivityAssociationDashboard = ({
   };
 
   const saveActivity = () => {
-    // todo: go through all of the objectives and remove or add them
-    // const objective: Objective = {
-    //   ...rememberedObjective,
-    //   associatedActivities: objectToKeyValueArray(objectiveSwitches)
-    //     .filter(kv => kv.value)
-    //     .map(kv => kv.key)
-    // };
-    // dispatch(updatedObjective(objective));
-    // history.push('/strategy/objectives/')
+    const updatedObjectives = objectToKeyValueArray(objectiveSwitches)
+      .map(idToObjective => {
+        const objective: Objective = objectives[idToObjective.key];
+        const updatedObjective = {
+          ...objective,
+          associatedActivities: [
+            ...(objective.associatedActivities.filter(a=>!!a) || []),
+          ]
+        };
+        if(idToObjective.value){
+          updatedObjective.associatedActivities.push(activityId)
+        }
+
+        return updatedObjective
+      });
+    updatedObjectives.forEach(objective => dispatch(updatedObjective(objective)));
+    history.push('/tactical/activities/')
   };
 
   const discardChanges = () => {
-    history.push('/strategy/objectives/');
+    history.push('/tactical/activities/');
   };
 
 
@@ -150,8 +154,8 @@ const ObjectiveActivityAssociationDashboard = ({
             >
               {
                 allObjectives.map((objective: Objective) => (
-                  <div className={classes.activity}>
-                    <Card key={objective.id}>
+                  <div key={objective.id} className={classes.activity}>
+                    <Card>
                       <div className={classes.content}>
                         <div className={classes.activityAvatar}>
                           <GoalIcon  objective={objective}
@@ -195,10 +199,8 @@ const ObjectiveActivityAssociationDashboard = ({
 
 const mapStateToProps = state => {
   const {objectives} = selectStrategyState(state);
-  const {activities} = selectTacticalActivityState(state);
   return {
-    objectives,
-    activities
+    objectives
   }
 };
 
