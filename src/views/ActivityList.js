@@ -83,8 +83,9 @@ const ActivityList = (props: Props) => {
           >
             {
               allTacticalActivities.map(tacticalActivity => (
-                <div className={classes.activity}>
-                  <Card key={tacticalActivity.id}>
+                <div key={tacticalActivity.id}
+                     className={classes.activity}>
+                  <Card>
                     <div className={classes.content}>
                       <div className={classes.activityAvatar}>
                         <TacticalActivityIcon tacticalActivity={tacticalActivity}
