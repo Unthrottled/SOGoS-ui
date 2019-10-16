@@ -48,7 +48,6 @@ const useStyles = makeStyles(theme => ({
   },
   activityIcon: {
     marginLeft: theme.spacing(1),
-    opacity: 0.75,
   },
 }));
 

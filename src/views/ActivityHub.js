@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   },
   hubRoot: {
-    position: 'absolute',
-    top: theme.spacing(7),
+    position: 'sticky',
+    top: theme.spacing(1),
   },
   container: {
     background: 'rgba(0,0,0,0.90)',
