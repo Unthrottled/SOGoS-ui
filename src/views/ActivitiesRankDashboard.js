@@ -9,7 +9,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 import {withRouter} from "react-router-dom";
 import {objectToArray} from "../miscellanous/Tools";
 import {
-  createFetchedTacticalActivitesEvent,
+  createReplaceActiveActivitesEvent,
   createReRankedTacticalActivitiesEvent,
   createViewedTacticalActivitesEvent
 } from "../events/TacticalEvents";
@@ -215,7 +215,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       changedActivities.push(fromDude);
 
       dispatch(createReRankedTacticalActivitiesEvent(changedActivities));
-      dispatch(createFetchedTacticalActivitesEvent(allTacticalActivities));
+      dispatch(createReplaceActiveActivitesEvent(allTacticalActivities));
     }
   }
 

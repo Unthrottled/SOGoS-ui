@@ -7,7 +7,7 @@ import {
   CACHED_TACTICAL_ACTIVITY,
   CREATED_ACTIVITY,
   DELETED_ACTIVITY,
-  FOUND_ACTIVITIES, RESTORED_ACTIVITY,
+  FOUND_ACTIVITIES, REPLACE_ACTIVITIES, RESTORED_ACTIVITY,
   SYNCED_TACTICAL_ACTIVITIES,
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
@@ -88,6 +88,16 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
           ...state.activity,
           activities: rememberedActivities,
           archivedActivities: archivedActivities.reduce(dictionaryReducer, {}),
+        },
+      };
+    case REPLACE_ACTIVITIES:
+      return {
+        ...state,
+        activity: {
+          ...state.activity,
+          activities: action.payload
+            .filter(tactActivity => !tactActivity.hidden)
+            .reduce(rankReducer, {}),
         },
       };
     case CACHED_TACTICAL_ACTIVITY: {

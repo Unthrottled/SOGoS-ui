@@ -1,7 +1,8 @@
 import {call, put, select} from 'redux-saga/effects'
 import type {TacticalActivity} from "../../types/TacticalModels";
 import {
-  createArchivedTacticalActivityEvent, createFetchedTacticalActivitesEvent, createReRankedTacticalActivitiesEvent,
+  createArchivedTacticalActivityEvent,
+  createReRankedTacticalActivitiesEvent,
   createRestoredTacticalActivityEvent,
   createUpdatedTacticalActivityEvent
 } from "../../events/TacticalEvents";
@@ -35,6 +36,7 @@ export function* tacticalActivityHiddenSaga({payload}) {
   yield put(createUpdatedTacticalActivityEvent(tacticalActivity));
   yield put(createArchivedTacticalActivityEvent(tacticalActivity));
 }
+
 export function* tacticalActivityShownSaga({payload}) {
 
   const tacticalActivity: TacticalActivity = {

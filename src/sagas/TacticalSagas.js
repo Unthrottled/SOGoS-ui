@@ -2,7 +2,10 @@ import {all, call, fork, take, takeEvery} from "@redux-saga/core/effects";
 import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
 import {
   CREATED_ACTIVITY,
-  DELETED_ACTIVITY, HID_ACTIVITY, RANKED_ACTIVITIES, REQUESTED_ACTIVITY_DELETION, UNHID_ACTIVITY,
+  HID_ACTIVITY,
+  RANKED_ACTIVITIES,
+  REQUESTED_ACTIVITY_DELETION,
+  UNHID_ACTIVITY,
   UPDATED_ACTIVITY,
   UPDATED_POMODORO_SETTINGS,
   VIEWED_ACTIVITIES,
@@ -12,7 +15,8 @@ import {FOUND_WIFI} from "../events/NetworkEvents";
 import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
 import {
   activityChangesSaga,
-  activityCreationSaga, activityRankSaga,
+  activityCreationSaga,
+  activityRankSaga,
   activityTerminationSaga
 } from "./tactical/TacticalActivityCreationSagas";
 import {fetchSettings, settingsSyncSaga, updatePomodoroSaga} from "./tactical/PomodoroSettingsSagas";
