@@ -12,8 +12,8 @@ import {ColorPicker} from "./ColorPicker";
 import {PopupModal} from "./PopupModal";
 import {
   createCreatedTacticalActivityEvent,
-  createDeletedTacticalActivityEvent,
-  createHideTacticalActivityEvent, createRequestToDeleteTacticalActivityEvent,
+  createHideTacticalActivityEvent,
+  createRequestToDeleteTacticalActivityEvent,
   createUpdatedTacticalActivityEvent
 } from "../events/TacticalEvents";
 import type {TacticalActivity} from "../types/TacticalModels";
@@ -25,12 +25,12 @@ import {PersistActions} from "./PersistActions";
 import {mapTacticalActivitiesToID} from "./PieFlavored";
 
 const suggestions = [
-  {label: 'Technical'},
-  {label: 'Recovery'},
-  {label: 'Social'},
-  {label: 'Financial'},
-  {label: 'Education'},
-  {label: 'Career'},
+  {label: 'Deliberate Practice'},
+  {label: 'Physical'},
+  {label: 'Cognitive'},
+  {label: 'Overhead'},
+  {label: 'Pastime'},
+  {label: 'Leisure'},
 ].map(suggestion => ({
   value: suggestion.label,
   label: suggestion.label,
@@ -130,11 +130,15 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
         line: defaultLine
       },
       rank: activities.length + 1,
+      categories: [],
     };
 
   const [tacticalActivityName, setTacticalActivityName] = useState(currentTacticalActivity.name);
   const handleTacticalNameChange = event => setTacticalActivityName(event.target.value);
 
+  const [categoryValues, setMulti] = React.useState(currentTacticalActivity.categories ?
+    currentTacticalActivity.categories.map(catVal => ({value: catVal, label: catVal})): null );
+  
   const saveTacticalActivity = () => {
     const tacticalActivity: TacticalActivity = {
       id: activityId,
@@ -144,7 +148,8 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
       iconCustomization: {
         background: backgroundColor,
         line: lineColor,
-      }
+      },
+      categories: categoryValues.map(catVal => catVal.value)
     };
     if (!mappedTacticalActivities[tacticalActivity.id]) {
       dispatch(createCreatedTacticalActivityEvent(tacticalActivity));
@@ -178,7 +183,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
       },
     }),
   };
-  const [multi, setMulti] = React.useState(null);
+  
   const [finnaDelete, setFinnaDelete] = useState(false);
 
   const handleChangeMulti = (value) => setMulti(value);
@@ -245,7 +250,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           }}
           options={suggestions}
           components={components}
-          value={multi}
+          value={categoryValues}
           onChange={handleChangeMulti}
           isMulti
         />
