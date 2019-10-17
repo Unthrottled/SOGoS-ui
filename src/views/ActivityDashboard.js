@@ -13,7 +13,7 @@ import {PopupModal} from "./PopupModal";
 import {
   createCreatedTacticalActivityEvent,
   createDeletedTacticalActivityEvent,
-  createHideTacticalActivityEvent,
+  createHideTacticalActivityEvent, createRequestToDeleteTacticalActivityEvent,
   createUpdatedTacticalActivityEvent
 } from "../events/TacticalEvents";
 import type {TacticalActivity} from "../types/TacticalModels";
@@ -165,11 +165,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
-    dispatch(createDeletedTacticalActivityEvent(currentTacticalActivity));
-    history.push('/tactical/activities/')
-  };
-  const completeThatObjectiveYo = () => {
-    dispatch(createHideTacticalActivityEvent(currentTacticalActivity));
+    dispatch(createRequestToDeleteTacticalActivityEvent(currentTacticalActivity));
     history.push('/tactical/activities/')
   };
 
@@ -184,7 +180,6 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
   };
   const [multi, setMulti] = React.useState(null);
   const [finnaDelete, setFinnaDelete] = useState(false);
-  const [finnaComplete, setFinnaComplete] = useState(false);
 
   const handleChangeMulti = (value) => setMulti(value);
 
@@ -192,7 +187,6 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
   const [backgroundColor, setBackgroundColor] = useState((iconCustomization && iconCustomization.background) || defaultBackground);
   const [lineColor, setLineColor] = useState((iconCustomization && iconCustomization.line) || defaultLine);
   const dismissDeletionWindow = () => setFinnaDelete(false);
-  const dismissCompletionWindow = () => setFinnaComplete(false);
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -274,16 +268,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
                   onDismiss={dismissDeletionWindow}
                   onNegativeAction={dismissDeletionWindow}
                   onPositiveAction={wipeObjectiveOffOfTheFaceOfThePlanet}
-                  contents={"Woah! Are you sure you want to delete this objective?"}
-      />
-      <PopupModal open={finnaComplete}
-                  negativeActionText={"No, I'm still working"}
-                  positiveActionText={"Yes, I'm done"}
-                  title={"Congratulations!"}
-                  onDismiss={dismissCompletionWindow}
-                  onNegativeAction={dismissCompletionWindow}
-                  onPositiveAction={completeThatObjectiveYo}
-                  contents={"Excellent work! Are ready to complete your objective?"}
+                  contents={"Woah! Are you sure you want to delete this activity?"}
       />
     </LoggedInLayout>
   );

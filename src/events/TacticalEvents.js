@@ -9,6 +9,7 @@ import type {
 export const CREATED_ACTIVITY: 'CREATED_ACTIVITY' = 'CREATED_ACTIVITY';
 export const UPDATED_ACTIVITY: 'UPDATED_ACTIVITY' = 'UPDATED_ACTIVITY';
 export const DELETED_ACTIVITY: 'DELETED_ACTIVITY' = 'DELETED_ACTIVITY';
+export const REQUESTED_ACTIVITY_DELETION: 'REQUESTED_ACTIVITY_DELETION' = 'REQUESTED_ACTIVITY_DELETION';
 export const HID_ACTIVITY: 'HID_ACTIVITY' = 'HID_ACTIVITY';
 export const UNHID_ACTIVITY: 'UNHID_ACTIVITY' = 'UNHID_ACTIVITY';
 export const FOUND_ACTIVITIES: 'FOUND_ACTIVITIES' = 'FOUND_ACTIVITIES';
@@ -102,6 +103,11 @@ export const createUpdatedTacticalActivityEvent = (tacticalActivity: TacticalAct
 
 export const createDeletedTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
   type: DELETED_ACTIVITY,
+  payload: tacticalActivity,
+});
+
+export const createRequestToDeleteTacticalActivityEvent = (tacticalActivity: TacticalActivity) => ({
+  type: REQUESTED_ACTIVITY_DELETION,
   payload: tacticalActivity,
 });
 

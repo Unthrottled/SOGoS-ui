@@ -10,12 +10,7 @@ import type {TacticalActivityState} from "../../reducers/TacticalReducer";
 import {objectToArray} from "../../miscellanous/Tools";
 
 
-export function* tacticalActivityHiddenSaga({payload}) {
-  const tacticalActivity: TacticalActivity = {
-    ...payload,
-    hidden: true,
-  };
-
+export function* removalReRankSaga(tacticalActivity) {
   const tacticalActivityState: TacticalActivityState = yield select(selectTacticalActivityState);
   const allTacticalActivites = objectToArray(tacticalActivityState.activities);
 
@@ -26,6 +21,15 @@ export function* tacticalActivityHiddenSaga({payload}) {
     });
 
   yield put(createReRankedTacticalActivitiesEvent(changedActivities));
+}
+
+export function* tacticalActivityHiddenSaga({payload}) {
+  const tacticalActivity: TacticalActivity = {
+    ...payload,
+    hidden: true,
+  };
+
+  yield call(removalReRankSaga, tacticalActivity);
 
   delete tacticalActivity.rank;
   yield put(createUpdatedTacticalActivityEvent(tacticalActivity));

@@ -5,9 +5,14 @@ import {selectUserState} from "../../reducers";
 import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
 import {createCachedDataEvent} from "../../events/UserEvents";
 import type {CachedTacticalActivity, TacticalActivity} from "../../types/TacticalModels";
-import {createCachedTacticalActivityEvent, createSyncedTacticalActivityEvent} from "../../events/TacticalEvents";
+import {
+  createCachedTacticalActivityEvent,
+  createDeletedTacticalActivityEvent,
+  createSyncedTacticalActivityEvent
+} from "../../events/TacticalEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {BULK_ACTIVITY_UPLOAD_URL} from "./TacticalActivitySyncSaga";
+import {removalReRankSaga} from "./TacticalActivityVisibilitySagas";
 
 export function* activityCreationSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityCreateSaga, activityUploadToCached);
@@ -33,10 +38,8 @@ export function* activityRankSaga({payload}) {
 
 export function* activityTerminationSaga({payload}) {
   yield call(activityAPIInteractionSaga, payload, activityDeleteSaga, activityDeleteToCached);
-}
-
-export function* activityCompletionSaga({payload}) {
-  yield call(activityAPIInteractionSaga, payload, activityCompleteSaga, activityCompleteToCached);
+  yield call(removalReRankSaga, payload);
+  yield put(createDeletedTacticalActivityEvent(payload))
 }
 
 export function* activityCreateSaga(activity: TacticalActivity) {

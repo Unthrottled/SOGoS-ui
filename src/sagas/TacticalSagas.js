@@ -2,7 +2,7 @@ import {all, call, fork, take, takeEvery} from "@redux-saga/core/effects";
 import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
 import {
   CREATED_ACTIVITY,
-  DELETED_ACTIVITY, HID_ACTIVITY, RANKED_ACTIVITIES, UNHID_ACTIVITY,
+  DELETED_ACTIVITY, HID_ACTIVITY, RANKED_ACTIVITIES, REQUESTED_ACTIVITY_DELETION, UNHID_ACTIVITY,
   UPDATED_ACTIVITY,
   UPDATED_POMODORO_SETTINGS,
   VIEWED_ACTIVITIES,
@@ -46,7 +46,7 @@ function* listenForTacticalEvents() {
   yield takeEvery(CREATED_ACTIVITY, activityCreationSaga);
   yield takeEvery(UPDATED_ACTIVITY, activityChangesSaga);
   yield takeEvery(RANKED_ACTIVITIES, activityRankSaga);
-  yield takeEvery(DELETED_ACTIVITY, activityTerminationSaga);
+  yield takeEvery(REQUESTED_ACTIVITY_DELETION, activityTerminationSaga);
   yield takeEvery(HID_ACTIVITY, tacticalActivityHiddenSaga);
   yield takeEvery(UNHID_ACTIVITY, tacticalActivityShownSaga);
 }

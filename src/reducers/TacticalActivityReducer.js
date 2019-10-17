@@ -47,7 +47,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
     case UPDATED_ACTIVITY:
       const newActivity = [action.payload];
       return updateStateWithActivities(newActivity, state);
-    case DELETED_ACTIVITY: //TODO: re rank when deleted.
+    case DELETED_ACTIVITY:
       const {payload: deletedActivity} = action;
       const newActivities = objectToArray(state.activity.activities).filter(suspiciousActivity =>
         suspiciousActivity.id !== deletedActivity.id);
