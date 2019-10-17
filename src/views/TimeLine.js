@@ -73,6 +73,7 @@ const TimeLine = ({
                     tacticalActivities,
                     currentActivity,
                     bottomActivity,
+                    archivedActivities,
                     dispatch,
                   }) => {
   const classes = withStyles();
@@ -209,7 +210,10 @@ const TimeLine = ({
         return keyValue.value
       });
 
-      const mappedTacticalActivities = mapTacticalActivitiesToID(tacticalActivities);
+      const mappedTacticalActivities = {
+        ...mapTacticalActivitiesToID(tacticalActivities),
+        ...archivedActivities
+      };
       const colorToActivity = constructColorMappings(mappedTacticalActivities);
 
       timeLanes.append("g")
@@ -274,13 +278,14 @@ const TimeLine = ({
 
 const mapStateToProps = state => {
   const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
-  const {activities} = selectTacticalActivityState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
   const {currentActivity} = selectActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
     relativeFromTime: from,
     tacticalActivities: activities,
+    archivedActivities,
     currentActivity,
     bottomActivity,
   }

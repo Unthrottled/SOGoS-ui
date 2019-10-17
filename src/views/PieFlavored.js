@@ -39,11 +39,13 @@ export const responsivefy = svg => {
 export const mapTacticalActivitiesToID = tacticalActivities =>
   objectToArray(tacticalActivities).reduce(dictionaryReducer, {});
 
-const PieFlavored = ({ activityFeed,
+const PieFlavored = ({
+                       activityFeed,
                        relativeToTime,
                        relativeFromTime,
                        tacticalActivities,
                        bottomActivity,
+                       archivedActivities,
                      }) => {
   const activityProjection = activityFeed.reduceRight((accum, activity) => {
     if (accum.trackedTime < 0) {
@@ -97,7 +99,7 @@ const PieFlavored = ({ activityFeed,
 
   const bottomCapActivity: Activity = bottomActivity;
   const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
-  if(!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope){
+  if (!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope) {
     const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
     if (!bins[bottomActivityIdentifier]) {
       bins[bottomActivityIdentifier] = []
@@ -126,7 +128,7 @@ const PieFlavored = ({ activityFeed,
     }, []);
 
 
-  const totalTime = pieData.reduceRight((accum, b)=> accum + b.value, 0);
+  const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
 
   useEffect(() => {
     if (activityFeed.length > 0) {
@@ -153,7 +155,10 @@ const PieFlavored = ({ activityFeed,
         .innerRadius(radius * 0.7)
         .outerRadius(radius - 1);
 
-      const mappedTacticalActivities = mapTacticalActivitiesToID(tacticalActivities);
+      const mappedTacticalActivities = {
+        ...mapTacticalActivitiesToID(tacticalActivities),
+        ...archivedActivities,
+      };
 
       const idToColor = constructColorMappings(mappedTacticalActivities);
 
@@ -184,12 +189,13 @@ const PieFlavored = ({ activityFeed,
 
 const mapStateToProps = state => {
   const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
-  const {activities} = selectTacticalActivityState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     activityFeed,
     relativeToTime: to,
     relativeFromTime: from,
     tacticalActivities: activities,
+    archivedActivities,
     bottomActivity,
   }
 };

@@ -273,7 +273,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
                   onDismiss={dismissDeletionWindow}
                   onNegativeAction={dismissDeletionWindow}
                   onPositiveAction={wipeObjectiveOffOfTheFaceOfThePlanet}
-                  contents={"Woah! Are you sure you want to delete this activity?"}
+                  contents={"Woah! Are you sure you want to delete this activity? You'll lose all history of what you have done!"}
       />
     </LoggedInLayout>
   );
