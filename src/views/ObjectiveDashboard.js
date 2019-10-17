@@ -28,11 +28,13 @@ import {PersistActions} from "./PersistActions";
 
 const suggestions = [
   {label: 'Technical'},
-  {label: 'Recovery'},
-  {label: 'Social'},
+  {label: 'Health'},
+  {label: 'Creative'},
   {label: 'Financial'},
   {label: 'Education'},
+  {label: 'Recovery'},
   {label: 'Career'},
+  {label: 'Social'},
 ].map(suggestion => ({
   value: suggestion.label,
   label: suggestion.label,
@@ -138,11 +140,12 @@ const ObjectiveDashboard = ({
       iconCustomization: {
         background: defaultSky
       },
+      categories: [],
       keyResults: [
         {
           id: uuid(),
         }
-      ]
+      ],
     };
   const [keyResults, setKeyResults] = useState(objective.keyResults);
   const [objectiveValue, setObjective] = useState(objective.valueStatement);
@@ -165,6 +168,10 @@ const ObjectiveDashboard = ({
       .filter(keyResult => keyResult.id !== idToRemove))
   };
 
+  const [categoryValues, setMulti] = React.useState(objective.categories ?
+    objective.categories.map(catVal => ({value: catVal, label: catVal})): null );
+
+
   const saveObjective = () => {
     const objective: Objective = {
       id: objectiveId,
@@ -173,7 +180,8 @@ const ObjectiveDashboard = ({
       keyResults,
       iconCustomization: {
         background: skyColor,
-      }
+      },
+      categories: categoryValues.map(catVal => catVal.value),
     };
     if (!objectives[objective.id]) {
       dispatch(createdObjective(objective));
@@ -206,7 +214,6 @@ const ObjectiveDashboard = ({
       },
     }),
   };
-  const [multi, setMulti] = React.useState(null);
   const [finnaDelete, setFinnaDelete] = useState(false);
   const [finnaComplete, setFinnaComplete] = useState(false);
 
@@ -272,7 +279,7 @@ const ObjectiveDashboard = ({
           }}
           options={suggestions}
           components={components}
-          value={multi}
+          value={categoryValues}
           onChange={handleChangeMulti}
           isMulti
         />

@@ -20,6 +20,7 @@ export type Objective = {
   keyResults: KeyResult[],
   iconCustomization: IconCustomization,
   associatedActivities: string[],
+  categories: string[],
 }
 
 export type CachedObjective = {
