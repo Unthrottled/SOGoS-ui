@@ -155,6 +155,11 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
     }
   };
 
+  const hideTacticalActivity = () => {
+    dispatch(createHideTacticalActivityEvent(mappedTacticalActivities[activityId]));
+    history.push('/tactical/activities/');
+  };
+
   const discardChanges = () => {
     history.push('/tactical/activities/');
   };
@@ -254,8 +259,8 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           {...{
             ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
             ...(rememberedTacticalObjective ? {
-              onComplete: () => setFinnaComplete(true),
-              completionTitle: 'Archive Activity',
+              onComplete: hideTacticalActivity,
+              completionTitle: 'Hide Activity',
               completionIcon: ArchiveIcon,
             } : {}),
           }}
