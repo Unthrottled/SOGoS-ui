@@ -7,16 +7,14 @@ import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import {withRouter} from "react-router-dom";
-import {selectStrategyState, selectTacticalActivityState, selectUserState} from "../reducers";
+import {selectStrategyState} from "../reducers";
 import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
-import type {TacticalActivity} from "../types/TacticalModels";
 import {Card, Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
 import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
-import {dictionaryReducer} from "../reducers/StrategyReducer";
 import {GoalIcon} from "./GoalIcon";
 
 const useStyles = makeStyles(theme => (
@@ -108,10 +106,10 @@ const ObjectiveActivityAssociationDashboard = ({
         const updatedObjective = {
           ...objective,
           associatedActivities: [
-            ...(objective.associatedActivities.filter(a=>!!a) || []),
+            ...(objective.associatedActivities.filter(a => !!a) || []),
           ]
         };
-        if(idToObjective.value){
+        if (idToObjective.value) {
           updatedObjective.associatedActivities.push(activityId)
         }
 
@@ -158,11 +156,11 @@ const ObjectiveActivityAssociationDashboard = ({
                     <Card>
                       <div className={classes.content}>
                         <div className={classes.activityAvatar}>
-                          <GoalIcon  objective={objective}
-                                                size={{
-                                                  width: '45px',
-                                                  height: '45px',
-                                                }}/>
+                          <GoalIcon objective={objective}
+                                    size={{
+                                      width: '45px',
+                                      height: '45px',
+                                    }}/>
                         </div>
                         <div className={classes.activityName}>{objective.valueStatement}</div>
                         <div>

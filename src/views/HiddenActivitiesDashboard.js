@@ -3,11 +3,7 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import {withRouter} from "react-router-dom";
-import {
-  createHideTacticalActivityEvent,
-  createShowTacticalActivityEvent,
-  createViewedTacticalActivitesEvent
-} from "../events/TacticalEvents";
+import {createShowTacticalActivityEvent, createViewedTacticalActivitesEvent} from "../events/TacticalEvents";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
