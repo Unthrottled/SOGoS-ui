@@ -16,15 +16,17 @@ import {objectToArray} from "../miscellanous/Tools";
 import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "./GoalIcon";
 import Container from "@material-ui/core/Container";
-import {ActivityIcon} from "./ActivityIcon";
 
 const useStyles = makeStyles(theme => ({
   root: {
     textAlign: 'left',
-    margin: `0 ${theme.spacing(2)}px`
+    margin: `${theme.spacing(1)}px ${theme.spacing(2)}px`
   },
   button: {
     margin: theme.spacing(1)
+  },
+  activityIcon: {
+    marginRight: theme.spacing(.75),
   },
   heading: {
     fontSize: theme.typography.pxToRem(20),
@@ -33,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.fontWeightRegular,
   },
   objective: {
-    background: theme.palette.primary.main,
+    background: theme.palette.background.paper,
     color: theme.palette.primary.contrastText,
   },
   objectiveSummary: {},
@@ -46,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 
 const MAX_OBJECTIVES = 5;
 
-const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
+const ObjectivesDashboard = ({objectives, dispatch}) => {
   const classes = useStyles();
   const [didMountState] = useState('');
   useEffect(() => {
@@ -125,18 +127,14 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
                         <Button variant={'outlined'}
                                 color={'secondary'}
                                 className={classes.button}>
-                          <AddIcon/> Edit Objective
+                          Edit Objective
                         </Button>
                       </Link>
                       <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
                         <Button variant={'outlined'}
                                 color={'secondary'}
-                                style={{lineHeight: 1}}
                                 className={classes.button}>
-
-                          <ActivityIcon
-                            style={{marginRight: '5px'}}
-                            size={{width: '24px', height: '24px'}}/> Associate Activities
+                          Associate Activities
                         </Button>
                       </Link>
                     </div>
@@ -152,9 +150,8 @@ const ObjectivesDashboard = ({objectives, fullName, dispatch}) => {
 };
 
 const mapStateToProps = state => {
-  const {user: {information: {fullName}}, strategy: {objectives}} = state;
+  const {strategy: {objectives}} = state;
   return {
-    fullName,
     objectives,
   }
 };

@@ -52,9 +52,7 @@ export const ActivityIcon = (props: Props) => {
   }
 
   return (
-      <ReactSVG {...{
-        ...(props.styles ? props.styles : {}),
-      }} src={Activity} beforeInjection={(svg) => {
+      <ReactSVG src={Activity} beforeInjection={(svg) => {
         svg.setAttribute('width', usableSize.width || defaultSize.width);
         svg.setAttribute('height', usableSize.height || defaultSize.height);
         alterColor(svg, 'activityLine', usableLine, (node, color)=>{
