@@ -4,6 +4,7 @@ import LoggedInLayout from "./LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
+import EditIcon from '@material-ui/icons/Edit'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import uuid from 'uuid/v4';
 import {Link, withRouter} from "react-router-dom";
@@ -103,11 +104,11 @@ export const TacticalActivitySettingsComponent = ({
       <MenuItem onClick={() => {
         handleClose();
         history.push(`./${tacticalActivity.id}`)
-      }}>Edit </MenuItem>
+      }}>Edit <EditIcon style={{marginLeft: '8px'}} /></MenuItem>
       <MenuItem onClick={() => {
         handleClose();
         dispetch(createHideTacticalActivityEvent(tacticalActivity))
-      }}>Hide</MenuItem>
+      }}>Hide<VisibilityOffIcon style={{marginLeft: '8px'}}/></MenuItem>
     </Menu>
   </div>);
 };
