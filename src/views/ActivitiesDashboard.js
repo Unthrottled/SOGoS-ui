@@ -156,7 +156,7 @@ const ActivitiesDashboard = ({dispatch, history}) => {
         <Button variant={'contained'}
                 color={'primary'}
                 className={classes.button}>
-          <VisibilityOffIcon/> Hidden
+          <VisibilityOffIcon style={{marginRight: '2px'}}/> Hidden
         </Button>
       </Link>
       <ActivityList
