@@ -62,12 +62,12 @@ const useStyles = makeStyles(theme => (
     },
     inputContainer: {
       textAlign: 'center',
+      position: 'fixed',
+      bottom: theme.spacing(2),
+      width: '100%',
     },
     save: {
       margin: theme.spacing(2),
-    },
-    activityCard: {
-      maxWidth: 250,
     },
   }
 ));
