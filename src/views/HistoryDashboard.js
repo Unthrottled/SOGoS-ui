@@ -54,27 +54,6 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     overflow: 'auto',
@@ -85,8 +64,11 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.spacing(0.5),
   },
   fixedHeight: {
+    marginTop: theme.spacing(1),
     minHeight: 240,
     maxHeight: 500,
   },
@@ -96,10 +78,6 @@ const useStyles = makeStyles(theme => ({
     alignContent: 'center',
     margin: 'auto',
     padding: theme.spacing(3),
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
   },
   headerContent: {
     backgroundColor: theme.palette.background.paper,

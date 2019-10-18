@@ -12,11 +12,12 @@ import {objectToKeyValueArray} from "../miscellanous/Tools";
 import {getActivityBackgroundColor} from "../types/TacticalModels";
 import {getMeaningFullName, mapTacticalActivitiesToID} from "./PieFlavored";
 import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
+import {blue} from "@material-ui/core/colors";
 
 
 const withStyles = makeStyles(__ => ({
   timeBar: {
-    fillOpacity: .7,
+    fillOpacity: 1,
     strokeWidth: 6,
   },
 }));
@@ -24,7 +25,7 @@ const withStyles = makeStyles(__ => ({
 export const constructColorMappings = tacticalActivities => {
   const defaultColors = {};
   defaultColors[ActivityStrategy.GENERIC] = 'lime';
-  defaultColors[RECOVERY] = 'skyblue';
+  defaultColors[RECOVERY] = blue[500];
   return {
     ...objectToKeyValueArray(tacticalActivities)
       .map(kv => ({key: kv.key, value: getActivityBackgroundColor(kv.value)}))
@@ -186,7 +187,8 @@ const TimeLine = ({
       timeSVG.append("g")
         .attr("transform", `translate(0,${margin.top})`)
         .call(axis)
-        .attr('font-size', 'xx-large');
+        .attr('font-size', 'xx-large')
+        .attr('color','black');
 
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
