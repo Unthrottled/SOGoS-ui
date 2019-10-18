@@ -109,6 +109,9 @@ const useStyles = makeStyles(theme => (
       background: theme.palette.secondary.main,
       color: theme.palette.secondary.contrastText,
     },
+    persistActions: {
+      marginTop: theme.spacing(2),
+    },
     save: {
       position: 'relative',
       top: theme.spacing(1),
@@ -169,7 +172,7 @@ const ObjectiveDashboard = ({
   };
 
   const [categoryValues, setMulti] = React.useState(objective.categories ?
-    objective.categories.map(catVal => ({value: catVal, label: catVal})): null );
+    objective.categories.map(catVal => ({value: catVal, label: catVal})) : null);
 
 
   const saveObjective = () => {
@@ -260,7 +263,7 @@ const ObjectiveDashboard = ({
           className={classes.textField}
           label={'What you do want to accomplish?'}
           placeholder={'I want to use my time better.'}
-          variant={'filled'}
+          variant={'outlined'}
           margin={'normal'}
           {...(objective ? {defaultValue: objective.valueStatement} : {})}
           onBlur={handleObjectiveChange}
@@ -308,19 +311,24 @@ const ObjectiveDashboard = ({
         </List>
         <div>
           <Button variant={'contained'}
-                  color={'primary'}
+                  color={'secondary'}
                   onClick={addKeyResult}
                   className={classes.button}>
             <AddIcon/>Add Key Result
           </Button>
         </div>
-        <PersistActions
-          {...{
-            ...(rememberedObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-            ...(rememberedObjective ? {onComplete: () => setFinnaComplete(true), completionTitle: 'Complete Objective'} : {}),
-          }}
-          onCancel={discardChanges}
-          onSave={saveObjective}/>
+        <div className={classes.persistActions}>
+          <PersistActions
+            {...{
+              ...(rememberedObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+              ...(rememberedObjective ? {
+                onComplete: () => setFinnaComplete(true),
+                completionTitle: 'Complete Objective'
+              } : {}),
+            }}
+            onCancel={discardChanges}
+            onSave={saveObjective}/>
+        </div>
       </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}

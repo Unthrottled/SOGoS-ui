@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 export const MultiValue = props => (
   <Chip
+    color={'secondary'}
     label={props.children}
     className={clsx(props.selectProps.classes.chip, {
       [props.selectProps.classes.chipFocused]: props.isFocused,
