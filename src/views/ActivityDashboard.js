@@ -105,6 +105,9 @@ const useStyles = makeStyles(theme => (
       background: theme.palette.secondary.main,
       color: theme.palette.secondary.contrastText,
     },
+    persistActions: {
+      marginTop: theme.spacing(2),
+    },
     save: {
       position: 'relative',
       top: theme.spacing(1),
@@ -137,8 +140,8 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
   const handleTacticalNameChange = event => setTacticalActivityName(event.target.value);
 
   const [categoryValues, setMulti] = React.useState(currentTacticalActivity.categories ?
-    currentTacticalActivity.categories.map(catVal => ({value: catVal, label: catVal})): null );
-  
+    currentTacticalActivity.categories.map(catVal => ({value: catVal, label: catVal})) : null);
+
   const saveTacticalActivity = () => {
     const tacticalActivity: TacticalActivity = {
       id: activityId,
@@ -183,7 +186,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
       },
     }),
   };
-  
+
   const [finnaDelete, setFinnaDelete] = useState(false);
 
   const handleChangeMulti = (value) => setMulti(value);
@@ -217,13 +220,13 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
             lineColor={lineColor}
           />
           <div style={{display: 'flex-column', alignItems: 'center', justifyContent: 'center'}}>
+            <ColorPicker defaultColor={lineColor}
+                         onSelect={setLineColor}
+                         label={'Pulse Color'}
+            />
             <ColorPicker defaultColor={backgroundColor}
                          onSelect={setBackgroundColor}
                          label={'Background Color'}
-            />
-            <ColorPicker defaultColor={lineColor}
-                         onSelect={setLineColor}
-                         label={'Line Color'}
             />
           </div>
         </div>
@@ -231,7 +234,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           className={classes.textField}
           label={'What is it you do?'}
           placeholder={'Coding'}
-          variant={'filled'}
+          variant={'outlined'}
           margin={'normal'}
           {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.name} : {})}
           onBlur={handleTacticalNameChange}
@@ -254,17 +257,19 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           onChange={handleChangeMulti}
           isMulti
         />
-        <PersistActions
-          {...{
-            ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-            ...(rememberedTacticalObjective ? {
-              onComplete: hideTacticalActivity,
-              completionTitle: 'Hide Activity',
-              completionIcon: ArchiveIcon,
-            } : {}),
-          }}
-          onCancel={discardChanges}
-          onSave={saveTacticalActivity}/>
+        <div className={classes.persistActions}>
+          <PersistActions
+            {...{
+              ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+              ...(rememberedTacticalObjective ? {
+                onComplete: hideTacticalActivity,
+                completionTitle: 'Hide Activity',
+                completionIcon: ArchiveIcon,
+              } : {}),
+            }}
+            onCancel={discardChanges}
+            onSave={saveTacticalActivity}/>
+        </div>
       </Paper>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}

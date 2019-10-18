@@ -106,7 +106,7 @@ const ObjectiveActivityAssociationDashboard = ({
         const updatedObjective = {
           ...objective,
           associatedActivities: [
-            ...(objective.associatedActivities.filter(a => !!a) || []),
+            ...((objective.associatedActivities || []).filter(a => !!a) || []),
           ]
         };
         if (idToObjective.value) {
