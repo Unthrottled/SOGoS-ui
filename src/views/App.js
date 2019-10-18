@@ -5,7 +5,7 @@ import {appInitialized} from "../events/ApplicationLifecycleEvents";
 import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
-import {green, purple} from "@material-ui/core/colors";
+import {blue, amber} from "@material-ui/core/colors";
 import {Route, Switch} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -29,10 +29,10 @@ import HiddenActivitiesDashboard from "./HiddenActivitiesDashboard";
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
     primary: {
-      ...purple,
+      ...amber,
       alertColor: '#f9ff75',
     },
-    secondary: green,
+    secondary: blue,
   }
 }));
 
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
       '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
     },
     '*::-webkit-scrollbar-thumb': {
-      backgroundColor: purple["500"],
+      backgroundColor: amber["500"],
       outline: '1px solid slategrey'
     }
   }

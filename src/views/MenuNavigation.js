@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
   drawer: {
     backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
     position: 'fixed',
     height: '100%',
     width: '200px'
@@ -83,10 +84,10 @@ const MenuNavigation = ({guid}) => {
       <List>
         {menuTopics.map((topic, index) => (
           topic.path ?
-            (<Link key={topic.title} to={topic.path} style={{textDecoration: 'none'}}>
+            (<Link key={topic.title} to={topic.path} style={{textDecoration: 'none', color: 'inherit'}}>
               {getListItem(index, topic)}
             </Link>) :
-            (<a key={topic.title} href={topic.href} target={'_blank'} style={{textDecoration: 'none'}}>
+            (<a key={topic.title} href={topic.href} target={'_blank'} style={{textDecoration: 'none', color: 'inherit'}}>
               {getListItem(index, topic)}
             </a>)
         ))}

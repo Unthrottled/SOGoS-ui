@@ -15,7 +15,7 @@ import {
 } from "../types/ActivityModels";
 import {PomodoroTimer} from "./PomodoroTimer";
 import Stopwatch from "./Stopwatch";
-import {blue} from "@material-ui/core/colors";
+import {blue, green} from "@material-ui/core/colors";
 import {selectActivityState, selectTacticalState} from "../reducers";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {createCompletedPomodoroEvent} from "../events/ActivityEvents";
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(0.5),
     zIndex: 69,
-    background: theme.palette.secondary.main,
+    background: green[500],
   },
   recovery: {
     background: blue[500]
