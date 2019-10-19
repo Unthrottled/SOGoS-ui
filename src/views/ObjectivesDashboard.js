@@ -88,63 +88,65 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
             </Link>
           )
       }
-      <div className={classes.root}>
-        {
-          allObjectives.map(objective => (
-            <ExpansionPanel key={objective.id} className={classes.objective}>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon className={classes.objective}/>}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <GoalIcon objective={objective} size={{
-                  width: '75px',
-                  height: '75px',
-                }}/>
-                <Typography className={classes.heading}>{objective.valueStatement}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <div style={{display: 'flex', width: '100%'}}>
-                  <div style={{flexGrow: 2}}>
-                    <Typography gutterBottom>
-                      Key Completion Results:
-                    </Typography>
-                    <ul>
-                      {
-                        objective.keyResults.map(keyResult => (
-                          <li key={keyResult.id}>
-                            <Typography>
-                              {keyResult.valueStatement}
-                            </Typography>
-                          </li>
-                        ))
-                      }
-                    </ul>
-                  </div>
-                  <div>
-                    <div style={{display: 'flex', flexDirection: 'column', textAlign: 'right'}}>
-                      <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
-                        <Button variant={'outlined'}
-                                color={'secondary'}
-                                className={classes.button}>
-                          Edit Objective
-                        </Button>
-                      </Link>
-                      <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
-                        <Button variant={'outlined'}
-                                color={'secondary'}
-                                className={classes.button}>
-                          Associate Activities
-                        </Button>
-                      </Link>
+      <Container maxWidth={"lg"}>
+        <div className={classes.root}>
+          {
+            allObjectives.map(objective => (
+              <ExpansionPanel key={objective.id} className={classes.objective}>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon className={classes.objective}/>}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <GoalIcon objective={objective} size={{
+                    width: '75px',
+                    height: '75px',
+                  }}/>
+                  <Typography className={classes.heading}>{objective.valueStatement}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <div style={{display: 'flex', width: '100%'}}>
+                    <div style={{flexGrow: 2}}>
+                      <Typography gutterBottom>
+                        Key Completion Results:
+                      </Typography>
+                      <ul>
+                        {
+                          objective.keyResults.map(keyResult => (
+                            <li key={keyResult.id}>
+                              <Typography>
+                                {keyResult.valueStatement}
+                              </Typography>
+                            </li>
+                          ))
+                        }
+                      </ul>
+                    </div>
+                    <div>
+                      <div style={{display: 'flex', flexDirection: 'column', textAlign: 'right'}}>
+                        <Link to={`./${objective.id}`} style={{textDecoration: 'none'}}>
+                          <Button variant={'outlined'}
+                                  color={'secondary'}
+                                  className={classes.button}>
+                            Edit Objective
+                          </Button>
+                        </Link>
+                        <Link to={`./${objective.id}/tactics/association`} style={{textDecoration: 'none'}}>
+                          <Button variant={'outlined'}
+                                  color={'secondary'}
+                                  className={classes.button}>
+                            Associate Activities
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          ))
-        }
-      </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            ))
+          }
+        </div>
+      </Container>
     </LoggedInLayout>
   );
 };
