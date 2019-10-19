@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import ActivityList from "./ActivityList";
 import IconButton from "@material-ui/core/IconButton";
-import SettingsIcon from '@material-ui/icons/Settings';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import MenuItem from "@material-ui/core/MenuItem";
@@ -83,7 +83,7 @@ export const TacticalActivitySettingsComponent = ({
       onClick={handleMenu}
       color="inherit"
     >
-      <SettingsIcon/>
+      <MoreVertIcon/>
     </IconButton>
     <Menu
       id="menu-appbar"

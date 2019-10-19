@@ -15,7 +15,7 @@ import {
 } from "../events/TacticalEvents";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import type {TacticalActivity} from "../types/TacticalModels";
-import SettingsIcon from '@material-ui/icons/Settings';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import {Card} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
@@ -112,7 +112,7 @@ export const TacticalActivityRankComponent = ({
             onClick={handleMenu}
             color="inherit"
           >
-            <SettingsIcon/>
+            <MoreVertIcon/>
           </IconButton>
           <Menu
             id="menu-appbar"
