@@ -69,7 +69,7 @@
        d="M 234.36279,21.263914 A 101.29762,101.29762 0 0 1 133.4055,122.56097 101.29762,101.29762 0 0 1 31.769834,21.944579 101.29762,101.29762 0 0 1 132.04418,-80.028563 101.29762,101.29762 0 0 1 234.35365,19.902616"
        transform="rotate(46.407316)" />
     <path
-       style="fill:#169f16;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       style="fill:#faac00;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
        id="path819"
        sodipodi:type="arc"
        sodipodi:cx="76.285301"
