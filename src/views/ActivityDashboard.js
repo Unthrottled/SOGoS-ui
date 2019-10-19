@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import ArchiveIcon from '@material-ui/icons/Archive';
+import UnArchiveIcon from '@material-ui/icons/Unarchive';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
@@ -14,6 +15,7 @@ import {
   createCreatedTacticalActivityEvent,
   createHideTacticalActivityEvent,
   createRequestToDeleteTacticalActivityEvent,
+  createShowTacticalActivityEvent,
   createUpdatedTacticalActivityEvent
 } from "../events/TacticalEvents";
 import type {TacticalActivity} from "../types/TacticalModels";
@@ -119,10 +121,20 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ActivityDashboard = ({dispatch, activities, history, match: {params: {activityId}}}) => {
+const ActivityDashboard = ({
+                             dispatch,
+                             activities,
+                             history,
+                             archivedActivities,
+                             match: {params: {activityId}}
+                           }
+) => {
   const classes = useStyles();
   const theme = useTheme();
-  const mappedTacticalActivities = mapTacticalActivitiesToID(activities);
+  const mappedTacticalActivities = {
+    ...mapTacticalActivitiesToID(activities),
+    ...archivedActivities
+  };
   const rememberedTacticalObjective = mappedTacticalActivities[activityId];
 
   const currentTacticalActivity: TacticalActivity = mappedTacticalActivities[activityId] ||
@@ -168,6 +180,11 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
     history.push('/tactical/activities/');
   };
 
+  const unHideTacticalActivity = () => {
+    dispatch(createShowTacticalActivityEvent(mappedTacticalActivities[activityId]));
+    history.push('/tactical/activities/');
+  };
+
   const discardChanges = () => {
     history.push('/tactical/activities/');
   };
@@ -195,6 +212,21 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
   const [backgroundColor, setBackgroundColor] = useState((iconCustomization && iconCustomization.background) || defaultBackground);
   const [lineColor, setLineColor] = useState((iconCustomization && iconCustomization.line) || defaultLine);
   const dismissDeletionWindow = () => setFinnaDelete(false);
+
+  const archiveAction = currentTacticalActivity.hidden ? (
+    {
+      onComplete: unHideTacticalActivity,
+      completionTitle: 'Show Activity',
+      completionIcon: UnArchiveIcon,
+    }
+  ) : (
+    {
+      onComplete: hideTacticalActivity,
+      completionTitle: 'Hide Activity',
+      completionIcon: ArchiveIcon,
+    }
+  );
+
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -261,11 +293,7 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
           <PersistActions
             {...{
               ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-              ...(rememberedTacticalObjective ? {
-                onComplete: hideTacticalActivity,
-                completionTitle: 'Hide Activity',
-                completionIcon: ArchiveIcon,
-              } : {}),
+              ...(rememberedTacticalObjective ? archiveAction : {}),
             }}
             onCancel={discardChanges}
             onSave={saveTacticalActivity}/>
@@ -286,10 +314,11 @@ const ActivityDashboard = ({dispatch, activities, history, match: {params: {acti
 
 const mapStateToProps = state => {
   const {information: {fullName}} = selectUserState(state);
-  const {activities} = selectTacticalActivityState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     fullName,
     activities,
+    archivedActivities,
   };
 };
 

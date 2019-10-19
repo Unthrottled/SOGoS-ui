@@ -13,6 +13,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import MenuItem from "@material-ui/core/MenuItem";
+import EditIcon from '@material-ui/icons/Edit'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -102,7 +103,12 @@ export const TacticalActivitySettingsComponent = ({
       <MenuItem onClick={() => {
         handleClose();
         dispetch(createShowTacticalActivityEvent(tacticalActivity))
-      }}><VisibilityIcon className={classes.menuIcon}/> Show</MenuItem>
+      }}>Show <VisibilityIcon style={{marginLeft: '8px'}}
+                              className={classes.menuIcon}/></MenuItem>
+      <MenuItem onClick={() => {
+        handleClose();
+        history.push(`./${tacticalActivity.id}`)
+      }}>Edit <EditIcon style={{marginLeft: '20px'}} /></MenuItem>
     </Menu>
   </div>);
 };
