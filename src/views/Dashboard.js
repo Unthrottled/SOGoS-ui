@@ -29,16 +29,11 @@ const useStyles = makeStyles(theme => ({
   },
   gridItem: {
     padding: theme.spacing(1),
+    width: theme.spacing(40),
   }
 }));
 
 const placesToGo = [
-  {
-    name: 'History',
-    description: 'Look at all the shit you have done!',
-    icon: <HistoryIcon style={{fontSize: '100px'}}/>,
-    navigator: (history, guid) => () => history.push(`./${guid}/history/`)
-  },
   {
     name: 'Strategy',
     description: 'What shit do I need to get together?',
@@ -50,6 +45,12 @@ const placesToGo = [
     description: 'How to do I get my shit together?',
     icon: <TacticalIcon/>,
     navigator: (history, guid) => () => history.push(`./tactical/`)
+  },
+  {
+    name: 'History',
+    description: 'Look at all the shit you have done!',
+    icon: <HistoryIcon style={{fontSize: '100px'}}/>,
+    navigator: (history, guid) => () => history.push(`./${guid}/history/`)
   },
   {
     name: 'Settings',
