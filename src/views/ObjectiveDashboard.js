@@ -43,12 +43,18 @@ const suggestions = [
 const useStyles = makeStyles(theme => (
   {
     headerContent: {
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6, 0, 6),
       marginBottom: theme.spacing(1),
     },
     inputContainer: {
+      width: '100%',
+      background: theme.palette.background.paper,
+      color: theme.palette.common.black,
+      borderRadius: theme.spacing(1),
+    },
+    cardContent: {
       maxWidth: theme.spacing(75),
       margin: 'auto',
       padding: theme.spacing(3),
@@ -245,92 +251,94 @@ const ObjectiveDashboard = ({
           </Typography>
         </Container>
       </div>
-      <Paper className={classes.inputContainer}>
-        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-          <MountainIcon skyColor={skyColor}/>
-          <div style={{
-            display: 'flex-column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: 'auto 0',
-          }}>
-            <ColorPicker onSelect={setSkyColor}
-                         defaultColor={skyColor}
-                         label={'Background Color'}/>
+      <div className={classes.inputContainer}>
+        <div className={classes.cardContent}>
+          <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+            <MountainIcon skyColor={skyColor}/>
+            <div style={{
+              display: 'flex-column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 'auto 0',
+            }}>
+              <ColorPicker onSelect={setSkyColor}
+                           defaultColor={skyColor}
+                           label={'Background Color'}/>
 
+            </div>
+          </div>
+          <TextField
+            className={classes.textField}
+            label={'What you do want to accomplish?'}
+            placeholder={'I want to use my time better.'}
+            variant={'outlined'}
+            margin={'normal'}
+            {...(objective ? {defaultValue: objective.valueStatement} : {})}
+            onBlur={handleObjectiveChange}
+          />
+          <ReactSelect
+            classes={classes}
+            styles={selectStyles}
+            inputId="react-select-multiple"
+            TextFieldProps={{
+              label: 'Categories',
+              InputLabelProps: {
+                htmlFor: 'react-select-multiple',
+                shrink: true,
+              },
+              placeholder: 'Give your objective categories!',
+            }}
+            options={suggestions}
+            components={components}
+            value={categoryValues}
+            onChange={handleChangeMulti}
+            isMulti
+          />
+          <List>
+            {keyResults.map((topic) => (
+              <ListItem key={topic.id}>
+                <ListItemAvatar>
+                  <Avatar className={classes.avatar}>
+                    <DoneIcon/>
+                  </Avatar>
+                </ListItemAvatar>
+                <TextField
+                  className={classes.textField}
+                  label={'How will you know you are successful?'}
+                  placeholder={'50% of my time awake is spent doing what I want.'}
+                  variant={'outlined'}
+                  margin={'normal'}
+                  {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
+                  onBlur={event => updateResult(topic.id, event.target.value)}
+                />
+                <IconButton onClick={() => removeKeyResult(topic.id)}>
+                  <DeleteIcon/>
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+          <div>
+            <Button variant={'contained'}
+                    color={'secondary'}
+                    onClick={addKeyResult}
+                    className={classes.button}>
+              <AddIcon/>Add Key Result
+            </Button>
+          </div>
+          <div className={classes.persistActions}>
+            <PersistActions
+              {...{
+                ...(rememberedObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+                ...(rememberedObjective ? {
+                  onComplete: () => setFinnaComplete(true),
+                  completionTitle: 'Complete Objective'
+                } : {}),
+              }}
+              onCancel={discardChanges}
+              onSave={saveObjective}/>
           </div>
         </div>
-        <TextField
-          className={classes.textField}
-          label={'What you do want to accomplish?'}
-          placeholder={'I want to use my time better.'}
-          variant={'outlined'}
-          margin={'normal'}
-          {...(objective ? {defaultValue: objective.valueStatement} : {})}
-          onBlur={handleObjectiveChange}
-        />
-        <ReactSelect
-          classes={classes}
-          styles={selectStyles}
-          inputId="react-select-multiple"
-          TextFieldProps={{
-            label: 'Categories',
-            InputLabelProps: {
-              htmlFor: 'react-select-multiple',
-              shrink: true,
-            },
-            placeholder: 'Give your objective categories!',
-          }}
-          options={suggestions}
-          components={components}
-          value={categoryValues}
-          onChange={handleChangeMulti}
-          isMulti
-        />
-        <List>
-          {keyResults.map((topic) => (
-            <ListItem key={topic.id}>
-              <ListItemAvatar>
-                <Avatar className={classes.avatar}>
-                  <DoneIcon/>
-                </Avatar>
-              </ListItemAvatar>
-              <TextField
-                className={classes.textField}
-                label={'How will you know you are successful?'}
-                placeholder={'50% of my time awake is spent doing what I want.'}
-                variant={'outlined'}
-                margin={'normal'}
-                {...(topic.valueStatement ? {defaultValue: topic.valueStatement} : {})}
-                onBlur={event => updateResult(topic.id, event.target.value)}
-              />
-              <IconButton onClick={() => removeKeyResult(topic.id)}>
-                <DeleteIcon/>
-              </IconButton>
-            </ListItem>
-          ))}
-        </List>
-        <div>
-          <Button variant={'contained'}
-                  color={'secondary'}
-                  onClick={addKeyResult}
-                  className={classes.button}>
-            <AddIcon/>Add Key Result
-          </Button>
-        </div>
-        <div className={classes.persistActions}>
-          <PersistActions
-            {...{
-              ...(rememberedObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-              ...(rememberedObjective ? {
-                onComplete: () => setFinnaComplete(true),
-                completionTitle: 'Complete Objective'
-              } : {}),
-            }}
-            onCancel={discardChanges}
-            onSave={saveObjective}/>
-        </div>
-      </Paper>
+      </div>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
                   positiveActionText={"Yes, Get rid of it"}

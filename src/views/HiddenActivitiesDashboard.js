@@ -14,6 +14,8 @@ import Menu from "@material-ui/core/Menu";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import MenuItem from "@material-ui/core/MenuItem";
 import EditIcon from '@material-ui/icons/Edit'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -140,6 +142,13 @@ const HiddenActivitiesDashboard = ({dispatch, history}) => {
           <TacticalActivityIcon/>
         </Container>
       </div>
+      <Button variant={'contained'}
+              color={'primary'}
+              className={classes.button}
+              onClick={() => history.push('/tactical/activities/')}
+      >
+        <ArrowBackIcon/> Go back
+      </Button>
       <ActivityList
         hidden
         actionComponent={tacticalActivity => (

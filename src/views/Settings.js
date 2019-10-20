@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
-import {Paper, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import {withRouter} from "react-router-dom";
 import {createUpdatedPomodoroSettingsEvent} from "../events/TacticalEvents";
 import {selectPomodoroState} from "../reducers";
@@ -16,6 +16,12 @@ import {PersistActions} from "./PersistActions";
 
 const useStyles = makeStyles(theme => ({
   container: {
+    width: '100%',
+    background: theme.palette.background.paper,
+    color: theme.palette.common.black,
+    borderRadius: theme.spacing(1),
+  },
+  cardContent: {
     maxWidth: theme.spacing(75),
     margin: 'auto',
     padding: theme.spacing(3),
@@ -186,66 +192,68 @@ const SettingsBoard = ({
           <SettingsIcon style={{color: 'black', fontSize: '3em'}}/>
         </Container>
       </div>
-      <Paper className={classes.container}>
-        <TomatoIcon size={{width: 50, height: 50}}/>
-        <Typography gutterBottom>
-          Pomodoro Settings
-        </Typography>
-        <hr/>
-        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
-          Work Duration (minutes)
-        </Typography>
-        <SliderBoi
-          id={'pomodoro-work-time'}
-          label={'Working Duration (minutes)'}
-          defaultValue={workTime}
-          aria-labelledby="discrete-slider-always"
-          step={0.5}
-          onChangeCommitted={saveWorkTime}
-          min={5}
-          marks={workMarks}
-          max={workMarks[workMarks.length - 1].value}
-          valueLabelDisplay="auto"
-        />
-        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
-          Short Break Duration (minutes)
-        </Typography>
-        <SliderBoi
-          id={'pomodoro-recovery-time'}
-          label={'Working Duration (minutes)'}
-          defaultValue={recoveryTime}
-          aria-labelledby="discrete-slider-always"
-          step={0.5}
-          onChangeCommitted={saveRecoveryTime}
-          min={0.5}
-          marks={restMarks}
-          max={restMarks[restMarks.length - 1].value}
-          valueLabelDisplay="auto"
-        />
-        <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
-          Long Break Duration (minutes)
-        </Typography>
-        <SliderBoi
-          id={'pomodoro-long-recovery-time'}
-          label={'Working Duration (minutes)'}
-          defaultValue={longRecoveryTime}
-          aria-labelledby="discrete-slider-always"
-          step={0.5}
-          onChangeCommitted={saveLongRecoveryTime}
-          min={5}
-          marks={recoveryMarks}
-          max={recoveryMarks[recoveryMarks.length - 1].value}
-          valueLabelDisplay="auto"
-        />
-        <hr/>
-        <div>
-          <Typography>
-            Full Cycle Time (4 iterations): {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
+      <div className={classes.container}>
+        <div className={classes.cardContent}>
+          <TomatoIcon size={{width: 50, height: 50}}/>
+          <Typography gutterBottom>
+            Pomodoro Settings
           </Typography>
+          <hr/>
+          <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+            Work Duration (minutes)
+          </Typography>
+          <SliderBoi
+            id={'pomodoro-work-time'}
+            label={'Working Duration (minutes)'}
+            defaultValue={workTime}
+            aria-labelledby="discrete-slider-always"
+            step={0.5}
+            onChangeCommitted={saveWorkTime}
+            min={5}
+            marks={workMarks}
+            max={workMarks[workMarks.length - 1].value}
+            valueLabelDisplay="auto"
+          />
+          <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+            Short Break Duration (minutes)
+          </Typography>
+          <SliderBoi
+            id={'pomodoro-recovery-time'}
+            label={'Working Duration (minutes)'}
+            defaultValue={recoveryTime}
+            aria-labelledby="discrete-slider-always"
+            step={0.5}
+            onChangeCommitted={saveRecoveryTime}
+            min={0.5}
+            marks={restMarks}
+            max={restMarks[restMarks.length - 1].value}
+            valueLabelDisplay="auto"
+          />
+          <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
+            Long Break Duration (minutes)
+          </Typography>
+          <SliderBoi
+            id={'pomodoro-long-recovery-time'}
+            label={'Working Duration (minutes)'}
+            defaultValue={longRecoveryTime}
+            aria-labelledby="discrete-slider-always"
+            step={0.5}
+            onChangeCommitted={saveLongRecoveryTime}
+            min={5}
+            marks={recoveryMarks}
+            max={recoveryMarks[recoveryMarks.length - 1].value}
+            valueLabelDisplay="auto"
+          />
+          <hr/>
+          <div>
+            <Typography>
+              Full Cycle Time (4 iterations): {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
+            </Typography>
+          </div>
+          <PersistActions onSave={saveSettings}
+                          onCancel={discardChanges}/>
         </div>
-        <PersistActions onSave={saveSettings}
-                        onCancel={discardChanges} />
-      </Paper>
+      </div>
     </LoggedInLayout>
   );
 };

@@ -22,7 +22,6 @@ import type {TacticalActivity} from "../types/TacticalModels";
 import {selectTacticalActivityState, selectUserState} from "../reducers";
 import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
 import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
 import {PersistActions} from "./PersistActions";
 import {mapTacticalActivitiesToID} from "./PieFlavored";
 
@@ -41,12 +40,18 @@ const suggestions = [
 const useStyles = makeStyles(theme => (
   {
     headerContent: {
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6, 0, 6),
       marginBottom: theme.spacing(1),
     },
     inputContainer: {
+      width: '100%',
+      background: theme.palette.background.paper,
+      color: theme.palette.common.black,
+      borderRadius: theme.spacing(1),
+    },
+    cardContent: {
       maxWidth: theme.spacing(75),
       margin: 'auto',
       padding: theme.spacing(3),
@@ -246,60 +251,62 @@ const ActivityDashboard = ({
           </Typography>
         </Container>
       </div>
-      <Paper className={classes.inputContainer}>
-        <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-          <ActivityIcon
-            backgroundColor={backgroundColor}
-            lineColor={lineColor}
+      <div className={classes.inputContainer}>
+        <div className={classes.cardContent}>
+          <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+            <ActivityIcon
+              backgroundColor={backgroundColor}
+              lineColor={lineColor}
+            />
+            <div style={{display: 'flex-column', alignItems: 'center', justifyContent: 'center'}}>
+              <ColorPicker defaultColor={lineColor}
+                           onSelect={setLineColor}
+                           label={'Pulse Color'}
+              />
+              <ColorPicker defaultColor={backgroundColor}
+                           onSelect={setBackgroundColor}
+                           label={'Background Color'}
+              />
+            </div>
+          </div>
+          <TextField
+            className={classes.textField}
+            label={'What is it you do?'}
+            placeholder={'Coding'}
+            variant={'outlined'}
+            margin={'normal'}
+            {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.name} : {})}
+            onBlur={handleTacticalNameChange}
           />
-          <div style={{display: 'flex-column', alignItems: 'center', justifyContent: 'center'}}>
-            <ColorPicker defaultColor={lineColor}
-                         onSelect={setLineColor}
-                         label={'Pulse Color'}
-            />
-            <ColorPicker defaultColor={backgroundColor}
-                         onSelect={setBackgroundColor}
-                         label={'Background Color'}
-            />
+          <ReactSelect
+            classes={classes}
+            styles={selectStyles}
+            inputId="react-select-multiple"
+            TextFieldProps={{
+              label: 'Categories',
+              InputLabelProps: {
+                htmlFor: 'react-select-multiple',
+                shrink: true,
+              },
+              placeholder: 'Give your activity categories!',
+            }}
+            options={suggestions}
+            components={components}
+            value={categoryValues}
+            onChange={handleChangeMulti}
+            isMulti
+          />
+          <div className={classes.persistActions}>
+            <PersistActions
+              {...{
+                ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
+                ...(rememberedTacticalObjective ? archiveAction : {}),
+              }}
+              onCancel={discardChanges}
+              onSave={saveTacticalActivity}/>
           </div>
         </div>
-        <TextField
-          className={classes.textField}
-          label={'What is it you do?'}
-          placeholder={'Coding'}
-          variant={'outlined'}
-          margin={'normal'}
-          {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.name} : {})}
-          onBlur={handleTacticalNameChange}
-        />
-        <ReactSelect
-          classes={classes}
-          styles={selectStyles}
-          inputId="react-select-multiple"
-          TextFieldProps={{
-            label: 'Categories',
-            InputLabelProps: {
-              htmlFor: 'react-select-multiple',
-              shrink: true,
-            },
-            placeholder: 'Give your activity categories!',
-          }}
-          options={suggestions}
-          components={components}
-          value={categoryValues}
-          onChange={handleChangeMulti}
-          isMulti
-        />
-        <div className={classes.persistActions}>
-          <PersistActions
-            {...{
-              ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-              ...(rememberedTacticalObjective ? archiveAction : {}),
-            }}
-            onCancel={discardChanges}
-            onSave={saveTacticalActivity}/>
-        </div>
-      </Paper>
+      </div>
       <PopupModal open={finnaDelete}
                   negativeActionText={"No, I'll keep it"}
                   positiveActionText={"Yes, Get rid of it"}
