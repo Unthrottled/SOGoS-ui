@@ -15,6 +15,7 @@ import UpdateApplication from "./UpdateApplication";
 import {Link} from "react-router-dom";
 import MenuNavigation from "./MenuNavigation";
 import ManualSync from "./ManualSync";
+import {Reach} from "./Reach";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,7 +58,6 @@ const MenuAppBar = ({dispatch: dispetch}) => {
           <OfflineMode/>
           <ManualSync/>
           <Typography variant="h6" className={classes.title}>
-            <Link to={'/'} className={classes.link}>SOGoS</Link>
           </Typography>
           <UpdateApplication/>
           <InstallApplication/>
