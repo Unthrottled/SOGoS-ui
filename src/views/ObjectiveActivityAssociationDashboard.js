@@ -64,6 +64,7 @@ const useStyles = makeStyles(theme => (
       textAlign: 'center',
       position: 'fixed',
       bottom: theme.spacing(2),
+      left: 0,
       width: '100%',
     },
     save: {

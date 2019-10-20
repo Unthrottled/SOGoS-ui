@@ -58,8 +58,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     overflow: 'auto',
   },
-  container: {
-  },
+  container: {},
   paper: {
     display: 'flex',
     overflow: 'auto',
@@ -136,14 +135,12 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
         </Container>
       </div>
       <main className={classes.content}>
-        <Container maxWidth="lg" className={classes.container}>
-          <div className={fixedHeightPaper}>
-            <TimeLine/>
-          </div>
-          <div className={fixedHeightPaper}>
-            <PieFlavored/>
-          </div>
-        </Container>
+        <div className={fixedHeightPaper}>
+          <TimeLine/>
+        </div>
+        <div className={fixedHeightPaper}>
+          <PieFlavored/>
+        </div>
       </main>
     </LoggedInLayout>
   );

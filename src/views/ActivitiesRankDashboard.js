@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   activity: {
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(2)}px`,
+    padding: `${theme.spacing(0.5)}px 0px`,
   },
 }));
 

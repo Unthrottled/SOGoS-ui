@@ -5,8 +5,9 @@ import Activity from "./ActivityHub";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PausedPomodoro from "./PausedPomodoro";
 import SnackBoi from "./SnackBoi";
+import {Container} from "@material-ui/core";
 
-const useStyles = makeStyles(theme =>({
+const useStyles = makeStyles(theme => ({
   container: {
     minHeight: '100%',
     marginBottom: theme.spacing(9),
@@ -19,9 +20,11 @@ const LoggedInLayout = ({children, ...otherProperties}) => {
     <div {...otherProperties} className={classes.container}>
       <MenuAppBar/>
       <Activity/>
+      <Container maxWidth={"lg"}>
         {
           children
         }
+      </Container>
       <PausedPomodoro/>
       <SessionExpired/>
       <SnackBoi/>

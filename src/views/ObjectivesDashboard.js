@@ -20,7 +20,7 @@ import Container from "@material-ui/core/Container";
 const useStyles = makeStyles(theme => ({
   root: {
     textAlign: 'left',
-    margin: `${theme.spacing(1)}px ${theme.spacing(2)}px`
+    margin: `${theme.spacing(1)}px 0px`
   },
   button: {
     margin: theme.spacing(1)
@@ -88,7 +88,7 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
             </Link>
           )
       }
-      <Container maxWidth={"lg"}>
+
         <div className={classes.root}>
           {
             allObjectives.map(objective => (
@@ -146,7 +146,6 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
             ))
           }
         </div>
-      </Container>
     </LoggedInLayout>
   );
 };
