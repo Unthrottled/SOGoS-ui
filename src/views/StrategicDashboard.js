@@ -40,12 +40,11 @@ const StrategicDashboard = ({history}) => {
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Command Center
+            Strategize
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            What does it mean to succeed?
+            Figure out what you want to do and how you know you accomplished it.
           </Typography>
           <StrategyIcon/>
         </Container>
@@ -64,8 +63,8 @@ const StrategicDashboard = ({history}) => {
                 We all have things that we want to accomplish.
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Go here to choose your <strong>Top 3</strong> goals.
-                You can have up to 5 but limit to what is important.
+                Choose your <strong>Top 3</strong> goals.
+                You can have up to 5, but limit it to what is important.
               </Typography>
             </CardContent>
           </div>
