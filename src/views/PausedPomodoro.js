@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     fontSize: '5em',
-    color: green[800],
+    color: green[500],
   },
   cancel: {},
   cancelIcon: {
@@ -121,7 +121,6 @@ const PausedPomodoro = ({
           tacticalActivity && (
             <div className={classes.pivotContainer}>
               <div className={classes.pivotLabel}>
-                <SwapVert/>
                 <div>Pivoted to: {getActivityName(currentActivity)} </div>
               </div>
               <TacticalActivityIcon tacticalActivity={tacticalActivity}/>

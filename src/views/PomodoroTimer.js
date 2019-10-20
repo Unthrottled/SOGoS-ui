@@ -7,11 +7,11 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import ActivitySelection from "./ActivitySelection";
 import StopWatch from '@material-ui/icons/Timer';
 import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
     display: 'inline-flex',
-    marginTop: theme.spacing(1.5),
   },
   actionButton: {
     marginLeft: theme.spacing(1.5),
@@ -85,23 +85,26 @@ export const PomodoroTimer = ({
     <div className={classes.stopwatchContainer}>
       {
         !hidePause &&
-        (<div className={classes.swappo}
+        (<IconButton
+          color={'inherit'}
+          title={'Pivot to Activity'}
+          className={classes.swappo}
               onClick={openSelection}>
           <SwapVert/>
-        </div>)
+        </IconButton>)
       }
       <div style={{margin: 'auto'}}>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
       <div className={classes.actionButton}>
         {
-          !hidePause && (isPaused ?
-            (<div onClick={resumeTimer}>
-              <PlayArrow/>
-            </div>) :
-            (<div onClick={pauseTimer}>
+          !hidePause &&
+            (<IconButton
+              title={'Pause Pomodoro'}
+              color={'inherit'}
+                         onClick={pauseTimer}>
               <Pause/>
-            </div>))
+            </IconButton>)
         }
       </div>
       <ActivitySelection open={selectionOpen}
