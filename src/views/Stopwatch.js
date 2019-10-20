@@ -11,6 +11,8 @@ const useStyles = makeStyles(theme => ({
   },
   actionButton: {
     marginLeft: theme.spacing(1.5),
+    lineHeight: 1,
+    marginTop: 'auto',
   },
 }));
 
@@ -64,7 +66,7 @@ const Stopwatch = ({
   const classes = useStyles();
   return (
     <div className={classes.stopwatchContainer}>
-      <div style={{fontSize: actualFontSize}}>
+      <div style={{fontSize: actualFontSize, margin: 'auto'}}>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
       <div className={classes.actionButton}>

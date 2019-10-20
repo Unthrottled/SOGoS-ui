@@ -15,9 +15,13 @@ const useStyles = makeStyles(theme => ({
   },
   actionButton: {
     marginLeft: theme.spacing(1.5),
+    lineHeight: 1,
+    marginTop: 'auto',
   },
   swappo: {
     marginRight: theme.spacing(1.5),
+    lineHeight: 1,
+    marginTop: 'auto',
   },
   bigIcon: {
     fontSize: "175px",
@@ -86,7 +90,7 @@ export const PomodoroTimer = ({
           <SwapVert/>
         </div>)
       }
-      <div>
+      <div style={{margin: 'auto'}}>
         <TimeDisplay timeElapsed={timeElapsed}/>
       </div>
       <div className={classes.actionButton}>

@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: theme.spacing(1)
   },
   activityIcon: {
+    lineHeight: 1,
     marginLeft: theme.spacing(1),
   },
 }));
