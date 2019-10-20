@@ -11,9 +11,12 @@ import Container from "@material-ui/core/Container";
 import {StrategyIcon} from "./StrategyIcon";
 
 const useStyles = makeStyles(theme => ({
-  card: {
+  cardContent: {
     maxWidth: 345,
     margin: 'auto',
+  },
+  card: {
+    width: '100%',
   },
   headerContent: {
     borderRadius: theme.spacing(1),
@@ -49,21 +52,23 @@ const StrategicDashboard = ({history}) => {
       </div>
       <Card className={classes.card}>
         <CardActionArea onClick={() => history.push('./objectives/')}>
-          <div className={classes.goalIcon}>
-            <GoalIcon/>
+          <div className={classes.cardContent}>
+            <div className={classes.goalIcon}>
+              <GoalIcon/>
+            </div>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Goal Setting
+              </Typography>
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                We all have things that we want to accomplish.
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Go here to choose your <strong>Top 3</strong> goals.
+                You can have up to 5 but limit to what is important.
+              </Typography>
+            </CardContent>
           </div>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Goal Setting
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-              We all have things that we want to accomplish.
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              Go here to choose your <strong>Top 3</strong> goals.
-              You can have up to 5 but limit to what is important.
-            </Typography>
-          </CardContent>
         </CardActionArea>
       </Card>
     </LoggedInLayout>

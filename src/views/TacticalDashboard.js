@@ -11,9 +11,12 @@ import Container from "@material-ui/core/Container";
 import {TacticalIcon} from "./TacticalIcon";
 
 const useStyles = makeStyles(theme => ({
-  card: {
+  cardContent: {
     maxWidth: 345,
     margin: 'auto',
+  },
+  card: {
+    width: '100%',
   },
   headerContent: {
     borderRadius: theme.spacing(1),
@@ -44,26 +47,28 @@ const TacticalDashboard = ({history}) => {
             Make it short and sweet, but not too short so folks don&apos;t simply skip over it
             entirely.
           </Typography>
-          <TacticalIcon />
+          <TacticalIcon/>
         </Container>
       </div>
       <Card className={classes.card}>
         <CardActionArea onClick={() => history.push('./activities/')}>
-          <div className={classes.goalIcon}>
-            <TacticalActivityIcon/>
+          <div className={classes.cardContent}>
+            <div className={classes.goalIcon}>
+              <TacticalActivityIcon/>
+            </div>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Activity Hub
+              </Typography>
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                This is how you reach your goals.
+              </Typography>
+              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+                The things you do are related to a goal you want to accomplish.
+                Otherwise you would not be doing it, right?
+              </Typography>
+            </CardContent>
           </div>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Activity Hub
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-              This is how you reach your goals.
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-              The things you do are related to a goal you want to accomplish.
-              Otherwise you would not be doing it, right?
-            </Typography>
-          </CardContent>
         </CardActionArea>
       </Card>
     </LoggedInLayout>

@@ -37,13 +37,13 @@ const useStyles = makeStyles(theme => ({
 const placesToGo = [
   {
     name: 'Strategy',
-    description: 'What shit do I need to get together?',
+    description: 'Where does my shit need to go?',
     icon: <StrategyIcon/>,
     navigator: (history, guid) => () => history.push(`./strategy/`)
   },
   {
     name: 'Tactics',
-    description: 'How to do I get my shit together?',
+    description: 'How to do I get my shit to where it needs to be?',
     icon: <TacticalIcon/>,
     navigator: (history, guid) => () => history.push(`./tactical/`)
   },
