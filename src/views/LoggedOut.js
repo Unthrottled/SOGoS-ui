@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     background: 'linear-gradient(45deg, #e49d2c 30%, #e0be5f 90%)',
     borderRadius: 3,
     border: 0,
-    color: '#6e6e6e',
+    color: '#585858',
     height: 48,
     padding: '0 30px',
     boxShadow: '0 3px 5px 2px rgba(227, 158, 45, .5)',
@@ -34,47 +34,72 @@ function LoggedOut({dispatch: dispetch, isOnline}) {
   const logUserIn = (): void => {
     dispetch(login());
   };
-  return isOnline ? (
+  return (
     <div style={{height: '100%'}}>
-      <div style={{margin: 'auto'}}>
-        <Container maxWidth={'lg'}>
-          <div className={headerContent}>
-            <Container maxWidth={'sm'}>
-              <Typography component={'h1'}
-                          variant={'h2'}
-                          align={'center'}
-                          color={'textPrimary'}
-                          gutterBottom>
-                SOGoS
-              </Typography>
-              <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                Short and leading about the collection below—its contents, the
-                creator, etc.
-                Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-                entirely.
-              </Typography>
-              <Reach/>
-              <Button
-                classes={{
-                  root,
-                  label
-                }}
-                onClick={() => logUserIn()}>Take me to Log In!</Button>
-            </Container>
-          </div>
-        </Container>
+      <div style={{
+        display: 'table',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+      }}>
+        <div style={{
+          display: 'table-cell',
+          verticalAlign: 'middle',
+        }}>
+          <Container maxWidth={'lg'}>
+            <div className={headerContent}>
+              <Container maxWidth={'sm'}>
+                <Typography component={'h1'}
+                            variant={'h2'}
+                            align={'center'}
+                            color={'textPrimary'}
+                            gutterBottom>
+                  SOGoS
+                </Typography>
+                <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                  Short and leading about the collection below—its contents, the
+                  creator, etc.
+                  Make it short and sweet, but not too short so folks don&apos;t simply skip over it
+                  entirely.
+                </Typography>
+                <Reach/>
+                {
+                  isOnline ? (
+                    <Button
+                      classes={{
+                        root,
+                        label
+                      }}
+                      onClick={() => logUserIn()}>Start using SOGoS!</Button>
+                  ) : (
+                    <div>
+                      <hr/>
+                      <div style={{
+                        color: 'black',
+                        display: 'flex',
+                      }}>
+                        <CloudOff style={{
+                          fontSize: '10rem'
+                        }}/>
+                        <div>
+                          <Typography variant={'h4'} align="center" paragraph>
+                            Internet is needed to login!
+                          </Typography>
+                          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                            After that, you are free to use the SOGoS offline &#128526;
+                          </Typography>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+              </Container>
+            </div>
+          </Container>
+        </div>
       </div>
-    </div>
-  ) : (
-    <div>
-      <CloudOff style={{
-        fontSize: '10rem'
-      }}/>
-      <h3 style={{
-        margin: 0,
-        padding: '1.17em',
-      }}>Hey, You need wifi before you can log in!</h3>
-      <div>After that, you are free to use the app offline :)</div>
     </div>
   );
 }
