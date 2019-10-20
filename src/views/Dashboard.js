@@ -98,6 +98,7 @@ const Dashboard = ({
               {
                 placesToGo.map(placeToGo => (
                   <Grid item
+                        xs={6}
                         className={classes.gridItem}
                         key={placeToGo.name}
                   >
