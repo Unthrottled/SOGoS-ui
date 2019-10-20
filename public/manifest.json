@@ -11,7 +11,7 @@
       "sizes": "144x144",
       "type": "image/png"
     }, {
-      "src": "/images/reach_indigo_152.png",
+      "src": "/images/reach_orange_152.png",
       "sizes": "152x152",
       "type": "image/png"
     }, {
@@ -26,6 +26,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#3DB823",
-  "background_color": "#603890"
+  "theme_color": "#ffc107",
+  "background_color": "#eaeaf0"
 }
