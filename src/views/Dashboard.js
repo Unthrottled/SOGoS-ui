@@ -37,25 +37,25 @@ const useStyles = makeStyles(theme => ({
 const placesToGo = [
   {
     name: 'Strategy',
-    description: 'Where does my shit need to go?',
+    description: 'What does it mean to succeed? Find your summit(s) here.',
     icon: <StrategyIcon/>,
     navigator: (history, guid) => () => history.push(`./strategy/`)
   },
   {
     name: 'Tactics',
-    description: 'How to do I get my shit to where it needs to be?',
+    description: 'How do you get to the top of the summit? Figure out how scale mountains here.',
     icon: <TacticalIcon/>,
     navigator: (history, guid) => () => history.push(`./tactical/`)
   },
   {
     name: 'History',
-    description: 'Look at all the shit you have done!',
+    description: 'Look at how far you have come and all of your achievements!',
     icon: <HistoryIcon style={{fontSize: '100px'}}/>,
     navigator: (history, guid) => () => history.push(`./${guid}/history/`)
   },
   {
     name: 'Settings',
-    description: 'Get your shit together.',
+    description: 'Everybody is different. Tailor the experience to your abilities.',
     icon: <SettingsIcon style={{fontSize: '100px'}}/>,
     navigator: (history, guid) => () => history.push(`./settings/`)
   }
@@ -83,10 +83,10 @@ const Dashboard = ({
             Strategic Orchestration and Governance System
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Welcome{fullName ? ` ${fullName}` : ''}! short and leading about the collection below—its contents, the
-            creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Welcome{fullName ? ` ${fullName}` : ''}!
+            Figure out where you want to excel.
+            Then push yourself to your limits.
+            Knowing that you can find optimal recovery window for maximum periodization.
           </Typography>
           <Reach/>
         </Container>
