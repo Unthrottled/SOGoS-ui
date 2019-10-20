@@ -79,6 +79,9 @@ const Dashboard = ({
                       gutterBottom>
             SOGoS
           </Typography>
+          <Typography color={'textSecondary'}  gutterBottom>
+            Strategic Orchestration and Governance System
+          </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
             Welcome{fullName ? ` ${fullName}` : ''}! short and leading about the collection below—its contents, the
             creator, etc.

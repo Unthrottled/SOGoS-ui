@@ -58,11 +58,13 @@ function LoggedOut({dispatch: dispetch, isOnline}) {
                             gutterBottom>
                   SOGoS
                 </Typography>
+                <Typography color={'textSecondary'}  gutterBottom>
+                  Strategic Orchestration and Governance System
+                </Typography>
                 <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                  Short and leading about the collection below—its contents, the
-                  creator, etc.
-                  Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-                  entirely.
+                  Find and reach your maximum potential!
+                  Push yourself to the limits of your ability.
+                  Knowing that you rest easy when you really need to.
                 </Typography>
                 <Reach/>
                 {
