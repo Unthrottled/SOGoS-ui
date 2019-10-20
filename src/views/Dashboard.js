@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   headerContent: {
+    borderRadius: theme.spacing(1),
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
