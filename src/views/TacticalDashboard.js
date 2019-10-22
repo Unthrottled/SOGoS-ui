@@ -40,12 +40,11 @@ const TacticalDashboard = ({history}) => {
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            The Bridge
+            Get Tactical
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Those goals aren't going to accomplish themselves!
+            Figure out nitty-gritty of getting the job done.
           </Typography>
           <TacticalIcon/>
         </Container>
@@ -59,9 +58,6 @@ const TacticalDashboard = ({history}) => {
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
                 Activity Hub
-              </Typography>
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                This is how you reach your goals.
               </Typography>
               <Typography gutterBottom variant="body2" color="textSecondary" component="p">
                 The things you do are related to a goal you want to accomplish.

@@ -132,12 +132,11 @@ const HiddenActivitiesDashboard = ({dispatch, history}) => {
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Activity Hub
+            Activity Archive
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            These are activities that you have done in the past and still want to remember you did them.
+            We just put them here so they don't get in the way of your current activities.
           </Typography>
           <TacticalActivityIcon/>
         </Container>

@@ -238,9 +238,8 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
             Activity Ranking
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Not all activities are created equal.
+            Place the activities you most often spend time on at the top.
           </Typography>
           <TacticalActivityIcon/>
         </Container>

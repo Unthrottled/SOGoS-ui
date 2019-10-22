@@ -242,12 +242,12 @@ const ActivityDashboard = ({
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Goal Setting
+            Your Activity
           </Typography>
           <Typography variant="h6" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            This is something you spend your time on.
+            Whether or not it helps you reach your goal is up to you.
+            Remember spend your time wisely, because you aren't getting it back!
           </Typography>
         </Container>
       </div>
@@ -272,7 +272,7 @@ const ActivityDashboard = ({
           <TextField
             className={classes.textField}
             label={'What is it you do?'}
-            placeholder={'Coding'}
+            placeholder={'Stuff ;)'}
             variant={'outlined'}
             margin={'normal'}
             {...(currentTacticalActivity ? {defaultValue: currentTacticalActivity.name} : {})}
