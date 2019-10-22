@@ -70,9 +70,9 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
             Goal Setting
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Which summits do you want to reach the top of the most?
+            In order to keep your focus, please choose your current <strong>top 3</strong> objectives to work towards.
+            You can have up to 5 but limit yourself to what is important.
           </Typography>
           <GoalIcon/>
         </Container>

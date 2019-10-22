@@ -37,13 +37,13 @@ const useStyles = makeStyles(theme => ({
 const placesToGo = [
   {
     name: 'Strategy',
-    description: 'What does it mean to succeed? Find your summit(s) here.',
+    description: 'What does it mean to succeed? Establish your endgame objectives here.',
     icon: <StrategyIcon/>,
     navigator: (history, guid) => () => history.push(`./strategy/`)
   },
   {
     name: 'Tactics',
-    description: 'How do you get to the top of the summit? Figure out how scale mountains here.',
+    description: 'How do you reach your endgame? Catalog activities needed to reach your goals here.',
     icon: <TacticalIcon/>,
     navigator: (history, guid) => () => history.push(`./tactical/`)
   },

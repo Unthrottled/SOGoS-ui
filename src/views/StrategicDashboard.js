@@ -60,7 +60,7 @@ const StrategicDashboard = ({history}) => {
                 Goal Setting
               </Typography>
               <Typography gutterBottom variant="body2" color="textSecondary" component="p">
-                We all have things that we want to accomplish.
+                What do you want to accomplish?
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
                 Choose your <strong>Top 3</strong> goals.
