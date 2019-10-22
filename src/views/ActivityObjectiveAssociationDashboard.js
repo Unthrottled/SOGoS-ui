@@ -7,15 +7,16 @@ import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
 import {withRouter} from "react-router-dom";
-import {selectStrategyState} from "../reducers";
+import {selectStrategyState, selectTacticalActivityState} from "../reducers";
 import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import {Card, Switch} from "@material-ui/core";
 import type {Objective} from "../types/StrategyModels";
 import {updatedObjective} from "../actions/StrategyActions";
-import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import {GoalIcon} from "./GoalIcon";
+import {createAssociationComponent} from "./ObjectiveActivityAssociationDashboard";
+import {mapTacticalActivitiesToID} from "./PieFlavored";
 
 const useStyles = makeStyles(theme => (
   {
@@ -27,8 +28,8 @@ const useStyles = makeStyles(theme => (
       margin: theme.spacing(1)
     },
     headerContent: {
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6, 0, 6),
       marginBottom: theme.spacing(1),
     },
@@ -77,6 +78,7 @@ const ObjectiveActivityAssociationDashboard = ({
                                                  dispatch,
                                                  objectives,
                                                  history,
+                                                 activities,
                                                  match: {params: {activityId}}
                                                }) => {
   const classes = useStyles();
@@ -99,6 +101,8 @@ const ObjectiveActivityAssociationDashboard = ({
       ...objectiveSwitches
     });
   };
+
+  const mappedTacticalActivites = mapTacticalActivitiesToID(activities);
 
   const saveActivity = () => {
     const updatedObjectives = objectToKeyValueArray(objectiveSwitches)
@@ -134,14 +138,17 @@ const ObjectiveActivityAssociationDashboard = ({
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Activity Hub
+            Associated Objectives
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Find objectives that can be reached with your activity:
           </Typography>
-          <TacticalActivityIcon/>
+          <Typography variant="h5" color={'textPrimary'} align="center" paragraph>
+            {mappedTacticalActivites[activityId].name}
+          </Typography>
+          {
+            createAssociationComponent({}, mappedTacticalActivites[activityId])
+          }
         </Container>
       </div>
       <div className={classes.root}>
@@ -198,8 +205,10 @@ const ObjectiveActivityAssociationDashboard = ({
 
 const mapStateToProps = state => {
   const {objectives} = selectStrategyState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
-    objectives
+    objectives,
+    activities
   }
 };
 

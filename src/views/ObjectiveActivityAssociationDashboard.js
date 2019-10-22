@@ -76,6 +76,19 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
+export const createAssociationComponent = (rememberedObjective, rememberedActivity) => <div style={{
+  display: 'flex',
+  justifyContent: 'center',
+}}>
+  <GoalIcon objective={rememberedObjective}/>
+  <SwapHorizIcon style={{
+    color: 'grey',
+    margin: 'auto 0',
+    fontSize: '2em'
+  }}/>
+  <TacticalActivityIcon tacticalActivity={rememberedActivity}/>
+</div>;
+
 const ObjectiveActivityAssociationDashboard = ({
                                                  dispatch,
                                                  objectives,
@@ -132,23 +145,14 @@ const ObjectiveActivityAssociationDashboard = ({
             Associated Activities
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph gutterBottom>
-            Find your activities help you reach your objective:
+            Find activities that help you reach your objective:
           </Typography>
           <Typography variant="h5" color={'textPrimary'} align="center" paragraph>
             {rememberedObjective.valueStatement}
           </Typography>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}>
-            <GoalIcon objective={rememberedObjective}/>
-            <SwapHorizIcon style={{
-              color: 'grey',
-              margin: 'auto 0',
-              fontSize: '2em'
-            }}/>
-            <TacticalActivityIcon/>
-          </div>
+          {
+            createAssociationComponent(rememberedObjective)
+          }
         </Container>
       </div>
       <div className={classes.root}>
