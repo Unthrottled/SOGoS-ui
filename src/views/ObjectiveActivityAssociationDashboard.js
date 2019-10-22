@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import {connect} from "react-redux";
 import LoggedInLayout from "./LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
@@ -16,6 +17,7 @@ import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import ActivityList from "./ActivityList";
+import {GoalIcon} from "./GoalIcon";
 
 const useStyles = makeStyles(theme => (
   {
@@ -127,14 +129,26 @@ const ObjectiveActivityAssociationDashboard = ({
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Activity Hub
+            Associated Activities
           </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+          <Typography variant="h5" align="center" color="textSecondary" paragraph gutterBottom>
+            Find your activities help you reach your objective:
           </Typography>
-          <TacticalActivityIcon/>
+          <Typography variant="h5" color={'textPrimary'} align="center" paragraph>
+            {rememberedObjective.valueStatement}
+          </Typography>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}>
+            <GoalIcon objective={rememberedObjective}/>
+            <SwapHorizIcon style={{
+              color: 'grey',
+              margin: 'auto 0',
+              fontSize: '2em'
+            }}/>
+            <TacticalActivityIcon/>
+          </div>
         </Container>
       </div>
       <div className={classes.root}>

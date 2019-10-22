@@ -242,12 +242,12 @@ const ObjectiveDashboard = ({
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Goal Setting
+            Your Objective
           </Typography>
           <Typography variant="h6" align="center" color="textSecondary" paragraph>
-            Something short and leading about the collection below—its contents, the creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            Dig deep and shoot for the moon.
+            This should be a long shot that is difficult to accomplish.
+            Don't sandbag yourself, strive for greatness!
           </Typography>
         </Container>
       </div>
