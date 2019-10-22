@@ -177,27 +177,27 @@ const ActivityDashboard = ({
       history.push(`/tactical/activities/${activityId}/strategy/association`)
     } else {
       dispatch(createUpdatedTacticalActivityEvent(tacticalActivity));
-      history.push('/tactical/activities/')
+      history.goBack()
     }
   };
 
   const hideTacticalActivity = () => {
     dispatch(createHideTacticalActivityEvent(mappedTacticalActivities[activityId]));
-    history.push('/tactical/activities/');
+    history.goBack();
   };
 
   const unHideTacticalActivity = () => {
     dispatch(createShowTacticalActivityEvent(mappedTacticalActivities[activityId]));
-    history.push('/tactical/activities/');
+    history.goBack();
   };
 
   const discardChanges = () => {
-    history.push('/tactical/activities/');
+    history.goBack();
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
     dispatch(createRequestToDeleteTacticalActivityEvent(currentTacticalActivity));
-    history.push('/tactical/activities/')
+    history.goBack()
   };
 
   const selectStyles = {

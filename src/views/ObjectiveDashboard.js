@@ -198,21 +198,21 @@ const ObjectiveDashboard = ({
       history.push(`/strategy/objectives/${objective.id}/tactics/association`)
     } else {
       dispatch(updatedObjective(objective));
-      history.push('/strategy/objectives/')
+      history.goBack()
     }
   };
 
   const discardChanges = () => {
-    history.push('/strategy/objectives/');
+    history.goBack();
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
     dispatch(deletedObjective(objective));
-    history.push('/strategy/objectives/')
+    history.goBack()
   };
   const completeThatObjectiveYo = () => {
     dispatch(completedObjective(objective));
-    history.push('/strategy/objectives/')
+    history.goBack()
   };
 
   const selectStyles = {
