@@ -18,6 +18,7 @@ export type ActivityContent = {
   timedType: ActivityTimedType,
   type: ActivityType,
   paused: boolean,
+  autoComplete: boolean,
 };
 export type Activity = {
   antecedenceTime: number,
@@ -33,7 +34,7 @@ export type ActivityRegistryFailure = {
   activity: Activity,
 }
 
-const getActivityContent = (activity: Activity): ActivityContent => (activity && activity.content) || {};
+export const getActivityContent = (activity: Activity): ActivityContent => (activity && activity.content) || {};
 export const getTimedType = (activity: Activity) => getActivityContent(activity).timedType || ActivityTimedType.NONE;
 export const getActivityType = (activity: Activity) => getActivityContent(activity).type || ActivityType.PASSIVE;
 export const getActivityName = (activity: Activity) => getActivityContent(activity).name;

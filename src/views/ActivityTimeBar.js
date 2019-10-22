@@ -90,7 +90,7 @@ const ActivityTimeBar = ({
     }))
   };
 
-  const startRecovery = () => {
+  const startRecovery = (autoComplete) => {
     dispetch(startTimedActivity({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
@@ -99,6 +99,9 @@ const ActivityTimeBar = ({
         pomodoroSettings.longRecoveryDuration :
         pomodoroSettings.shortRecoveryDuration,
       uuid: uuid(),
+      ...(autoComplete ? {
+        autoComplete: true
+      } : {})
     }));
   };
 
@@ -123,18 +126,21 @@ const ActivityTimeBar = ({
 
   const completedPomodoro = () => {
     if (name === RECOVERY) {
-      resumePreviousActivity();
+      resumePreviousActivity(true);
     } else {
-      startRecovery();
+      startRecovery(true);
       dispetch(createCompletedPomodoroEvent())
     }
   };
 
-  function resumePreviousActivity() {
+  function resumePreviousActivity(autoComplete) {
     dispetch(startTimedActivity({
       ...previousActivity.content,
       ...(previousActivity.content.duration ? {
         duration: pomodoroSettings.loadDuration
+      } : {}),
+      ...(autoComplete ? {
+        autoComplete: true
       } : {}),
       uuid: uuid(),
     }));
