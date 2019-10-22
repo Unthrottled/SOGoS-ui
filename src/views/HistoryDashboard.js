@@ -117,7 +117,7 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
-            Activity Time Frame
+            Activity History
           </Typography>
           <div className={classes.form} noValidate>
             <DateRangePicker
