@@ -177,17 +177,15 @@ const SettingsBoard = ({
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
           <Typography component={'h1'}
-                      variant={'h4'}
+                      variant={'h2'}
                       align={'center'}
                       color={'textPrimary'}
                       gutterBottom>
             Settings
           </Typography>
           <Typography variant="h6" align="center" color="textSecondary" paragraph>
-            Some short and leading about the collection below—its contents, the
-            creator, etc.
-            Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-            entirely.
+            We all cannot be the same.
+            Therefore we thought it would be handy to allow you to adjust the experience to your preferences!
           </Typography>
           <SettingsIcon style={{color: 'black', fontSize: '3em'}}/>
         </Container>
