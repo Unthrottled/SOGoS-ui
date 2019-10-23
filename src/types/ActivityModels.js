@@ -18,7 +18,7 @@ export type ActivityContent = {
   timedType: ActivityTimedType,
   type: ActivityType,
   paused: boolean,
-  autoComplete: boolean,
+  autoStart: boolean,
 };
 export type Activity = {
   antecedenceTime: number,

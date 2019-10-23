@@ -86,7 +86,7 @@ const Dashboard = ({
             Welcome{fullName ? ` ${fullName}` : ''}!
             Figure out where you want to excel.
             Then push yourself to your limits.
-            Knowing that you can find optimal recovery window for maximum periodization.
+            Knowing you can find your optimal recovery window, for maximum periodization.
           </Typography>
           <Reach/>
         </Container>

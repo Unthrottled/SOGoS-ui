@@ -1,14 +1,21 @@
 import {select} from 'redux-saga/effects'
 import {selectConfigurationState} from "../../reducers";
-import {getActivityContent} from "../../types/ActivityModels";
+import {getActivityContent, getActivityName, isActivityRecovery} from "../../types/ActivityModels";
 
-//todo: only notify after auto starting.
+const audio = new Audio('/notification.mp3');
+
 export function* activityNotificationSaga({payload}) {
   const {miscellaneous: {notificationsAllowed}} = yield select(selectConfigurationState);
-  if (notificationsAllowed === "granted" && ("Notification" in window) && getActivityContent(payload).autoComplete) {
-    new Notification("Fam ravioli");
+  if (notificationsAllowed === "granted" &&
+    ("Notification" in window) &&
+    getActivityContent(payload).autoStart) {
+    if(isActivityRecovery(payload)){
+      new Notification("Take a Break!");
+    } else {
+      new Notification(`Get Back to ${getActivityName(payload)}!`);
+    }
     window.navigator.vibrate([200, 100, 200]);
-    const audio = new Audio('/notif.mp3');
-    audio.play().then(()=>{})
+
+    audio.play().then(_ => {})
   }
 }
