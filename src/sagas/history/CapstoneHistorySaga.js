@@ -46,7 +46,7 @@ const getAfterIndex = (index) => {
   if(index > -1){
     return index - 1;
   } else {
-    return Math.abs(index) - 2 // todo: this does not seem right
+    return Math.abs(index) - 2
   }
 };
 
