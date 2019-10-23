@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     minHeight: '100%',
     marginBottom: theme.spacing(9),
   },
+  content: {
+    marginTop: -theme.spacing(5),
+  },
 }));
 
 const LoggedInLayout = ({children, ...otherProperties}) => {
@@ -20,7 +23,7 @@ const LoggedInLayout = ({children, ...otherProperties}) => {
     <div {...otherProperties} className={classes.container}>
       <MenuAppBar/>
       <Activity/>
-      <Container maxWidth={"lg"}>
+      <Container className={classes.content} maxWidth={"lg"}>
         {
           children
         }
