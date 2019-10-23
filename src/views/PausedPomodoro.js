@@ -22,6 +22,7 @@ import {objectToArray} from "../miscellanous/Tools";
 import {dictionaryReducer} from "../reducers/StrategyReducer";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
+import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
 
 
 const useStyles = makeStyles(theme => ({
@@ -117,12 +118,12 @@ const PausedPomodoro = ({
           </IconButton>
         </div>
         {
-          tacticalActivity && (
+          (tacticalActivity || getActivityName(currentActivity) === GENERIC_ACTIVITY_NAME) && (
             <div className={classes.pivotContainer}>
               <div className={classes.pivotLabel}>
-                <div>Pivoted to: {getActivityName(currentActivity)} </div>
+                <div>Pivoted to: {getActivityName(currentActivity).replace(/_/, ' ')} </div>
               </div>
-              <TacticalActivityIcon tacticalActivity={tacticalActivity}/>
+              {tacticalActivity && <TacticalActivityIcon tacticalActivity={tacticalActivity}/> }
             </div>
           )
         }
