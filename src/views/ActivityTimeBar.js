@@ -182,7 +182,7 @@ const ActivityTimeBar = ({
           </div>
         }
         {
-          !tacticalActivity && isTimer && <TomatoIcon size={{
+          !tacticalActivity && isTimer && !isRecovery && <TomatoIcon size={{
             width: '50px',
             height: '50px',
           }}/>
