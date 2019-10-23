@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {TimeDisplay} from "./TimeDisplay";
 import Pause from '@material-ui/icons/Pause';
-import PlayArrow from '@material-ui/icons/PlayArrow';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -27,10 +26,6 @@ const Stopwatch = ({
   const pauseTimer = () => {
     onPause();
     setIsPaused(true)
-  };
-  const resumeTimer = () => {
-    onResume();
-    setIsPaused(false)
   };
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
 

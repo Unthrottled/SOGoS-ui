@@ -5,7 +5,7 @@ import {appInitialized} from "../events/ApplicationLifecycleEvents";
 import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
-import {blue, amber} from "@material-ui/core/colors";
+import {amber, blue} from "@material-ui/core/colors";
 import {Route, Switch} from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import makeStyles from "@material-ui/core/styles/makeStyles";

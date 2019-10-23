@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import SwapVert from '@material-ui/icons/SwapVert';
-import PlayArrow from '@material-ui/icons/PlayArrow';
 import {TimeDisplay} from "./TimeDisplay";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import ActivitySelection from "./ActivitySelection";
@@ -45,10 +44,6 @@ export const PomodoroTimer = ({
   const pauseTimer = () => {
     onPause();
     setIsPaused(true)
-  };
-  const resumeTimer = () => {
-    onResume();
-    setIsPaused(false)
   };
 
   const [rememberedActivity, setRememberedActivity] = useState(activityId || '');

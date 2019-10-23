@@ -22,7 +22,6 @@ import {ColorPicker} from "./ColorPicker";
 import {MountainIcon} from "./MountainIcon";
 import {PopupModal} from "./PopupModal";
 import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import {PersistActions} from "./PersistActions";
 

@@ -90,7 +90,8 @@ function LoggedOut({dispatch: dispetch, isOnline}) {
                             Internet is needed to login!
                           </Typography>
                           <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                            After that, you are free to use the SOGoS offline &#128526;
+                            After that, you are free to use the SOGoS offline
+                            <span aria-label={'cool emoji'} role={'img'}>&#128526;</span>
                           </Typography>
                         </div>
                       </div>

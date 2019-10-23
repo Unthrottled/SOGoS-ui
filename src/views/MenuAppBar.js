@@ -15,7 +15,6 @@ import UpdateApplication from "./UpdateApplication";
 import {Link} from "react-router-dom";
 import MenuNavigation from "./MenuNavigation";
 import ManualSync from "./ManualSync";
-import {Reach} from "./Reach";
 
 const useStyles = makeStyles(theme => ({
   root: {

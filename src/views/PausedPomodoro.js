@@ -22,7 +22,6 @@ import {objectToArray} from "../miscellanous/Tools";
 import {dictionaryReducer} from "../reducers/StrategyReducer";
 import type {TacticalActivity} from "../types/TacticalModels";
 import {TacticalActivityIcon} from "./TacticalActivityIcon";
-import SwapVert from '@material-ui/icons/SwapVert';
 
 
 const useStyles = makeStyles(theme => ({
