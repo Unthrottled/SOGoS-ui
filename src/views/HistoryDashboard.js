@@ -12,7 +12,8 @@ import {createAdjustedHistoryTimeFrame} from "../events/HistoryEvents";
 import {selectHistoryState, selectUserState} from "../reducers";
 import {DateRangePicker} from 'react-dates';
 import {ONE_DAY} from "../sagas/activity/PomodoroActivitySagas";
-import {Typography} from "@material-ui/core";
+import InputLabel from "@material-ui/core/InputLabel";
+import HistoryIcon from '@material-ui/icons/History';
 
 const drawerWidth = 240;
 
@@ -71,6 +72,10 @@ const useStyles = makeStyles(theme => ({
     minHeight: 240,
     maxHeight: 500,
   },
+  placeIcon: {
+    padding: theme.spacing(2),
+    color: theme.palette.common.black,
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -112,14 +117,8 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
     <LoggedInLayout>
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
-          <Typography component={'h4'}
-                      variant={'h4'}
-                      align={'center'}
-                      color={'textPrimary'}
-                      gutterBottom>
-            Activity History
-          </Typography>
           <div className={classes.form} noValidate>
+            <InputLabel>Active Time Range</InputLabel>
             <DateRangePicker
               startDate={meowMinusSeven}
               startDateId="steve"
@@ -134,6 +133,9 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
             />
           </div>
         </Container>
+        <div className={classes.placeIcon}>
+          <HistoryIcon style={{fontSize: '100px'}}/>
+        </div>
       </div>
       <main className={classes.content}>
         <div className={fixedHeightPaper}>
