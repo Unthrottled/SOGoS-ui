@@ -19,6 +19,7 @@ export type ActivityContent = {
   type: ActivityType,
   paused: boolean,
   autoStart: boolean,
+  veryFirstActivity?: boolean,
 };
 export type Activity = {
   antecedenceTime: number,

@@ -3,11 +3,16 @@ import {
   ADJUSTED_HISTORY,
   FOUND_AFTER_CAPSTONE,
   FOUND_BEFORE_CAPSTONE,
-  INITIALIZED_HISTORY,
+  INITIALIZED_HISTORY, UPDATED_CAPSTONES,
   VIEWED_HISTORY
 } from "../events/HistoryEvents";
 import {RECEIVED_USER} from "../events/UserEvents";
-import {historyAdjustmentSaga, historyInitializationSaga, historyObservationSaga} from "./history/ActivityHistorySagas";
+import {
+  firstActivityAdjustmentSaga,
+  historyAdjustmentSaga,
+  historyInitializationSaga,
+  historyObservationSaga
+} from "./history/ActivityHistorySagas";
 import type {FullRangeAndFeed} from "./history/CapstoneHistorySaga";
 import {capstoneHistorySaga, getFullHistory} from "./history/CapstoneHistorySaga";
 import type {DateRange} from "../reducers/HistoryReducer";
@@ -28,8 +33,17 @@ export function* initializeActivityFeedSaga() {
   yield takeEvery(ADJUSTED_HISTORY, historyAdjustmentSaga);
 }
 
+export function* historyFeedAdjustmentSaga() {
+  yield all({
+    askedForHistory: take(UPDATED_CAPSTONES),
+    foundUser: take(RECEIVED_USER),
+  });
+  yield call(firstActivityAdjustmentSaga)
+}
+
 function* listenToActivityEvents() {
   yield fork(initializeActivityFeedSaga);
+  yield fork(historyFeedAdjustmentSaga);
   yield takeEvery(ADJUSTED_HISTORY, historyAdjustmentCapstoneSaga);
   yield takeEvery(INITIALIZED_HISTORY, historyInitializationCapstoneSaga);
 }

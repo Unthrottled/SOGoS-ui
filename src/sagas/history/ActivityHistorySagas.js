@@ -1,6 +1,7 @@
 import {call, put, select} from 'redux-saga/effects'
 import {performStreamedGet} from "../APISagas";
 import {
+  createAdjustedHistoryTimeFrame,
   createInitializedHistoryEvent,
   createUpdatedFullFeedEvent,
   createUpdatedHistorySelectionEvent
@@ -11,11 +12,13 @@ import type {HistoryState} from "../../reducers/HistoryReducer";
 import {reverseBinarySearch} from "../../miscellanous/Tools";
 import type {Activity} from "../../types/ActivityModels";
 import type {UserState} from "../../reducers/UserReducer";
+import {getActivityContent} from "../../types/ActivityModels";
 
 export const createHistoryAPIURL = (guid, from, to) =>
   `/api/history/${guid}/feed?from=${from}&to=${to}`;
 
-const meow = new Date();
+const ONE_MINUTE = 60000;
+const meow = new Date(new Date().valueOf() + (2 * ONE_MINUTE));
 const SEVEN_DAYS = 604800000;
 const meowMinusSeven = new Date(meow.getTime() - SEVEN_DAYS);
 
@@ -128,4 +131,13 @@ export function* updateSelection(fullFeed: Activity[], to: number, from: number)
     },
     activities: fullFeed.slice(newTo, safeFrom)
   }))
+}
+
+export function* firstActivityAdjustmentSaga() {
+  const {capstone : {bottomActivity}}: HistoryState = yield select(selectHistoryState);
+  if (getActivityContent(bottomActivity).veryFirstActivity) {
+    const rightMeow = new Date().valueOf();
+    const timeToMoveBack = (rightMeow - bottomActivity.antecedenceTime);
+    yield put(createAdjustedHistoryTimeFrame(bottomActivity.antecedenceTime - timeToMoveBack, rightMeow))
+  }
 }
