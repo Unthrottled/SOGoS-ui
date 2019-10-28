@@ -6,11 +6,15 @@ export type OAuthConfig = {
   userInfoEndpoint: string,
 }
 export type InitialConfig = {
-  callbackURI: string,
   clientID: string,
+  authorizationEndpoint: string,
+  logoutEndpoint: string,
+  userInfoEndpoint: string,
+  tokenEndpoint: string,
   openIDConnectURI: string,
   provider: string,
 }
+
 export type MiscellaneousConfig = {
   notificationsAllowed: string,
 }

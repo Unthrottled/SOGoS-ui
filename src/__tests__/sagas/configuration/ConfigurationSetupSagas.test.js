@@ -22,13 +22,6 @@ describe('Configuration Setup Sagas', () => {
         };
         return initialConfig;
       });
-      it('should call the correct authorization server', sagaEffect => {
-        expect(sagaEffect).toEqual(call(fetchConfigurationsFromIssuer, 'http://allyourbase.io'));
-        const oauthConfig: OAuthConfig = {
-          authorizationEndpoint: 'http://auth'
-        };
-        return oauthConfig;
-      });
       it('should dispetch correct event', sagaEffect => {
         expect(sagaEffect).toEqual(put(createReceivedRemoteOAuthConfigurations({
           authorizationEndpoint: 'http://auth'
@@ -46,10 +39,6 @@ describe('Configuration Setup Sagas', () => {
           openIDConnectURI: 'http://allyourbase.io',
         };
         return initialConfig;
-      });
-      it('should call the correct authorization server', sagaEffect => {
-        expect(sagaEffect).toEqual(call(fetchConfigurationsFromIssuer, 'http://allyourbase.io'));
-        return new Error(`SHIT'S BROKE, YO.`);
       });
       it('should dispetch correct failure event', sagaEffect => {
         expect(sagaEffect).toEqual(put(createFailedToGetRemoteOAuthConfigurationsEvent(`SHIT'S BROKE, YO.`)))
