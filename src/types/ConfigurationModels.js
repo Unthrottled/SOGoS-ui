@@ -13,6 +13,7 @@ export type InitialConfig = {
   tokenEndpoint: string,
   openIDConnectURI: string,
   provider: string,
+  callbackURI?: string,
 }
 
 export type MiscellaneousConfig = {

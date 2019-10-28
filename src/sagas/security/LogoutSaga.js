@@ -1,31 +1,43 @@
-import {call, put, select} from 'redux-saga/effects';
-import type {InitialConfig} from "../../types/ConfigurationModels";
-import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
-import {selectConfigurationState} from "../../reducers";
+import {call, put} from 'redux-saga/effects';
+import type {InitialConfig, OAuthConfig} from "../../types/ConfigurationModels";
+import {initialConfigurationSaga, oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {createLoggedOffEvent} from "../../events/SecurityEvents";
 import {activityLogoutSaga} from "../activity/LogoutActivitySaga";
 
 export function* constructRedirectURI(): string {
-  const {endSessionEndpoint} = yield call(oauthConfigurationSaga);
-  const {initial} = yield select(selectConfigurationState);
-  return `${endSessionEndpoint}?${getRedirectParameter(initial)}`;
+  const {endSessionEndpoint}: OAuthConfig = yield call(oauthConfigurationSaga);
+  const initialConfig = yield call(initialConfigurationSaga);
+  return `${endSessionEndpoint}?${getRedirectParameter(initialConfig)}`;
 }
+
+const getClientIfNecessary = (initialConfig: InitialConfig): String => {
+  if(isCognito(initialConfig)){
+    return `client_id=${initialConfig.clientID}&`
+  } else {
+    return '';
+  }
+};
 
 const getRedirectParameter = (initialConfig: InitialConfig): string => {
   const queryParameter = getQueryParameter(initialConfig);
-  return `${queryParameter}=${initialConfig.callbackURI}`
+  return `${getClientIfNecessary(initialConfig)}${queryParameter}=${initialConfig.callbackURI}`
 };
 
 const getQueryParameter = (initialConfig: InitialConfig): string => {
   if (isKeycloak(initialConfig)) {
     return 'redirect_uri'
   } else {
-    return 'continue=https://appengine.google.com/_ah/logout?continue'
+    return 'logout_uri'
   }
 };
 
 const isKeycloak = (initialConfiguration: InitialConfig): boolean => {
   return initialConfiguration && initialConfiguration.provider === 'KEYCLOAK';
+};
+
+// Thanks Obama.
+const isCognito = (initialConfiguration: InitialConfig): boolean => {
+  return initialConfiguration && initialConfiguration.provider === 'COGNITO';
 };
 
 export function* logoffPreFlightSaga() {
