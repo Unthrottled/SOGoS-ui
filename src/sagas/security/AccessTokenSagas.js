@@ -1,5 +1,5 @@
-import {call, race, select, take} from 'redux-saga/effects';
-import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
+import {call, put, race, select, take} from 'redux-saga/effects';
+import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {canRefreshToken} from "../../security/OAuth";
 import {refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga} from "./RefreshTokenSagas";
 import {SessionExpiredException} from "../../types/SecurityModels";
@@ -32,7 +32,7 @@ export function* getOrRefreshAccessTokenWithoutSessionExtension() {
 export function* getOrRefreshAccessToken(refreshTokenSaga, shouldTokenRefresh) {
   const {security} = yield select();
   if (shouldTokenRefresh(security)) {
-    throw new SessionExpiredException();
+    yield put(createExpiredSessionEvent());
   } else {
     return security.accessToken
   }
