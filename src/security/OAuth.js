@@ -7,7 +7,7 @@ export const shouldCheckForAuthorizationGrant = (securityState: SecurityState) =
 };
 
 export const canRefreshToken = (securityState: SecurityState) => {
-  return !isAccessTokenValid(securityState) && securityState && securityState.refreshToken;
+  return !isAccessTokenValid(securityState);
 };
 
 /**

@@ -1,8 +1,7 @@
-import {call, fork, race, select, take} from 'redux-saga/effects';
+import {call, race, select, take} from 'redux-saga/effects';
 import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
-import {canRefreshEitherTokens, canRefreshToken} from "../../security/OAuth";
+import {canRefreshToken} from "../../security/OAuth";
 import {refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga} from "./RefreshTokenSagas";
-import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {SessionExpiredException} from "../../types/SecurityModels";
 
 export function* accessTokenWithSessionExtensionSaga() {
@@ -23,8 +22,9 @@ export function* accessTokenSagas(getOrRefreshAccessTokenSaga) {
 }
 
 export function* getOrRefreshAccessTokenWithSessionExtension() {
-  return yield call(getOrRefreshAccessToken, refreshTokenWithReplacementSaga, canRefreshEitherTokens);
+  return yield call(getOrRefreshAccessToken, refreshTokenWithReplacementSaga, canRefreshToken);
 }
+
 export function* getOrRefreshAccessTokenWithoutSessionExtension() {
   return yield call(getOrRefreshAccessToken, refreshTokenWithoutReplacementSaga, canRefreshToken);
 }
@@ -32,9 +32,7 @@ export function* getOrRefreshAccessTokenWithoutSessionExtension() {
 export function* getOrRefreshAccessToken(refreshTokenSaga, shouldTokenRefresh) {
   const {security} = yield select();
   if (shouldTokenRefresh(security)) {
-    const oauthConfiguration = yield call(oauthConfigurationSaga);
-    yield fork(refreshTokenSaga, oauthConfiguration, security);
-    return yield call(awaitToken);
+    throw new SessionExpiredException();
   } else {
     return security.accessToken
   }
