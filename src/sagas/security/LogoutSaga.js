@@ -24,7 +24,7 @@ const getRedirectParameter = (initialConfig: InitialConfig): string => {
 };
 
 const getQueryParameter = (initialConfig: InitialConfig): string => {
-  if (isKeycloak(initialConfig)) {
+  if (isOkta(initialConfig) || isKeycloak(initialConfig)) {
     return 'redirect_uri'
   } else {
     return 'logout_uri'
@@ -33,6 +33,10 @@ const getQueryParameter = (initialConfig: InitialConfig): string => {
 
 const isKeycloak = (initialConfiguration: InitialConfig): boolean => {
   return initialConfiguration && initialConfiguration.provider === 'KEYCLOAK';
+};
+
+const isOkta = (initialConfiguration: InitialConfig): boolean => {
+  return initialConfiguration && initialConfiguration.provider === 'OKTA';
 };
 
 // Thanks Obama.
