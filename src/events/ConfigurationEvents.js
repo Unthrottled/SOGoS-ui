@@ -8,6 +8,7 @@ export const RECEIVED_OAUTH_CONFIGURATION: 'RECEIVED_OAUTH_CONFIGURATION' = 'REC
 export const RECEIVED_REMOTE_OAUTH_CONFIGURATION: 'RECEIVED_REMOTE_OAUTH_CONFIGURATION' = 'RECEIVED_REMOTE_OAUTH_CONFIGURATION';
 export const FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION: 'FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION' = 'FAILED_TO_RECEIVE_REMOTE_OAUTH_CONFIGURATION';
 export const RECEIVED_INITIAL_CONFIGURATION: 'RECEIVED_INITIAL_CONFIGURATION' = 'RECEIVED_INITIAL_CONFIGURATION';
+export const RECEIVED_PARTIAL_INITIAL_CONFIGURATION: 'RECEIVED_PARTIAL_INITIAL_CONFIGURATION' = 'RECEIVED_PARTIAL_INITIAL_CONFIGURATION';
 export const NOTIFICATION_ANSWERED: 'NOTIFICATION_ANSWERED' = 'NOTIFICATION_ANSWERED';
 
 export const createFailedToGetRemoteOAuthConfigurationsEvent = () => ({
@@ -31,6 +32,11 @@ export const createReceivedRemoteOAuthConfigurations = (oauthConfig: OAuthConfig
 
 export const createReceivedInitialConfigurationsEvent = (initialConfig: InitialConfig) => ({
   type: RECEIVED_INITIAL_CONFIGURATION,
+  payload: initialConfig
+});
+
+export const createReceivedPartialInitialConfigurationsEvent = (initialConfig: InitialConfig) => ({
+  type: RECEIVED_PARTIAL_INITIAL_CONFIGURATION,
   payload: initialConfig
 });
 

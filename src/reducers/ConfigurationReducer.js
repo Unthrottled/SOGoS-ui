@@ -1,6 +1,6 @@
 import {
   NOTIFICATION_ANSWERED,
-  RECEIVED_INITIAL_CONFIGURATION,
+  RECEIVED_INITIAL_CONFIGURATION, RECEIVED_PARTIAL_INITIAL_CONFIGURATION,
   RECEIVED_REMOTE_OAUTH_CONFIGURATION
 } from "../events/ConfigurationEvents";
 import {Action} from "redux";
@@ -26,6 +26,7 @@ export const INITIAL_CONFIGURATION_STATE: ConfigurationState = {
     clientID: '',
     openIDConnectURI: '',
     provider: '',
+    apiURL: '',
   },
   miscellaneous: {
     notificationsAllowed: NOT_ASKED
@@ -44,6 +45,7 @@ export const configurationReducer = (state: ConfigurationState = INITIAL_CONFIGU
         }
       };
     case RECEIVED_INITIAL_CONFIGURATION:
+    case RECEIVED_PARTIAL_INITIAL_CONFIGURATION:
       return {
         ...state,
         initial: {

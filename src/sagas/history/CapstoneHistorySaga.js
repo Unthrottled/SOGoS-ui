@@ -125,9 +125,9 @@ export function* getFirstAfter(selectedToRange: number,
   return activities[safeAfter];
 }
 
-export const constructActivityBeforeURL = (guid: string) => `/api/history/${guid}/first/before`;
+export const constructActivityBeforeURL = (guid: string) => `/history/${guid}/first/before`;
 
-export const constructActivityAfterURL = (guid: string) => `/api/history/${guid}/first/after`;
+export const constructActivityAfterURL = (guid: string) => `/history/${guid}/first/after`;
 
 export function* findFirstActivityBeforeTime(relativeTime: number): Activity {
   return yield call(findCapstoneActivity, relativeTime, constructActivityBeforeURL)

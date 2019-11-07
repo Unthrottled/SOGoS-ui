@@ -72,7 +72,7 @@ export function* objectiveAPIInteractionSaga(objective: Objective,
   }
 }
 
-export const OBJECTIVES_URL = `/api/strategy/objectives`;
+export const OBJECTIVES_URL = `/strategy/objectives`;
 
 export function* objectiveUploadSaga(objective: Objective,
                                      apiAction,

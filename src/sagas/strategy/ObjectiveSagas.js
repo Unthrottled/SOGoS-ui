@@ -3,7 +3,7 @@ import {performStreamedGet} from "../APISagas";
 import {createFetchedObjectivesEvent} from "../../events/StrategyEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
-export const OBJECTIVES_URL = `/api/strategy/objectives`;
+export const OBJECTIVES_URL = `/strategy/objectives`;
 
 export function* objectiveHistoryFetchSaga() {
   try {

@@ -1,8 +1,9 @@
-import {performOpenGet} from "../APISagas";
+import {performFullOpenGet, performOpenGet} from "../APISagas";
 import {
   createFailedToGetInitialConfigurationsEvent,
   createFoundInitialConfigurationsEvent,
   createReceivedInitialConfigurationsEvent,
+  createReceivedPartialInitialConfigurationsEvent,
   RECEIVED_INITIAL_CONFIGURATION
 } from "../../events/ConfigurationEvents";
 import {call, put, select, take} from 'redux-saga/effects'
@@ -15,10 +16,12 @@ import {waitForWifi} from "../NetworkSagas";
 export function* initialConfigurationSaga() {
   try {
     yield call(waitForWifi);
-    const {data} = yield call(performOpenGet, '/api/configurations');
+    const {data: configData} = yield call(performFullOpenGet, '/config/initial.json');
+    yield put(createReceivedPartialInitialConfigurationsEvent(configData));
+    const {data} = yield call(performOpenGet, '/configurations');
     yield put(createReceivedInitialConfigurationsEvent({
       ...data,
-      callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':'+window.location.port: ''}`
+      callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
     }));
   } catch (e) {
     yield put(createFailedToGetInitialConfigurationsEvent(e));

@@ -5,7 +5,7 @@ import {createSyncedObjectivesEvent} from "../../events/StrategyEvents";
 import {createSyncedDataEvent} from "../../events/UserEvents";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
-export const BULK_OBJECTIVE_UPLOAD_URL = '/api/strategy/objectives/bulk';
+export const BULK_OBJECTIVE_UPLOAD_URL = '/strategy/objectives/bulk';
 
 export function* strategySyncSaga() {
   const globalState = yield select();

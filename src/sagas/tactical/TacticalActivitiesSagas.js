@@ -3,7 +3,7 @@ import {performStreamedGet} from "../APISagas";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 import {createFetchedTacticalActivitesEvent} from "../../events/TacticalEvents";
 
-export const TACTICAL_ACTIVITIES_URL = `/api/tactical/activity`;
+export const TACTICAL_ACTIVITIES_URL = `/tactical/activity`;
 
 export function* tacticalActivitiesFetchSaga() {
   try {

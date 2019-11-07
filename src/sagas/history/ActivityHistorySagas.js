@@ -15,7 +15,7 @@ import type {UserState} from "../../reducers/UserReducer";
 import {getActivityContent} from "../../types/ActivityModels";
 
 export const createHistoryAPIURL = (guid, from, to) =>
-  `/api/history/${guid}/feed?from=${from}&to=${to}`;
+  `/history/${guid}/feed?from=${from}&to=${to}`;
 
 const ONE_MINUTE = 60000;
 const meow = new Date(new Date().valueOf() + (2 * ONE_MINUTE));

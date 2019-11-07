@@ -13,7 +13,7 @@ import {performGet, performPost} from "../APISagas";
 import {delayWork} from "../activity/CurrentActivitySaga";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
 
-export const POMODORO_API = '/api/tactical/pomodoro/settings';
+export const POMODORO_API = '/tactical/pomodoro/settings';
 
 export function* fetchSettings() {
   try {

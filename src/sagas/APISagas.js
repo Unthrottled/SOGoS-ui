@@ -4,6 +4,9 @@ import axios from "axios";
 import oboe from 'oboe';
 
 import {accessTokenWithoutSessionExtensionSaga, accessTokenWithSessionExtensionSaga} from "./security/AccessTokenSagas";
+import type {InitialConfig} from "../types/ConfigurationModels";
+import {selectConfigurationState} from "../reducers";
+import type {ConfigurationState} from "../reducers/ConfigurationReducer";
 
 const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
 
@@ -68,9 +71,15 @@ export function* createHeaders(accessTokenSaga, options = {headers: {}}) {
   };
 }
 
+export function* constructURL(url: String): String {
+  const { initial: {apiURL}}: ConfigurationState = yield select(selectConfigurationState);
+  return `${apiURL || ''}${url}`
+}
+
 export function* performGetWithToken(url, options, accessTokenSaga) {
   const headers = yield call(createHeaders, accessTokenSaga, options);
-  return yield call(axios.get, url, {
+  const fullURL = yield call(constructURL, url);
+  return yield call(axios.get, fullURL, {
     ...options,
     headers
   });
@@ -85,12 +94,18 @@ export function* performGetWithoutSessionExtension<T>(url: String, options = {he
 }
 
 export function* performOpenGet<T>(url: String, options): T {
-  return yield call(axios.get, url, options);
+  const fullURL = yield call(constructURL, url);
+  return yield call(axios.get, fullURL, options);
+}
+
+export function* performFullOpenGet<T>(fullURL: String, options): T {
+  return yield call(axios.get, fullURL, options);
 }
 
 export function* performPost<T>(url: String, data, options = {headers: {}}): T {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
-  return yield call(axios.post, url, data, {
+  const fullURL = yield call(constructURL, url);
+  return yield call(axios.post, fullURL, data, {
     ...options,
     headers,
   });
@@ -98,7 +113,8 @@ export function* performPost<T>(url: String, data, options = {headers: {}}): T {
 
 export function* performPut<T>(url: String, data, options = {headers: {}}): T {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
-  return yield call(axios.put, url, data, {
+  const fullURL = yield call(constructURL, url);
+  return yield call(axios.put, fullURL, data, {
     ...options,
     headers,
   });
@@ -106,7 +122,8 @@ export function* performPut<T>(url: String, data, options = {headers: {}}): T {
 
 export function* performDelete<T>(url: String, data, options = {headers: {}}): T {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
-  return yield call(axios.delete, url, {
+  const fullURL = yield call(constructURL, url);
+  return yield call(axios.delete, fullURL, {
     ...options,
     headers,
     data

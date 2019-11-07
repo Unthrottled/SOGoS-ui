@@ -33,8 +33,8 @@ export function* handleNewActivity(activity) {
   }
 }
 
-export const CURRENT_ACTIVITY_URL = '/api/activity/current';
-export const PREVIOUS_ACTIVITY_URL = '/api/activity/previous';
+export const CURRENT_ACTIVITY_URL = '/activity/current';
+export const PREVIOUS_ACTIVITY_URL = '/activity/previous';
 
 export function* updateCurrentActivity(attempt: number = 10) {
   try {

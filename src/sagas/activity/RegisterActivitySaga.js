@@ -21,7 +21,7 @@ export function* registerActivitySaga(action) {
   }
 }
 
-export const ACTIVITY_URL = '/api/activity';
+export const ACTIVITY_URL = '/activity';
 
 export function* activityUploadSaga(activity: Activity) {
   try {

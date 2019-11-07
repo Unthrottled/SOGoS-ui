@@ -14,6 +14,7 @@ export type InitialConfig = {
   openIDConnectURI: string,
   provider: string,
   callbackURI?: string,
+  apiURL?: string,
 }
 
 export type MiscellaneousConfig = {
