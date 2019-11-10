@@ -1,0 +1,31 @@
+{
+  "short_name": "SOGoS",
+  "name": "SOGoS",
+  "icons": [
+    {
+      "src": "reach.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }, {
+      "src": "/images/reach_orange_144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }, {
+      "src": "/images/reach_orange_152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }, {
+      "src": "/images/reach_orange_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "/images/reach_orange_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffc107",
+  "background_color": "#eaeaf0"
+}
