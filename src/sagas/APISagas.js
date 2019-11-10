@@ -4,7 +4,6 @@ import axios from "axios";
 import oboe from 'oboe';
 
 import {accessTokenWithoutSessionExtensionSaga, accessTokenWithSessionExtensionSaga} from "./security/AccessTokenSagas";
-import type {InitialConfig} from "../types/ConfigurationModels";
 import {selectConfigurationState} from "../reducers";
 import type {ConfigurationState} from "../reducers/ConfigurationReducer";
 
@@ -34,8 +33,9 @@ export const createStreamChannel = ({url, method, headers, body}) => {
 
 export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[] {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
+  const fullURL = yield call(constructURL, url);
   const streamChannel = yield call(createStreamChannel, {
-    url,
+    url: fullURL,
     method: 'GET',
     headers,
     body: '',
