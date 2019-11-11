@@ -53,4 +53,5 @@ export const activitiesEqual = (currentActivity: Activity, activity: Activity) =
 
 
 export const RECOVERY = 'RECOVERY';
-export const isActivityRecovery = (activity: Activity) => activity && activity.content && activity.content.name === RECOVERY;
+export const isActivityRecovery = (activity: Activity) =>
+  activity && activity.content && activity.content.name === RECOVERY;
