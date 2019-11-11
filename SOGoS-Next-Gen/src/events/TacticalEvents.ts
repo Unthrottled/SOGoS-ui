@@ -1,5 +1,5 @@
 import {
-    ActivityCacheEvent,
+    TacticalActivityCacheEvent,
     CachedSettings,
     PomodoroSettings,
     PomodoroSettingsRegistryFailure,
@@ -85,8 +85,8 @@ export const createViewedTacticalActivitesEvent =
 
 export const createCachedTacticalActivityEvent =
     (
-        tacticalActivityCacheEvent: ActivityCacheEvent
-    ): PayloadEvent<ActivityCacheEvent> => ({
+        tacticalActivityCacheEvent: TacticalActivityCacheEvent
+    ): PayloadEvent<TacticalActivityCacheEvent> => ({
         type: CACHED_TACTICAL_ACTIVITY,
         payload: tacticalActivityCacheEvent
     });

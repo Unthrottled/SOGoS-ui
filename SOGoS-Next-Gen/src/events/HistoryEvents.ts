@@ -12,19 +12,19 @@ export const UPDATED_HISTORY: 'UPDATED_HISTORY' = 'UPDATED_HISTORY';
 export const VIEWED_HISTORY: 'VIEWED_HISTORY' = 'VIEWED_HISTORY';
 export const ADJUSTED_HISTORY: 'ADJUSTED_HISTORY' = 'ADJUSTED_HISTORY';
 
-export type ActivityReceptionPayload = {
-    activities: Activity[],
-    between: DateRange,
+export interface ActivityReceptionPayload {
+    activities: Activity[];
+    between: DateRange;
 }
 
-export type CapstoneActivityUpdatePayload = {
-    beforeCapstone: Activity,
-    afterCapstone: Activity,
+export interface CapstoneActivityUpdatePayload {
+    beforeCapstone: Activity;
+    afterCapstone: Activity;
 }
 
-export type ActivityUpdatePayload = {
-    selection: ActivityReceptionPayload,
-    full: ActivityReceptionPayload,
+export interface ActivityUpdatePayload {
+    selection: ActivityReceptionPayload;
+    full: ActivityReceptionPayload;
 }
 
 

@@ -1,7 +1,11 @@
 import {ColorType} from "./StrategyTypes";
 import {EventTypes} from "./EventTypes";
-import {ActivityStrategy, isActivityRecovery, RECOVERY} from "./ActivityTypes";
+import {ActivityStrategy, RECOVERY} from "./ActivityTypes";
 
+export interface RememberedPomodoro {
+    dateCounted: number;
+    count: number;
+}
 
 export interface PomodoroSettings {
     loadDuration: number, //milliseconds
@@ -11,7 +15,7 @@ export interface PomodoroSettings {
 
 export interface CachedSettings {
     settings: PomodoroSettings
-};
+}
 
 export interface PomodoroSettingsRegistryFailure {
     error: any,
@@ -36,14 +40,14 @@ export interface TacticalActivity {
     },
     categories: string[],
     hidden: boolean,
-};
+}
 
 export interface CachedTacticalActivity {
     uploadType: EventTypes.CREATED | EventTypes.UPDATED | EventTypes.DELETED,
     activity: TacticalActivity
 }
 
-export interface ActivityCacheEvent {
+export interface TacticalActivityCacheEvent {
     activity: CachedTacticalActivity,
     userGUID: string,
 }

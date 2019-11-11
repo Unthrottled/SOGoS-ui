@@ -16,6 +16,11 @@ export enum ActivityTimedType {
 }
 
 
+export interface ActivityCacheEvent {
+    cachedActivity: CachedActivity,
+    userGUID: string,
+}
+
 
 export interface ActivityContent {
     uuid: string;
