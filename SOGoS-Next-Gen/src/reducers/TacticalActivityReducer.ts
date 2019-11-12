@@ -1,5 +1,4 @@
 import {numberObjectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
-import {TacticalState} from "./TacticalReducer";
 import {INITIAL_TACTICAL_STATE} from "./TacticalReducer";
 import {
   ARCHIVED_ACTIVITY,
@@ -13,7 +12,7 @@ import {
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
 import {dictionaryReducer} from "./StrategyReducer";
-import {TacticalActivity} from "../types/TacticalTypes";
+import {TacticalActivity, TacticalState} from "../types/TacticalTypes";
 import {NumberDictionary} from "../types/BaseTypes";
 
 export const rankReducer = (accum: NumberDictionary<TacticalActivity>,

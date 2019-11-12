@@ -1,5 +1,4 @@
-import {Action} from "redux";
-import {PomodoroSettings, TacticalActivity} from "../types/TacticalTypes";
+import {PomodoroSettings, TacticalActivity, TacticalState} from "../types/TacticalTypes";
 import {
   CACHED_SETTINGS,
   REGISTERED_POMODORO_SETTINGS, SettingsCacheEvent,
@@ -22,11 +21,6 @@ export type TacticalActivityState = {
   cache: StringDictionary<CachedTacticalActivity[]>,
 }
 
-export type TacticalState = {
-  activity: TacticalActivityState,
-  pomodoro: PomodoroState,
-}
-
 export const INITIAL_TACTICAL_STATE: TacticalState = {
   pomodoro: {
     settings: {
@@ -43,7 +37,7 @@ export const INITIAL_TACTICAL_STATE: TacticalState = {
   }
 };
 
-const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: Action) => {
+const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: any) => {
   const updatedState = TacticalActivityReducer(state, action);
   switch (action.type) {
     case UPDATED_POMODORO_SETTINGS:
@@ -74,9 +68,10 @@ const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: 
         pomodoro: {
           ...updatedState.pomodoro,
           cache: {
-            ...objectToKeyValueArray(updatedState.cache)
+            ...objectToKeyValueArray(updatedState.pomodoro.cache)
               .filter(keyValues => keyValues.key !== action.payload)
-              .reduce((accum, keyValue) => {
+              .reduce((accum: StringDictionary<SettingsCacheEvent>,
+                       keyValue) => {
                 accum[keyValue.key] = keyValue.value;
                 return accum
               }, {}),
