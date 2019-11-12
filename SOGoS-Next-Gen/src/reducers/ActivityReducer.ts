@@ -25,7 +25,7 @@ export type ActivityState = {
     cache: any,
 }
 
-const defaultActivity = {
+export const defaultActivity = {
     antecedenceTime: 0,
     content: {
         uuid: '',

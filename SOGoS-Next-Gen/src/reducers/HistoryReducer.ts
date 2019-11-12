@@ -1,5 +1,4 @@
-import {Action} from "redux";
-import type {
+import {
   ActivityReceptionPayload,
   ActivityUpdatePayload,
   CapstoneActivityUpdatePayload
@@ -11,29 +10,30 @@ import {
   UPDATED_HISTORY,
   UPDATED_HISTORY_SELECTION
 } from "../events/HistoryEvents";
-import type {Activity} from "../types/ActivityModels";
+import {Activity} from "../types/ActivityTypes";
+import {defaultActivity} from "./ActivityReducer";
 
-export type DateRange = {
-  from: number,
-  to: number,
+export interface DateRange {
+  from: number;
+  to: number;
 }
 
-export type CapstoneState = {
-  topActivity: Activity,
-  bottomActivity: Activity,
-};
+export interface CapstoneState {
+  topActivity: Activity;
+  bottomActivity: Activity;
+}
 
-export type HistoryState = {
-  activityFeed: any[],
-  selectedHistoryRange: DateRange,
-  fullFeed: any[],
-  fullHistoryRange: DateRange,
-  capstone: CapstoneState,
+export interface HistoryState {
+  activityFeed: Activity[];
+  selectedHistoryRange: DateRange;
+  fullFeed: Activity[];
+  fullHistoryRange: DateRange;
+  capstone: CapstoneState;
 }
 
 const DEFAULT_RANGE: DateRange = {
   from: 0,
-  to: 0,
+  to: 69,
 };
 
 export const INITIAL_HISTORY_STATE: HistoryState = {
@@ -42,12 +42,12 @@ export const INITIAL_HISTORY_STATE: HistoryState = {
   selectedHistoryRange: DEFAULT_RANGE,
   fullHistoryRange: DEFAULT_RANGE,
   capstone: {
-    topActivity: {},
-    bottomActivity: {},
+    topActivity: defaultActivity,// todo: should this be default activity?
+    bottomActivity: defaultActivity,// todo: should this be default activity?
   }
 };
 
-const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: Action = {}): HistoryState => {
+const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: any): HistoryState => {
   switch (action.type) {
     case INITIALIZED_HISTORY:
     case UPDATED_HISTORY:
