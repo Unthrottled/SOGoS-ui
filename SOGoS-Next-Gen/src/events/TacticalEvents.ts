@@ -49,7 +49,6 @@ export const createViewedSettingsEvent =
         });
 
 export const createCachedSettingsEvent =
-
     (cachedSettings: SettingsCacheEvent): PayloadEvent<SettingsCacheEvent> => ({
         type: CACHED_SETTINGS,
         payload: cachedSettings

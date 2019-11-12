@@ -1,13 +1,15 @@
+import {StringDictionary} from "../types/BaseTypes";
+
 export const objectToArray =
-    (object: any): any[] =>
+    <T>(object: StringDictionary<T>): T[] =>
         Object.keys(object || {}).map(key => object[key]);
 
-export interface KeyValue {
-    key: any,
-    value: any,
+export interface KeyValue<T> {
+    key: string,
+    value: T,
 }
 
-export const objectToKeyValueArray = (object: any): KeyValue[] =>
+export const objectToKeyValueArray = <T>(object: StringDictionary<T>): KeyValue<T>[] =>
     Object.keys(object || {}).map(key => ({
         key,
         value: object[key],
