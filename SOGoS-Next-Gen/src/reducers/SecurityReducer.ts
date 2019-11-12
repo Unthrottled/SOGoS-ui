@@ -1,8 +1,7 @@
 import {EXPIRED_SESSION, INITIALIZED_SECURITY, LOGGED_OFF, LOGGED_ON, RECEIVED_TOKENS} from "../events/SecurityEvents";
-import {tokenReceptionReducer} from "./security/TokenReducers";
-import {Action} from "redux";
+import {tokenReceptionReducer} from "./security/TokenReducer";
 import {RECEIVED_USER} from "../events/UserEvents";
-import type {TokenInformation} from "../types/SecurityModels";
+import {TokenInformation} from "../types/SecurityTypes";
 
 export type SecurityState = {
   isLoggedIn: boolean,
@@ -16,13 +15,23 @@ export type SecurityState = {
   isInitialized: boolean,
 };
 
+const defaultTokenInfo = {
+  issuedAt: 0,
+  expiresAt: 69,
+};
 const INITIAL_SECURITY_STATE: SecurityState = {
+  refreshTokenInformation: defaultTokenInfo,
+  accessToken: "",
+  accessTokenInformation: defaultTokenInfo,
+  idToken: "",
+  refreshToken: "",
+  verificationKey: "",
   isLoggedIn: false,
   isExpired: false,
-  isInitialized: false,
+  isInitialized: false
 };
 
-const securityReducer = (state = INITIAL_SECURITY_STATE, action: Action) => {
+const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
   switch (action.type) {
     case LOGGED_ON :
       return {
