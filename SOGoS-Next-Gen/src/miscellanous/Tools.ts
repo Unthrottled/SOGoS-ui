@@ -1,7 +1,11 @@
-import {StringDictionary} from "../types/BaseTypes";
+import {NumberDictionary, StringDictionary} from "../types/BaseTypes";
 
 export const objectToArray =
     <T>(object: StringDictionary<T>): T[] =>
+        Object.keys(object || {}).map(key => object[key]);
+
+export const numberObjectToArray =
+    <T>(object: NumberDictionary<T>): T[] =>
         Object.keys(object || {}).map(key => object[key]);
 
 export interface KeyValue<T> {

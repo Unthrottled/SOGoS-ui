@@ -1,4 +1,4 @@
-import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
+import {numberObjectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
 import {TacticalState} from "./TacticalReducer";
 import {INITIAL_TACTICAL_STATE} from "./TacticalReducer";
 import {
@@ -14,9 +14,11 @@ import {
 } from "../events/TacticalEvents";
 import {dictionaryReducer} from "./StrategyReducer";
 import {TacticalActivity} from "../types/TacticalTypes";
+import {NumberDictionary} from "../types/BaseTypes";
 
-
-export const rankReducer = (accum: any, toIndex: TacticalActivity, index: number) => {
+export const rankReducer = (accum: NumberDictionary<TacticalActivity>,
+                            toIndex: TacticalActivity,
+                            index: number) => {
   if(!toIndex.rank && toIndex.rank !== 0) {
     toIndex.rank = index;
   }
@@ -24,13 +26,14 @@ export const rankReducer = (accum: any, toIndex: TacticalActivity, index: number
   return accum;
 };
 
-const updateStateWithActivities = (newActivities: TacticalActivity[], state: TacticalState): TacticalState => {
+const updateStateWithActivities = (newActivities: TacticalActivity[],
+                                   state: TacticalState): TacticalState => {
   const tacticalActivities = [
-    ...objectToArray(state.activity.activities),
+    ...numberObjectToArray(state.activity.activities),
     ...newActivities.filter(tactAct => !tactAct.hidden)
   ].reduce(rankReducer, {});
   const archivedTacticalActivities = [
-    ...objectToArray(state.activity.archivedActivities),
+    ...numberObjectToArray(state.activity.archivedActivities),
     ...newActivities.filter(tactAct => tactAct.hidden)
   ].reduce(dictionaryReducer, {});
   return {
@@ -51,7 +54,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
       return updateStateWithActivities(newActivity, state);
     case DELETED_ACTIVITY:
       const {payload: deletedActivity} = action;
-      const newActivities = objectToArray(state.activity.activities).filter(suspiciousActivity =>
+      const newActivities = numberObjectToArray(state.activity.activities).filter(suspiciousActivity =>
         suspiciousActivity.id !== deletedActivity.id);
       return {
         ...state,
@@ -65,7 +68,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         ...state,
         activity: {
           ...state.activity,
-          activities: objectToArray(state.activity.activities)
+          activities: numberObjectToArray(state.activity.activities)
             .filter(activity => activity.id !== action.payload.id)
             .reduce(rankReducer, {})
         }
@@ -75,7 +78,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         ...state,
         activity: {
           ...state.activity,
-          archivedActivities: objectToArray(state.activity.archivedActivities)
+          archivedActivities: numberObjectToArray(state.activity.archivedActivities)
             .filter(activity => activity.id !== action.payload.id)
             .reduce(rankReducer, {})
         }
