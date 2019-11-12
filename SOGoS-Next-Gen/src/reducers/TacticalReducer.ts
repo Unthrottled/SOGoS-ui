@@ -10,15 +10,15 @@ import TacticalActivityReducer from "./TacticalActivityReducer";
 import {NumberDictionary, StringDictionary} from "../types/BaseTypes";
 import {CachedTacticalActivity} from "../types/TacticalTypes";
 
-export type PomodoroState = {
-  settings: PomodoroSettings,
-  cache: StringDictionary<SettingsCacheEvent>,
+export interface PomodoroState {
+  settings: PomodoroSettings;
+  cache: StringDictionary<SettingsCacheEvent>;
 }
 
-export type TacticalActivityState = {
-  activities: NumberDictionary<TacticalActivity>,
-  archivedActivities: NumberDictionary<TacticalActivity>,
-  cache: StringDictionary<CachedTacticalActivity[]>,
+export interface TacticalActivityState {
+  activities: NumberDictionary<TacticalActivity>;
+  archivedActivities: NumberDictionary<TacticalActivity>;
+  cache: StringDictionary<CachedTacticalActivity[]>;
 }
 
 export const INITIAL_TACTICAL_STATE: TacticalState = {

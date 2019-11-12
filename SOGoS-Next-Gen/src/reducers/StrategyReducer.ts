@@ -28,9 +28,9 @@ export const dictionaryReducer = <T extends HasId>(accum: StringDictionary<T>, t
   return accum;
 };
 
-function updateStateWithObjectives(newObjectives: Objective[],
+const updateStateWithObjectives = (newObjectives: Objective[],
                                    newKeyResults: KeyResult[],
-                                   state: StrategyState): StrategyState {
+                                   state: StrategyState): StrategyState => {
   const objectives = [
     ...objectToArray(state.objectives),
     ...newObjectives
@@ -44,7 +44,7 @@ function updateStateWithObjectives(newObjectives: Objective[],
     objectives,
     keyResults
   };
-}
+};
 
 const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any) => {
   switch (action.type) {
