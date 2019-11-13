@@ -1,6 +1,5 @@
 import {call, put, select, take} from 'redux-saga/effects'
 import {createReceivedOAuthConfigurations, RECEIVED_REMOTE_OAUTH_CONFIGURATION} from "../../events/ConfigurationEvents";
-import type {OAuthConfig} from "../../types/ConfigurationModels";
 import {createOauthConfigurationObject} from "../../security/StupidShit";
 import {selectConfigurationState} from "../../reducers";
 
@@ -9,7 +8,7 @@ export function* securityRequestSaga() {
   yield put(createReceivedOAuthConfigurations(oauthConfig))
 }
 
-export function* fetchOAuthConfiguration(): OAuthConfig {
+export function* fetchOAuthConfiguration() {
   const {oauth} = yield select(selectConfigurationState);
   if (!oauth.authorizationEndpoint) {
     const {payload} = yield take(RECEIVED_REMOTE_OAUTH_CONFIGURATION);
