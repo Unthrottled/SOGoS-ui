@@ -2,7 +2,7 @@ import {SecurityState} from "../SecurityReducer";
 import {TokenResponse} from "@openid/appauth";
 import jwtDecode from 'jwt-decode';
 
-const getRefreshTokenInformation = (refreshToken: string) => {
+const getRefreshTokenInformation = (refreshToken: string | undefined) => {
     if(refreshToken){
         const decodedToken = jwtDecode(refreshToken);
         return {
@@ -25,7 +25,7 @@ export const tokenReceptionReducer = (state: SecurityState,
         accessToken: tokenReceptionPayload.accessToken,
         accessTokenInformation: {
             issuedAt: tokenReceptionPayload.issuedAt,
-            expiresAt: tokenReceptionPayload.issuedAt + tokenReceptionPayload.expiresIn
+            expiresAt: tokenReceptionPayload.issuedAt + (tokenReceptionPayload.expiresIn || 0)
         },
         ...getRefreshTokenInformation(tokenReceptionPayload.refreshToken),
         refreshToken: tokenReceptionPayload.refreshToken || state.refreshToken,

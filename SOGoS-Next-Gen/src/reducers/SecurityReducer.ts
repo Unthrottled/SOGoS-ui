@@ -9,7 +9,7 @@ export type SecurityState = {
   accessTokenInformation: TokenInformation,
   refreshToken: string,
   refreshTokenInformation: TokenInformation,
-  idToken: string,
+  idToken?: string,
   verificationKey: string,
   isExpired: boolean,
   isInitialized: boolean,
