@@ -1,17 +1,18 @@
 import {performPost} from "../APISagas";
 import {
   createCachedActivityEvent,
-  CREATED,
   createFailureToRegisterStartEvent,
   createRegisteredStartEvent
 } from "../../events/ActivityEvents";
 import {call, put, select} from 'redux-saga/effects'
 import {isOnline} from "../NetworkSagas";
 import {selectUserState} from "../../reducers";
-import type {Activity} from "../../types/ActivityModels";
+import {Activity} from "../../types/ActivityTypes";
 import {createCachedDataEvent} from "../../events/UserEvents";
+import {PayloadEvent} from "../../events/Event";
+import {EventTypes} from "../../types/EventTypes";
 
-export function* registerActivitySaga(action) {
+export function* registerActivitySaga(action: PayloadEvent<Activity>) {
   const {payload: activity} = action;
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
@@ -41,7 +42,7 @@ export function* activityCacheSaga(activity: Activity) {
   yield put(createCachedActivityEvent({
     cachedActivity: {
       activity,
-      uploadType: CREATED,
+      uploadType: EventTypes.CREATED,
     },
     userGUID: guid,
   }));
