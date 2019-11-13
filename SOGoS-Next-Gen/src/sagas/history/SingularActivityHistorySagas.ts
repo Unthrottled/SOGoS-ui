@@ -1,12 +1,12 @@
 import {call, put, select} from "@redux-saga/core/effects";
-import type {Activity} from "../../types/ActivityModels";
+import {Activity} from "../../types/ActivityTypes";
 import {selectHistoryState} from "../../reducers";
-import type {HistoryState} from "../../reducers/HistoryReducer";
+import {HistoryState} from "../../reducers/HistoryReducer";
 import {createUpdatedFullFeedEvent} from "../../events/HistoryEvents";
+import {PayloadEvent} from "../../events/Event";
 
 
-export function* apiBeforeCapstoneSaga({payload}){
-  const activity: Activity = payload;
+export function* apiBeforeCapstoneSaga({payload: activity}: PayloadEvent<Activity>) {
   const historyState: HistoryState = yield select(selectHistoryState);
   yield put(createUpdatedFullFeedEvent({
     activities: [
@@ -20,7 +20,7 @@ export function* apiBeforeCapstoneSaga({payload}){
   }));
 }
 
-export function* addActivityAfter(activity) {
+export function* addActivityAfter(activity: Activity) {
   const historyState: HistoryState = yield select(selectHistoryState);
   yield put(createUpdatedFullFeedEvent({
     activities: [
@@ -34,11 +34,10 @@ export function* addActivityAfter(activity) {
   }));
 }
 
-export function* apiAfterCapstoneSaga({payload}){
-  const activity: Activity = payload;
+export function* apiAfterCapstoneSaga({payload: activity}: PayloadEvent<Activity>) {
   yield call(addActivityAfter, activity);
 }
 
-export function* currentActivityHistorySaga({payload}) {
+export function* currentActivityHistorySaga({payload}: PayloadEvent<Activity>) {
   yield call(addActivityAfter, payload);
 }
