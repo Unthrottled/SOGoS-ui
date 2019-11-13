@@ -1,4 +1,4 @@
-import {getActivityContent, getActivityName, isActivityRecovery} from "../../types/ActivityModels";
+import {getActivityContent, getActivityName, isActivityRecovery} from "types/ActivityTypes";
 
 const audio = new Audio('/notification.mp3');
 
