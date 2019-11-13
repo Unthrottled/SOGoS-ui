@@ -1,8 +1,9 @@
-import {getActivityContent, getActivityName, isActivityRecovery} from "types/ActivityTypes";
+import {Activity, getActivityContent, getActivityName, isActivityRecovery} from "../../types/ActivityTypes";
+import {PayloadEvent} from "../../events/Event";
 
 const audio = new Audio('/notification.mp3');
 
-export function activityNotificationSaga({payload}) {
+export function activityNotificationSaga({payload}: PayloadEvent<Activity>) {
   Notification.requestPermission()
     .then(_ => {
       if (("Notification" in window) &&

@@ -1,15 +1,15 @@
 import {call, select, take} from 'redux-saga/effects'
 import {buffers, END, eventChannel} from 'redux-saga';
-import axios from "axios";
+import axios from 'axios';
 import oboe from 'oboe';
-
 import {accessTokenWithoutSessionExtensionSaga, accessTokenWithSessionExtensionSaga} from "./security/AccessTokenSagas";
 import {selectConfigurationState} from "../reducers";
-import type {ConfigurationState} from "../reducers/ConfigurationReducer";
+import {ConfigurationState} from "../reducers/ConfigurationReducer";
 
 const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
 
-export const createStreamChannel = ({url, method, headers, body}) => {
+type ChannelParameters = { url: string, method: string, headers: any, body: any };
+export const createStreamChannel = ({url, method, headers, body}: ChannelParameters) => {
   return eventChannel(statusObserver => {
     const requestStream = oboe({
       url,
@@ -31,7 +31,7 @@ export const createStreamChannel = ({url, method, headers, body}) => {
   }, buffers.expanding(100))
 };
 
-export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[] {
+export function* performStreamedGet<T>(url: String, options = {headers: {}}) {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
   const fullURL = yield call(constructURL, url);
   const streamChannel = yield call(createStreamChannel, {
@@ -60,7 +60,7 @@ export function* performStreamedGet<T>(url: String, options = {headers: {}}): T[
   }
 }
 
-export function* createHeaders(accessTokenSaga, options = {headers: {}}) {
+export function* createHeaders(accessTokenSaga: ()=>any, options = {headers: {}}) {
   const accessToken = yield call(accessTokenSaga);
   const {user: {information: {guid}}, security: {verificationKey}} = yield select();
   return {
@@ -71,12 +71,14 @@ export function* createHeaders(accessTokenSaga, options = {headers: {}}) {
   };
 }
 
-export function* constructURL(url: String): String {
+export function* constructURL(url: String) {
   const { initial: {apiURL}}: ConfigurationState = yield select(selectConfigurationState);
   return `${apiURL || ''}${url}`
 }
 
-export function* performGetWithToken(url, options, accessTokenSaga) {
+export function* performGetWithToken(url: string,
+                                     options: any,
+                                     accessTokenSaga: ()=>any) {
   const headers = yield call(createHeaders, accessTokenSaga, options);
   const fullURL = yield call(constructURL, url);
   return yield call(axios.get, fullURL, {
@@ -85,24 +87,25 @@ export function* performGetWithToken(url, options, accessTokenSaga) {
   });
 }
 
-export function* performGet<T>(url: String, options = {headers: {}}): T {
+export function* performGet(url: string,
+                               options = {headers: {}}) {
   return yield call(performGetWithToken, url, options, accessTokenWithSessionExtensionSaga);
 }
 
-export function* performGetWithoutSessionExtension<T>(url: String, options = {headers: {}}): T {
+export function* performGetWithoutSessionExtension(url: string, options = {headers: {}}) {
   return yield call(performGetWithToken, url, options, accessTokenWithoutSessionExtensionSaga);
 }
 
-export function* performOpenGet<T>(url: String, options): T {
+export function* performOpenGet(url: string, options = {headers: {}}) {
   const fullURL = yield call(constructURL, url);
   return yield call(axios.get, fullURL, options);
 }
 
-export function* performFullOpenGet<T>(fullURL: String, options): T {
+export function* performFullOpenGet(fullURL: string, options = {headers: {}}) {
   return yield call(axios.get, fullURL, options);
 }
 
-export function* performPost<T>(url: String, data, options = {headers: {}}): T {
+export function* performPost(url: string, data: any, options = {headers: {}}) {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
   const fullURL = yield call(constructURL, url);
   return yield call(axios.post, fullURL, data, {
@@ -111,7 +114,7 @@ export function* performPost<T>(url: String, data, options = {headers: {}}): T {
   });
 }
 
-export function* performPut<T>(url: String, data, options = {headers: {}}): T {
+export function* performPut(url: string, data: any, options = {headers: {}}) {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
   const fullURL = yield call(constructURL, url);
   return yield call(axios.put, fullURL, data, {
@@ -120,7 +123,7 @@ export function* performPut<T>(url: String, data, options = {headers: {}}): T {
   });
 }
 
-export function* performDelete<T>(url: String, data, options = {headers: {}}): T {
+export function* performDelete(url: string, data: any, options = {headers: {}}) {
   const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
   const fullURL = yield call(constructURL, url);
   return yield call(axios.delete, fullURL, {
