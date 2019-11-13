@@ -27,8 +27,8 @@ export interface ActivityContent {
     name: string;
     timedType: ActivityTimedType;
     type: ActivityType;
-    paused: boolean;
-    autoStart: boolean;
+    paused?: boolean;
+    autoStart?: boolean;
     veryFirstActivity?: boolean;
     activityID?: string;
 }
