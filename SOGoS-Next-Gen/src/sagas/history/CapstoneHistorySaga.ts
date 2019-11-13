@@ -1,5 +1,5 @@
 import {call, put, select, take} from 'redux-saga/effects';
-import type {DateRange, HistoryState} from "../../reducers/HistoryReducer";
+import {DateRange, HistoryState} from "../../reducers/HistoryReducer";
 import {selectHistoryState, selectUserState} from "../../reducers";
 import {
   createFoundAfterCapstoneEvent,
@@ -7,9 +7,9 @@ import {
   createUpdatedCapstonesEvent,
   UPDATED_FULL_FEED
 } from "../../events/HistoryEvents";
-import type {Activity} from "../../types/ActivityModels";
+import {Activity} from "../../types/ActivityTypes";
 import {reverseBinarySearch} from "../../miscellanous/Tools";
-import type {UserState} from "../../reducers/UserReducer";
+import {UserState} from "../../reducers/UserReducer";
 import {performPost} from "../APISagas";
 import {isTimedActivity} from "../activity/CurrentActivitySaga";
 import {shouldTime} from "../../miscellanous/Projection";
@@ -34,7 +34,7 @@ export function* capstoneHistorySaga(selectedDateRange: DateRange,
   }));
 }
 
-const getBeforeIndex = (index) => {
+const getBeforeIndex = (index: number) => {
   if(index > -1){
     return index + 1;
   } else {
@@ -42,7 +42,7 @@ const getBeforeIndex = (index) => {
   }
 };
 
-const getAfterIndex = (index) => {
+const getAfterIndex = (index: number) => {
   if(index > -1){
     return index - 1;
   } else {
@@ -75,7 +75,7 @@ export function* getFirstBefore(selectedFromDate: number,
   return activities[activities.length - 1];
 }
 
-export const findOldestTimedActivityInCache= (activityIndex: number, activities: Activity[]) => {
+export const findOldestTimedActivityInCache= (activityIndex: number, activities: Activity[]): Activity | undefined => {
   if(activityIndex >= activities.length){
     return undefined
   } else {
@@ -129,15 +129,15 @@ export const constructActivityBeforeURL = (guid: string) => `/history/${guid}/fi
 
 export const constructActivityAfterURL = (guid: string) => `/history/${guid}/first/after`;
 
-export function* findFirstActivityBeforeTime(relativeTime: number): Activity {
+export function* findFirstActivityBeforeTime(relativeTime: number) {
   return yield call(findCapstoneActivity, relativeTime, constructActivityBeforeURL)
 }
 
-export function* findFirstActivityAfterTime(relativeTime: number): Activity {
+export function* findFirstActivityAfterTime(relativeTime: number) {
   return yield call(findCapstoneActivity, relativeTime, constructActivityAfterURL)
 }
 
-export function* findCapstoneActivity(relativeTime: number, urlBuilder: (string) => string) : Activity {
+export function* findCapstoneActivity(relativeTime: number, urlBuilder: (arg0: string) => string)  {
   const {information: {guid}}: UserState = yield select(selectUserState);
   const beforeURL = urlBuilder(guid);
   try {
@@ -147,7 +147,7 @@ export function* findCapstoneActivity(relativeTime: number, urlBuilder: (string)
   }
 }
 
-export function* getFullHistory(timeRange: DateRange): FullRangeAndFeed {
+export function* getFullHistory(timeRange: DateRange) {
   const historyState: HistoryState = yield select(selectHistoryState);
   const {fullHistoryRange} = historyState;
   if (fullHistoryRange.to < timeRange.to || fullHistoryRange.from > timeRange.from) {
