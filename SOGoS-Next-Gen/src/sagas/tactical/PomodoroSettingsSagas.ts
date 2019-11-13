@@ -12,10 +12,12 @@ import {isOnline} from "../NetworkSagas";
 import {performGet, performPost} from "../APISagas";
 import {delayWork} from "../activity/CurrentActivitySaga";
 import {createShowWarningNotificationEvent} from "../../events/MiscEvents";
+import {PomodoroSettings} from "../../types/TacticalTypes";
+import {PayloadEvent} from "../../events/Event";
 
 export const POMODORO_API = '/tactical/pomodoro/settings';
 
-export function* fetchSettings() {
+export function* fetchSettings(): any {
   try {
     const {data} = yield call(performGet, POMODORO_API);
     yield put(createUpdatedPomodoroSettingsEvent(data));
@@ -41,18 +43,18 @@ export function* settingsSyncSaga() {
 }
 
 
-export function* settingsCacheSaga(settings) {
+export function* settingsCacheSaga(settings: PomodoroSettings) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedSettingsEvent({
-    cachedSettings: {
-      ...settings,
+    cachedSettings: { //todo: look into cached settings being dumb
+      settings
     },
     userGUID: guid,
   }));
   yield put(createCachedDataEvent());
 }
 
-export function* updatePomodoroSaga({payload}) {
+export function* updatePomodoroSaga({payload}: PayloadEvent<PomodoroSettings>) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(settingsUploadSaga, payload)
@@ -61,7 +63,7 @@ export function* updatePomodoroSaga({payload}) {
   }
 }
 
-export function* settingsUploadSaga(settings) {
+export function* settingsUploadSaga(settings: PomodoroSettings) {
   try {
     yield call(performPost, POMODORO_API, settings);
     yield put(createRegisteredPomodoroSettingsEvent(settings));
