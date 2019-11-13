@@ -1,15 +1,15 @@
-import type {SecurityState} from "../../reducers/SecurityReducer";
+import {SecurityState} from "../../reducers/SecurityReducer";
 import {GRANT_TYPE_REFRESH_TOKEN, TokenRequest} from "@openid/appauth";
 import {createExpiredSessionEvent, FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
 import {call, fork, put, race, take} from 'redux-saga/effects'
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
-import type {OAuthConfig} from "../../types/ConfigurationModels";
+import {OAuthConfig} from "../../types/ConfigurationTypes";
 import {fetchTokenWithoutSessionRefreshSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {waitForWifi} from "../NetworkSagas";
 
 export function* refreshTokenSaga(oauthConfig: OAuthConfig,
                                   securityState: SecurityState,
-                                  fetchTokenSaga) {
+                                  fetchTokenSaga: (c: OAuthConfig, t: TokenRequest) => any) {
   yield call(waitForWifi);
   const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
   yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
@@ -31,7 +31,7 @@ export function* refreshTokenWithReplacementSaga(oauthConfig: OAuthConfig, secur
   yield call(refreshTokenSaga, oauthConfig, securityState, fetchTokenWithRefreshSaga);
 }
 
-export function* refreshTokenRequestSaga(securityState: SecurityState): TokenRequest {
+export function* refreshTokenRequestSaga(securityState: SecurityState) {
   yield put(createRequestForInitialConfigurations());
   const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
   return new TokenRequest({
