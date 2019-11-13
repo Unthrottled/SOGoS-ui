@@ -19,7 +19,7 @@ import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
-import type {OAuthConfig} from "../../types/ConfigurationModels";
+import {OAuthConfig} from "../../types/ConfigurationTypes";
 
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);
@@ -36,7 +36,10 @@ export function constructAuthorizationRequestHandler(): Promise<AuthorizationReq
   return Promise.resolve(authorizationHandler.setAuthorizationNotifier(notifier));
 }
 
-export function performAuthorizationRequest(authorizationHandler: AuthorizationRequestHandler, oauthConfig: OAuthConfig, authorizationRequest: AuthorizationRequest): Promise<void> {
+export function performAuthorizationRequest(authorizationHandler: AuthorizationRequestHandler,
+                                            oauthConfig: OAuthConfig,
+                                            authorizationRequest: AuthorizationRequest): Promise<void> {
+  // @ts-ignore
   return Promise.resolve(authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest));
 }
 
@@ -46,9 +49,11 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
   const authorizationHandler: AuthorizationRequestHandler =
     yield call(constructAuthorizationRequestHandler);
   const authorizationResult: AuthorizationRequestResponse =
+    // @ts-ignore
     yield call(completeAuthorizationRequest, authorizationHandler);
   if (authorizationResult) {
     const {request, response} = authorizationResult;
+    // @ts-ignore
     const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
     yield call(exchangeAuthorizationGrantForAccessToken, tokenRequest, oauthConfig);
   } else if (shouldRequestLogon) {
@@ -65,7 +70,8 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
   }
 }
 
-export function* constructAuthorizationCodeGrantRequest(request, response): TokenRequest {
+export function* constructAuthorizationCodeGrantRequest(request: { internal: { code_verifier: any; }; },
+                                                        response: { code: any; }) {
   const code = response.code;
   const codeVerifier = request.internal && request.internal.code_verifier;
   yield put(createRequestForInitialConfigurations());
@@ -81,7 +87,8 @@ export function* constructAuthorizationCodeGrantRequest(request, response): Toke
   });
 }
 
-export function* exchangeAuthorizationGrantForAccessToken(tokenRequest, oauthConfig) {
+export function* exchangeAuthorizationGrantForAccessToken(tokenRequest: TokenRequest,
+                                                          oauthConfig: any) {
   yield fork(fetchTokenWithRefreshSaga, oauthConfig, tokenRequest);
   const {tokenReception} = yield race({
     tokenReception: take(RECEIVED_TOKENS),
