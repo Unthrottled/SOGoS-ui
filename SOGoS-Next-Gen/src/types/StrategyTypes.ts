@@ -24,7 +24,7 @@ export interface Objective {
 }
 
 export interface CachedObjective {
-    uploadType: EventTypes.CREATED | EventTypes.UPDATED | EventTypes.DELETED;
+    uploadType: EventTypes;
     objective: Objective;
 }
 

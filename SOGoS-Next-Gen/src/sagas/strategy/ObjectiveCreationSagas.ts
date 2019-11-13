@@ -1,25 +1,26 @@
 import {call, put, select} from 'redux-saga/effects'
 import {isOnline} from "../NetworkSagas";
-import type {CachedObjective, Objective} from "../../types/StrategyModels";
+import {CachedObjective, Objective} from "../../types/StrategyTypes";
 import {performDelete, performPost, performPut} from "../APISagas";
 import {createCachedObjectiveEvent, createSyncedObjectiveEvent} from "../../events/StrategyEvents";
 import {selectUserState} from "../../reducers";
-import {COMPLETED, CREATED, DELETED, UPDATED} from "../../events/ActivityEvents";
 import {createCachedDataEvent} from "../../events/UserEvents";
+import {PayloadEvent} from "../../events/Event";
+import {EventTypes} from "../../types/EventTypes";
 
-export function* objectiveCreationSaga({payload}) {
+export function* objectiveCreationSaga({payload}: PayloadEvent<Objective>) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveCreateSaga, objectiveUploadToCached);
 }
 
-export function* objectiveChangesSaga({payload}) {
+export function* objectiveChangesSaga({payload}: PayloadEvent<Objective>) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveUpdateSaga, objectiveUpdateToCached);
 }
 
-export function* objectiveTerminationSaga({payload}) {
+export function* objectiveTerminationSaga({payload}: PayloadEvent<Objective>) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveDeleteSaga, objectiveDeleteToCached);
 }
 
-export function* objectiveCompletionSaga({payload}) {
+export function* objectiveCompletionSaga({payload}: PayloadEvent<Objective>) {
   yield call(objectiveAPIInteractionSaga, payload, objectiveCompleteSaga, objectiveCompleteToCached);
 }
 
@@ -41,29 +42,29 @@ export function* objectiveCompleteSaga(objective: Objective) {
       `${OBJECTIVES_URL}/${_objective.id}/complete`);
 }
 
-export const objectiveUploadToCached: (Objective) => CachedObjective = objective => ({
+export const objectiveUploadToCached: (objective: Objective) => CachedObjective = objective => ({
   objective,
-  uploadType: CREATED,
+  uploadType: EventTypes.CREATED,
 });
 
-export const objectiveUpdateToCached: (Objective) => CachedObjective = objective => ({
+export const objectiveUpdateToCached: (objective: Objective) => CachedObjective = objective => ({
   objective,
-  uploadType: UPDATED,
+  uploadType: EventTypes.UPDATED,
 });
 
-export const objectiveDeleteToCached: (Objective) => CachedObjective = objective => ({
+export const objectiveDeleteToCached: (objective: Objective) => CachedObjective = objective => ({
   objective,
-  uploadType: DELETED,
+  uploadType: EventTypes.DELETED,
 });
 
-export const objectiveCompleteToCached: (Objective) => CachedObjective = objective => ({
+export const objectiveCompleteToCached: (objective: Objective) => CachedObjective = objective => ({
   objective,
-  uploadType: COMPLETED,
+  uploadType: EventTypes.COMPLETED,
 });
 
 export function* objectiveAPIInteractionSaga(objective: Objective,
-                                             objectiveSaga,
-                                             cachedObjectiveFunction: (Objective)=>CachedObjective) {
+                                             objectiveSaga: (o: Objective) => any,
+                                             cachedObjectiveFunction: (objective: Objective) => CachedObjective) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
     yield call(objectiveSaga, objective)
@@ -75,9 +76,9 @@ export function* objectiveAPIInteractionSaga(objective: Objective,
 export const OBJECTIVES_URL = `/strategy/objectives`;
 
 export function* objectiveUploadSaga(objective: Objective,
-                                     apiAction,
-                                     cachingFunction: (Objective) => CachedObjective,
-                                     urlFunction: (Objective)=> string = __ => OBJECTIVES_URL) {
+                                     apiAction: (u: string, o: Objective) => any,
+                                     cachingFunction: (objective: Objective) => CachedObjective,
+                                     urlFunction: (objective: Objective) => string = __ => OBJECTIVES_URL) {
   try {
     yield call(apiAction, urlFunction(objective), objective);
     yield put(createSyncedObjectiveEvent(objective))
