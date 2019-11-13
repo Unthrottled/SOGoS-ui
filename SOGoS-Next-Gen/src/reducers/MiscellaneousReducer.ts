@@ -6,11 +6,11 @@ export interface NotificationState {
     type: string;
 }
 
-export interface MiscState {
+export interface MiscellaneousState {
     notification: NotificationState;
 }
 
-export const INITIAL_MISC_STATE: MiscState = {
+export const INITIAL_MISC_STATE: MiscellaneousState = {
     notification: {
         message: 'We done goofed.',
         shown: false,
@@ -18,7 +18,7 @@ export const INITIAL_MISC_STATE: MiscState = {
     }
 };
 
-const MiscReducer = (state: MiscState = INITIAL_MISC_STATE, action: any) => {
+const MiscellaneousReducer = (state: MiscellaneousState = INITIAL_MISC_STATE, action: any): MiscellaneousState => {
     switch (action.type) {
         case DISMISSED_NOTIFICATION:
             return {
@@ -33,7 +33,8 @@ const MiscReducer = (state: MiscState = INITIAL_MISC_STATE, action: any) => {
                 ...state,
                 notification: {
                     message: action.payload,
-                    shown: true
+                    shown: true,
+                    type: 'info'
                 },
             };
         default:
@@ -41,4 +42,4 @@ const MiscReducer = (state: MiscState = INITIAL_MISC_STATE, action: any) => {
     }
 };
 
-export default MiscReducer;
+export default MiscellaneousReducer;

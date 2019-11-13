@@ -13,10 +13,10 @@ import {HistoryState} from "./HistoryReducer";
 import HistoryReducer from "./HistoryReducer";
 import {StrategyState} from "./StrategyReducer";
 import StrategyReducer from "./StrategyReducer";
-import {PomodoroState, TacticalActivityState, TacticalState} from "./TacticalReducer";
+import {PomodoroState, TacticalActivityState} from "./TacticalReducer";
 import TacticalReducer from "./TacticalReducer";
-import {MiscState} from "./MiscReducer";
-import MiscReducer from "./MiscReducer";
+import MiscellaneousReducer, {MiscellaneousState} from "./MiscellaneousReducer";
+import {TacticalState} from "../types/TacticalTypes";
 
 export interface GlobalState {
   security: SecurityState;
@@ -27,7 +27,7 @@ export interface GlobalState {
   history: HistoryState;
   strategy: StrategyState;
   tactical: TacticalState;
-  misc: MiscState;
+  misc: MiscellaneousState;
 }
 
 const rootReducer = combineReducers({
@@ -39,14 +39,14 @@ const rootReducer = combineReducers({
   history: HistoryReducer,
   strategy: StrategyReducer,
   tactical: TacticalReducer,
-  misc: MiscReducer,
+  misc: MiscellaneousReducer,
 });
 
 export const selectSecurityState =
     (globalState: GlobalState): SecurityState => globalState.security;
 
 export const selectMiscState =
-    (globalState: GlobalState): MiscState => globalState.misc;
+    (globalState: GlobalState): MiscellaneousState => globalState.misc;
 
 export const selectActivityState =
     (globalState: GlobalState): ActivityState => globalState.activity;
