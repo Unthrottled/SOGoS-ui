@@ -7,15 +7,19 @@ import {
 } from "@openid/appauth";
 import {createTokenFailureEvent, createTokenReceptionEvent} from "../../events/SecurityEvents";
 import {call, put} from 'redux-saga/effects'
-import type {OAuthConfig} from "../../types/ConfigurationModels";
+import {OAuthConfig} from "../../types/ConfigurationTypes";
 
 const tokenHandler: TokenRequestHandler = new BaseTokenRequestHandler();
 
-export const requestToken = (oauthConfig: AuthorizationServiceConfiguration, tokenRequest: TokenRequest): Promise<TokenResponse> =>
+export const requestToken = (oauthConfig: AuthorizationServiceConfiguration,
+                             tokenRequest: TokenRequest): Promise<TokenResponse> =>
   tokenHandler.performTokenRequest(oauthConfig, tokenRequest);//Because Stateful function ._.
 
-export function* fetchTokenSaga(oauthConfig: OAuthConfig, tokenRequest: TokenRequest, responseModifier: (any) => any) {
+export function* fetchTokenSaga(oauthConfig: OAuthConfig,
+                                tokenRequest: TokenRequest,
+                                responseModifier: (any: any) => any) {
   try {
+    // @ts-ignore
     const tokenResponse = yield call(requestToken, oauthConfig, tokenRequest);
     yield put(createTokenReceptionEvent(responseModifier(tokenResponse)));
   } catch (error) {
@@ -38,7 +42,7 @@ export function* fetchTokenWithRefreshSaga(oauthConfig: OAuthConfig, tokenReques
   yield call(fetchTokenSaga, oauthConfig, tokenRequest, identityFunction);
 }
 
-export const identityFunction = tokenResponse => tokenResponse;
+export const identityFunction = <T>(tokenResponse: T): T => tokenResponse;
 
 /**
  * Attempts to fetch token from Authorization Server.
@@ -52,7 +56,7 @@ export function* fetchTokenWithoutSessionRefreshSaga(oauthConfig: OAuthConfig, t
   yield call(fetchTokenSaga, oauthConfig, tokenRequest, refreshTokenDeleter);
 }
 
-export const refreshTokenDeleter = tokenResponse => {
+export const refreshTokenDeleter = (tokenResponse: { [x: string]: any; }) => {
   delete tokenResponse['refreshToken'];
   return tokenResponse;
 };

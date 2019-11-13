@@ -5,7 +5,7 @@ import {
   createSecurityInitializedEvent,
   requestAuthorizationGrantCheck
 } from "../../events/SecurityEvents";
-import type {OAuthConfig} from "../../types/ConfigurationModels";
+import {OAuthConfig} from "../../types/ConfigurationTypes";
 
 function* oauthInitializationSaga(oauthConfig: OAuthConfig) {
   const {security} = yield select();
