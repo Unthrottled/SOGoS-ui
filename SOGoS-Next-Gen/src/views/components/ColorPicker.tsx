@@ -1,35 +1,42 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {MouseEventHandler, useState} from 'react';
 import {PhotoshopPicker} from "react-color";
 import Edit from '@material-ui/icons/Edit';
 import IconButton from "@material-ui/core/IconButton";
 import {Fade} from "@material-ui/core";
 import Popper from "@material-ui/core/Popper";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {ColorType} from "../../types/StrategyTypes";
 
-const useStyles = makeStyles(theme => ({
-  pickerContainer: {
-  },
+const useStyles = makeStyles(_ => ({
+  pickerContainer: {},
 }));
 
+type Props = {
+  onSelect: (arg0: ColorType) => void,
+  onComplete: (arg0: ColorType) => void,
+  label: string,
+  defaultColor: ColorType,
+};
 export const ColorPicker = ({
                               onSelect,
                               onComplete,
                               label,
                               defaultColor,
-                            }) => {
+                            }: Props) => {
   const [open, setOpen] = useState(false);
-  const [ancorElement, setAnchorElement] = useState(null);
-  const [currentColor, setCurrentColor] = useState(defaultColor || {
+  // @ts-ignore
+  const [ancorElement, setAnchorElement] = useState<EventTarget>(null);
+  const [currentColor, setCurrentColor] = useState<ColorType>(defaultColor || {
     hex: '#86a4f3',
     opacity: 1,
   });
 
-  const [savedColor, setSetSavedColor] = useState(defaultColor || {
+  const [savedColor, setSetSavedColor] = useState<ColorType>(defaultColor || {
     hex: '#86a4f3',
     opacity: 1,
   });
-  const edit = (e) => {
+  const edit: MouseEventHandler = (e) => {
     setAnchorElement(e.currentTarget);
     setSetSavedColor(currentColor);
     setOpen(true);
@@ -53,7 +60,7 @@ export const ColorPicker = ({
             <div className={classes.pickerContainer}>
               <PhotoshopPicker
                 color={currentColor.hex}
-                alpha={currentColor.opacity}
+                // alpha={currentColor.opacity}
                 onCancel={() => {
                   setOpen(false);
                   onSelect(savedColor);
@@ -64,9 +71,9 @@ export const ColorPicker = ({
                   onSelect(currentColor)
                 }}
                 onChangeComplete={(color) => {
-                  const brandNewColour = {
+                  const brandNewColour: ColorType = {
                     hex: color.hex,
-                    opacity: color.rgb.a
+                    opacity: color.rgb.a || 1
                   };
                   setCurrentColor(brandNewColour);
                   onSelect(brandNewColour);
