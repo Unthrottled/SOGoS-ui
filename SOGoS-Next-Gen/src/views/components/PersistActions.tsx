@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {Component} from 'react';
 import IconButton from "@material-ui/core/IconButton";
@@ -33,6 +32,7 @@ export const PersistActions = (props: Props) => {
   const CompletionIcon = props.completionIcon || CheckIcon;
   return (
     <div>
+      // @ts-ignore
       <IconButton color={'primary'}
                   className={classes.save}
                   onClick={props.onSave}
@@ -41,6 +41,7 @@ export const PersistActions = (props: Props) => {
       </IconButton>
       {
         props.onComplete &&
+        // @ts-ignore
         <IconButton color={'primary'}
                     className={classes.save}
                     onClick={props.onComplete}
@@ -51,6 +52,7 @@ export const PersistActions = (props: Props) => {
       }
       {
         props.onDelete &&
+        // @ts-ignore
         <IconButton color={'primary'}
                     className={classes.save}
                     onClick={props.onDelete}
@@ -58,6 +60,7 @@ export const PersistActions = (props: Props) => {
           <DeleteIcon className={classes.icon}/>
         </IconButton>
       }
+      // @ts-ignore
       <IconButton color={'primary'}
                   className={classes.save}
                   onClick={props.onCancel}

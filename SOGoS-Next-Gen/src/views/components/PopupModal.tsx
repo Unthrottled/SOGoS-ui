@@ -1,5 +1,5 @@
-// @flow
 import * as React from 'react';
+import {FC} from 'react';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -8,16 +8,17 @@ import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+// @ts-ignore
+const Transition: FC = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 type Props = {
   open: boolean,
-  onDismiss: Function,
+  onDismiss: () => void,
   title: string,
-  onPositiveAction: Function,
-  onNegativeAction: Function,
+  onPositiveAction: () => void,
+  onNegativeAction: () => void,
   positiveActionText: string,
   negativeActionText: string,
   contents: string,
