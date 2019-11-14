@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,7 +14,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import {StrategyIcon} from "../strategic/StrategyIcon";
 import {TacticalIcon} from "../icons/TacticalIcon";
 import {selectUserState} from "../../reducers";
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles(theme => ({
@@ -37,9 +37,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-const MenuNavigation = ({guid}) => {
-  const topics = [
+type Props = {
+  guid: string,
+};
+interface Topic {
+  title: string,
+  path: string,
+  icon: JSX.Element,
+  href?: string,
+}
+const MenuNavigation: FC<Props> = ({guid}) => {
+  const topics: Topic[] = [
     {
       title: 'Strategy',
       path: '/strategy/',
@@ -63,11 +71,11 @@ const MenuNavigation = ({guid}) => {
   ];
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const toggleDrawer = (open) => () => {
+  const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
 
-  const getListItem = (index, topic) => {
+  const getListItem = (index: number, topic: Topic) => {
     return <ListItem button style={{backgroundColor: index % 2 === 0 ? 'rgba(10,10,10, .05)' : 'rgba(0,0,0,0)'}}>
       <ListItemIcon>{topic.icon || (<MailIcon/>)}</ListItemIcon>
       <ListItemText primary={topic.title}/>
@@ -105,6 +113,7 @@ const MenuNavigation = ({guid}) => {
       </IconButton>
       <Drawer anchor="left" open={drawerOpen}
               SlideProps={{
+                // @ts-ignore
                 className: classes.drawer,
               }}
               onClose={toggleDrawer(false)}>

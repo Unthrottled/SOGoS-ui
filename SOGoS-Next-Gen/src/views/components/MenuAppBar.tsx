@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC, MouseEventHandler} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,14 +7,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import {connect} from "react-redux";
-import {logout} from "../actions/SecurityActions";
+import {connect, DispatchProp} from "react-redux";
 import OfflineMode from "./OfflineMode";
 import InstallApplication from "./InstallApplication";
 import UpdateApplication from "./UpdateApplication";
 import {Link} from "react-router-dom";
 import MenuNavigation from "./MenuNavigation";
 import ManualSync from "./ManualSync";
+import {requestLogoff} from "../../events/SecurityEvents";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,12 +32,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const MenuAppBar = ({dispatch: dispetch}) => {
+type Props = DispatchProp & {
+
+};
+
+const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  // @ts-ignore
+  const [anchorEl, setAnchorEl] = React.useState<EventTarget>(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu = event => {
+  const handleMenu: MouseEventHandler = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -46,7 +51,7 @@ const MenuAppBar = ({dispatch: dispetch}) => {
   };
 
   const logUserOut = (): void => {
-    dispetch(logout());
+    dispetch(requestLogoff());
   };
 
   return (

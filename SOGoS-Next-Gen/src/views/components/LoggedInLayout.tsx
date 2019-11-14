@@ -1,4 +1,4 @@
-import React from "react";
+import React, {FC} from "react";
 import MenuAppBar from "./MenuAppBar";
 import SessionExpired from "../auth/SessionExpired";
 import Activity from "../time/ActivityHub";
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LoggedInLayout = ({children, ...otherProperties}) => {
+const LoggedInLayout: FC = ({children, ...otherProperties}) => {
   const classes = useStyles();
   return (
     <div {...otherProperties} className={classes.container}>
