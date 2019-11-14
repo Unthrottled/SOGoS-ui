@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {connect} from "react-redux";
-import {appInitialized} from "../events/ApplicationLifecycleEvents";
+import {connect, DispatchProp} from "react-redux";
+import {createApplicationInitializedEvent} from "../events/ApplicationLifecycleEvents";
 import LoggedOut from "./LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
@@ -25,18 +25,21 @@ import HistoryDashboard from "./HistoryDashboard";
 import ActivitiesRankDashboard from "./ActivitiesRankDashboard";
 import ActivityObjectiveAssociationDashboard from "./ActivityObjectiveAssociationDashboard";
 import HiddenActivitiesDashboard from "./HiddenActivitiesDashboard";
+import {GlobalState, selectSecurityState} from "../reducers";
+import {SecurityState} from "../reducers/SecurityReducer";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
     primary: {
       ...amber,
+      //@ts-ignore
       alertColor: '#f9ff75',
     },
     secondary: blue,
   }
 }));
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(_ => ({
   content: {
     height: '100%'
   },
@@ -54,12 +57,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function App({dispatch: dispetch, isInitialized}) {
+type Props = DispatchProp & {
+  isInitialized: boolean,
+};
+const App = ({dispatch: dispetch, isInitialized}: Props) => {
   const classes = useStyles();
   const [mounted] = useState(true);
   useEffect(() => {
-    dispetch(appInitialized());
-  }, [mounted]);
+    dispetch(createApplicationInitializedEvent());
+  }, [dispetch, mounted]);
   return isInitialized ? (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -71,12 +77,14 @@ function App({dispatch: dispetch, isInitialized}) {
             <PrivateRoute path={'/:uuid/history'} component={HistoryDashboard}/>
 
             <PrivateRoute path={'/settings'} component={Settings}/>
-            <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'} component={ObjectiveActivityAssociationDashboard}/>
+            <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'}
+                          component={ObjectiveActivityAssociationDashboard}/>
             <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
             <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
             <PrivateRoute path={'/tactical/activities/rank/dashboard'} component={ActivitiesRankDashboard}/>
             <PrivateRoute path={'/tactical/activities/hidden'} component={HiddenActivitiesDashboard}/>
-            <PrivateRoute path={'/tactical/activities/:activityId/strategy/association'} component={ActivityObjectiveAssociationDashboard}/>
+            <PrivateRoute path={'/tactical/activities/:activityId/strategy/association'}
+                          component={ActivityObjectiveAssociationDashboard}/>
             <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
             <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
             <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
@@ -89,10 +97,13 @@ function App({dispatch: dispetch, isInitialized}) {
       </div>
     </ThemeProvider>
   ) : (<div/>);
-}
+};
 
-const mapStateToProps = ({security: {isInitialized}}) => ({
-  isInitialized
-});
+const mapStateToProps = (globalState: GlobalState) => {
+  const {isInitialized}: SecurityState = selectSecurityState(globalState);
+  return ({
+    isInitialized
+  });
+};
 
 export default connect(mapStateToProps)(App);
