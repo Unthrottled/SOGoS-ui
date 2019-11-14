@@ -28,7 +28,7 @@ export function* inspectCaches() {
   yield call(cachedItemsSaga, hasCachedItems)
 }
 
-export function* cachedItemsSaga(hasCachedItems = true) {
+export function* cachedItemsSaga(hasCachedItems: any = true) {
   yield put(createCheckedCachesEvent(!!hasCachedItems));
 }
 

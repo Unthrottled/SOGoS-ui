@@ -13,9 +13,9 @@ import {performOpenGet} from "./APISagas";
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
 
-export const createNetworkChannel = (event) => {
+export const createNetworkChannel = (event: string) => {
   return eventChannel(statusObserver => {
-    const statusHandler = status => statusObserver(status);
+    const statusHandler = (status: any) => statusObserver(status);
     window.addEventListener(event, statusHandler);
     return () => window.removeEventListener(event, statusHandler);
   })
@@ -23,8 +23,8 @@ export const createNetworkChannel = (event) => {
 
 function* onlineSaga() {
   const onlineEventChannel = yield call(createOnlineChannel);
-  try{
-    while (true){
+  try {
+    while (true) {
       yield take(onlineEventChannel);
       yield put(createFoundWifiEvent());
     }
@@ -33,15 +33,15 @@ function* onlineSaga() {
   }
 }
 
-function* offLineSaga() {
+function* offlineSaga(): any {
   const onlineEventChannel = yield call(createOfflineChannel);
-  try{
-    while (true){
+  try {
+    while (true) {
       yield take(onlineEventChannel);
       yield put(createLostWifiEvent());
     }
   } catch (e) {
-    yield fork(offLineSaga);
+    yield fork(offlineSaga);
   }
 }
 
@@ -57,17 +57,17 @@ export function* waitForWifi() {
   }
 }
 
-function* initialNetworkStateSaga(){
-  if(navigator.onLine){
+function* initialNetworkStateSaga() {
+  if (navigator.onLine) {
     yield put(createFoundWifiEvent());
   } else {
     yield put(createLostWifiEvent())
   }
 }
 
-function* initialInternetStateSaga(){
+function* initialInternetStateSaga() {
   const hasInternet = yield checkInternet();
-  if(hasInternet){
+  if (hasInternet) {
     yield put(createFoundInternetEvent());
   } else {
     yield put(createLostInternetEvent())
@@ -79,7 +79,8 @@ function* checkInternet() {
   try {
     yield performOpenGet('https://acari.io');
     return true
-  } catch(ignored){}
+  } catch (ignored) {
+  }
   return false;
 }
 
@@ -87,7 +88,7 @@ function* listenToNetworkEvents() {
   yield fork(initialNetworkStateSaga);
   yield fork(initialInternetStateSaga);
   yield fork(onlineSaga);
-  yield fork(offLineSaga);
+  yield fork(offlineSaga);
 }
 
 export default function* rootSaga() {
