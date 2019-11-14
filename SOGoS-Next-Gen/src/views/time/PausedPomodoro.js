@@ -132,7 +132,7 @@ const PausedPomodoro = ({
   ) : null;
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
   const {activities} = selectTacticalActivityState(state);
   return {

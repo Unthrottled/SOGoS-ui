@@ -219,7 +219,7 @@ const ActivityTimeBar = ({
     </Slide>) : null;
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {currentActivity, previousActivity, shouldTime, completedPomodoro: {count}} = selectActivityState(state);
   const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
   return {

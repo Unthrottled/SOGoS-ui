@@ -271,7 +271,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {information: {fullName}} = selectUserState(state);
   const {activities} = selectTacticalActivityState(state);
   return {

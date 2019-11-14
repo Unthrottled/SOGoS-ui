@@ -22,7 +22,7 @@ const PrivateRoute = ({isLoggedIn, component: Component, ...rest}) =>
     />
   );
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {security: {isLoggedIn},} = state;
   return {
     isLoggedIn,

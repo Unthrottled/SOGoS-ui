@@ -157,7 +157,7 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {strategy: {objectives}} = state;
   return {
     objectives,

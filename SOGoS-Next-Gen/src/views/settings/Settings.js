@@ -256,7 +256,7 @@ const SettingsBoard = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {settings} = selectPomodoroState(state);
   return {
     pomodoroSettings: settings,

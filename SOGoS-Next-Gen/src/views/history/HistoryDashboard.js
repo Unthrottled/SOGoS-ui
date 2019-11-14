@@ -149,7 +149,7 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {information: {fullName}} = selectUserState(state);
   const {selectedHistoryRange: {from, to}} = selectHistoryState(state);
   return {

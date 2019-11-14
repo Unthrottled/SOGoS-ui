@@ -41,7 +41,7 @@ return (
 )
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {security: {isExpired}} = state;
   return {
     isExpired

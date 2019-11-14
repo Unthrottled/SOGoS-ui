@@ -360,7 +360,7 @@ const ObjectiveDashboard = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {user: {information: {fullName}}, strategy: {objectives}} = state;
   return {
     fullName,

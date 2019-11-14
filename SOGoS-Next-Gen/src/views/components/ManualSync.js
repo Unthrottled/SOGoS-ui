@@ -27,7 +27,7 @@ const ManualSync = ({isOnline, hasItemsCached, dispatch}) => {
     </IconButton>
   ) : null;
 };
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {isOnline} = selectNetworkState(state);
   const {miscellaneous: {hasItemsCached}} = selectUserState(state);
   return {

@@ -71,7 +71,7 @@ const TacticalDashboard = ({history}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   return {}
 };
 

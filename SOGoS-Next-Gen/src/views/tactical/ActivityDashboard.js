@@ -320,7 +320,7 @@ const ActivityDashboard = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {information: {fullName}} = selectUserState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {

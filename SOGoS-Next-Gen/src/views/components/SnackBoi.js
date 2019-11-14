@@ -62,7 +62,7 @@ const SnackBoi = ({message, shown, dispatch}) => {
 };
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {notification: {message, shown}} = selectMiscState(state);
   return {
     message,

@@ -203,7 +203,7 @@ const ObjectiveActivityAssociationDashboard = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {objectives} = selectStrategyState(state);
   const {activities} = selectTacticalActivityState(state);
   return {

@@ -74,7 +74,7 @@ const StrategicDashboard = ({history}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   return {}
 };
 

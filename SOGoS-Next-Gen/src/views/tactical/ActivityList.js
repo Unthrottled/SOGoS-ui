@@ -120,7 +120,7 @@ const ActivityList = (props: Props) => {
 };
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {objectives} = selectStrategyState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {

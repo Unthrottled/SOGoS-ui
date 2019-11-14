@@ -226,7 +226,7 @@ const ActivityHub = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {pomodoro: {settings: {loadDuration}}} = selectTacticalState(state);
   const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
   const {activities} = selectTacticalActivityState(state);

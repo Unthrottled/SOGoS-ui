@@ -139,7 +139,7 @@ const ActivitySelection = (props: Props) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {activities} = selectTacticalActivityState(state);
   return {
     activities

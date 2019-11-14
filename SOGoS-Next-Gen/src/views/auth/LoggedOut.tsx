@@ -1,12 +1,13 @@
 import CloudOff from '@material-ui/icons/CloudOff';
 import React from "react";
-import {connect} from "react-redux";
-import {login} from "../actions/SecurityActions";
+import {connect, DispatchProp} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import {Typography} from "@material-ui/core";
 import {Reach} from "../icons/Reach";
+import {createRequestLogonEvent} from "../../events/SecurityEvents";
+import {GlobalState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   headerContent: {
@@ -28,11 +29,13 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'capitalize',
   },
 }));
-
-function LoggedOut({dispatch: dispetch, isOnline}) {
+type Props = DispatchProp & {
+  isOnline: boolean,
+};
+const LoggedOut = ({dispatch: dispetch, isOnline}: Props) => {
   const {root, label, headerContent} = useStyles();
   const logUserIn = (): void => {
-    dispetch(login());
+    dispetch(createRequestLogonEvent())
   };
   return (
     <div style={{height: '100%'}}>
@@ -58,7 +61,7 @@ function LoggedOut({dispatch: dispetch, isOnline}) {
                             gutterBottom>
                   SOGoS
                 </Typography>
-                <Typography color={'textSecondary'}  gutterBottom>
+                <Typography color={'textSecondary'} gutterBottom>
                   Strategic Orchestration and Governance System
                 </Typography>
                 <Typography variant="h5" align="center" color="textSecondary" paragraph>
@@ -105,9 +108,9 @@ function LoggedOut({dispatch: dispetch, isOnline}) {
       </div>
     </div>
   );
-}
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: GlobalState) => {
   const {network: {isOnline}} = state;
   return {
     isOnline,

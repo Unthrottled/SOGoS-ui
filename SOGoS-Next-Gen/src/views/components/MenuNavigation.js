@@ -121,7 +121,7 @@ const MenuNavigation = ({guid}) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {information: {guid}} = selectUserState(state);
   return {
     guid

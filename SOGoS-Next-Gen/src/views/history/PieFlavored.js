@@ -187,7 +187,7 @@ const PieFlavored = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {

@@ -22,7 +22,7 @@ const OfflineMode = ({isOnline, hasInternet}) => {
     </Tooltip>
   );
 };
-const mapStateToProps = state => {
+const mapStateToProps = (state : GlobalState) => {
   const {isOnline, hasInternet} = selectNetworkState(state);
   return {
     isOnline,
