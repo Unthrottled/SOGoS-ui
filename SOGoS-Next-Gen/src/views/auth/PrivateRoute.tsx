@@ -1,8 +1,13 @@
 import {connect} from 'react-redux';
 import * as React from 'react';
 import {Redirect, Route} from "react-router-dom";
+import {GlobalState} from "../../reducers";
 
-const PrivateRoute = ({isLoggedIn, component: Component, ...rest}) =>
+const PrivateRoute = (
+  {
+    isLoggedIn, component:
+    Component, ...rest
+  }: { isLoggedIn: boolean, component: any }) =>
   (
     <Route
       {...rest}
@@ -22,7 +27,7 @@ const PrivateRoute = ({isLoggedIn, component: Component, ...rest}) =>
     />
   );
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {security: {isLoggedIn},} = state;
   return {
     isLoggedIn,
