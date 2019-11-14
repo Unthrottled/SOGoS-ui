@@ -1,5 +1,5 @@
 import {call, put, select} from 'redux-saga/effects'
-import type {TacticalActivity} from "../../types/TacticalModels";
+import {TacticalActivity} from "../../types/TacticalTypes";
 import {
   createArchivedTacticalActivityEvent,
   createReRankedTacticalActivitiesEvent,
@@ -7,15 +7,16 @@ import {
   createUpdatedTacticalActivityEvent
 } from "../../events/TacticalEvents";
 import {selectTacticalActivityState} from "../../reducers";
-import type {TacticalActivityState} from "../../reducers/TacticalReducer";
-import {objectToArray} from "../../miscellanous/Tools";
+import {TacticalActivityState} from "../../reducers/TacticalReducer";
+import {numberObjectToArray} from "../../miscellanous/Tools";
+import {PayloadEvent} from "../../events/Event";
 
 
-export function* removalReRankSaga(tacticalActivity) {
+export function* removalReRankSaga(tacticalActivity: TacticalActivity) {
   const tacticalActivityState: TacticalActivityState = yield select(selectTacticalActivityState);
-  const allTacticalActivites = objectToArray(tacticalActivityState.activities);
+  const allTacticalActivities = numberObjectToArray(tacticalActivityState.activities);
 
-  const changedActivities = allTacticalActivites.splice(tacticalActivity.rank + 1, allTacticalActivites.length)
+  const changedActivities = allTacticalActivities.splice(tacticalActivity.rank + 1, allTacticalActivities.length)
     .map(activity => {
       --activity.rank;
       return activity
@@ -24,7 +25,7 @@ export function* removalReRankSaga(tacticalActivity) {
   yield put(createReRankedTacticalActivitiesEvent(changedActivities));
 }
 
-export function* tacticalActivityHiddenSaga({payload}) {
+export function* tacticalActivityHiddenSaga({payload}: PayloadEvent<TacticalActivity>) {
   const tacticalActivity: TacticalActivity = {
     ...payload,
     hidden: true,
@@ -37,8 +38,7 @@ export function* tacticalActivityHiddenSaga({payload}) {
   yield put(createArchivedTacticalActivityEvent(tacticalActivity));
 }
 
-export function* tacticalActivityShownSaga({payload}) {
-
+export function* tacticalActivityShownSaga({payload}: PayloadEvent<TacticalActivity>) {
   const tacticalActivity: TacticalActivity = {
     ...payload,
     hidden: false,
