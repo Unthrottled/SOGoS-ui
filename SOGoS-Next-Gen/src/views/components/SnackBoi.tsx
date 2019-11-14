@@ -1,6 +1,5 @@
-// @flow
 import * as React from 'react';
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SnackbarContent} from "@material-ui/core";
 import WarningIcon from '@material-ui/icons/Warning';
@@ -8,8 +7,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from "@material-ui/core/IconButton";
 import {amber} from "@material-ui/core/colors";
 import Snackbar from "@material-ui/core/Snackbar";
-import {selectMiscState} from "../../reducers";
+import {GlobalState, selectMiscState} from "../../reducers";
 import {createHideNotificationEvent} from "../../events/MiscEvents";
+import {FC} from "react";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -28,7 +28,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SnackBoi = ({message, shown, dispatch}) => {
+type Props = DispatchProp & {
+  shown: boolean,
+  message: string,
+};
+
+const SnackBoi: FC<Props> = ({message, shown, dispatch}) => {
   const classes = useStyles();
   const onClose = () => {
       dispatch(createHideNotificationEvent())

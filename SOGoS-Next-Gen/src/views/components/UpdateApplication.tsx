@@ -7,6 +7,7 @@ import Zoom from "@material-ui/core/Zoom";
 
 const useStyles = makeStyles(theme => ({
   download: {
+    // @ts-ignore
     color: theme.palette.primary.alertColor,
     opacity: 0.95
   },
@@ -16,14 +17,15 @@ const useStyles = makeStyles(theme => ({
 const UpdateApplication = () => {
   const classes = useStyles();
   const [componentDidMount] = useState('didMount');
-  const [registration, setRegistrationState] = useState(null);
+  const [registration, setRegistrationState] = useState<any>(null);
   const [didUpdate, setDidUpdate] = useState(false);
   useEffect(() => {
+    // @ts-ignore
     window.addEventListener('sogosUpdateAvailable', (event) => setRegistrationState(event.detail));
   }, [componentDidMount]);
 
   const installApplication = () => {
-    registration.waiting.postMessage('skipWaiting');
+    registration && registration.waiting.postMessage('skipWaiting');
     setDidUpdate(true);
   };
 
