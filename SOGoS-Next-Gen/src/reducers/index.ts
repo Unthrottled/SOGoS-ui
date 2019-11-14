@@ -17,6 +17,7 @@ import {PomodoroState, TacticalActivityState} from "./TacticalReducer";
 import TacticalReducer from "./TacticalReducer";
 import MiscellaneousReducer, {MiscellaneousState} from "./MiscellaneousReducer";
 import {TacticalState} from "../types/TacticalTypes";
+import {Reducer} from "react";
 
 export interface GlobalState {
   security: SecurityState;
@@ -30,7 +31,7 @@ export interface GlobalState {
   misc: MiscellaneousState;
 }
 
-const rootReducer = combineReducers({
+const rootReducer: Reducer<any, any> = combineReducers({
   security: securityReducer,
   user: userReducer,
   configuration: configurationReducer,

@@ -6,7 +6,9 @@ export const objectToArray =
 
 export const numberObjectToArray =
     <T>(object: NumberDictionary<T>): T[] =>
-        Object.keys(object || {}).map(key => object[key]);
+        Object.keys(object || {})
+          .map(parseInt)
+          .map(key => object[key]);
 
 export interface KeyValue<T> {
     key: string,

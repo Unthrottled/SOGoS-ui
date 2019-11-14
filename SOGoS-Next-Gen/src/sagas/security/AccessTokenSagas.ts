@@ -31,7 +31,7 @@ export function* getOrRefreshAccessTokenWithoutSessionExtension() {
   return yield call(getOrRefreshAccessToken, refreshTokenWithoutReplacementSaga, canRefreshToken);
 }
 
-export function* getOrRefreshAccessToken(refreshTokenSaga: ()=>any,
+export function* getOrRefreshAccessToken(refreshTokenSaga: (arg0: any, arg2: any)=>any,
                                          shouldTokenRefresh: (arg0: SecurityState)=>boolean) {
   const security: SecurityState = yield select(selectSecurityState);
   if (shouldTokenRefresh(security)) {
