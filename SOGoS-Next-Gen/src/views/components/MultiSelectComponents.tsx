@@ -1,13 +1,13 @@
 import Chip from "@material-ui/core/Chip";
 import clsx from "clsx";
 import CancelIcon from "@material-ui/icons/Cancel";
-import React from "react";
+import React, {FC} from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 
-export const MultiValue = props => (
+export const MultiValue = (props: any) => (
   <Chip
     color={'secondary'}
     label={props.children}
@@ -18,7 +18,7 @@ export const MultiValue = props => (
     deleteIcon={<CancelIcon  />}
   />
 );
-export const NoOptionsMessage = props => (
+export const NoOptionsMessage = (props: any) => (
   <Typography
     color="textSecondary"
     className={props.selectProps.classes.noOptionsMessage}
@@ -27,9 +27,9 @@ export const NoOptionsMessage = props => (
     {props.children}
   </Typography>
 );
-const inputComponent = ({inputRef, ...props}) =>
+const inputComponent: FC<{inputRef: any}> = ({inputRef, ...props}) =>
   <div ref={inputRef} {...props} />;
-export const Control = props => {
+export const Control = (props: any) => {
   const {
     children,
     innerProps,
@@ -53,7 +53,7 @@ export const Control = props => {
     />
   );
 };
-export const Option = props => (
+export const Option = (props: any) => (
   <MenuItem
     ref={props.innerRef}
     selected={props.isFocused}
@@ -66,7 +66,7 @@ export const Option = props => (
     {props.children}
   </MenuItem>
 );
-export const Placeholder = props => (
+export const Placeholder = (props: any) => (
   <Typography
     color="textSecondary"
     className={props.selectProps.classes.placeholder}
@@ -75,14 +75,14 @@ export const Placeholder = props => (
     {props.children}
   </Typography>
 );
-export const SingleValue = props => (
+export const SingleValue = (props: any) => (
   <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
     {props.children}
   </Typography>
 );
-export const ValueContainer = props =>
+export const ValueContainer = (props: any) =>
   <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
-export const Menu = props => (
+export const Menu = (props: any) => (
   <Paper square
           style={{zIndex: 69}}
          className={props.selectProps.classes.paper}
