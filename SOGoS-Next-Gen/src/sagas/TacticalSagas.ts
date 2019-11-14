@@ -38,8 +38,8 @@ function* watchForSettingsUpdates() {
 
 function* tacticalActivitiesObservationInitializationSaga() {
   yield takeEvery(VIEWED_ACTIVITIES, tacticalActivityObservationSaga);
-  const foundUser = yield take(RECEIVED_USER);
-  yield fork(tacticalActivitiesFetchSaga, foundUser);
+  yield take(RECEIVED_USER);
+  yield fork(tacticalActivitiesFetchSaga);
 }
 
 function* listenForTacticalEvents() {

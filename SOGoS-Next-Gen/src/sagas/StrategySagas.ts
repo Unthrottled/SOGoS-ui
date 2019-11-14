@@ -18,8 +18,8 @@ import {FOUND_WIFI} from "../events/NetworkEvents";
 import {strategySyncSaga} from "./strategy/StrategySyncSaga";
 
 export function* objectiveObservationInitializationSaga() {
-  const foundUser = yield take(RECEIVED_USER);
-  yield fork(objectiveHistoryFetchSaga, foundUser);
+  yield take(RECEIVED_USER);
+  yield fork(objectiveHistoryFetchSaga);
   yield takeEvery(VIEWED_OBJECTIVES, objectiveObservationSaga);
 }
 
