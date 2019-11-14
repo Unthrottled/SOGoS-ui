@@ -10,7 +10,7 @@ export function* objectiveHistoryFetchSaga() {
     const data = yield call(performStreamedGet, OBJECTIVES_URL);
     yield put(createFetchedObjectivesEvent(data))
   } catch (e) {
-    yield put(createShowWarningNotificationEvent("Unable to get objectives! Try again later, please."))
+    yield put(createShowWarningNotificationEvent("Unable to get strategic! Try again later, please."))
   }
 }
 
