@@ -49,11 +49,11 @@ export interface TacticalActivity {
 }
 
 export interface CachedTacticalActivity {
-    uploadType: EventTypes.CREATED | EventTypes.UPDATED | EventTypes.DELETED,
+    uploadType: EventTypes;
     activity: TacticalActivity
 }
 
 export interface TacticalActivityCacheEvent {
-    activity: CachedTacticalActivity,
+    cachedActivity: CachedTacticalActivity,
     userGUID: string,
 }
