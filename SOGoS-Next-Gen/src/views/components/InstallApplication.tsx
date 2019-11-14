@@ -7,6 +7,7 @@ import Zoom from "@material-ui/core/Zoom";
 
 const useStyles = makeStyles(theme => ({
   download: {
+    // @ts-ignore
     color: theme.palette.primary.alertColor,
     opacity: 0.95
   },
@@ -17,6 +18,7 @@ const isStandalone = () => window.matchMedia('(display-mode: standalone)').match
 const InstallApplication = () => {
   const classes = useStyles();
   const [componentDidMount] = useState('didMount');
+  // @ts-ignore
   const [installPrompt, setInstallPromptState] = useState(window.sogosInstallPrompt);
   const [askedToInstall, setAskedToInstall] = useState(false);
   useEffect(() => {
@@ -26,7 +28,7 @@ const InstallApplication = () => {
   const installApplication = () => {
     installPrompt.prompt();
     installPrompt.userChoice
-      .then(choice => {
+      .then((choice: any) => {
         if (choice.outcome === 'accepted') {
           console.log('User accepted the A2HS prompt', choice);
         } else {
