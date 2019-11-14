@@ -3,17 +3,18 @@ import {connect} from "react-redux";
 import LoggedInLayout from "./components/LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
-import {selectUserState} from "../reducers";
+import {GlobalState, selectUserState} from "../reducers";
 import {Card, Typography} from "@material-ui/core";
 import {Reach} from "./icons/Reach";
 import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import {withRouter} from "react-router-dom";
+import {RouteComponentProps, withRouter} from "react-router-dom";
 import {StrategyIcon} from "./strategic/StrategyIcon";
 import {TacticalIcon} from "./icons/TacticalIcon";
 import HistoryIcon from '@material-ui/icons/History';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CardContent from "@material-ui/core/CardContent";
+import {History} from "history";
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -39,33 +40,36 @@ const placesToGo = [
     name: 'Strategy',
     description: 'What does it mean to succeed? Establish your endgame objectives here.',
     icon: <StrategyIcon/>,
-    navigator: (history, guid) => () => history.push(`./strategy/`)
+    navigator: (history: History, _: string) => () => history.push(`./strategy/`)
   },
   {
     name: 'Tactics',
     description: 'How do you reach your endgame? Catalog activities needed to reach your goals here.',
     icon: <TacticalIcon/>,
-    navigator: (history, guid) => () => history.push(`./tactical/`)
+    navigator: (history: History, _: string) => () => history.push(`./tactical/`)
   },
   {
     name: 'History',
     description: 'Look at how far you have come and all of your achievements!',
     icon: <HistoryIcon style={{fontSize: '100px'}}/>,
-    navigator: (history, guid) => () => history.push(`./${guid}/history/`)
+    navigator: (history: History, guid: string) => () => history.push(`./${guid}/history/`)
   },
   {
     name: 'Settings',
     description: 'Everybody is different. Tailor the experience to your abilities.',
     icon: <SettingsIcon style={{fontSize: '100px'}}/>,
-    navigator: (history, guid) => () => history.push(`./settings/`)
+    navigator: (history: History, _: string) => () => history.push(`./settings/`)
   }
 ];
-
+type Props = RouteComponentProps & {
+  fullName: string,
+  guid: string,
+};
 const Dashboard = ({
                      fullName,
                      guid,
                      history
-                   }) => {
+                   }: Props) => {
   const classes = useStyles();
 
   return (
@@ -79,7 +83,7 @@ const Dashboard = ({
                       gutterBottom>
             SOGoS
           </Typography>
-          <Typography color={'textSecondary'}  gutterBottom>
+          <Typography color={'textSecondary'} gutterBottom>
             Strategic Orchestration and Governance System
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" paragraph>
@@ -131,7 +135,7 @@ const Dashboard = ({
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: GlobalState) => {
   const {information: {fullName, guid}} = selectUserState(state);
   return {
     fullName,
