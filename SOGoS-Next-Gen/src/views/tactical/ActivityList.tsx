@@ -1,13 +1,13 @@
-// @flow
 import * as React from 'react';
 import {Component} from 'react';
 import List from "@material-ui/core/List";
 import {Card, makeStyles} from "@material-ui/core";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
-import {selectStrategyState, selectTacticalActivityState} from "../../reducers";
+import {GlobalState, selectStrategyState, selectTacticalActivityState} from "../../reducers";
 import {connect} from "react-redux";
-import type {TacticalActivity} from "../types/TacticalModels";
-import {objectToArray} from "../../miscellanous/Tools";
+import {numberObjectToArray} from "../../miscellanous/Tools";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {NumberDictionary} from "../../types/BaseTypes";
 
 const useStyles = makeStyles(theme => (
   {
@@ -19,8 +19,8 @@ const useStyles = makeStyles(theme => (
       margin: theme.spacing(1)
     },
     headerContent: {
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6, 0, 6),
       marginBottom: theme.spacing(1),
     },
@@ -66,14 +66,14 @@ const useStyles = makeStyles(theme => (
 ));
 
 type Props = {
-  activities: any,
-  archivedActivities: any,
-  actionComponent?: (TacticalActivity) => Component,
+  activities: NumberDictionary<TacticalActivity>,
+  archivedActivities: NumberDictionary<TacticalActivity>,
+  actionComponent?: (arg1: TacticalActivity) => JSX.Element,
   hidden?: boolean,
 };
 
 const ActivityList = (props: Props) => {
-  const allTacticalActivities: TacticalActivity[] = objectToArray(
+  const allTacticalActivities: TacticalActivity[] = numberObjectToArray(
     props.hidden ? props.archivedActivities :
       props.activities
   );
@@ -81,6 +81,7 @@ const ActivityList = (props: Props) => {
 
   return (
     <div className={classes.root}>
+      // @ts-ignore
       <List justify={'center'}>
         <div>
           <div
@@ -120,7 +121,7 @@ const ActivityList = (props: Props) => {
 };
 
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {objectives} = selectStrategyState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {

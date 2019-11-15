@@ -1,23 +1,25 @@
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
-import {withRouter} from "react-router-dom";
-import {selectStrategyState, selectTacticalActivityState} from "../../reducers";
+import {useHistory, useParams} from "react-router-dom";
+import {GlobalState, selectStrategyState, selectTacticalActivityState} from "../../reducers";
 import {objectToArray, objectToKeyValueArray} from "../../miscellanous/Tools";
-import type {TacticalActivity} from "../types/TacticalModels";
 import {Switch} from "@material-ui/core";
-import type {Objective} from "../types/StrategyModels";
-import {updatedObjective} from "../actions/StrategyActions";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
 import ActivityList from "../tactical/ActivityList";
 import {GoalIcon} from "../icons/GoalIcon";
+import {Objective} from "../../types/StrategyTypes";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {StringDictionary} from "../../types/BaseTypes";
+import reduceRight from 'lodash/reduceRight';
+import {createUpdatedObjectiveEvent} from "../../events/StrategyEvents";
 
 const useStyles = makeStyles(theme => (
   {
@@ -29,8 +31,8 @@ const useStyles = makeStyles(theme => (
       margin: theme.spacing(1)
     },
     headerContent: {
-    borderRadius: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+      borderRadius: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6, 0, 6),
       marginBottom: theme.spacing(1),
     },
@@ -76,47 +78,57 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-export const createAssociationComponent = (rememberedObjective, rememberedActivity) => <div style={{
-  display: 'flex',
-  justifyContent: 'center',
-}}>
-  <GoalIcon objective={rememberedObjective}/>
-  <SwapHorizIcon style={{
-    color: 'grey',
-    margin: 'auto 0',
-    fontSize: '2em'
-  }}/>
-  <TacticalActivityIcon tacticalActivity={rememberedActivity}/>
-</div>;
+export const createAssociationComponent = (rememberedObjective: Objective,
+                                           rememberedActivity?: TacticalActivity) =>
+  <div style={{
+    display: 'flex',
+    justifyContent: 'center',
+  }}>
+    <GoalIcon objective={rememberedObjective}/>
+    <SwapHorizIcon style={{
+      color: 'grey',
+      margin: 'auto 0',
+      fontSize: '2em'
+    }}/>
+    <TacticalActivityIcon tacticalActivity={rememberedActivity}/>
+  </div>;
 
-const ObjectiveActivityAssociationDashboard = ({
-                                                 dispatch,
-                                                 objectives,
-                                                 activities,
-                                                 history,
-                                                 match: {params: {objectiveId}}
-                                               }) => {
+interface Props {
+  objectives: StringDictionary<Objective>,
+  activities: StringDictionary<TacticalActivity>,
+}
+
+const ObjectiveActivityAssociationDashboard: FC<DispatchProp & Props> = ({
+                                                                           dispatch,
+                                                                           objectives,
+                                                                           activities,
+                                                                         }) => {
   const classes = useStyles();
+  const {objectiveId} = useParams<{ objectiveId: string }>();
   const rememberedObjective: Objective = objectives[objectiveId];
   const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
-  const associatedActivityDictionary = (rememberedObjective.associatedActivities || []).reduce((accum, activity) => {
-    accum[activity] = true;
-    return accum;
-  }, {});
-  const selectedActivities = allTacticalActivities.reduce((accum, activity) => {
-    accum[activity.id] = !!associatedActivityDictionary[activity.id];
-    return accum;
-  }, {});
+  const associatedActivityDictionary = reduceRight((rememberedObjective.associatedActivities || []),
+    (accum: StringDictionary<boolean>, activity) => {
+      accum[activity] = true;
+      return accum;
+    }, {});
+
+  const selectedActivities = reduceRight(allTacticalActivities,
+    (accum: StringDictionary<boolean>, activity) => {
+      accum[activity.id] = !!associatedActivityDictionary[activity.id];
+      return accum;
+    }, {});
 
 
   const [activitySwitches, setActivitySwitches] = useState(selectedActivities);
-  const toggleActivity = (activityId) => {
+  const toggleActivity = (activityId: string) => {
     activitySwitches[activityId] = !activitySwitches[activityId];
     setActivitySwitches({
       ...activitySwitches
     });
   };
 
+  const history = useHistory();
   const saveObjective = () => {
     const objective: Objective = {
       ...rememberedObjective,
@@ -124,7 +136,7 @@ const ObjectiveActivityAssociationDashboard = ({
         .filter(kv => kv.value)
         .map(kv => kv.key)
     };
-    dispatch(updatedObjective(objective));
+    dispatch(createUpdatedObjectiveEvent(objective));
     history.push('/strategy/objectives/')
   };
 
@@ -157,7 +169,7 @@ const ObjectiveActivityAssociationDashboard = ({
       </div>
       <div className={classes.root}>
         <ActivityList
-          actionComponent={tacticalActivity =>
+          actionComponent={(tacticalActivity: TacticalActivity) =>
             <Switch checked={activitySwitches[tacticalActivity.id]}
                     onChange={() => toggleActivity(tacticalActivity.id)}/>
           }
@@ -182,7 +194,7 @@ const ObjectiveActivityAssociationDashboard = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {objectives} = selectStrategyState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
@@ -191,4 +203,5 @@ const mapStateToProps = (state : GlobalState) => {
   }
 };
 
-export default connect(mapStateToProps)(withRouter(ObjectiveActivityAssociationDashboard));
+// @ts-ignore
+export default connect(mapStateToProps)(ObjectiveActivityAssociationDashboard);
