@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
+import React, {FC, useEffect, useState} from "react";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import clsx from 'clsx';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
 import PieFlavored from "./PieFlavored";
 import TimeLine from "./TimeLine";
-import {viewedActivityFeed} from "../actions/HistoryActions";
-import moment from 'moment';
-import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
-import {selectHistoryState, selectUserState} from "../../reducers";
+import moment, { Moment } from 'moment';
+import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
+import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
 import {DateRangePicker} from 'react-dates';
 import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -91,33 +90,40 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
+interface Props {
+  selectedTo: number,
+  selectedFrom: number,
+}
+const HistoryDashboard: FC<DispatchProp & Props> = ({
+                                                      dispatch,
+                                                      selectedTo,
+                                                      selectedFrom}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const [didMountState] = useState('');
 
   useEffect(() => {
-    dispatch(viewedActivityFeed());
-  }, [didMountState]);
+    dispatch(createViewedHistoryEvent());
+  }, [dispatch]);
 
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
 
   const [focusedInput, setFocusedInput] = useState(null);
 
-  const submitTimeFrame = (from, to) => {
-    dispatch(createAdjustedHistoryTimeFrame(
-      new Date(from).valueOf(),
-      new Date(to).valueOf()
-    ));
+  const submitTimeFrame = (from: Moment, to: Moment) => {
+    const fromUnix = from.valueOf();
+    const toUnix = to.valueOf() + ONE_DAY - 1000;
+    dispatch(createAdjustedHistoryTimeFrame({
+      from: new Date(fromUnix).valueOf(),
+      to: new Date(toUnix).valueOf(),
+    }));
   };
 
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
-          <div className={classes.form} noValidate>
+          <div className={classes.form}>
             <InputLabel>Active Time Range</InputLabel>
             <DateRangePicker
               startDate={meowMinusSeven}
@@ -127,8 +133,10 @@ const HistoryDashboard = ({dispatch, selectedTo, selectedFrom}) => {
               maxDate={moment()}
               isOutsideRange={(date) => moment().isSameOrBefore(date, 'day')}
               endDateId="jerry"
-              onDatesChange={({startDate, endDate}) => submitTimeFrame(startDate, endDate + ONE_DAY - 1000)}
+              onDatesChange={({startDate, endDate}) =>
+                submitTimeFrame(startDate || moment(), endDate || moment())}
               focusedInput={focusedInput}
+              // @ts-ignore
               onFocusChange={setFocusedInput}
             />
           </div>
