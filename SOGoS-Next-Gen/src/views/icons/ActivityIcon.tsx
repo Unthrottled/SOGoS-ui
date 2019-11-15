@@ -1,9 +1,8 @@
-// @flow
 import * as React from 'react';
-import type {ColorType} from "../types/StrategyModels";
 import Activity from "../../images/ActivityIcon.svg";
 import ReactSVG from "react-svg";
-import {findChild} from "./MountainIcon";
+import {findChild, SizeType} from "./MountainIcon";
+import {ColorType} from "../../types/StrategyTypes";
 
 
 type Props = {
@@ -41,23 +40,23 @@ export const ActivityIcon = (props: Props) => {
 
   const usableSize = size || defaultSize;
 
-  function alterColor(svg, childID, usableColorType, modifier = (node, color)=>{
+  const alterColor = (svg: any, childID: any, usableColorType: any, modifier: any = (node: any, color: ColorType)=>{
     node.setAttribute('fill', color.hex);
-    node.setAttribute('fill-opacity', color.opacity);
-  }) {
-    const background = findChild(svg, (node) => {
+    node.setAttribute('fill-opacity', String(color.opacity));
+  }) => {
+    const background = findChild(svg, (node: any) => {
       return node.id && node.id.startsWith(childID);
     });
     modifier(background, usableColorType);
-  }
+  };
 
   return (
       <ReactSVG src={Activity} beforeInjection={(svg) => {
-        svg.setAttribute('width', usableSize.width || defaultSize.width);
-        svg.setAttribute('height', usableSize.height || defaultSize.height);
-        alterColor(svg, 'activityLine', usableLine, (node, color)=>{
+        svg.setAttribute('width', String(usableSize.width || defaultSize.width));
+        svg.setAttribute('height', String(usableSize.height || defaultSize.height));
+        alterColor(svg, 'activityLine', usableLine, (node: any, color: ColorType)=>{
           node.setAttribute('stroke', color.hex);
-          node.setAttribute('stroke-opacity', color.opacity);
+          node.setAttribute('stroke-opacity', String(color.opacity));
         });
         alterColor(svg, 'activityBackground', usableBackground);
       }}/>
