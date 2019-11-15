@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
+import React, {FC, useEffect, useState} from "react";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
@@ -7,7 +7,7 @@ import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import uuid from 'uuid/v4';
-import {Link, withRouter} from "react-router-dom";
+import {Link, useHistory,} from "react-router-dom";
 import {createHideTacticalActivityEvent, createViewedTacticalActivitesEvent} from "../../events/TacticalEvents";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import Container from "@material-ui/core/Container";
@@ -18,6 +18,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {GlobalState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,16 +64,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface SettingsProps {
+  tacticalActivity: TacticalActivity;
+}
 
-export const TacticalActivitySettingsComponent = ({
-                                                    tacticalActivity,
-                                                    dispetch,
-                                                    history,
-                                                  }) => {
+export const TacticalActivitySettingsComponent: FC<DispatchProp & SettingsProps> = ({
+                                                                                      tacticalActivity,
+                                                                                      dispatch: dispetch,
+                                                                                    }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const history = useHistory();
 
-  const handleMenu = event => {
+  const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -105,7 +110,7 @@ export const TacticalActivitySettingsComponent = ({
       <MenuItem onClick={() => {
         handleClose();
         history.push(`./${tacticalActivity.id}`)
-      }}>Edit <EditIcon style={{marginLeft: '8px'}} /></MenuItem>
+      }}>Edit <EditIcon style={{marginLeft: '8px'}}/></MenuItem>
       <MenuItem onClick={() => {
         handleClose();
         dispetch(createHideTacticalActivityEvent(tacticalActivity))
@@ -114,13 +119,11 @@ export const TacticalActivitySettingsComponent = ({
   </div>);
 };
 
-
-const ActivitiesDashboard = ({dispatch, history}) => {
+const ActivitiesDashboard: FC<DispatchProp> = ({dispatch}) => {
   const classes = useStyles();
-  const [didMountState] = useState('');
   useEffect(() => {
     dispatch(createViewedTacticalActivitesEvent());
-  }, [didMountState]);
+  }, [dispatch]);
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -164,8 +167,7 @@ const ActivitiesDashboard = ({dispatch, history}) => {
         actionComponent={tacticalActivity => (
           <TacticalActivitySettingsComponent
             tacticalActivity={tacticalActivity}
-            history={history}
-            dispetch={dispatch}
+            dispatch={dispatch}
           />
         )}
       />
@@ -173,8 +175,9 @@ const ActivitiesDashboard = ({dispatch, history}) => {
   );
 };
 
-const mapStateToProps = _ => {
+const mapStateToProps = (_: GlobalState) => {
   return {}
 };
 
-export default connect(mapStateToProps)(withRouter(ActivitiesDashboard));
+export default connect(mapStateToProps)(ActivitiesDashboard)
+
