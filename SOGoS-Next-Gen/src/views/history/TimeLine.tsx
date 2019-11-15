@@ -1,20 +1,27 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import {axisTop, brushX, event} from 'd3'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {areDifferent, getActivityIdentifier, shouldTime} from "../../miscellanous/Projection";
-import {activitiesEqual, ActivityStrategy, getActivityID, getActivityName, RECOVERY} from "../types/ActivityModels";
-import {selectActivityState, selectHistoryState, selectTacticalActivityState} from "../../reducers";
-import {connect} from "react-redux";
+import {GlobalState, selectActivityState, selectHistoryState, selectTacticalActivityState} from "../../reducers";
+import {connect, DispatchProp} from "react-redux";
 import {objectToKeyValueArray} from "../../miscellanous/Tools";
-import {getActivityBackgroundColor} from "../types/TacticalModels";
 import {getMeaningFullName, mapTacticalActivitiesToID} from "./PieFlavored";
 import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
 import {blue} from "@material-ui/core/colors";
-import {StringDictionary} from "../../types/BaseTypes";
-import {TacticalActivity} from "../../types/TacticalTypes";
+import {NumberDictionary, StringDictionary} from "../../types/BaseTypes";
+import {getActivityBackgroundColor, TacticalActivity} from "../../types/TacticalTypes";
+import {
+  activitiesEqual,
+  Activity,
+  ActivityStrategy,
+  DEFAULT_ACTIVITY, getActivityID,
+  getActivityName,
+  RECOVERY
+} from "../../types/ActivityTypes";
+import reduceRight from 'lodash/reduceRight';
 
 
 const withStyles = makeStyles(__ => ({
@@ -29,10 +36,10 @@ export const constructColorMappings = (tacticalActivities : StringDictionary<Tac
   defaultColors[ActivityStrategy.GENERIC] = 'lime';
   defaultColors[RECOVERY] = blue[500];
   return {
-    ...objectToKeyValueArray(tacticalActivities)
-      .map(kv => ({key: kv.key, value: getActivityBackgroundColor(kv.value)}))
-      .filter(kv => !!kv.value)
-      .reduce((accum, idToColor) => {
+    ...reduceRight(objectToKeyValueArray(tacticalActivities)
+        .map(kv => ({key: kv.key, value: getActivityBackgroundColor(kv.value)}))
+        .filter(kv => !!kv.value)
+      , (accum: StringDictionary<string>, idToColor) => {
         accum[idToColor.key] = idToColor.value;
         return accum;
       }, {}),
@@ -40,7 +47,7 @@ export const constructColorMappings = (tacticalActivities : StringDictionary<Tac
   };
 };
 
-export const responsivefy = svg => {
+export const responsivefy = (svg: any) => {
   const resize = () => {
     const targetWidth = parseInt(container.style("width"));
     svg.attr("width", targetWidth);
@@ -69,7 +76,34 @@ const getTimeUnit = (milliseconds: number) => {
   }
 };
 
-const TimeLine = ({
+interface Props {
+  activityFeed: Activity[],
+  relativeToTime: number,
+  relativeFromTime: number,
+  tacticalActivities: NumberDictionary<TacticalActivity>,
+  currentActivity: Activity,
+  bottomActivity: Activity,
+  archivedActivities: NumberDictionary<TacticalActivity>,
+}
+
+interface ActivityProjection {
+  activityName: string,
+  activityIdentifier: string,
+  start: number,
+  stop: number,
+  spawn: {
+    start: Activity,
+    stop: Activity
+  },
+  lane?: number,
+}
+
+interface TimelineProjection {
+  currentActivity: Activity,
+  activityBins: StringDictionary<ActivityProjection[]>,
+}
+
+const TimeLine: FC<DispatchProp & Props> = ({
                     activityFeed,
                     relativeToTime,
                     relativeFromTime,
@@ -79,7 +113,7 @@ const TimeLine = ({
                     archivedActivities,
                     dispatch,
                   }) => {
-  const classes = withStyles();
+  const classes: any = withStyles();
   const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
   currentActivity.antecedenceTime <= relativeToTime ? [currentActivity] : []),
     ...activityFeed];
@@ -87,7 +121,7 @@ const TimeLine = ({
     modifiedFeed.push(bottomActivity)
   }
 
-  const activityProjection = modifiedFeed.reduceRight((accum, activity) => {
+  const activityProjection = reduceRight(modifiedFeed, (accum: TimelineProjection, activity) => {
     if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
       accum.currentActivity = activity;
     } else if (areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
@@ -113,7 +147,7 @@ const TimeLine = ({
     }
     return accum;
   }, {
-    currentActivity: {},
+    currentActivity: DEFAULT_ACTIVITY,
     activityBins: {}
   });
 
@@ -132,6 +166,7 @@ const TimeLine = ({
     spawn: {
       start: activityProjection.currentActivity,
       stop: {
+        ...DEFAULT_ACTIVITY,
         antecedenceTime: meow.valueOf(),
       }
     },
@@ -178,8 +213,8 @@ const TimeLine = ({
       const axis = axisTop(x)
         .tickFormat((d, i) => {
           const dateBoi = new Date(relativeFromTime + (steppyBoi * i));
-          const trailingZero = number => number / 10 < 1 ? 0 : '';
-          const convertToPretty = numberDude => `${trailingZero(numberDude)}${numberDude}`;
+          const trailingZero = (number: number) => number / 10 < 1 ? 0 : '';
+          const convertToPretty = (numberDude: number) => `${trailingZero(numberDude)}${numberDude}`;
           const hours = convertToPretty(dateBoi.getHours());
           const minutes = convertToPretty(dateBoi.getMinutes());
           return `${hours}:${minutes}`;
@@ -237,9 +272,9 @@ const TimeLine = ({
         .attr("transform", `translate(0,${margin.top})`)
         .attr('fill', d => colorToActivity[(getActivityID(d.spawn.start))])
         .attr('opacity', 0.7)
-        .attr("class", () => classes["timebar"])
+        .attr("class", () => classes.timebar)
         .attr("x", d => x(d.start))
-        .attr("y", d => y1(d.lane) + 10)
+        .attr("y", (d: any) => y1(d.lane) + 10)
         .attr("width", d => x(d.stop - d.start))
         .attr("height", () => .8 * y1(1))
         .append("title")
@@ -249,14 +284,17 @@ const TimeLine = ({
           return `${meaningFullName}: ${getTimeUnit(millisecondsDuration)} `;
         });
 
-      const brushEnd = (bBoi, bBoiSelection) => {
+      const brushEnd = (bBoi: any, bBoiSelection: any) => {
         if (!event.sourceEvent || !event.selection) return;
         bBoi.clear(bBoiSelection);
         const [newFrom, newTo] = event.selection
           .map(x.invert)
-          .map(n => n + relativeFromTime)
+          .map((n: any) => n + relativeFromTime)
         ;
-        dispatch(createAdjustedHistoryTimeFrame(newFrom, newTo));
+        dispatch(createAdjustedHistoryTimeFrame({
+          from: newFrom,
+          to: newTo
+        }));
       };
 
       const bBoi = brushX().extent([[0, 0], [width, height]]);
