@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
@@ -14,9 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import uuid from "uuid/v4";
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {completedObjective, createdObjective, deletedObjective, updatedObjective} from "../actions/StrategyActions";
-import type {Objective} from "../types/StrategyModels";
-import {withRouter} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {components} from "../components/MultiSelectComponents";
 import {ColorPicker} from "../components/ColorPicker";
 import {MountainIcon} from "../icons/MountainIcon";
@@ -24,6 +22,15 @@ import {PopupModal} from "../components/PopupModal";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import {PersistActions} from "../components/PersistActions";
+import {KeyResult, Objective} from "../../types/StrategyTypes";
+import {StringDictionary} from "../../types/BaseTypes";
+import {
+  createCompletedObjectiveEvent,
+  createCreatedObjectiveEvent,
+  createDeletedObjectiveEvent,
+  createUpdatedObjectiveEvent
+} from "../../events/StrategyEvents";
+import {GlobalState} from "../../reducers";
 
 const suggestions = [
   {label: 'Technical'},
@@ -129,14 +136,17 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveDashboard = ({
-                              dispatch,
-                              objectives,
-                              history,
-                              match: {params: {objectiveId}}
-                            }) => {
-  const classes = useStyles();
+interface Props {
+  objectives: StringDictionary<Objective>;
+}
+
+const ObjectiveDashboard: FC<DispatchProp & Props> = ({
+                                                        dispatch,
+                                                        objectives,
+                                                      }) => {
+  const classes: any = useStyles();
   const theme = useTheme();
+  const {objectiveId} = useParams<{ objectiveId: string }>();
   const rememberedObjective = objectives[objectiveId];
 
   const defaultSky = {
@@ -156,11 +166,14 @@ const ObjectiveDashboard = ({
         }
       ],
     };
-  const [keyResults, setKeyResults] = useState(objective.keyResults);
+  const [keyResults, setKeyResults] = useState<KeyResult[]>(objective.keyResults);
   const [objectiveValue, setObjective] = useState(objective.valueStatement);
-  const handleObjectiveChange = event => setObjective(event.target.value);
-  const updateResult = (resultId, resultValue) => {
-    keyResults.find(result => result.id === resultId).valueStatement = resultValue
+  const handleObjectiveChange = (event: any) => setObjective(event.target.value);
+  const updateResult = (resultId: string, resultValue: string) => {
+    const foundKeyResult = keyResults.find(result => result.id === resultId);
+    if (foundKeyResult) {
+      foundKeyResult.valueStatement = resultValue
+    }
 
   };
   const addKeyResult = () => {
@@ -169,17 +182,21 @@ const ObjectiveDashboard = ({
       {
         id: uuid(),
         antecedenceTime: new Date().getTime(),
+        valueStatement: '',
+        objectiveId: objectiveId,
       }
     ])
   };
-  const removeKeyResult = (idToRemove) => {
+  const removeKeyResult = (idToRemove: string) => {
     setKeyResults(keyResults
       .filter(keyResult => keyResult.id !== idToRemove))
   };
 
-  const [categoryValues, setMulti] = React.useState(objective.categories ?
-    objective.categories.map(catVal => ({value: catVal, label: catVal})) : null);
+  const [categoryValues, setMulti] = useState<{ value: string, label: string }[]>(objective.categories ?
+    objective.categories.map((catVal: string) => ({value: catVal, label: catVal})) : []);
 
+
+  const history = useHistory();
 
   const saveObjective = () => {
     const objective: Objective = {
@@ -190,13 +207,14 @@ const ObjectiveDashboard = ({
       iconCustomization: {
         background: skyColor,
       },
+      associatedActivities: [],
       categories: categoryValues.map(catVal => catVal.value),
     };
     if (!objectives[objective.id]) {
-      dispatch(createdObjective(objective));
+      dispatch(createCreatedObjectiveEvent(objective));
       history.push(`/strategy/objectives/${objective.id}/tactics/association`)
     } else {
-      dispatch(updatedObjective(objective));
+      dispatch(createUpdatedObjectiveEvent(objective));
       history.goBack()
     }
   };
@@ -206,16 +224,16 @@ const ObjectiveDashboard = ({
   };
 
   const wipeObjectiveOffOfTheFaceOfThePlanet = () => {
-    dispatch(deletedObjective(objective));
+    dispatch(createDeletedObjectiveEvent(objective));
     history.goBack()
   };
   const completeThatObjectiveYo = () => {
-    dispatch(completedObjective(objective));
+    dispatch(createCompletedObjectiveEvent(objective));
     history.goBack()
   };
 
   const selectStyles = {
-    input: base => ({
+    input: (base: any) => ({
       ...base,
       color: theme.palette.text.primary,
       '& input': {
@@ -226,7 +244,7 @@ const ObjectiveDashboard = ({
   const [finnaDelete, setFinnaDelete] = useState(false);
   const [finnaComplete, setFinnaComplete] = useState(false);
 
-  const handleChangeMulti = (value) => setMulti(value);
+  const handleChangeMulti = (value: any) => setMulti(value);
 
   const iconCustomization = objective.iconCustomization;
   const [skyColor, setSkyColor] = useState((iconCustomization && iconCustomization.background) || defaultSky);
@@ -360,7 +378,7 @@ const ObjectiveDashboard = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {user: {information: {fullName}}, strategy: {objectives}} = state;
   return {
     fullName,
@@ -368,4 +386,4 @@ const mapStateToProps = (state : GlobalState) => {
   }
 };
 
-export default connect(mapStateToProps)(withRouter(ObjectiveDashboard));
+export default connect(mapStateToProps)(ObjectiveDashboard);

@@ -203,5 +203,6 @@ const mapStateToProps = (state: GlobalState) => {
   }
 };
 
+// todo revisit me
 // @ts-ignore
 export default connect(mapStateToProps)(ObjectiveActivityAssociationDashboard);

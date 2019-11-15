@@ -14,7 +14,7 @@ const useStyles = makeStyles(_ => ({
 
 type Props = {
   onSelect: (arg0: ColorType) => void,
-  onComplete: (arg0: ColorType) => void,
+  onComplete?: (arg0: ColorType) => void,
   label: string,
   defaultColor: ColorType,
 };

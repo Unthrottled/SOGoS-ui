@@ -4,6 +4,7 @@ export interface KeyResult {
     id: string;
     objectiveId: string;
     valueStatement: string;
+    antecedenceTime?: number;
 }
 export interface ColorType {
     hex: string;
@@ -17,6 +18,7 @@ export interface IconCustomization {
 export interface Objective {
     id: string;
     valueStatement: string;
+    antecedenceTime: number;
     keyResults: KeyResult[];
     iconCustomization: IconCustomization;
     associatedActivities: string[];
