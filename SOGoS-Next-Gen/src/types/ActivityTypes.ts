@@ -3,6 +3,7 @@ import {EventTypes} from "./EventTypes";
 export enum ActivityType {
     ACTIVE = 'ACTIVE',
     PASSIVE = 'PASSIVE',
+    NA = 'NA',
 }
 
 export enum ActivityStrategy {
@@ -10,6 +11,7 @@ export enum ActivityStrategy {
 }
 
 export enum ActivityTimedType {
+    NA = 'NA',
     NONE = 'NONE',
     TIMER = 'TIMER',
     STOP_WATCH = 'STOP_WATCH',
@@ -20,7 +22,6 @@ export interface ActivityCacheEvent {
     cachedActivity: CachedActivity,
     userGUID: string,
 }
-
 
 export interface ActivityContent {
     uuid: string;
@@ -37,6 +38,16 @@ export interface Activity {
     antecedenceTime: number;
     content: ActivityContent;
 }
+
+export const DEFAULT_ACTIVITY: Activity = {
+    antecedenceTime: 0,
+    content: {
+        uuid: '',
+        name: '',
+        timedType: ActivityTimedType.NA,
+        type: ActivityType.NA,
+    }
+};
 
 export interface CachedActivity {
     uploadType: EventTypes.CREATED | EventTypes.UPDATED | EventTypes.DELETED;

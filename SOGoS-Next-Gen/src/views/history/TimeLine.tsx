@@ -13,6 +13,8 @@ import {getActivityBackgroundColor} from "../types/TacticalModels";
 import {getMeaningFullName, mapTacticalActivitiesToID} from "./PieFlavored";
 import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
 import {blue} from "@material-ui/core/colors";
+import {StringDictionary} from "../../types/BaseTypes";
+import {TacticalActivity} from "../../types/TacticalTypes";
 
 
 const withStyles = makeStyles(__ => ({
@@ -22,8 +24,8 @@ const withStyles = makeStyles(__ => ({
   },
 }));
 
-export const constructColorMappings = tacticalActivities => {
-  const defaultColors = {};
+export const constructColorMappings = (tacticalActivities : StringDictionary<TacticalActivity>):StringDictionary<string> => {
+  const defaultColors: StringDictionary<string> = {};
   defaultColors[ActivityStrategy.GENERIC] = 'lime';
   defaultColors[RECOVERY] = blue[500];
   return {
