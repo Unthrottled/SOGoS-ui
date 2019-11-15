@@ -9,7 +9,7 @@ import {Reach} from "./icons/Reach";
 import Grid from "@material-ui/core/Grid";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {StrategyIcon} from "./strategic/StrategyIcon";
+import {StrategyIcon} from "./icons/StrategyIcon";
 import {TacticalIcon} from "./icons/TacticalIcon";
 import HistoryIcon from '@material-ui/icons/History';
 import SettingsIcon from '@material-ui/icons/Settings';

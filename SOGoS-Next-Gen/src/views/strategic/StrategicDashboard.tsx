@@ -2,13 +2,14 @@ import React from "react";
 import {connect} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
-import {withRouter} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {Card, makeStyles} from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import {GoalIcon} from "../icons/GoalIcon";
 import Container from "@material-ui/core/Container";
-import {StrategyIcon} from "./StrategyIcon";
+import {StrategyIcon} from "../icons/StrategyIcon";
+import {GlobalState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -29,8 +30,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StrategicDashboard = ({history}) => {
+const StrategicDashboard = () => {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -78,4 +80,4 @@ const mapStateToProps = (state : GlobalState) => {
   return {}
 };
 
-export default connect(mapStateToProps)(withRouter(StrategicDashboard));
+export default connect(mapStateToProps)(StrategicDashboard);

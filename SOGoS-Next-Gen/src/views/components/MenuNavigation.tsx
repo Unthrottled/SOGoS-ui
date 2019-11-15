@@ -11,7 +11,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
-import {StrategyIcon} from "../strategic/StrategyIcon";
+import {StrategyIcon} from "../icons/StrategyIcon";
 import {TacticalIcon} from "../icons/TacticalIcon";
 import {selectUserState} from "../../reducers";
 import {connect, DispatchProp} from "react-redux";
