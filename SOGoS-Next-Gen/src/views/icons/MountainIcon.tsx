@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react';
-import type {ColorType} from "../types/StrategyModels";
 import Goal from "../../images/Goal.svg";
 import ReactSVG from "react-svg";
 import {objectToArray} from "../../miscellanous/Tools";
+import {ColorType} from "../../types/StrategyTypes";
 
-export const findChild = (node, finder) => {
+export const findChild = (node: any, finder: (arg0: any)=>boolean) => {
   const queue = [];
   const touched = [];
   queue.push(node);
@@ -18,7 +17,7 @@ export const findChild = (node, finder) => {
     } else {
       currentNode._checked = 1;
       objectToArray(currentNode.childNodes)
-        .filter(n => !n._checked)
+        .filter((n: any) => !n._checked)
         .forEach(n => queue.unshift(n));
     }
   }
@@ -47,8 +46,8 @@ export const MountainIcon = (props: Props) => {
   return (
     <div>
       <ReactSVG src={Goal} beforeInjection={(svg) => {
-        svg.setAttribute('width', usableSize.width || defaultSize.width);
-        svg.setAttribute('height', usableSize.height || defaultSize.height);
+        svg.setAttribute('width', String(usableSize.width || defaultSize.width));
+        svg.setAttribute('height', String(usableSize.height || defaultSize.height));
         const background = findChild(svg, (node) => {
           return node.id && node.id.indexOf('path5680') > -1;
         });

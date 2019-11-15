@@ -1,8 +1,7 @@
-// @flow
 import * as React from 'react';
-import type {SizeType} from "./MountainIcon";
-import type {TacticalActivity} from "../types/TacticalModels";
 import {ActivityIcon, defaultBackground, defaultLine} from "./ActivityIcon";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {SizeType} from "./MountainIcon";
 
 type TacticalActivityIconProps = {
   tacticalActivity?: TacticalActivity,
