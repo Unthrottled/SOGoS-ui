@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 import ArchiveIcon from '@material-ui/icons/Archive';
 import UnArchiveIcon from '@material-ui/icons/Unarchive';
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {withRouter} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import {components} from "../components/MultiSelectComponents";
 import {ColorPicker} from "../components/ColorPicker";
 import {PopupModal} from "../components/PopupModal";
@@ -18,12 +18,13 @@ import {
   createShowTacticalActivityEvent,
   createUpdatedTacticalActivityEvent
 } from "../../events/TacticalEvents";
-import type {TacticalActivity} from "../types/TacticalModels";
-import {selectTacticalActivityState, selectUserState} from "../../reducers";
+import {GlobalState, selectTacticalActivityState, selectUserState} from "../../reducers";
 import {ActivityIcon, defaultBackground, defaultLine} from "../icons/ActivityIcon";
 import Container from "@material-ui/core/Container";
 import {PersistActions} from "../components/PersistActions";
 import {mapTacticalActivitiesToID} from "../history/PieFlavored";
+import {NumberDictionary, StringDictionary} from "../../types/BaseTypes";
+import {TacticalActivity} from "../../types/TacticalTypes";
 
 const suggestions = [
   {label: 'Deliberate Practice'},
@@ -127,16 +128,19 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ActivityDashboard = ({
+interface Props {
+  activities: NumberDictionary<TacticalActivity>,
+  archivedActivities: StringDictionary<TacticalActivity>,
+}
+const ActivityDashboard: FC<DispatchProp & Props> = ({
                              dispatch,
                              activities,
-                             history,
                              archivedActivities,
-                             match: {params: {activityId}}
                            }
 ) => {
   const classes = useStyles();
   const theme = useTheme();
+  const {activityId} = useParams<{ activityId: string }>();
   const mappedTacticalActivities = {
     ...mapTacticalActivitiesToID(activities),
     ...archivedActivities
@@ -150,16 +154,17 @@ const ActivityDashboard = ({
         background: defaultBackground,
         line: defaultLine
       },
-      rank: activities.length + 1,
+      rank: Object.keys(activities).length + 1,
       categories: [],
     };
 
   const [tacticalActivityName, setTacticalActivityName] = useState(currentTacticalActivity.name);
-  const handleTacticalNameChange = event => setTacticalActivityName(event.target.value);
+  const handleTacticalNameChange = (event: any) => setTacticalActivityName(event.target.value);
 
-  const [categoryValues, setMulti] = React.useState(currentTacticalActivity.categories ?
-    currentTacticalActivity.categories.map(catVal => ({value: catVal, label: catVal})) : null);
+  const [categoryValues, setMulti] = useState<{ value: string, label: string }[]>(currentTacticalActivity.categories ?
+    currentTacticalActivity.categories.map(catVal => ({value: catVal, label: catVal})) : []);
 
+  const history = useHistory();
   const saveTacticalActivity = () => {
     const tacticalActivity: TacticalActivity = {
       id: activityId,
@@ -170,6 +175,7 @@ const ActivityDashboard = ({
         background: backgroundColor,
         line: lineColor,
       },
+
       categories: categoryValues.map(catVal => catVal.value)
     };
     if (!mappedTacticalActivities[tacticalActivity.id]) {
@@ -201,7 +207,7 @@ const ActivityDashboard = ({
   };
 
   const selectStyles = {
-    input: base => ({
+    input: (base: any) => ({
       ...base,
       color: theme.palette.text.primary,
       '& input': {
@@ -212,7 +218,7 @@ const ActivityDashboard = ({
 
   const [finnaDelete, setFinnaDelete] = useState(false);
 
-  const handleChangeMulti = (value) => setMulti(value);
+  const handleChangeMulti = (value: any) => setMulti(value);
 
   const iconCustomization = currentTacticalActivity.iconCustomization;
   const [backgroundColor, setBackgroundColor] = useState((iconCustomization && iconCustomization.background) || defaultBackground);
@@ -297,6 +303,7 @@ const ActivityDashboard = ({
             isMulti
           />
           <div className={classes.persistActions}>
+            // @ts-ignore
             <PersistActions
               {...{
                 ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
@@ -330,4 +337,4 @@ const mapStateToProps = (state : GlobalState) => {
   };
 };
 
-export default connect(mapStateToProps)(withRouter(ActivityDashboard));
+export default connect(mapStateToProps)(ActivityDashboard);

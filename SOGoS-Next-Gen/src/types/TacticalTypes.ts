@@ -40,12 +40,13 @@ export interface TacticalActivity {
     id: string,
     name: string,
     rank: number,
+    antecedenceTime?: number,
     iconCustomization: {
         background: ColorType,
         line: ColorType,
     },
     categories: string[],
-    hidden: boolean,
+    hidden?: boolean,
 }
 
 export interface CachedTacticalActivity {

@@ -1,20 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
+import React, {FC, useEffect, useState} from "react";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import {makeStyles} from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import {withRouter} from "react-router-dom";
-import {objectToArray} from "../../miscellanous/Tools";
+import {useHistory} from "react-router-dom";
+import {numberObjectToArray} from "../../miscellanous/Tools";
 import {
   createReplaceActiveActivitesEvent,
   createReRankedTacticalActivitiesEvent,
   createViewedTacticalActivitesEvent
 } from "../../events/TacticalEvents";
-import {selectTacticalActivityState, selectUserState} from "../../reducers";
-import type {TacticalActivity} from "../types/TacticalModels";
+import {GlobalState, selectTacticalActivityState, selectUserState} from "../../reducers";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import {Card} from "@material-ui/core";
@@ -24,6 +23,8 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {NumberDictionary} from "../../types/BaseTypes";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,17 +70,23 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+interface RankProps {
+  tacticalActivities: TacticalActivity[];
+  tacticalActivity: TacticalActivity;
+  moveItems: (arg1: number, arg2: number) => void;
+  classes: any;
+}
 
-export const TacticalActivityRankComponent = ({
-                                                tacticalActivities,
-                                                tacticalActivity,
-                                                moveItems,
-                                                classes
-                                              }) => {
+export const TacticalActivityRankComponent: FC<RankProps> = ({
+                                                               tacticalActivities,
+                                                               tacticalActivity,
+                                                               moveItems,
+                                                               classes
+                                                             }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const handleMenu = event => {
+  const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -87,11 +94,11 @@ export const TacticalActivityRankComponent = ({
     setAnchorEl(null);
   };
 
-  const sendToTheTop = (rank) => {
+  const sendToTheTop = (rank: number) => {
     moveItems(rank, 0)
   };
 
-  const sendToTheBottom = (rank) => {
+  const sendToTheBottom = (rank: number) => {
     moveItems(rank, tacticalActivities.length - 1)
   };
   return <Card>
@@ -144,11 +151,18 @@ export const TacticalActivityRankComponent = ({
   </Card>;
 };
 
-export const TacticalActivityList = ({
-                                       tacticalActivities,
-                                       moveItems,
-                                       classes
-                                     }) => {
+interface ListProps {
+  tacticalActivities: TacticalActivity[];
+  moveItems: (arg1: number, arg2: number) => void;
+  classes: any;
+}
+
+// @ts-ignore
+export const TacticalActivityList: FC<ListProps> = ({
+                                                      tacticalActivities,
+                                                      moveItems,
+                                                      classes
+                                                    }) => {
   return tacticalActivities.map((tacticalActivity, index) => (
     <Draggable key={tacticalActivity.id}
                draggableId={tacticalActivity.id}
@@ -172,7 +186,9 @@ export const TacticalActivityList = ({
 };
 
 
-function promotActivities(dragSourceIndex, dragToIndex, allTacticalActivities) {
+const promoteActivities = (dragSourceIndex: number,
+                           dragToIndex: number,
+                           allTacticalActivities: TacticalActivity[]) => {
   const wasPromotion = dragSourceIndex > dragToIndex;
   if (wasPromotion) {
     return Array(dragSourceIndex - dragToIndex)
@@ -193,23 +209,26 @@ function promotActivities(dragSourceIndex, dragToIndex, allTacticalActivities) {
         return activityToChange
       })
   }
+};
+
+interface Props {
+  activities: NumberDictionary<TacticalActivity>,
 }
 
-const ActivitiesDashboard = ({activities, dispatch, history}) => {
+const ActivitiesDashboard: FC<DispatchProp & Props> = ({activities, dispatch}) => {
   const classes = useStyles();
-  const [didMountState] = useState('');
   useEffect(() => {
     dispatch(createViewedTacticalActivitesEvent());
-  }, [didMountState]);
+  }, [dispatch]);
 
-  const allTacticalActivities: TacticalActivity[] = objectToArray(activities);
+  const allTacticalActivities: TacticalActivity[] = numberObjectToArray(activities);
 
-  function moveItems(dragSourceIndex, dragToIndex) {
+  const moveItems = (dragSourceIndex: number, dragToIndex: number) => {
     if (dragSourceIndex !== dragToIndex) {
       const fromDude = allTacticalActivities[dragSourceIndex];
       fromDude.rank = dragToIndex;
 
-      const changedActivities = promotActivities(dragSourceIndex,
+      const changedActivities = promoteActivities(dragSourceIndex,
         dragToIndex,
         allTacticalActivities);
 
@@ -218,14 +237,15 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
       dispatch(createReRankedTacticalActivitiesEvent(changedActivities));
       dispatch(createReplaceActiveActivitesEvent(allTacticalActivities));
     }
-  }
+  };
 
-  const reorderActivities = dragResult => {
+  const reorderActivities = (dragResult: any) => {
     const dragSourceIndex = dragResult.source.index;
     const dragToIndex = dragResult.destination.index;
     moveItems(dragSourceIndex, dragToIndex);
   };
 
+  const history = useHistory();
   return (
     <LoggedInLayout>
       <div className={classes.headerContent}>
@@ -271,7 +291,7 @@ const ActivitiesDashboard = ({activities, dispatch, history}) => {
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {information: {fullName}} = selectUserState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
@@ -280,4 +300,4 @@ const mapStateToProps = (state : GlobalState) => {
   }
 };
 
-export default connect(mapStateToProps)(withRouter(ActivitiesDashboard));
+export default connect(mapStateToProps)(ActivitiesDashboard);

@@ -17,7 +17,7 @@ export interface PomodoroState {
 
 export interface TacticalActivityState {
   activities: NumberDictionary<TacticalActivity>;
-  archivedActivities: NumberDictionary<TacticalActivity>;
+  archivedActivities: StringDictionary<TacticalActivity>;
   cache: StringDictionary<CachedTacticalActivity[]>;
 }
 
