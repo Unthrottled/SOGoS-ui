@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
+import React, {FC, useEffect, useState} from "react";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Slider from "@material-ui/core/Slider";
 import {Typography} from "@material-ui/core";
-import {withRouter} from "react-router-dom";
-import {createUpdatedPomodoroSettingsEvent} from "../../events/TacticalEvents";
-import {selectPomodoroState} from "../../reducers";
-import {viewedSettings} from "../actions/TacticalActions";
+import {useHistory} from "react-router-dom";
+import {createUpdatedPomodoroSettingsEvent, createViewedSettingsEvent} from "../../events/TacticalEvents";
+import {GlobalState, selectPomodoroState} from "../../reducers";
 import Container from "@material-ui/core/Container";
 import SettingsIcon from '@material-ui/icons/Settings';
 import withStyles from "@material-ui/core/styles/withStyles";
 import {TomatoIcon} from "../icons/TomatoIcon";
 import {PersistActions} from "../components/PersistActions";
+import {PomodoroSettings} from "../../types/TacticalTypes";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -131,34 +131,37 @@ const SliderBoi = withStyles({
   },
 })(Slider);
 
-const SettingsBoard = ({
-                         history,
-                         dispatch,
-                         pomodoroSettings,
-                       }) => {
+interface Props {
+  pomodoroSettings: PomodoroSettings,
+}
+
+const SettingsBoard: FC<DispatchProp & Props> = ({
+                                                   dispatch,
+                                                   pomodoroSettings,
+                                                 }) => {
   const classes = useStyles();
-  const [didMountState] = useState('');
   useEffect(() => {
-    dispatch(viewedSettings());
-  }, [didMountState]);
+    dispatch(createViewedSettingsEvent());
+  }, [dispatch]);
   const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
 
-  const saveRecoveryTime = (_, time) => {
+  const saveRecoveryTime = (_: any, time: number) => {
     setRecoveryTime(time)
   };
 
   const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration / MINUTE_CONVERSION);
 
-  const saveLongRecoveryTime = (_, time) => {
+  const saveLongRecoveryTime = (_: any, time: number) => {
     setLongRecoveryTime(time)
   };
   const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration / MINUTE_CONVERSION);
 
-  const saveWorkTime = (_, time) => {
+  const saveWorkTime = (_: any, time: number) => {
     setWorkTime(time)
   };
   const cycleTimeMinutes = (workTime + recoveryTime) * 4 - recoveryTime;
 
+  const history = useHistory();
   const saveSettings = () => {
     dispatch(createUpdatedPomodoroSettingsEvent({
       loadDuration: workTime * 60000,
@@ -206,6 +209,7 @@ const SettingsBoard = ({
             defaultValue={workTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
+            // @ts-ignore
             onChangeCommitted={saveWorkTime}
             min={5}
             marks={workMarks}
@@ -221,6 +225,7 @@ const SettingsBoard = ({
             defaultValue={recoveryTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
+            // @ts-ignore
             onChangeCommitted={saveRecoveryTime}
             min={0.5}
             marks={restMarks}
@@ -236,6 +241,7 @@ const SettingsBoard = ({
             defaultValue={longRecoveryTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
+            // @ts-ignore
             onChangeCommitted={saveLongRecoveryTime}
             min={5}
             marks={recoveryMarks}
@@ -256,11 +262,11 @@ const SettingsBoard = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {settings} = selectPomodoroState(state);
   return {
     pomodoroSettings: settings,
   }
 };
 
-export default connect(mapStateToProps)(withRouter(SettingsBoard));
+export default connect(mapStateToProps)(SettingsBoard);

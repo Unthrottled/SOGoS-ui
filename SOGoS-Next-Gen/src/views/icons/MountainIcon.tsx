@@ -27,8 +27,8 @@ export const findChild = (node: any, finder: (arg0: any)=>boolean) => {
 
 
 export type SizeType = {
-  width?: string,
-  height?: string,
+  width?: string | number,
+  height?: string | number,
 }
 
 type Props = {
