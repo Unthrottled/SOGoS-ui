@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {connect} from "react-redux";
+import React, {FC, useEffect} from "react";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
@@ -11,13 +11,15 @@ import Button from "@material-ui/core/Button";
 import AddIcon from '@material-ui/icons/Add'
 import uuid from 'uuid/v4';
 import {Link} from "react-router-dom";
-import {viewedObjectives} from "../actions/StrategyActions";
 import {objectToArray} from "../../miscellanous/Tools";
-import type {Objective} from "../types/StrategyModels";
 import {GoalIcon} from "../icons/GoalIcon";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import {CardContent} from "@material-ui/core";
+import {StringDictionary} from "../../types/BaseTypes";
+import {Objective} from "../../types/StrategyTypes";
+import {createViewedObjectivesEvent} from "../../events/StrategyEvents";
+import {GlobalState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,12 +53,18 @@ const useStyles = makeStyles(theme => ({
 
 const MAX_OBJECTIVES = 5;
 
-const ObjectivesDashboard = ({objectives, dispatch}) => {
+interface Props {
+  objectives: StringDictionary<Objective>,
+}
+
+const ObjectivesDashboard: FC<DispatchProp & Props> = ({
+                                                         objectives,
+                                                         dispatch
+                                                       }) => {
   const classes = useStyles();
-  const [didMountState] = useState('');
   useEffect(() => {
-    dispatch(viewedObjectives());
-  }, [didMountState]);
+    dispatch(createViewedObjectivesEvent());
+  }, [dispatch]);
 
   const allObjectives: Objective[] = objectToArray(objectives);
 
@@ -157,7 +165,7 @@ const ObjectivesDashboard = ({objectives, dispatch}) => {
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {strategy: {objectives}} = state;
   return {
     objectives,
