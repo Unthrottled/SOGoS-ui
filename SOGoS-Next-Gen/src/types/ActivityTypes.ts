@@ -32,6 +32,8 @@ export interface ActivityContent {
     autoStart?: boolean;
     veryFirstActivity?: boolean;
     activityID?: string;
+    duration?: number;
+    workStartedWomboCombo?: number;
 }
 
 export interface Activity {

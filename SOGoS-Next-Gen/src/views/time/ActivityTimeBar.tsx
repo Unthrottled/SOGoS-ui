@@ -1,27 +1,28 @@
-import React from 'react';
+import React, {Dispatch} from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Slide from "@material-ui/core/Slide";
 import Close from '@material-ui/icons/Close';
-import {startNonTimedActivity, startTimedActivity} from "../actions/ActivityActions";
 import uuid from "uuid/v4";
+import {PomodoroTimer} from "./PomodoroTimer";
+import Stopwatch from "./Stopwatch";
+import {blue, green} from "@material-ui/core/colors";
+import {GlobalState, selectActivityState, selectTacticalState} from "../../reducers";
+import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
+import {createCompletedPomodoroEvent} from "../../events/ActivityEvents";
+import {TomatoIcon} from "../icons/TomatoIcon";
+import {mapTacticalActivitiesToID} from "../history/PieFlavored";
+import {buildCommenceActivityContents} from "./ActivityHub";
+import {startNonTimedActivity, startTimedActivity} from "../../actions/ActivityActions";
 import {
+  Activity,
   ActivityTimedType,
   ActivityType,
   getActivityID,
   isActivityRecovery,
   isPausedActivity,
   RECOVERY
-} from "../types/ActivityModels";
-import {PomodoroTimer} from "./PomodoroTimer";
-import Stopwatch from "./Stopwatch";
-import {blue, green} from "@material-ui/core/colors";
-import {selectActivityState, selectTacticalState} from "../../reducers";
-import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
-import {createCompletedPomodoroEvent} from "../../events/ActivityEvents";
-import {TomatoIcon} from "../icons/TomatoIcon";
-import {mapTacticalActivitiesToID} from "../history/PieFlavored";
-import {buildCommenceActivityContents} from "./ActivityHub";
+} from "../../types/ActivityTypes";
 
 const useStyles = makeStyles(theme => ({
   pomoCount: {
@@ -52,10 +53,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const getTime = antecedenceTime => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
-const getTimerTime = (stopTime) => Math.floor((stopTime - new Date().getTime()) / 1000);
+export const getTime = (antecedenceTime: number) => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
+const getTimerTime = (stopTime: number) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
-export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
+export const resumeActivity = (dispetch: Dispatch<any>,
+                               previousActivity: Activity,
+                               currentActivity: Activity) => {
   dispetch(startTimedActivity({
     ...previousActivity.content,
     ...(previousActivity.content.duration ? {
@@ -70,27 +73,44 @@ export const resumeActivity = (dispetch, previousActivity, currentActivity) => {
   }));
 };
 
-const ActivityTimeBar = ({
-                           shouldTime,
-                           currentActivity,
-                           previousActivity,
-                           pomodoroSettings,
-                           activities,
-                           numberOfCompletedPomodoro,
-                           dispatch: dispetch
-                         }) => {
+const mapStateToProps = (state : GlobalState) => {
+  const {currentActivity, previousActivity, shouldTime, completedPomodoro: {count}} = selectActivityState(state);
+  const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
+  return {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    pomodoroSettings: settings,
+    activities,
+    numberOfCompletedPomodoro: count
+  }
+};
+
+
+const ActivityTimeBar = () => {
   const classes = useStyles();
+  const {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    pomodoroSettings,
+    activities,
+    numberOfCompletedPomodoro,
+  } = useSelector(mapStateToProps);
+
   const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
 
+  const dispetch: Dispatch<any> = useDispatch();
   const stopActivity = () => {
     dispetch(startNonTimedActivity({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.NONE,
       uuid: uuid(),
     }))
   };
 
-  const startRecovery = (autoStart) => {
+  const startRecovery = (autoStart: boolean = false) => {
     dispetch(startTimedActivity({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
@@ -105,8 +125,7 @@ const ActivityTimeBar = ({
     }));
   };
 
-  const pivotActivity = (name, supplements) => {
-    console.log(name, supplements);
+  const pivotActivity = (name: string, supplements: any) => {
     const activityContent = buildCommenceActivityContents(supplements, name);
     return dispetch(startTimedActivity({
       ...activityContent,
@@ -133,7 +152,7 @@ const ActivityTimeBar = ({
     }
   };
 
-  function resumePreviousActivity(autoStart) {
+  function resumePreviousActivity(autoStart: boolean = false) {
     dispetch(startTimedActivity({
       ...previousActivity.content,
       ...(previousActivity.content.duration ? {
@@ -191,7 +210,7 @@ const ActivityTimeBar = ({
           {
             isTimer ?
               (
-                <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + duration)}
+                <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + (duration || 0))}
                                onComplete={completedPomodoro}
                                onPause={startPausedRecovery}
                                pivotActivity={pivotActivity}
@@ -200,7 +219,8 @@ const ActivityTimeBar = ({
                                onResume={startRecoveryOrResume}
                                activityId={activityId}/>
               ) :
-              <Stopwatch startTimeInSeconds={getTime(currentActivity.content.workStartedWomboCombo)}
+              <Stopwatch startTimeInSeconds={
+                getTime(currentActivity.content.workStartedWomboCombo || (new Date().valueOf()))}
                          onPause={startPausedRecovery}
                          activityId={activityId}/>
           }
@@ -219,17 +239,5 @@ const ActivityTimeBar = ({
     </Slide>) : null;
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {currentActivity, previousActivity, shouldTime, completedPomodoro: {count}} = selectActivityState(state);
-  const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
-  return {
-    shouldTime,
-    currentActivity,
-    previousActivity,
-    pomodoroSettings: settings,
-    activities,
-    numberOfCompletedPomodoro: count
-  }
-};
 
-export default connect(mapStateToProps)(ActivityTimeBar);
+export default ActivityTimeBar;
