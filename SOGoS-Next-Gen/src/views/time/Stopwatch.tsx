@@ -32,7 +32,7 @@ const Stopwatch: FC<Props> = ({
                    }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
-    onPause();
+    onPause && onPause();
     setIsPaused(true)
   };
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);

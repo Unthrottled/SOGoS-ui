@@ -1,14 +1,15 @@
 import * as React from 'react';
 
-const getDisplayTime = (hours, minutes, seconds) => {
+const getDisplayTime = (hours: number,
+                        minutes: number,
+                        seconds: number) => {
   const displayHours = hours ? `${hours}:` : '';
   const displayMinutes = Math.floor(Math.log10(minutes || 1)) ? `${minutes}:` : `0${minutes}:`;
   const displaySeconds = Math.floor(Math.log10(seconds || 1)) ? `${seconds}` : `0${seconds}`;
   return `${displayHours}${displayMinutes}${displaySeconds}`;
 };
 
-export const TimeDisplay = ({timeElapsed}) => {
-
+export const TimeDisplay = ({timeElapsed}: {timeElapsed: number}) => {
   const hours = Math.floor(timeElapsed / 3600);
   const remainingTimeForMinutes = timeElapsed - (hours * 3600);
   const minutes = Math.floor(remainingTimeForMinutes / 60);
@@ -19,4 +20,4 @@ export const TimeDisplay = ({timeElapsed}) => {
       {displayTime}
     </div>
   );
-};;
+};
