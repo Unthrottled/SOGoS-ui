@@ -22,6 +22,7 @@ import {
   RECOVERY
 } from "../../types/ActivityTypes";
 import reduceRight from 'lodash/reduceRight';
+import {constructProjection} from "./Projections";
 
 
 const withStyles = makeStyles(__ => ({
@@ -86,23 +87,6 @@ interface Props {
   archivedActivities: NumberDictionary<TacticalActivity>,
 }
 
-interface ActivityProjection {
-  activityName: string,
-  activityIdentifier: string,
-  start: number,
-  stop: number,
-  spawn: {
-    start: Activity,
-    stop: Activity
-  },
-  lane?: number,
-}
-
-interface TimelineProjection {
-  currentActivity: Activity,
-  activityBins: StringDictionary<ActivityProjection[]>,
-}
-
 const TimeLine: FC<DispatchProp & Props> = ({
                     activityFeed,
                     relativeToTime,
@@ -121,35 +105,7 @@ const TimeLine: FC<DispatchProp & Props> = ({
     modifiedFeed.push(bottomActivity)
   }
 
-  const activityProjection = reduceRight(modifiedFeed, (accum: TimelineProjection, activity) => {
-    if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
-      accum.currentActivity = activity;
-    } else if (areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
-      // Different Type: Create workable chunk and start next activity.
-      const currentActivity = accum.currentActivity;
-      accum.currentActivity = activity;
-
-      const activityName = getActivityName(currentActivity);
-      const activityIdentifier = getActivityIdentifier(currentActivity);
-      if (!accum.activityBins[activityIdentifier]) {
-        accum.activityBins[activityIdentifier] = [];
-      }
-      accum.activityBins[activityIdentifier].push({
-        activityName,
-        activityIdentifier,
-        start: currentActivity.antecedenceTime,
-        stop: activity.antecedenceTime,
-        spawn: {
-          start: currentActivity,
-          stop: activity
-        },
-      });
-    }
-    return accum;
-  }, {
-    currentActivity: DEFAULT_ACTIVITY,
-    activityBins: {}
-  });
+  const activityProjection = constructProjection(modifiedFeed);
 
   const bins = activityProjection.activityBins;
   const activityIdentifier = getActivityIdentifier(activityProjection.currentActivity);
