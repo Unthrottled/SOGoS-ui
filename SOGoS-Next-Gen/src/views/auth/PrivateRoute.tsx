@@ -6,11 +6,16 @@ import {GlobalState} from "../../reducers";
 const PrivateRoute = (
   {
     isLoggedIn, component:
-    Component, ...rest
-  }: { isLoggedIn: boolean, component: any }) =>
+    Component,
+    path,
+    exact,
+    ...rest
+  }: { isLoggedIn: boolean, component: any, path: string, exact?: boolean }) =>
   (
     <Route
       {...rest}
+      path={path}
+      exact={exact}
       render={props =>
         isLoggedIn ? (
           <Component {...props} />

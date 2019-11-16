@@ -7,8 +7,6 @@ import ActivitySelection from "./ActivitySelection";
 import StopWatch from '@material-ui/icons/Timer';
 import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
 import IconButton from "@material-ui/core/IconButton";
-import {TacticalActivity} from "../../types/TacticalTypes";
-import Timeout = NodeJS.Timeout;
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -65,7 +63,7 @@ export const PomodoroTimer: FC<Props> = ({
   const activityTheSame = rememberedActivity === activityId;
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
-    let timeout: Timeout;
+    let timeout: any;
     if (timeElapsed < 1 && activityTheSame) {
       onComplete && onComplete();
     } else if (!isPaused) {

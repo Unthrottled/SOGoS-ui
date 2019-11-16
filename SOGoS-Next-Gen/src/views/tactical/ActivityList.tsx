@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Component} from 'react';
 import List from "@material-ui/core/List";
 import {Card, makeStyles} from "@material-ui/core";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";

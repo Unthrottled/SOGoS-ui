@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Component} from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import SaveIcon from "@material-ui/icons/Save";
@@ -11,7 +10,7 @@ type Props = {
   onCancel: Function,
   onSave: Function,
   onComplete?: Function,
-  completionIcon?: Component,
+  completionIcon?: JSX.Element,
   completionTitle?: string,
   onDelete?: Function,
 };
@@ -47,6 +46,7 @@ export const PersistActions = (props: Props) => {
                     onClick={props.onComplete}
                     title={props.completionTitle || 'Complete'}
         >
+          // @ts-ignore
           <CompletionIcon className={classes.icon}/>
         </IconButton>
       }

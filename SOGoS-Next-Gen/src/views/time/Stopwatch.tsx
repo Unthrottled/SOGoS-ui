@@ -3,7 +3,6 @@ import {TimeDisplay} from "./TimeDisplay";
 import Pause from '@material-ui/icons/Pause';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import IconButton from "@material-ui/core/IconButton";
-import Timeout = NodeJS.Timeout;
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -27,7 +26,6 @@ const Stopwatch: FC<Props> = ({
                      startTimeInSeconds,
                      activityId,
                      onPause,
-                     onResume,
                      fontSize,
                    }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -38,7 +36,7 @@ const Stopwatch: FC<Props> = ({
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
 
   useEffect(() => {
-    let timeout: Timeout;
+    let timeout: any;
     if (!isPaused) {
       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed + 1);

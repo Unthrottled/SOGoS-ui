@@ -3,7 +3,7 @@ import {MountainIcon, SizeType} from "./MountainIcon";
 import {Objective} from "../../types/StrategyTypes";
 
 type GoalProps = {
-  objective?: Objective,
+  objective?: Objective | null,
   size?: SizeType,
 }
 export const GoalIcon = ({objective, size}: GoalProps) => {

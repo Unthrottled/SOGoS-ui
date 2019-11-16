@@ -4,7 +4,7 @@ import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import {axisTop, brushX, event} from 'd3'
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {areDifferent, getActivityIdentifier, shouldTime} from "../../miscellanous/Projection";
+import {getActivityIdentifier} from "../../miscellanous/Projection";
 import {GlobalState, selectActivityState, selectHistoryState, selectTacticalActivityState} from "../../reducers";
 import {connect, DispatchProp} from "react-redux";
 import {objectToKeyValueArray} from "../../miscellanous/Tools";
@@ -17,7 +17,8 @@ import {
   activitiesEqual,
   Activity,
   ActivityStrategy,
-  DEFAULT_ACTIVITY, getActivityID,
+  DEFAULT_ACTIVITY,
+  getActivityID,
   getActivityName,
   RECOVERY
 } from "../../types/ActivityTypes";
@@ -32,7 +33,7 @@ const withStyles = makeStyles(__ => ({
   },
 }));
 
-export const constructColorMappings = (tacticalActivities : StringDictionary<TacticalActivity>):StringDictionary<string> => {
+export const constructColorMappings = (tacticalActivities: StringDictionary<TacticalActivity>): StringDictionary<string> => {
   const defaultColors: StringDictionary<string> = {};
   defaultColors[ActivityStrategy.GENERIC] = 'lime';
   defaultColors[RECOVERY] = blue[500];
@@ -88,15 +89,15 @@ interface Props {
 }
 
 const TimeLine: FC<DispatchProp & Props> = ({
-                    activityFeed,
-                    relativeToTime,
-                    relativeFromTime,
-                    tacticalActivities,
-                    currentActivity,
-                    bottomActivity,
-                    archivedActivities,
-                    dispatch,
-                  }) => {
+                                              activityFeed,
+                                              relativeToTime,
+                                              relativeFromTime,
+                                              tacticalActivities,
+                                              currentActivity,
+                                              bottomActivity,
+                                              archivedActivities,
+                                              dispatch,
+                                            }) => {
   const classes: any = withStyles();
   const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
   currentActivity.antecedenceTime <= relativeToTime ? [currentActivity] : []),
@@ -181,7 +182,7 @@ const TimeLine: FC<DispatchProp & Props> = ({
         .attr("transform", `translate(0,${margin.top})`)
         .call(axis)
         .attr('font-size', 'xx-large')
-        .attr('color','black');
+        .attr('color', 'black');
 
       timeSVG.append("defs").append("clipPath")
         .attr("id", "clip")
@@ -274,7 +275,7 @@ const TimeLine: FC<DispatchProp & Props> = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   const {currentActivity} = selectActivityState(state);

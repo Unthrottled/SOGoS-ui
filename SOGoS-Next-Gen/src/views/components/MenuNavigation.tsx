@@ -13,8 +13,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 import {StrategyIcon} from "../icons/StrategyIcon";
 import {TacticalIcon} from "../icons/TacticalIcon";
-import {selectUserState} from "../../reducers";
-import {connect, DispatchProp} from "react-redux";
+import {GlobalState, selectUserState} from "../../reducers";
+import {useSelector} from "react-redux";
 import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles(theme => ({
@@ -38,15 +38,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  guid: string,
 };
+
 interface Topic {
   title: string,
   path: string,
   icon: JSX.Element,
   href?: string,
 }
-const MenuNavigation: FC<Props> = ({guid}) => {
+
+const mapStateToProps = (state: GlobalState) => {
+  const {information: {guid}} = selectUserState(state);
+  return {
+    guid
+  }
+};
+
+
+const MenuNavigation: FC<Props> = () => {
+  const {guid} = useSelector(mapStateToProps);
   const topics: Topic[] = [
     {
       title: 'Strategy',
@@ -95,7 +105,8 @@ const MenuNavigation: FC<Props> = ({guid}) => {
             (<Link key={topic.title} to={topic.path} style={{textDecoration: 'none', color: 'inherit'}}>
               {getListItem(index, topic)}
             </Link>) :
-            (<a key={topic.title} href={topic.href} target={'_blank'} style={{textDecoration: 'none', color: 'inherit'}}>
+            (<a key={topic.title} href={topic.href} target={'_blank'}
+                style={{textDecoration: 'none', color: 'inherit'}}>
               {getListItem(index, topic)}
             </a>)
         ))}
@@ -130,12 +141,5 @@ const MenuNavigation: FC<Props> = ({guid}) => {
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {information: {guid}} = selectUserState(state);
-  return {
-    guid
-  }
-};
 
-const connected: MenuNavigation = connect(mapStateToProps)(MenuNavigation);
-export default connected;
+export default MenuNavigation;
