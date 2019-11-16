@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import SwapVert from '@material-ui/icons/SwapVert';
 import {TimeDisplay} from "./TimeDisplay";
@@ -7,6 +7,8 @@ import ActivitySelection from "./ActivitySelection";
 import StopWatch from '@material-ui/icons/Timer';
 import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
 import IconButton from "@material-ui/core/IconButton";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import Timeout = NodeJS.Timeout;
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -30,7 +32,20 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const PomodoroTimer = ({
+interface Props {
+  startTimeInSeconds: number,
+  activityId: string,
+  onPause?: ()=>void,
+  onComplete?: ()=>void,
+  onResume?: ()=>void,
+  onBreak?: ()=>void,
+  fontSize?: string,
+  pivotActivity?: (name: string, stuff: {activityID?: string})=>void,
+  hidePause?: boolean
+}
+
+
+export const PomodoroTimer: FC<Props> = ({
                                 startTimeInSeconds,
                                 activityId,
                                 onComplete,
@@ -42,7 +57,7 @@ export const PomodoroTimer = ({
                               }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
-    onPause();
+    onPause && onPause();
     setIsPaused(true)
   };
 
@@ -50,18 +65,22 @@ export const PomodoroTimer = ({
   const activityTheSame = rememberedActivity === activityId;
   const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
   useEffect(() => {
-    let timeout;
+    let timeout: Timeout;
     if (timeElapsed < 1 && activityTheSame) {
       onComplete && onComplete();
     } else if (!isPaused) {
       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed - 1);
       }, 1000);
-    } else if (timeout) {
-      clearTimeout(timeout)
+    } else {
+      // @ts-ignore
+      if (timeout) {
+            clearTimeout(timeout)
+          }
     }
 
     return () => {
+      // @ts-ignore
       clearTimeout(timeout)
     }
   });
@@ -106,9 +125,9 @@ export const PomodoroTimer = ({
                          onClose={closeSelection}
                          onActivitySelection={activity => {
                            closeSelection();
-                           pivotActivity(activity.name, {activityID: activity.id});
+                           pivotActivity && pivotActivity(activity.name, {activityID: activity.id});
                          }}
-                         onGenericActivitySelection={() => pivotActivity(GENERIC_ACTIVITY_NAME, {})}
+                         onGenericActivitySelection={() => pivotActivity && pivotActivity(GENERIC_ACTIVITY_NAME, {})}
                          genericIcon={<StopWatch className={classes.bigIcon}/>}
       />
     </div>);
