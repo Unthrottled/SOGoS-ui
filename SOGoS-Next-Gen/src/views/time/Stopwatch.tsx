@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   startTimeInSeconds: number,
   activityId: string,
-  onPause: ()=>void,
+  onPause?: ()=>void,
   onResume?: ()=>void,
   fontSize?: string,
 }

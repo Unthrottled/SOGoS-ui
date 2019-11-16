@@ -1,11 +1,19 @@
 import * as React from 'react';
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import Stop from '@material-ui/icons/Stop';
-import {selectActivityState, selectTacticalActivityState} from "../../reducers";
+import {GlobalState, selectActivityState, selectTacticalActivityState} from "../../reducers";
 import Stopwatch from "./Stopwatch";
 import {getTime, resumeActivity} from "./ActivityTimeBar";
+import uuid from "uuid/v4";
+import IconButton from "@material-ui/core/IconButton";
+import {green} from "@material-ui/core/colors";
+import {numberObjectToArray} from "../../miscellanous/Tools";
+import {dictionaryReducer} from "../../reducers/StrategyReducer";
+import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
+import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
+import {TacticalActivity} from "../../types/TacticalTypes";
 import {
   ActivityTimedType,
   ActivityType,
@@ -13,16 +21,9 @@ import {
   getActivityName,
   isPausedActivity,
   RECOVERY
-} from "../types/ActivityModels";
-import {startNonTimedActivity} from "../actions/ActivityActions";
-import uuid from "uuid/v4";
-import IconButton from "@material-ui/core/IconButton";
-import {green} from "@material-ui/core/colors";
-import {objectToArray} from "../../miscellanous/Tools";
-import {dictionaryReducer} from "../../reducers/StrategyReducer";
-import type {TacticalActivity} from "../types/TacticalModels";
-import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
-import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
+} from "../../types/ActivityTypes";
+import {startNonTimedActivity} from "../../actions/ActivityActions";
+import {StringDictionary} from "../../types/BaseTypes";
 
 
 const useStyles = makeStyles(theme => ({
@@ -66,23 +67,38 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const PausedPomodoro = ({
-                          shouldTime,
-                          currentActivity,
-                          previousActivity,
-                          activities,
-                          dispatch: dispetch
-                        }) => {
-  const classes = useStyles();
+const mapStateToProps = (state: GlobalState) => {
+  const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
+  const {activities} = selectTacticalActivityState(state);
+  return {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    activities,
+  };
+};
+
+
+const PausedPomodoro = () => {
+  const classes: any = useStyles();
+  const {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    activities,
+  } = useSelector(mapStateToProps);
   const {antecedenceTime, content: {uuid: activityId, timedType}} = currentActivity;
 
-  const mappedTacticalActivities = objectToArray(activities).reduce(dictionaryReducer, {});
-  const tacticalActivity: TacticalActivity = mappedTacticalActivities[getActivityID(currentActivity)];
+  const mappedTacticalActivities: StringDictionary<TacticalActivity> =
+    numberObjectToArray(activities).reduce(dictionaryReducer, {});
+  const tacticalActivity = mappedTacticalActivities[getActivityID(currentActivity)];
 
+  const dispetch = useDispatch();
   const stopActivity = () => {
     dispetch(startNonTimedActivity({
       name: RECOVERY,
       type: ActivityType.ACTIVE,
+      timedType: ActivityTimedType.NONE,
       uuid: uuid(),
     }))
   };
@@ -123,7 +139,7 @@ const PausedPomodoro = ({
               <div className={classes.pivotLabel}>
                 <div>Pivoted to: {getActivityName(currentActivity).replace(/_/, ' ')} </div>
               </div>
-              {tacticalActivity && <TacticalActivityIcon tacticalActivity={tacticalActivity}/> }
+              {tacticalActivity && <TacticalActivityIcon tacticalActivity={tacticalActivity}/>}
             </div>
           )
         }
@@ -132,15 +148,5 @@ const PausedPomodoro = ({
   ) : null;
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {currentActivity, previousActivity, shouldTime} = selectActivityState(state);
-  const {activities} = selectTacticalActivityState(state);
-  return {
-    shouldTime,
-    currentActivity,
-    previousActivity,
-    activities,
-  };
-};
 
-export default connect(mapStateToProps)(PausedPomodoro);
+export default PausedPomodoro;
