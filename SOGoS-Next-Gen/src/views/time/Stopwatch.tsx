@@ -41,14 +41,9 @@ const Stopwatch: FC<Props> = ({
       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed + 1);
       }, 1000);
-    } else {
-      // @ts-ignore
-      if (timeout) {
-            clearTimeout(timeout)
-          }
     }
     return () => {
-      clearTimeout(timeout)
+      timeout && clearTimeout(timeout)
     }
   });
   const [rememberedActivity, setRememberedActivity] = useState(activityId || '');

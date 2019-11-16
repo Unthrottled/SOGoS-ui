@@ -157,12 +157,11 @@ interface ListProps {
   classes: any;
 }
 
-// @ts-ignore
-export const TacticalActivityList: FC<ListProps> = ({
-                                                      tacticalActivities,
-                                                      moveItems,
-                                                      classes
-                                                    }) => {
+export const TacticalActivityList = ({
+                                       tacticalActivities,
+                                       moveItems,
+                                       classes
+                                     }: ListProps): JSX.Element[] => {
   return tacticalActivities.map((tacticalActivity, index) => (
     <Draggable key={tacticalActivity.id}
                draggableId={tacticalActivity.id}
@@ -277,9 +276,12 @@ const ActivitiesDashboard: FC<DispatchProp & Props> = ({activities, dispatch}) =
             {
               provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <TacticalActivityList tacticalActivities={allTacticalActivities}
-                                        moveItems={moveItems}
-                                        classes={classes}/>
+                  {
+                    TacticalActivityList({
+                      tacticalActivities: allTacticalActivities,
+                      moveItems: moveItems,
+                      classes: classes,
+                    })};
                   {provided.placeholder}
                 </div>
               )

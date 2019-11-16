@@ -168,7 +168,7 @@ const PieFlavored: FC<Props> = ({
       selection.select('svg').remove();
 
       const pieSVG = selection.append('svg')
-        // @ts-ignore
+        // @ts-ignore real
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .call(responsivefy)
         .append('g');
@@ -176,10 +176,10 @@ const PieFlavored: FC<Props> = ({
       const pieFlavored = pie()
         .padAngle(0.005)
         .sort(null)
-        // @ts-ignore
+        // @ts-ignore real
         .value(d => d.value);
 
-      // @ts-ignore
+      // @ts-ignore real
       const arcs = pieFlavored(pieData);
 
       const radius = Math.min(width, height) / 2;

@@ -16,7 +16,7 @@ import {createNotificationPermissionReceivedEvent} from "../../events/Configurat
 import {TacticalActivity} from "../../types/TacticalTypes";
 
 
-// @ts-ignore
+// @ts-ignore real
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),

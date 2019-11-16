@@ -8,7 +8,7 @@ import {GlobalState, selectTacticalActivityState} from "../../reducers";
 import {TacticalActivity} from "../../types/TacticalTypes";
 import {useSelector} from "react-redux";
 
-// @ts-ignore
+// @ts-ignore real
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),

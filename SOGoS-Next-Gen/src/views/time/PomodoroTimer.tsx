@@ -33,26 +33,26 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   startTimeInSeconds: number,
   activityId: string,
-  onPause?: ()=>void,
-  onComplete?: ()=>void,
-  onResume?: ()=>void,
-  onBreak?: ()=>void,
+  onPause?: () => void,
+  onComplete?: () => void,
+  onResume?: () => void,
+  onBreak?: () => void,
   fontSize?: string,
-  pivotActivity?: (name: string, stuff: {activityID?: string})=>void,
+  pivotActivity?: (name: string, stuff: { activityID?: string }) => void,
   hidePause?: boolean
 }
 
 
 export const PomodoroTimer: FC<Props> = ({
-                                startTimeInSeconds,
-                                activityId,
-                                onComplete,
-                                onPause,
-                                pivotActivity,
-                                onBreak,
-                                onResume,
-                                hidePause,
-                              }) => {
+                                           startTimeInSeconds,
+                                           activityId,
+                                           onComplete,
+                                           onPause,
+                                           pivotActivity,
+                                           onBreak,
+                                           onResume,
+                                           hidePause,
+                                         }) => {
   const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
     onPause && onPause();
@@ -70,16 +70,9 @@ export const PomodoroTimer: FC<Props> = ({
       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed - 1);
       }, 1000);
-    } else {
-      // @ts-ignore
-      if (timeout) {
-            clearTimeout(timeout)
-          }
     }
-
     return () => {
-      // @ts-ignore
-      clearTimeout(timeout)
+      timeout && clearTimeout(timeout)
     }
   });
 
@@ -101,7 +94,7 @@ export const PomodoroTimer: FC<Props> = ({
           color={'inherit'}
           title={'Pivot to Activity'}
           className={classes.swappo}
-              onClick={openSelection}>
+          onClick={openSelection}>
           <SwapVert/>
         </IconButton>)
       }
@@ -111,12 +104,12 @@ export const PomodoroTimer: FC<Props> = ({
       <div className={classes.actionButton}>
         {
           !hidePause &&
-            (<IconButton
-              title={'Pause Pomodoro'}
-              color={'inherit'}
-                         onClick={pauseTimer}>
-              <Pause/>
-            </IconButton>)
+          (<IconButton
+            title={'Pause Pomodoro'}
+            color={'inherit'}
+            onClick={pauseTimer}>
+            <Pause/>
+          </IconButton>)
         }
       </div>
       <ActivitySelection open={selectionOpen}

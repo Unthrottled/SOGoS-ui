@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import {emphasize, makeStyles, useTheme} from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import ReactSelect from 'react-select/creatable';
-import {useParams, useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {components} from "../components/MultiSelectComponents";
 import {ColorPicker} from "../components/ColorPicker";
 import {PopupModal} from "../components/PopupModal";
@@ -132,11 +132,12 @@ interface Props {
   activities: NumberDictionary<TacticalActivity>,
   archivedActivities: StringDictionary<TacticalActivity>,
 }
+
 const ActivityDashboard: FC<DispatchProp & Props> = ({
-                             dispatch,
-                             activities,
-                             archivedActivities,
-                           }
+                                                       dispatch,
+                                                       activities,
+                                                       archivedActivities,
+                                                     }
 ) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -303,11 +304,10 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
             isMulti
           />
           <div className={classes.persistActions}>
-            // @ts-ignore
             <PersistActions
               {...{
                 ...(rememberedTacticalObjective ? {onDelete: () => setFinnaDelete(true)} : {}),
-                ...(rememberedTacticalObjective ? archiveAction : {}),
+                ...(rememberedTacticalObjective ? archiveAction : {})
               }}
               onCancel={discardChanges}
               onSave={saveTacticalActivity}/>
@@ -327,7 +327,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {information: {fullName}} = selectUserState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {

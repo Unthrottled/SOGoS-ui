@@ -16,6 +16,7 @@ import {TacticalIcon} from "../icons/TacticalIcon";
 import {GlobalState, selectUserState} from "../../reducers";
 import {useSelector} from "react-redux";
 import HistoryIcon from '@material-ui/icons/History';
+import {SlideProps} from "@material-ui/core/Slide";
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -113,6 +114,10 @@ const MenuNavigation: FC<Props> = () => {
       </List>
     </div>
   );
+  const slideProps: Partial<SlideProps> = {
+    // @ts-ignore real
+    className: classes.drawer,
+  };
   return (
     <div>
       <IconButton edge="start"
@@ -123,10 +128,7 @@ const MenuNavigation: FC<Props> = () => {
         <MenuIcon/>
       </IconButton>
       <Drawer anchor="left" open={drawerOpen}
-              SlideProps={{
-                // @ts-ignore
-                className: classes.drawer,
-              }}
+              SlideProps={slideProps}
               onClose={toggleDrawer(false)}>
         <div
           tabIndex={0}

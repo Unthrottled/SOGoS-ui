@@ -3,7 +3,7 @@ import List from "@material-ui/core/List";
 import {Card, makeStyles} from "@material-ui/core";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import {GlobalState, selectStrategyState, selectTacticalActivityState} from "../../reducers";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {numberObjectToArray} from "../../miscellanous/Tools";
 import {TacticalActivity} from "../../types/TacticalTypes";
 import {NumberDictionary} from "../../types/BaseTypes";
@@ -65,27 +65,34 @@ const useStyles = makeStyles(theme => (
 ));
 
 type Props = {
-  activities: NumberDictionary<TacticalActivity>,
-  archivedActivities: NumberDictionary<TacticalActivity>,
   actionComponent?: (arg1: TacticalActivity) => JSX.Element,
   hidden?: boolean,
 };
 
+const mapStateToProps = (state: GlobalState) => {
+  const {objectives} = selectStrategyState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
+  return {
+    objectives,
+    activities,
+    archivedActivities,
+  }
+};
+
 const ActivityList = (props: Props) => {
+  const selectedState = useSelector(mapStateToProps);
   const allTacticalActivities: TacticalActivity[] = numberObjectToArray(
-    props.hidden ? props.archivedActivities :
-      props.activities
+    props.hidden ? selectedState.archivedActivities :
+      selectedState.activities
   );
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      // @ts-ignore
-      <List justify={'center'}>
+      <List>
         <div>
           <div
             style={{flexGrow: 1}}
-
           >
             {
               allTacticalActivities.map(tacticalActivity => (
@@ -120,14 +127,5 @@ const ActivityList = (props: Props) => {
 };
 
 
-const mapStateToProps = (state: GlobalState) => {
-  const {objectives} = selectStrategyState(state);
-  const {activities, archivedActivities} = selectTacticalActivityState(state);
-  return {
-    objectives,
-    activities,
-    archivedActivities,
-  }
-};
 
-export default connect(mapStateToProps)(ActivityList);
+export default ActivityList;

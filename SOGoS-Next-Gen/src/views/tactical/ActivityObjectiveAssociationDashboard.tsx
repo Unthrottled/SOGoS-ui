@@ -98,12 +98,12 @@ const ObjectiveActivityAssociationDashboard: FC<DispatchProp & Props> = ({
     }, {});
 
   const selectedObjectives = reduceRight(allObjectives,
-    (accum: StringDictionary<Boolean>, objective) => {
+    (accum: StringDictionary<boolean>, objective) => {
       accum[objective.id] = !!associatedObjectiveDictionary[objective.id];
       return accum;
     }, {});
 
-  const [objectiveSwitches, setActivitySwitches] = useState(selectedObjectives);
+  const [objectiveSwitches, setActivitySwitches] = useState<StringDictionary<boolean>>(selectedObjectives);
   const toggleObjective = (objectiveId: string) => {
     objectiveSwitches[objectiveId] = !objectiveSwitches[objectiveId];
     setActivitySwitches({
@@ -162,8 +162,7 @@ const ObjectiveActivityAssociationDashboard: FC<DispatchProp & Props> = ({
         </Container>
       </div>
       <div className={classes.root}>
-        // @ts-ignore
-        <List justify={'center'}>
+        <List>
           <div>
             <div
               style={{flexGrow: 1}}
@@ -183,7 +182,6 @@ const ObjectiveActivityAssociationDashboard: FC<DispatchProp & Props> = ({
                         </div>
                         <div className={classes.activityName}>{objective.valueStatement}</div>
                         <div>
-                          // @ts-ignore
                           <Switch checked={objectiveSwitches[objective.id]}
                                   onChange={() => toggleObjective(objective.id)}/>
                         </div>

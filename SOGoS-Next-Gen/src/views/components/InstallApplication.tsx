@@ -7,7 +7,7 @@ import Zoom from "@material-ui/core/Zoom";
 
 const useStyles = makeStyles(theme => ({
   download: {
-    // @ts-ignore
+    // @ts-ignore real
     color: theme.palette.primary.alertColor,
     opacity: 0.95
   },
@@ -18,7 +18,7 @@ const isStandalone = () => window.matchMedia('(display-mode: standalone)').match
 const InstallApplication = () => {
   const classes = useStyles();
   const [componentDidMount] = useState('didMount');
-  // @ts-ignore
+  // @ts-ignore real
   const [installPrompt, setInstallPromptState] = useState(window.sogosInstallPrompt);
   const [askedToInstall, setAskedToInstall] = useState(false);
   useEffect(() => {

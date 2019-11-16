@@ -11,7 +11,7 @@ type Props = {
   onCancel: ()=>void,
   onSave: ()=>void,
   onComplete?: ()=>void,
-  completionIcon?: JSX.Element,
+  completionIcon?: (props: SvgIconProps) => JSX.Element,
   completionTitle?: string,
   onDelete?: ()=>void,
 };

@@ -9,7 +9,7 @@ import TimeLine from "./TimeLine";
 import moment, { Moment } from 'moment';
 import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
 import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
-import {DateRangePicker} from 'react-dates';
+import {DateRangePicker, FocusedInputShape} from 'react-dates';
 import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import InputLabel from "@material-ui/core/InputLabel";
 import HistoryIcon from '@material-ui/icons/History';
@@ -108,7 +108,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
 
-  const [focusedInput, setFocusedInput] = useState(null);
+  const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(null);
 
   const submitTimeFrame = (from: Moment, to: Moment) => {
     const fromUnix = from.valueOf();
@@ -129,14 +129,11 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
               startDate={meowMinusSeven}
               startDateId="steve"
               endDate={meow}
-              minDate={moment.unix(0)}
-              maxDate={moment()}
               isOutsideRange={(date) => moment().isSameOrBefore(date, 'day')}
               endDateId="jerry"
               onDatesChange={({startDate, endDate}) =>
                 submitTimeFrame(startDate || moment(), endDate || moment())}
               focusedInput={focusedInput}
-              // @ts-ignore
               onFocusChange={setFocusedInput}
             />
           </div>

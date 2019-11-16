@@ -10,7 +10,7 @@ import {createRequestedSyncEvent} from "../../events/UserEvents";
 
 const useStyles = makeStyles(theme => ({
   offline: {
-    // @ts-ignore
+    // @ts-ignore real
     color: theme.palette.primary.alertColor
   },
 }));
