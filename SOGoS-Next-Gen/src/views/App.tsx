@@ -32,7 +32,7 @@ const theme = responsiveFontSizes(createMuiTheme({
   palette: {
     primary: {
       ...amber,
-      //@ts-ignore
+      //@ts-ignore real
       alertColor: '#f9ff75',
     },
     secondary: blue,

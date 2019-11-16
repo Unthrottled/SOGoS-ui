@@ -25,8 +25,7 @@ export const ColorPicker = ({
                               defaultColor,
                             }: Props) => {
   const [open, setOpen] = useState(false);
-  // @ts-ignore
-  const [ancorElement, setAnchorElement] = useState<EventTarget>(null);
+  const [ancorElement, setAnchorElement] = useState<Element|null>(null);
   const [currentColor, setCurrentColor] = useState<ColorType>(defaultColor || {
     hex: '#86a4f3',
     opacity: 1,

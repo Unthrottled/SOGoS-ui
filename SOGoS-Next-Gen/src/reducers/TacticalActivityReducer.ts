@@ -12,13 +12,14 @@ import {
   UPDATED_ACTIVITY
 } from "../events/TacticalEvents";
 import {dictionaryReducer} from "./StrategyReducer";
-import {TacticalActivity, TacticalState} from "../types/TacticalTypes";
-import {NumberDictionary} from "../types/BaseTypes";
+import {CachedTacticalActivity, TacticalActivity, TacticalState} from "../types/TacticalTypes";
+import {NumberDictionary, StringDictionary} from "../types/BaseTypes";
+import reduceRight from "lodash/reduceRight";
 
 export const rankReducer = (accum: NumberDictionary<TacticalActivity>,
                             toIndex: TacticalActivity,
                             index: number) => {
-  if(!toIndex.rank && toIndex.rank !== 0) {
+  if (!toIndex.rank && toIndex.rank !== 0) {
     toIndex.rank = index;
   }
   accum[toIndex.rank] = toIndex;
@@ -58,7 +59,7 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
       return {
         ...state,
         activity: {
-         ...state.activity,
+          ...state.activity,
           activities: newActivities.reduce(rankReducer, {}),
         }
       };
@@ -84,9 +85,9 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
       };
     case FOUND_ACTIVITIES:
       const activeActivities = action.payload
-          .filter((tactActivity: TacticalActivity) => !tactActivity.hidden);
+        .filter((tactActivity: TacticalActivity) => !tactActivity.hidden);
       const archivedActivities = action.payload
-          .filter((tactActivity: TacticalActivity) => tactActivity.hidden);
+        .filter((tactActivity: TacticalActivity) => tactActivity.hidden);
       const rememberedActivities = activeActivities.reduce(rankReducer, {});
       return {
         ...state,
@@ -126,10 +127,9 @@ const TacticalActivityReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, 
         activity: {
           ...state.activity,
           cache: {
-            ...objectToKeyValueArray(state.activity.cache)
-              .filter(keyValues => keyValues.key !== action.payload)
-              .reduce((accum, keyValue) => {
-                // @ts-ignore
+            ...reduceRight(objectToKeyValueArray(state.activity.cache)
+                .filter(keyValues => keyValues.key !== action.payload),
+              (accum: StringDictionary<CachedTacticalActivity[]>, keyValue) => {
                 accum[keyValue.key] = keyValue.value;
                 return accum
               }, {}),

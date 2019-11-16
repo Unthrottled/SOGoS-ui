@@ -8,7 +8,7 @@ import {GlobalState, selectNetworkState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   offline: {
-    // @ts-ignore
+    // @ts-ignore real
     color: theme.palette.primary.alertColor
   },
 }));

@@ -5,14 +5,15 @@ import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from '@material-ui/icons/Check';
 import DeleteIcon from '@material-ui/icons/Delete';
+import {SvgIconProps} from "@material-ui/core/SvgIcon";
 
 type Props = {
-  onCancel: Function,
-  onSave: Function,
-  onComplete?: Function,
+  onCancel: ()=>void,
+  onSave: ()=>void,
+  onComplete?: ()=>void,
   completionIcon?: JSX.Element,
   completionTitle?: string,
-  onDelete?: Function,
+  onDelete?: ()=>void,
 };
 
 const useStyles = makeStyles(theme => ({
@@ -28,10 +29,10 @@ const useStyles = makeStyles(theme => ({
 
 export const PersistActions = (props: Props) => {
   const classes = useStyles();
-  const CompletionIcon = props.completionIcon || CheckIcon;
+  // @ts-ignore real
+  const CompletionIcon: (props: SvgIconProps) => JSX.Element =  props.completionIcon || CheckIcon;
   return (
     <div>
-      // @ts-ignore
       <IconButton color={'primary'}
                   className={classes.save}
                   onClick={props.onSave}
@@ -40,19 +41,16 @@ export const PersistActions = (props: Props) => {
       </IconButton>
       {
         props.onComplete &&
-        // @ts-ignore
         <IconButton color={'primary'}
                     className={classes.save}
                     onClick={props.onComplete}
                     title={props.completionTitle || 'Complete'}
         >
-          // @ts-ignore
           <CompletionIcon className={classes.icon}/>
         </IconButton>
       }
       {
         props.onDelete &&
-        // @ts-ignore
         <IconButton color={'primary'}
                     className={classes.save}
                     onClick={props.onDelete}
@@ -60,7 +58,6 @@ export const PersistActions = (props: Props) => {
           <DeleteIcon className={classes.icon}/>
         </IconButton>
       }
-      // @ts-ignore
       <IconButton color={'primary'}
                   className={classes.save}
                   onClick={props.onCancel}

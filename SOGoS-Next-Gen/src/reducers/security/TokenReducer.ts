@@ -4,12 +4,10 @@ import jwtDecode from 'jwt-decode';
 
 const getRefreshTokenInformation = (refreshToken: string | undefined) => {
     if(refreshToken){
-        const decodedToken = jwtDecode(refreshToken);
+        const decodedToken: any = jwtDecode(refreshToken);
         return {
             refreshTokenInformation:{
-                // @ts-ignore
                 issuedAt: decodedToken.iat,
-                // @ts-ignore
                 expiresAt: decodedToken.exp,
             }
         }

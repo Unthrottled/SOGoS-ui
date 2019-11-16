@@ -19,7 +19,7 @@ export function* fetchTokenSaga(oauthConfig: OAuthConfig,
                                 tokenRequest: TokenRequest,
                                 responseModifier: (any: any) => any) {
   try {
-    // @ts-ignore
+    // @ts-ignore real
     const tokenResponse = yield call(requestToken, oauthConfig, tokenRequest);
     yield put(createTokenReceptionEvent(responseModifier(tokenResponse)));
   } catch (error) {

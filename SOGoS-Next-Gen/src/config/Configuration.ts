@@ -17,9 +17,8 @@ const fetchMiddleware = (sagaMiddleware: any) => {
     return applyMiddleware(...commonMiddleware);
 };
 
-const blackListTransform = createTransform((inboundState, key)=> {
+const blackListTransform = createTransform((inboundState:any, key)=> {
     if(key === 'security'){
-        // @ts-ignore
         return omit(inboundState, ['isInitialized'])
     } else {
         return inboundState;

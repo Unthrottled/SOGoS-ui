@@ -1,5 +1,5 @@
 import {connect, DispatchProp} from "react-redux";
-import React, {FC} from "react";
+import React from "react";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,18 +9,19 @@ import Slide from '@material-ui/core/Slide';
 import Button from "@material-ui/core/Button";
 import {createRequestLogonEvent} from "../../events/SecurityEvents";
 import {GlobalState} from "../../reducers";
+import {TransitionProps} from "@material-ui/core/transitions";
 
-// todo: look into dis
-// @ts-ignore
-const Transition: FC =
+const Transition: React.ComponentType<TransitionProps> =
   React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 type Props = DispatchProp & {
   isExpired: boolean,
 };
-const SessionExpired = ({isExpired,
-                          dispatch: dispetch}: Props) => {
+const SessionExpired = ({
+                          isExpired,
+                          dispatch: dispetch
+                        }: Props) => {
   const goToLogin = (): void => {
     dispetch(dispetch(createRequestLogonEvent()))
   };

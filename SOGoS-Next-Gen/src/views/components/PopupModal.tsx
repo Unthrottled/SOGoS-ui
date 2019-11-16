@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {FC} from 'react';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
@@ -7,9 +6,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide";
+import {TransitionProps} from "@material-ui/core/transitions";
 
-// @ts-ignore
-const Transition: FC = React.forwardRef(function Transition(props, ref) {
+const Transition: React.ComponentType<TransitionProps> = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 

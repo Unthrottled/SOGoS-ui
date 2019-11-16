@@ -13,6 +13,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {TomatoIcon} from "../icons/TomatoIcon";
 import {PersistActions} from "../components/PersistActions";
 import {PomodoroSettings} from "../../types/TacticalTypes";
+import {SliderProps} from "@material-ui/core/Slider/Slider";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -119,7 +120,7 @@ const workMarks = [
   },
 ];
 
-const SliderBoi = withStyles({
+const SliderBoi:React.ComponentType<SliderProps>  = withStyles({
   thumb: {
     height: 20,
     width: 20,
@@ -145,18 +146,21 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
   }, [dispatch]);
   const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
 
-  const saveRecoveryTime = (_: any, time: number) => {
-    setRecoveryTime(time)
+  const saveRecoveryTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
+      // @ts-ignore real
+    setRecoveryTime(time);
   };
 
   const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration / MINUTE_CONVERSION);
 
-  const saveLongRecoveryTime = (_: any, time: number) => {
+  const saveLongRecoveryTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
+    // @ts-ignore real
     setLongRecoveryTime(time)
   };
   const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration / MINUTE_CONVERSION);
 
-  const saveWorkTime = (_: any, time: number) => {
+  const saveWorkTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
+    // @ts-ignore real
     setWorkTime(time)
   };
   const cycleTimeMinutes = (workTime + recoveryTime) * 4 - recoveryTime;
@@ -205,11 +209,9 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
           </Typography>
           <SliderBoi
             id={'pomodoro-work-time'}
-            label={'Working Duration (minutes)'}
             defaultValue={workTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
-            // @ts-ignore
             onChangeCommitted={saveWorkTime}
             min={5}
             marks={workMarks}
@@ -221,11 +223,9 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
           </Typography>
           <SliderBoi
             id={'pomodoro-recovery-time'}
-            label={'Working Duration (minutes)'}
             defaultValue={recoveryTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
-            // @ts-ignore
             onChangeCommitted={saveRecoveryTime}
             min={0.5}
             marks={restMarks}
@@ -237,11 +237,9 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
           </Typography>
           <SliderBoi
             id={'pomodoro-long-recovery-time'}
-            label={'Working Duration (minutes)'}
             defaultValue={longRecoveryTime}
             aria-labelledby="discrete-slider-always"
             step={0.5}
-            // @ts-ignore
             onChangeCommitted={saveLongRecoveryTime}
             min={5}
             marks={recoveryMarks}

@@ -44,22 +44,18 @@ export function* activityTerminationSaga({payload}: PayloadEvent<TacticalActivit
 }
 
 export function* activityCreateSaga(activity: TacticalActivity) {
-  // @ts-ignore   todo: come back to this
   yield call(activityUploadSaga, activity, performPost, activityUploadToCached);
 }
 
 export function* activityUpdateSaga(activity: TacticalActivity) {
-  // @ts-ignore   todo: come back to this
   yield call(activityUploadSaga, activity, performPut, activityUpdateToCached);
 }
 
 export function* activityDeleteSaga(activity: TacticalActivity) {
-  // @ts-ignore   todo: come back to this
   yield call(activityUploadSaga, activity, performDelete, activityDeleteToCached);
 }
 
 export function* activityCompleteSaga(activity: TacticalActivity) {
-  // @ts-ignore   todo: come back to this
   yield call(activityUploadSaga, activity, performPost, activityCompleteToCached,
     (_activity: TacticalActivity) =>
       `${TACTICAL_ACTIVITIES_URL}/${_activity.id}/complete`);
@@ -100,7 +96,7 @@ export function* activityAPIInteractionSaga(activity: TacticalActivity,
 export const TACTICAL_ACTIVITIES_URL = `/tactical/activity`;
 
 export function* activityUploadSaga(activity: TacticalActivity,
-                                    apiAction: (url: String, t: any, o?: any) => void,
+                                    apiAction: any,
                                     cachingFunction: (tacticalActivity: TacticalActivity) => CachedTacticalActivity,
                                     urlFunction: (tacticalActivity: TacticalActivity)=> string = __ => TACTICAL_ACTIVITIES_URL) {
   try {

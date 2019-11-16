@@ -1,9 +1,9 @@
 Immediate things need to be done:
 ----
+- Getting a new access token user experience.
 
 Mile-Stones after MVP:
 -----
-- Getting a new access token user experience.
 - Shared pomodoro count.
 - Sharable dashboard.
     - auto-sync

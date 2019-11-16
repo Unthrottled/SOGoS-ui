@@ -38,8 +38,7 @@ type Props = DispatchProp & {
 
 const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
   const classes = useStyles();
-  // @ts-ignore
-  const [anchorEl, setAnchorEl] = React.useState<EventTarget>(null);
+  const [anchorEl, setAnchorEl] = React.useState<Element|null>(null);
   const open = Boolean(anchorEl);
 
   const handleMenu: MouseEventHandler = event => {
@@ -75,8 +74,8 @@ const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
               <MoreVertIcon/>
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorEl}
+              id="menu-appbar"
               anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',

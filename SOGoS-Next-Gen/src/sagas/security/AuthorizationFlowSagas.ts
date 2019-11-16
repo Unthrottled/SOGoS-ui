@@ -39,7 +39,7 @@ export function constructAuthorizationRequestHandler(): Promise<AuthorizationReq
 export function performAuthorizationRequest(authorizationHandler: AuthorizationRequestHandler,
                                             oauthConfig: OAuthConfig,
                                             authorizationRequest: AuthorizationRequest): Promise<void> {
-  // @ts-ignore
+  // @ts-ignore real
   return Promise.resolve(authorizationHandler.performAuthorizationRequest(oauthConfig, authorizationRequest));
 }
 
@@ -49,11 +49,11 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
   const authorizationHandler: AuthorizationRequestHandler =
     yield call(constructAuthorizationRequestHandler);
   const authorizationResult: AuthorizationRequestResponse =
-    // @ts-ignore
+    // @ts-ignore real
     yield call(completeAuthorizationRequest, authorizationHandler);
   if (authorizationResult) {
     const {request, response} = authorizationResult;
-    // @ts-ignore
+    // @ts-ignore real
     const tokenRequest = yield call(constructAuthorizationCodeGrantRequest, request, response);
     yield call(exchangeAuthorizationGrantForAccessToken, tokenRequest, oauthConfig);
   } else if (shouldRequestLogon) {
