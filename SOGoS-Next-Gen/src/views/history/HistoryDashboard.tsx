@@ -6,7 +6,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Container from "@material-ui/core/Container";
 import PieFlavored from "./PieFlavored";
 import TimeLine from "./TimeLine";
-import moment, { Moment } from 'moment';
+import moment, {Moment} from 'moment';
 import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
 import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
 import {DateRangePicker, FocusedInputShape} from 'react-dates';

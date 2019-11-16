@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import {connect, DispatchProp, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';

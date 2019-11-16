@@ -1,9 +1,8 @@
 import {
-    TacticalActivityCacheEvent,
-    CachedSettings,
-    PomodoroSettings,
-    PomodoroSettingsRegistryFailure,
-    TacticalActivity
+  PomodoroSettings,
+  PomodoroSettingsRegistryFailure,
+  TacticalActivity,
+  TacticalActivityCacheEvent
 } from "../types/TacticalTypes";
 import {BaseEvent, PayloadEvent} from "./Event";
 

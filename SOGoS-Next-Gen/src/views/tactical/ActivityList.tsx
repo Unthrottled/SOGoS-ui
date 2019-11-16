@@ -3,10 +3,9 @@ import List from "@material-ui/core/List";
 import {Card, makeStyles} from "@material-ui/core";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import {GlobalState, selectStrategyState, selectTacticalActivityState} from "../../reducers";
-import {connect, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {numberObjectToArray} from "../../miscellanous/Tools";
 import {TacticalActivity} from "../../types/TacticalTypes";
-import {NumberDictionary} from "../../types/BaseTypes";
 
 const useStyles = makeStyles(theme => (
   {

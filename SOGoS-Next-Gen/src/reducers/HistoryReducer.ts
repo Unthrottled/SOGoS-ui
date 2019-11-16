@@ -1,9 +1,7 @@
 import {
   ActivityReceptionPayload,
   ActivityUpdatePayload,
-  CapstoneActivityUpdatePayload
-} from "../events/HistoryEvents";
-import {
+  CapstoneActivityUpdatePayload,
   INITIALIZED_HISTORY,
   UPDATED_CAPSTONES,
   UPDATED_FULL_FEED,

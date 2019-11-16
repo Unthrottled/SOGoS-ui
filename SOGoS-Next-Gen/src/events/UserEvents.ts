@@ -1,4 +1,4 @@
-import {User, UserResponse} from "../types/UserTypes";
+import {UserResponse} from "../types/UserTypes";
 import {BaseEvent, PayloadEvent} from "./Event";
 
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' = 'FAILED_REQUESTED_USER';

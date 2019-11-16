@@ -11,11 +11,12 @@ import {selectActivityState, selectNetworkState, selectSecurityState} from "../.
 import {FOUND_WIFI} from "../../events/NetworkEvents";
 import {isOnline} from "../NetworkSagas";
 import {
-  activitiesEqual, Activity,
-  ActivityTimedType,
-  ActivityType,
-  getActivityType,
-  getTimedType
+    activitiesEqual,
+    Activity,
+    ActivityTimedType,
+    ActivityType,
+    getActivityType,
+    getTimedType
 } from "../../types/ActivityTypes";
 import {INITIALIZED_SECURITY} from "../../events/SecurityEvents";
 

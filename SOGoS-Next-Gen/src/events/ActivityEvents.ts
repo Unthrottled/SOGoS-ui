@@ -1,9 +1,9 @@
 import {
-    Activity,
-    ActivityCacheEvent,
-    ActivityContent,
-    ActivityRegistryFailure,
-    ActivityTimedType
+  Activity,
+  ActivityCacheEvent,
+  ActivityContent,
+  ActivityRegistryFailure,
+  ActivityTimedType
 } from "../types/ActivityTypes";
 import {RememberedPomodoro} from "../types/TacticalTypes";
 import {BaseEvent, PayloadEvent} from "./Event";

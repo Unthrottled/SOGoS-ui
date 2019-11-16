@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {FC} from 'react';
 import {connect, DispatchProp} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SnackbarContent} from "@material-ui/core";
@@ -9,7 +10,6 @@ import {amber} from "@material-ui/core/colors";
 import Snackbar from "@material-ui/core/Snackbar";
 import {GlobalState, selectMiscState} from "../../reducers";
 import {createHideNotificationEvent} from "../../events/MiscEvents";
-import {FC} from "react";
 
 const useStyles = makeStyles(theme => ({
   container: {

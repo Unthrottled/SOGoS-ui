@@ -1,14 +1,14 @@
-import {PomodoroSettings, TacticalActivity, TacticalState} from "../types/TacticalTypes";
+import {CachedTacticalActivity, PomodoroSettings, TacticalActivity, TacticalState} from "../types/TacticalTypes";
 import {
   CACHED_SETTINGS,
-  REGISTERED_POMODORO_SETTINGS, SettingsCacheEvent,
+  REGISTERED_POMODORO_SETTINGS,
+  SettingsCacheEvent,
   SYNCED_SETTINGS,
   UPDATED_POMODORO_SETTINGS
 } from "../events/TacticalEvents";
 import {objectToKeyValueArray} from "../miscellanous/Tools";
 import TacticalActivityReducer from "./TacticalActivityReducer";
 import {NumberDictionary, StringDictionary} from "../types/BaseTypes";
-import {CachedTacticalActivity} from "../types/TacticalTypes";
 
 export interface PomodoroState {
   settings: PomodoroSettings;
