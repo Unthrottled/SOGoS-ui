@@ -78,7 +78,7 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-export const createAssociationComponent = (rememberedObjective: Objective,
+export const createAssociationComponent = (rememberedObjective: Objective | null,
                                            rememberedActivity?: TacticalActivity) =>
   <div style={{
     display: 'flex',

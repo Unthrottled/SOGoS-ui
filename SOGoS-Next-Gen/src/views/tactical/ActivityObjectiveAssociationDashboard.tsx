@@ -1,22 +1,25 @@
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import Fab from "@material-ui/core/Fab";
-import {withRouter} from "react-router-dom";
-import {selectStrategyState, selectTacticalActivityState} from "../../reducers";
+import {useHistory, useParams} from "react-router-dom";
+import {GlobalState, selectStrategyState, selectTacticalActivityState} from "../../reducers";
 import {objectToArray, objectToKeyValueArray} from "../../miscellanous/Tools";
 import {Card, Switch} from "@material-ui/core";
-import type {Objective} from "../types/StrategyModels";
-import {updatedObjective} from "../actions/StrategyActions";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import {GoalIcon} from "../icons/GoalIcon";
 import {createAssociationComponent} from "../strategic/ObjectiveActivityAssociationDashboard";
 import {mapTacticalActivitiesToID} from "../history/PieFlavored";
+import {Objective} from "../../types/StrategyTypes";
+import {NumberDictionary, StringDictionary} from "../../types/BaseTypes";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import reduceRight from "lodash/reduceRight";
+import {createUpdatedObjectiveEvent} from "../../events/StrategyEvents";
 
 const useStyles = makeStyles(theme => (
   {
@@ -74,28 +77,34 @@ const useStyles = makeStyles(theme => (
   }
 ));
 
-const ObjectiveActivityAssociationDashboard = ({
-                                                 dispatch,
-                                                 objectives,
-                                                 history,
-                                                 activities,
-                                                 match: {params: {activityId}}
-                                               }) => {
+interface Props {
+  objectives: StringDictionary<Objective>,
+  activities: NumberDictionary<TacticalActivity>,
+}
+
+const ObjectiveActivityAssociationDashboard: FC<DispatchProp & Props> = ({
+                                                                           dispatch,
+                                                                           objectives,
+                                                                           activities,
+                                                                         }) => {
   const classes = useStyles();
+  const {activityId} = useParams<{ activityId: string }>();
   const allObjectives = objectToArray(objectives);
-  const associatedObjectiveDictionary = allObjectives
-    .filter(objective => (objective.associatedActivities || []).indexOf(activityId) > -1)
-    .reduce((accum, objective) => {
+  const associatedObjectiveDictionary = reduceRight(allObjectives
+      .filter(objective => (objective.associatedActivities || []).indexOf(activityId) > -1),
+    (accum: StringDictionary<Boolean>, objective) => {
       accum[objective.id] = true;
       return accum
     }, {});
 
-  const selectedObjectives = allObjectives.reduce((accum, objective) => {
-    accum[objective.id] = !!associatedObjectiveDictionary[objective.id];
-    return accum;
-  }, {});
+  const selectedObjectives = reduceRight(allObjectives,
+    (accum: StringDictionary<Boolean>, objective) => {
+      accum[objective.id] = !!associatedObjectiveDictionary[objective.id];
+      return accum;
+    }, {});
+
   const [objectiveSwitches, setActivitySwitches] = useState(selectedObjectives);
-  const toggleObjective = (objectiveId) => {
+  const toggleObjective = (objectiveId: string) => {
     objectiveSwitches[objectiveId] = !objectiveSwitches[objectiveId];
     setActivitySwitches({
       ...objectiveSwitches
@@ -104,6 +113,7 @@ const ObjectiveActivityAssociationDashboard = ({
 
   const mappedTacticalActivites = mapTacticalActivitiesToID(activities);
 
+  const history = useHistory();
   const saveActivity = () => {
     const updatedObjectives = objectToKeyValueArray(objectiveSwitches)
       .map(idToObjective => {
@@ -120,7 +130,7 @@ const ObjectiveActivityAssociationDashboard = ({
 
         return updatedObjective
       });
-    updatedObjectives.forEach(objective => dispatch(updatedObjective(objective)));
+    updatedObjectives.forEach(objective => dispatch(createUpdatedObjectiveEvent(objective)));
     history.push('/tactical/activities/')
   };
 
@@ -147,11 +157,12 @@ const ObjectiveActivityAssociationDashboard = ({
             {mappedTacticalActivites[activityId].name}
           </Typography>
           {
-            createAssociationComponent({}, mappedTacticalActivites[activityId])
+            createAssociationComponent(null, mappedTacticalActivites[activityId])
           }
         </Container>
       </div>
       <div className={classes.root}>
+        // @ts-ignore
         <List justify={'center'}>
           <div>
             <div
@@ -172,6 +183,7 @@ const ObjectiveActivityAssociationDashboard = ({
                         </div>
                         <div className={classes.activityName}>{objective.valueStatement}</div>
                         <div>
+                          // @ts-ignore
                           <Switch checked={objectiveSwitches[objective.id]}
                                   onChange={() => toggleObjective(objective.id)}/>
                         </div>
@@ -203,7 +215,7 @@ const ObjectiveActivityAssociationDashboard = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
+const mapStateToProps = (state: GlobalState) => {
   const {objectives} = selectStrategyState(state);
   const {activities} = selectTacticalActivityState(state);
   return {
@@ -212,4 +224,4 @@ const mapStateToProps = (state : GlobalState) => {
   }
 };
 
-export default connect(mapStateToProps)(withRouter(ObjectiveActivityAssociationDashboard));
+export default connect(mapStateToProps)(ObjectiveActivityAssociationDashboard);
