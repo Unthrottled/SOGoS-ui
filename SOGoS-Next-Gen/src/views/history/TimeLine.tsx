@@ -1,21 +1,20 @@
 import * as React from 'react';
-import {FC, useEffect} from 'react';
+import {useEffect} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import {axisTop, brushX, event} from 'd3'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {getActivityIdentifier} from "../../miscellanous/Projection";
 import {GlobalState, selectActivityState, selectHistoryState, selectTacticalActivityState} from "../../reducers";
-import {connect, DispatchProp} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {objectToKeyValueArray} from "../../miscellanous/Tools";
 import {getMeaningFullName, mapTacticalActivitiesToID} from "./PieFlavored";
 import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
 import {blue} from "@material-ui/core/colors";
-import {NumberDictionary, StringDictionary} from "../../types/BaseTypes";
+import {StringDictionary} from "../../types/BaseTypes";
 import {getActivityBackgroundColor, TacticalActivity} from "../../types/TacticalTypes";
 import {
   activitiesEqual,
-  Activity,
   ActivityStrategy,
   DEFAULT_ACTIVITY,
   getActivityID,
@@ -78,31 +77,38 @@ const getTimeUnit = (milliseconds: number) => {
   }
 };
 
-interface Props {
-  activityFeed: Activity[],
-  relativeToTime: number,
-  relativeFromTime: number,
-  tacticalActivities: NumberDictionary<TacticalActivity>,
-  currentActivity: Activity,
-  bottomActivity: Activity,
-  archivedActivities: NumberDictionary<TacticalActivity>,
-}
+const mapStateToProps = (state: GlobalState) => {
+  const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
+  const {activities, archivedActivities} = selectTacticalActivityState(state);
+  const {currentActivity} = selectActivityState(state);
+  return {
+    activityFeed,
+    relativeToTime: to,
+    relativeFromTime: from,
+    tacticalActivities: activities,
+    archivedActivities,
+    currentActivity,
+    bottomActivity,
+  }
+};
 
-const TimeLine: FC<DispatchProp & Props> = ({
-                                              activityFeed,
-                                              relativeToTime,
-                                              relativeFromTime,
-                                              tacticalActivities,
-                                              currentActivity,
-                                              bottomActivity,
-                                              archivedActivities,
-                                              dispatch,
-                                            }) => {
+const TimeLine = () => {
   const classes: any = withStyles();
+  const dispatch = useDispatch();
+  const {
+    activityFeed,
+    relativeToTime,
+    relativeFromTime,
+    tacticalActivities,
+    currentActivity,
+    bottomActivity,
+    archivedActivities,
+  } = useSelector(mapStateToProps);
   const modifiedFeed = [...(currentActivity.antecedenceTime >= relativeFromTime &&
   currentActivity.antecedenceTime <= relativeToTime ? [currentActivity] : []),
     ...activityFeed];
-  if (!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity) && bottomActivity) {
+  if (!activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity) && bottomActivity &&
+    bottomActivity !== DEFAULT_ACTIVITY) {
     modifiedFeed.push(bottomActivity)
   }
 
@@ -248,6 +254,7 @@ const TimeLine: FC<DispatchProp & Props> = ({
           .map(x.invert)
           .map((n: any) => n + relativeFromTime)
         ;
+
         dispatch(createAdjustedHistoryTimeFrame({
           from: newFrom,
           to: newTo
@@ -275,18 +282,4 @@ const TimeLine: FC<DispatchProp & Props> = ({
   );
 };
 
-const mapStateToProps = (state: GlobalState) => {
-  const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
-  const {activities, archivedActivities} = selectTacticalActivityState(state);
-  const {currentActivity} = selectActivityState(state);
-  return {
-    activityFeed,
-    relativeToTime: to,
-    relativeFromTime: from,
-    tacticalActivities: activities,
-    archivedActivities,
-    currentActivity,
-    bottomActivity,
-  }
-};
-export default connect(mapStateToProps)(TimeLine);
+export default TimeLine;

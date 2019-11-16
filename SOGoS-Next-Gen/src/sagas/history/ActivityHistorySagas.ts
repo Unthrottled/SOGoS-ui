@@ -14,6 +14,7 @@ import {UserState} from "../../reducers/UserReducer";
 import {Activity, getActivityContent} from "../../types/ActivityTypes";
 import {PayloadEvent} from "../../events/Event";
 import {DateRange} from "../../types/HistoryTypes";
+import {UserResponse} from "../../types/UserTypes";
 
 export const createHistoryAPIURL = (guid: string, from: number, to: number) =>
   `/history/${guid}/feed?from=${from}&to=${to}`;
@@ -35,8 +36,7 @@ export function* archiveFetchSaga(guid: string,
   }
 }
 
-// todo: look into the parameter being user state
-export function* historyInitializationSaga({payload: {information: {guid}}}: PayloadEvent<UserState>) {
+export function* historyInitializationSaga({payload: {information: {guid}}}: PayloadEvent<UserResponse>) {
   const fromDate = meowMinusSeven.valueOf() - 1;
   const toDate = meow.valueOf() + 1;
   const initialHistoryFeed = yield call(archiveFetchSaga, guid, fromDate, toDate);

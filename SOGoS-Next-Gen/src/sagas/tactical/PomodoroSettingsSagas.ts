@@ -46,8 +46,8 @@ export function* settingsSyncSaga() {
 export function* settingsCacheSaga(settings: PomodoroSettings) {
   const {information: {guid}} = yield select(selectUserState);
   yield put(createCachedSettingsEvent({
-    cachedSettings: { //todo: look into cached settings being dumb
-      settings
+    cachedSettings: {
+      ...settings
     },
     userGUID: guid,
   }));

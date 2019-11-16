@@ -42,8 +42,8 @@ export const INITIAL_HISTORY_STATE: HistoryState = {
   selectedHistoryRange: DEFAULT_RANGE,
   fullHistoryRange: DEFAULT_RANGE,
   capstone: {
-    topActivity: defaultActivity,// todo: should this be default activity?
-    bottomActivity: defaultActivity,// todo: should this be default activity?
+    topActivity: defaultActivity,
+    bottomActivity: defaultActivity,
   }
 };
 

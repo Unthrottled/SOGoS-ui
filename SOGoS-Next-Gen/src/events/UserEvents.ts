@@ -1,4 +1,4 @@
-import {User} from "../types/UserTypes";
+import {User, UserResponse} from "../types/UserTypes";
 import {BaseEvent, PayloadEvent} from "./Event";
 
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' = 'FAILED_REQUESTED_USER';
@@ -8,7 +8,7 @@ export const CACHED_DATA: 'CACHED_DATA' = 'CACHED_DATA';
 export const SYNCED_DATA: 'SYNCED_DATA' = 'SYNCED_DATA';
 export const REQUESTED_SYNC: 'REQUESTED_SYNC' = 'REQUESTED_SYNC';
 
-export const createReceivedUserEvent = (user: User): PayloadEvent<User> => ({
+export const createReceivedUserEvent = (user: UserResponse): PayloadEvent<UserResponse> => ({
     type: RECEIVED_USER,
     payload: user
 });

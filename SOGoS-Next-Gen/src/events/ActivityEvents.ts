@@ -71,7 +71,7 @@ export const createStartedNonTimedActivityEvent =
             antecedenceTime: new Date().getTime(),
             content: {
                 ...content,
-                timedType: ActivityTimedType.NONE, //todo: is this right?
+                timedType: ActivityTimedType.NONE,
             },
         }
     });

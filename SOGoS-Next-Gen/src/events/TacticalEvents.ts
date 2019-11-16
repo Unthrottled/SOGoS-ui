@@ -31,7 +31,7 @@ export const REGISTERED_POMODORO_SETTINGS: 'REGISTERED_POMODORO_SETTINGS' = 'REG
 export const FAILED_TO_REGISTER_POMODORO_SETTINGS: 'FAILED_TO_REGISTER_POMODORO_SETTINGS' = 'FAILED_TO_REGISTER_POMODORO_SETTINGS';
 
 export interface SettingsCacheEvent {
-    cachedSettings: CachedSettings;
+    cachedSettings: PomodoroSettings;
     userGUID: string;
 }
 
