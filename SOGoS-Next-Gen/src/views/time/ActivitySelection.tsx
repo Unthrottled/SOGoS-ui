@@ -1,15 +1,14 @@
-// @flow
 import * as React from 'react';
-import {Component} from 'react';
 import IconButton from "@material-ui/core/IconButton";
 import {Cancel, KeyboardArrowDown} from "@material-ui/icons";
-import {objectToArray} from "../../miscellanous/Tools";
-import type {TacticalActivity} from "../types/TacticalModels";
+import {numberObjectToArray} from "../../miscellanous/Tools";
 import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
 import {Grow, makeStyles} from "@material-ui/core";
-import {selectTacticalActivityState} from "../../reducers";
-import {connect} from "react-redux";
+import {GlobalState, selectTacticalActivityState} from "../../reducers";
+import {TacticalActivity} from "../../types/TacticalTypes";
+import {useSelector} from "react-redux";
 
+// @ts-ignore
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -83,16 +82,23 @@ const useStyles = makeStyles(theme => ({
 
 type Props = {
   open: boolean,
-  activities?: TacticalActivity[],
-  onClose: Function,
-  onActivitySelection: Function,
-  onGenericActivitySelection: Function,
-  genericIcon: Component,
+  onClose: () => void,
+  onActivitySelection: (arg1: TacticalActivity) => void,
+  onGenericActivitySelection: () => void,
+  genericIcon: JSX.Element,
 };
+
+const mapStateToProps = (state: GlobalState) => {
+  const {activities} = selectTacticalActivityState(state);
+  return {
+    activities
+  }
+};
+
 
 const ActivitySelection = (props: Props) => {
   const classes = useStyles();
-
+  const {activities} = useSelector(mapStateToProps);
   return (
     <Grow in={props.open}>
       <div className={classes.container}>
@@ -106,7 +112,7 @@ const ActivitySelection = (props: Props) => {
           <br/>
           <div className={classes.activityContainer}>
             {
-              objectToArray(props.activities).map((activity: TacticalActivity) => (
+              numberObjectToArray(activities).map(activity => (
                 <div key={`tip_${activity.id}`}>
                   <div className={classes.toolTip}>
                     <span className={classes.toolTipInner}>{activity.name}</span>
@@ -139,13 +145,4 @@ const ActivitySelection = (props: Props) => {
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {activities} = selectTacticalActivityState(state);
-  return {
-    activities
-  }
-};
-
-const connected: ActivitySelection = connect(mapStateToProps)(ActivitySelection);
-
-export default connected;
+export default ActivitySelection;

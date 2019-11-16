@@ -3,19 +3,20 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import React, {useState} from "react";
 import StopWatch from '@material-ui/icons/Timer';
-import {makeStyles} from '@material-ui/core/styles';
 import uuid from 'uuid/v4';
-import {startTimedActivity} from "../actions/ActivityActions";
-import {connect} from "react-redux";
-import {ActivityTimedType, ActivityType} from "../types/ActivityModels";
-import {selectConfigurationState, selectTacticalActivityState, selectTacticalState} from "../../reducers";
-import {NOT_ASKED} from "../types/ConfigurationModels";
-import {receivedNotificationPermission} from "../actions/ConfigurationActions";
-import type {TacticalActivity} from "../types/TacticalModels";
+import {useDispatch, useSelector} from "react-redux";
+import {GlobalState, selectConfigurationState, selectTacticalActivityState, selectTacticalState} from "../../reducers";
 import {TomatoIcon} from "../icons/TomatoIcon";
 import ActivitySelection from "./ActivitySelection";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {ActivityTimedType, ActivityType} from "../../types/ActivityTypes";
+import {startTimedActivity} from "../../actions/ActivityActions";
+import {NOT_ASKED} from "../../types/ConfigurationTypes";
+import {createNotificationPermissionReceivedEvent} from "../../events/ConfigurationEvents";
+import {TacticalActivity} from "../../types/TacticalTypes";
 
 
+// @ts-ignore
 const useStyles = makeStyles(theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -88,7 +89,19 @@ const useStyles = makeStyles(theme => ({
 
 export const GENERIC_ACTIVITY_NAME = "GENERIC_ACTIVITY";
 
-export const buildCommenceActivityContents = (supplements, name) => ({
+const mapStateToProps = (state: GlobalState) => {
+  const {pomodoro: {settings: {loadDuration}}} = selectTacticalState(state);
+  const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
+  const {activities} = selectTacticalActivityState(state);
+  return {
+    loadDuration,
+    notificationsAllowed,
+    activities
+  }
+};
+
+
+export const buildCommenceActivityContents = (supplements: any, name: string) => ({
   ...supplements,
   name,
   type: ActivityType.ACTIVE,
@@ -96,22 +109,24 @@ export const buildCommenceActivityContents = (supplements, name) => ({
   uuid: uuid(),
   workStartedWomboCombo: new Date().getTime(),
 });
-const ActivityHub = ({
-                       dispatch: dispetch,
-                       loadDuration,
-                       notificationsAllowed,
-                     }) => {
+const ActivityHub = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
 
-  const commenceActivity = (name, supplements) =>
+  const {
+    loadDuration,
+    notificationsAllowed,
+  } = useSelector(mapStateToProps);
+
+  const dispetch = useDispatch();
+  const commenceActivity = (name: string, supplements: any) =>
     dispetch(startTimedActivity(buildCommenceActivityContents(supplements, name)));
 
-  const commenceTimedActivity = (name, supplements) => {
+  const commenceTimedActivity = (name: string, supplements: any) => {
     if (notificationsAllowed === NOT_ASKED) {
       Notification.requestPermission()
-        .then(res => dispetch(receivedNotificationPermission(res)));
+        .then(res => dispetch(createNotificationPermissionReceivedEvent(res)));
     }
     return dispetch(startTimedActivity({
       ...supplements,
@@ -141,15 +156,17 @@ const ActivityHub = ({
 
   const handleClick = () => setOpen(!open);
 
-  const [selectedAction, setSelectedAction] = useState(null);
-  const [selectedGenericAction, setSelectedGenericAction] = useState(null);
+  const [selectedAction, setSelectedAction] = useState<(arg1: TacticalActivity) => void>((_) => {
+  });
+  const [selectedGenericAction, setSelectedGenericAction] = useState<() => void>(() => {
+  });
   const invokeGenericAction = () => {
     selectedGenericAction();
     closeStrategy();
   };
 
-  const [selectedIcon, setSelectedIcon] = useState(null);
-  const baseAction = (action, icon, genericAction) => {
+  const [selectedIcon, setSelectedIcon] = useState<JSX.Element>((<></>));
+  const baseAction = (action: any, icon: any, genericAction: any) => {
     setStrategyOpen(!strategyOpen);
     setSelectedAction(() => action);
     setSelectedGenericAction(() => genericAction);
@@ -209,12 +226,13 @@ const ActivityHub = ({
               action.perform();
             }}
             title={""}
+            // @ts-ignore
             children={<div/>}/>
         ))}
       </SpeedDial>
       <ActivitySelection open={strategyOpen}
                          onClose={closeStrategy}
-                         onActivitySelection={activity=>{
+                         onActivitySelection={activity => {
                            selectedAction(activity);
                            closeStrategy();
                          }}
@@ -226,15 +244,5 @@ const ActivityHub = ({
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {pomodoro: {settings: {loadDuration}}} = selectTacticalState(state);
-  const {miscellaneous: {notificationsAllowed}} = selectConfigurationState(state);
-  const {activities} = selectTacticalActivityState(state);
-  return {
-    loadDuration,
-    notificationsAllowed,
-    activities
-  }
-};
 
-export default connect(mapStateToProps)(ActivityHub);
+export default ActivityHub;
