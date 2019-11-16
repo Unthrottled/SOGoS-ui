@@ -6,21 +6,24 @@ import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from
 import {OAuthConfig} from "../../types/ConfigurationTypes";
 import {fetchTokenWithoutSessionRefreshSaga, fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {waitForWifi} from "../NetworkSagas";
+import {performAuthorizationGrantFlowSaga} from "./AuthorizationFlowSagas";
 
 export function* refreshTokenSaga(oauthConfig: OAuthConfig,
                                   securityState: SecurityState,
                                   fetchTokenSaga: (c: OAuthConfig, t: TokenRequest) => any) {
   yield call(waitForWifi);
-  const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
-  yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
-  const {failureResponse} = yield race({
-    successResponse: take(RECEIVED_TOKENS),
-    failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
-  });
+  console.log("trying to refresh");
+  yield call(performAuthorizationGrantFlowSaga, true);
+  // const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
+  // yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
+  // const {failureResponse} = yield race({
+  //   successResponse: take(RECEIVED_TOKENS),
+  //   failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
+  // });
 
-  if (failureResponse) {
-    yield put(createExpiredSessionEvent());// credentials are not good, just ask logon again please
-  }
+  // if (failureResponse) {
+  //   yield put(createExpiredSessionEvent());// credentials are not good, just ask logon again please
+  // }
 }
 
 export function* refreshTokenWithoutReplacementSaga(oauthConfig: OAuthConfig, securityState: SecurityState) {
