@@ -1,8 +1,7 @@
 import React from "react";
-import {connect} from "react-redux";
+import {useHistory} from 'react-router-dom';
 import LoggedInLayout from "../components/LoggedInLayout";
 import Typography from "@material-ui/core/Typography";
-import {withRouter} from "react-router-dom";
 import {Card, makeStyles} from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -29,7 +28,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TacticalDashboard = ({history}) => {
+const TacticalDashboard = () => {
+  const history = useHistory();
   const classes = useStyles();
   return (
     <LoggedInLayout>
@@ -71,8 +71,5 @@ const TacticalDashboard = ({history}) => {
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  return {}
-};
 
-export default connect(mapStateToProps)(withRouter(TacticalDashboard));
+export default TacticalDashboard;
