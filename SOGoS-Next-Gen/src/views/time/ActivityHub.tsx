@@ -219,15 +219,13 @@ const ActivityHub = () => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
-            tooltipOpen
+            tooltipOpen={false}
             tooltipPlacement={'bottom'}
             onClick={() => {
               handleClick();
               action.perform();
             }}
-            title={""}
-            // @ts-ignore
-            children={<div/>}/>
+            title={""}/>
         ))}
       </SpeedDial>
       <ActivitySelection open={strategyOpen}
