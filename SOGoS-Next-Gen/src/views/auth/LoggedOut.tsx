@@ -1,13 +1,14 @@
 import CloudOff from '@material-ui/icons/CloudOff';
-import React from "react";
-import {connect, DispatchProp} from "react-redux";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import {Typography} from "@material-ui/core";
 import {Reach} from "../icons/Reach";
+import {useHistory} from 'react-router-dom';
 import {createRequestLogonEvent} from "../../events/SecurityEvents";
-import {GlobalState} from "../../reducers";
+import {GlobalState, selectNetworkState, selectSecurityState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   headerContent: {
@@ -29,14 +30,32 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'capitalize',
   },
 }));
-type Props = DispatchProp & {
-  isOnline: boolean,
+
+const mapStateToProps = (state: GlobalState) => {
+  const {isOnline} = selectNetworkState(state);
+  const {isLoggedIn} = selectSecurityState(state);
+  return {
+    isOnline,
+    isLoggedIn,
+  }
 };
-const LoggedOut = ({dispatch: dispetch, isOnline}: Props) => {
+
+const LoggedOut = () => {
   const {root, label, headerContent} = useStyles();
+  const dispetch = useDispatch();
+  const {isOnline, isLoggedIn} = useSelector(mapStateToProps);
   const logUserIn = (): void => {
     dispetch(createRequestLogonEvent())
   };
+  const history = useHistory();
+
+  useEffect(()=>{
+    if(isLoggedIn){
+      history.push('/');
+    }
+  }, [history]);
+
+
   return (
     <div style={{height: '100%'}}>
       <div style={{
@@ -109,11 +128,4 @@ const LoggedOut = ({dispatch: dispetch, isOnline}: Props) => {
     </div>
   );
 };
-
-const mapStateToProps = (state: GlobalState) => {
-  const {network: {isOnline}} = state;
-  return {
-    isOnline,
-  }
-};
-export default connect(mapStateToProps)(LoggedOut);
+export default LoggedOut;
