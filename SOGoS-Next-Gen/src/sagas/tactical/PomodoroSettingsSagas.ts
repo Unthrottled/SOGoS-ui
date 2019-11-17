@@ -2,10 +2,9 @@ import {call, put, select} from "@redux-saga/core/effects";
 import {selectTacticalState, selectUserState} from "../../reducers";
 import {
   createCachedSettingsEvent,
-  createFailureToRegisterPomodoroSettingsEvent,
+  createFailureToRegisterPomodoroSettingsEvent, createFoundPomodoroSettingsEvent,
   createRegisteredPomodoroSettingsEvent,
   createSyncedSettingsEvent,
-  createUpdatedPomodoroSettingsEvent
 } from "../../events/TacticalEvents";
 import {createCachedDataEvent, createSyncedDataEvent} from "../../events/UserEvents";
 import {isOnline} from "../NetworkSagas";
@@ -20,7 +19,7 @@ export const POMODORO_API = '/tactical/pomodoro/settings';
 export function* fetchSettings(): any {
   try {
     const {data} = yield call(performGet, POMODORO_API);
-    yield put(createUpdatedPomodoroSettingsEvent(data));
+    yield put(createFoundPomodoroSettingsEvent(data));
   } catch (e) {
     yield call(delayWork);
     yield call(fetchSettings);

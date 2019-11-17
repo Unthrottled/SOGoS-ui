@@ -23,6 +23,7 @@ export const SYNCED_TACTICAL_ACTIVITIES: 'SYNCED_TACTICAL_ACTIVITIES' = 'SYNCED_
 export const SYNCED_TACTICAL_ACTIVITY: 'SYNCED_TACTICAL_ACTIVITY' = 'SYNCED_TACTICAL_ACTIVITY';
 
 export const UPDATED_POMODORO_SETTINGS: 'UPDATED_POMODORO_SETTINGS' = 'UPDATED_POMODORO_SETTINGS';
+export const FOUND_POMODORO_SETTINGS: 'FOUND_POMODORO_SETTINGS' = 'FOUND_POMODORO_SETTINGS';
 export const CACHED_SETTINGS: 'CACHED_SETTINGS' = 'CACHED_SETTINGS';
 export const VIEWED_SETTINGS: 'VIEWED_SETTINGS' = 'VIEWED_SETTINGS';
 export const SYNCED_SETTINGS: 'SYNCED_SETTINGS' = 'SYNCED_SETTINGS';
@@ -35,9 +36,14 @@ export interface SettingsCacheEvent {
 }
 
 export const createUpdatedPomodoroSettingsEvent =
-
     (pomodoroSettings: PomodoroSettings): PayloadEvent<PomodoroSettings> => ({
         type: UPDATED_POMODORO_SETTINGS,
+        payload: pomodoroSettings,
+    });
+
+export const createFoundPomodoroSettingsEvent =
+    (pomodoroSettings: PomodoroSettings): PayloadEvent<PomodoroSettings> => ({
+        type: FOUND_POMODORO_SETTINGS,
         payload: pomodoroSettings,
     });
 

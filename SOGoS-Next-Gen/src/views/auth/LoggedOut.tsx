@@ -53,7 +53,7 @@ const LoggedOut = () => {
     if(isLoggedIn){
       history.push('/');
     }
-  }, [history]);
+  }, [history, isLoggedIn]);
 
 
   return (

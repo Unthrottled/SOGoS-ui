@@ -1,6 +1,6 @@
 import {CachedTacticalActivity, PomodoroSettings, TacticalActivity, TacticalState} from "../types/TacticalTypes";
 import {
-  CACHED_SETTINGS,
+  CACHED_SETTINGS, FOUND_POMODORO_SETTINGS,
   REGISTERED_POMODORO_SETTINGS,
   SettingsCacheEvent,
   SYNCED_SETTINGS,
@@ -41,6 +41,7 @@ const TacticalReducer = (state: TacticalState = INITIAL_TACTICAL_STATE, action: 
   const updatedState = TacticalActivityReducer(state, action);
   switch (action.type) {
     case UPDATED_POMODORO_SETTINGS:
+    case FOUND_POMODORO_SETTINGS:
     case REGISTERED_POMODORO_SETTINGS:
       return {
         ...updatedState,
