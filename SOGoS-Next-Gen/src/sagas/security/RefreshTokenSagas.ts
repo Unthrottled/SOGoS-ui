@@ -15,7 +15,7 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig,
   console.log("trying to refresh");
   const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
   yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
-  const {failureResponse} = yield race({
+  yield race({
     successResponse: take(RECEIVED_TOKENS),
     failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
   });
