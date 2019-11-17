@@ -155,7 +155,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
         background: defaultBackground,
         line: defaultLine
       },
-      rank: Object.keys(activities).length + 1,
+      rank: Object.keys(activities).length,
       categories: [],
     };
 
