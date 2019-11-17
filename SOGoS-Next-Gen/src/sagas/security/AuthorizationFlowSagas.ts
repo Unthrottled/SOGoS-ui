@@ -62,7 +62,7 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
     const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
     const authorizationRequest = new AuthorizationRequest({
       client_id: initialConfigurations.clientID,
-      redirect_uri: initialConfigurations.callbackURI,
+      redirect_uri: `${initialConfigurations.callbackURI}${window.location.pathname}`,
       scope,
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
     }, new NodeCrypto());
@@ -78,7 +78,7 @@ export function* constructAuthorizationCodeGrantRequest(request: { internal: { c
   const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
   return new TokenRequest({
     client_id: initialConfigurations.clientID,
-    redirect_uri: initialConfigurations.callbackURI,
+    redirect_uri: `${initialConfigurations.callbackURI}${window.location.pathname}`,
     grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
     code,
     extras: {
