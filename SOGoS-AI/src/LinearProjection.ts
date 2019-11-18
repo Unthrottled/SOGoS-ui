@@ -1,8 +1,7 @@
-import {Activity, DEFAULT_ACTIVITY, getActivityName} from "../../SOGoS-Next-Gen/src/types/ActivityTypes";
-import {areDifferent, getActivityIdentifier, shouldTime} from "../../SOGoS-Next-Gen/src/miscellanous/Projection";
-import {ActivityProjection, TimelineProjection} from "../../SOGoS-Next-Gen/src/views/history/Projections";
-// @ts-ignore
-import reduceRight from "lodash/reduceRight";
+import {Activity, DEFAULT_ACTIVITY, getActivityName} from "../../SOGoS-UI/src/types/ActivityTypes";
+import {ActivityProjection} from "../../SOGoS-UI/src/views/history/Projections";
+import {areDifferent, getActivityIdentifier, shouldTime} from "../../SOGoS-UI/src/miscellanous/Projection";
+import reduceRight = require("lodash/reduceRight");
 
 export interface LinearProjection {
   currentActivity: Activity,

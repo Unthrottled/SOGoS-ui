@@ -1,9 +1,11 @@
 // @ts-ignore
 import fs from 'fs';
-import {Activity} from "../../SOGoS-Next-Gen/src/types/ActivityTypes";
-import {shouldTime} from "../../SOGoS-Next-Gen/src/miscellanous/Projection";
+import {Activity} from "../../SOGoS-UI/src/types/ActivityTypes";
+import {shouldTime} from "../../SOGoS-UI/src/miscellanous/Projection";
 import {constructLinearProjection} from "./LinearProjection";
-import {ActivityProjection} from "../../SOGoS-Next-Gen/src/views/history/Projections";
+import {ActivityProjection} from "../../SOGoS-UI/src/views/history/Projections";
+import {StringDictionary} from "../../SOGoS-UI/src/types/BaseTypes";
+import reduceRight = require('lodash/reduceRight');
 
 const DATA_STEPS = 60000;
 new Promise<Activity[]>(((resolve, reject) => fs.readFile('./data/data.json', (err, data) => {
@@ -13,7 +15,15 @@ new Promise<Activity[]>(((resolve, reject) => fs.readFile('./data/data.json', (e
     // @ts-ignore
     resolve(JSON.parse(data))
   }
-}))).then(activities => {
+})))
+  .then(activities => {
+    const idToActivity = reduceRight(activities, (accum: StringDictionary<Activity>, activity)=> {
+      accum[activity.content.uuid] = activity;
+      return accum;
+    }, {});
+    return Object.values(idToActivity);
+  })
+  .then(activities => {
   const timingData = activities.filter(shouldTime)
     .sort(((a, b) => b.antecedenceTime - a.antecedenceTime));
   return constructLinearProjection(timingData);
