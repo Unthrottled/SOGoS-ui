@@ -10,6 +10,8 @@ import TacticalReducer, {PomodoroState, TacticalActivityState} from "./TacticalR
 import MiscellaneousReducer, {MiscellaneousState} from "./MiscellaneousReducer";
 import {TacticalState} from "../types/TacticalTypes";
 import {Reducer} from "react";
+import {connectRouter, RouterState} from "connected-react-router";
+import {History} from 'history';
 
 export interface GlobalState {
   security: SecurityState;
@@ -21,9 +23,10 @@ export interface GlobalState {
   strategy: StrategyState;
   tactical: TacticalState;
   misc: MiscellaneousState;
+  router: RouterState;
 }
 
-const rootReducer: Reducer<any, any> = combineReducers({
+const rootReducer = (history: History<any>): Reducer<any, any> => combineReducers({
   security: securityReducer,
   user: userReducer,
   configuration: configurationReducer,
@@ -33,39 +36,40 @@ const rootReducer: Reducer<any, any> = combineReducers({
   strategy: StrategyReducer,
   tactical: TacticalReducer,
   misc: MiscellaneousReducer,
+  router: connectRouter(history),
 });
 
 export const selectSecurityState =
-    (globalState: GlobalState): SecurityState => globalState.security;
+  (globalState: GlobalState): SecurityState => globalState.security;
 
 export const selectMiscState =
-    (globalState: GlobalState): MiscellaneousState => globalState.misc;
+  (globalState: GlobalState): MiscellaneousState => globalState.misc;
 
 export const selectActivityState =
-    (globalState: GlobalState): ActivityState => globalState.activity;
+  (globalState: GlobalState): ActivityState => globalState.activity;
 
 export const selectNetworkState =
-    (globalState: GlobalState): NetworkState => globalState.network;
+  (globalState: GlobalState): NetworkState => globalState.network;
 
 export const selectUserState =
-    (globalState: GlobalState): UserState => globalState.user;
+  (globalState: GlobalState): UserState => globalState.user;
 
 export const selectConfigurationState =
-    (globalState: GlobalState): ConfigurationState => globalState.configuration;
+  (globalState: GlobalState): ConfigurationState => globalState.configuration;
 
 export const selectHistoryState =
-    (globalState: GlobalState): HistoryState => globalState.history;
+  (globalState: GlobalState): HistoryState => globalState.history;
 
 export const selectStrategyState =
-    (globalState: GlobalState): StrategyState => globalState.strategy;
+  (globalState: GlobalState): StrategyState => globalState.strategy;
 
 export const selectTacticalState =
-    (globalState: GlobalState): TacticalState => globalState.tactical;
+  (globalState: GlobalState): TacticalState => globalState.tactical;
 
 export const selectPomodoroState =
-    (globalState: GlobalState): PomodoroState => selectTacticalState(globalState).pomodoro;
+  (globalState: GlobalState): PomodoroState => selectTacticalState(globalState).pomodoro;
 
 export const selectTacticalActivityState =
-    (globalState: GlobalState): TacticalActivityState => selectTacticalState(globalState).activity;
+  (globalState: GlobalState): TacticalActivityState => selectTacticalState(globalState).activity;
 
 export default rootReducer;

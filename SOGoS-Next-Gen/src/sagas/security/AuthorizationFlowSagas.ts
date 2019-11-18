@@ -7,6 +7,7 @@ import {
   RedirectRequestHandler,
   TokenRequest
 } from "@openid/appauth";
+import {push} from 'connected-react-router'
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {
   createCheckedAuthorizationEvent,
@@ -14,12 +15,15 @@ import {
   FAILED_TO_RECEIVE_TOKEN,
   RECEIVED_TOKENS
 } from "../../events/SecurityEvents";
-import {call, fork, put, race, take} from 'redux-saga/effects'
+import {call, fork, put, race, select, take} from 'redux-saga/effects'
 import {completeAuthorizationRequest} from "../../security/StupidShit";
 import {createRequestForInitialConfigurations, FOUND_INITIAL_CONFIGURATION} from "../../events/ConfigurationEvents";
 import {fetchTokenWithRefreshSaga} from "./TokenSagas";
 import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
 import {OAuthConfig} from "../../types/ConfigurationTypes";
+import {createSaveRedirect} from "../../events/MiscEvents";
+import {MiscellaneousState} from "../../reducers/MiscellaneousReducer";
+import {selectMiscState} from "../../reducers";
 
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);
@@ -60,9 +64,10 @@ export function* performAuthorizationGrantFlowSaga(shouldRequestLogon: boolean) 
     const scope = 'openid profile email';
     yield put(createRequestForInitialConfigurations());
     const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
+    yield put(createSaveRedirect(window.location.pathname));
     const authorizationRequest = new AuthorizationRequest({
       client_id: initialConfigurations.clientID,
-      redirect_uri: `${initialConfigurations.callbackURI}${window.location.pathname}`,
+      redirect_uri: initialConfigurations.callbackURI,
       scope,
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
     }, new NodeCrypto());
@@ -78,7 +83,7 @@ export function* constructAuthorizationCodeGrantRequest(request: { internal: { c
   const {payload: initialConfigurations} = yield take(FOUND_INITIAL_CONFIGURATION);
   return new TokenRequest({
     client_id: initialConfigurations.clientID,
-    redirect_uri: `${initialConfigurations.callbackURI}${window.location.pathname}`,
+    redirect_uri: initialConfigurations.callbackURI,
     grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
     code,
     extras: {
@@ -96,6 +101,8 @@ export function* exchangeAuthorizationGrantForAccessToken(tokenRequest: TokenReq
   });
 
   if (tokenReception) {
+    const {redirectPath}: MiscellaneousState = yield select(selectMiscState);
+    yield put(push(redirectPath));
     yield put(createLoggedOnAction());
   }
 }

@@ -12,7 +12,6 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig,
                                   securityState: SecurityState,
                                   fetchTokenSaga: (c: OAuthConfig, t: TokenRequest) => any) {
   yield call(waitForWifi);
-  console.log("trying to refresh");
   const refreshTokenRequest: TokenRequest = yield call(refreshTokenRequestSaga, securityState);
   yield fork(fetchTokenSaga, oauthConfig, refreshTokenRequest);
   yield race({
@@ -43,6 +42,7 @@ export function* refreshTokenRequestSaga(securityState: SecurityState) {
     client_id: initialConfigurations.clientID,
     redirect_uri: initialConfigurations.callbackURI,
     grant_type: GRANT_TYPE_REFRESH_TOKEN,
-    refresh_token: securityState.refreshToken
+    refresh_token: securityState.accessToken // todo: this is wrong on purpose
+    // refresh_token: securityState.refreshToken
   });
 }
