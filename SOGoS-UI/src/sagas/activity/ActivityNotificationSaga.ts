@@ -9,9 +9,13 @@ export function activityNotificationSaga({payload}: PayloadEvent<Activity>) {
       if (("Notification" in window) &&
         getActivityContent(payload).autoStart) {
         if (isActivityRecovery(payload)) {
-          new Notification("Take a Break!");
+          new Notification("Take a Break!", {
+            icon: '/images/reach_orange_512.png'
+          });
         } else {
-          new Notification(`Get Back to ${getActivityName(payload)}!`);
+          new Notification(`Get Back to ${getActivityName(payload)}!`, {
+            icon: '/images/reach_orange_512.png'
+          });
         }
         audio.play().then(_ => {
         });
