@@ -1,9 +1,17 @@
 Immediate things need to be done:
 ----
+- Shared pomodoro count.
+- Annoying 2 second delay.
+- Resuming pomodoro triggers alert
+- Alert icon
+- offline indicator
+- Server side Time sync
+
+
+--> Mobile App!
 
 Mile-Stones after MVP:
 -----
-- Shared pomodoro count.
 - Sharable dashboard.
     - auto-sync
 - On-boarding Experience
