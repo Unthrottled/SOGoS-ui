@@ -1,4 +1,4 @@
-import {all, call, fork, put, select, take} from 'redux-saga/effects'
+import {all, call, fork, put, race, select, take} from 'redux-saga/effects'
 import {eventChannel} from 'redux-saga';
 import {
   createFoundInternetEvent,
@@ -8,7 +8,10 @@ import {
   FOUND_WIFI
 } from "../events/NetworkEvents";
 import {selectNetworkState} from "../reducers";
-import {performOpenGet} from "./APISagas";
+import {
+  FAILED_RECEPTION_INITIAL_CONFIGURATION,
+  RECEIVED_PARTIAL_INITIAL_CONFIGURATION
+} from "../events/ConfigurationEvents";
 
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
@@ -74,14 +77,13 @@ function* initialInternetStateSaga() {
   }
 }
 
-//todo: figure out something better that works
 function* checkInternet() {
-  try {
-    yield performOpenGet('https://acari.io');
-    return true
-  } catch (ignored) {
-  }
-  return false;
+  const {worked} = yield race({
+    worked: take(RECEIVED_PARTIAL_INITIAL_CONFIGURATION),
+    didNot: take(FAILED_RECEPTION_INITIAL_CONFIGURATION),
+  });
+
+  return !!worked;
 }
 
 function* listenToNetworkEvents() {
