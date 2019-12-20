@@ -19,7 +19,7 @@ export function* refreshTokenSaga(oauthConfig: OAuthConfig,
     failureResponse: take(FAILED_TO_RECEIVE_TOKEN),
   });
 
-  yield delay(2000);
+  yield delay(100);
   yield call(performAuthorizationGrantFlowSaga, true);
 
   // if (failureResponse) {
