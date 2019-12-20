@@ -9,6 +9,10 @@ import {
 import {call, put, select, take} from 'redux-saga/effects'
 import {selectConfigurationState} from "../../reducers";
 import {waitForWifi} from "../NetworkSagas";
+import {
+  createApplicationInitializedEvent,
+  createFailedToInitializeApplicationEvent, createOutOfSyncEvent
+} from "../../events/ApplicationLifecycleEvents";
 
 /**
  * Gets the configurations from the backend to know what authorization server to talk to.
@@ -17,13 +21,21 @@ export function* initialConfigurationSaga() {
   try {
     yield call(waitForWifi);
     const {data: configData} = yield call(performFullOpenGet, '/config/initial.json');
-    yield put(createReceivedPartialInitialConfigurationsEvent(configData));
-    const {data} = yield call(performOpenGet, '/configurations');
-    yield put(createReceivedInitialConfigurationsEvent({
-      ...data,
-      callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
-    }));
+    const {data: {currentTime}} = yield call(performFullOpenGet, `${configData.apiURL}/time`);
+    const meow = new Date().valueOf();
+    if(meow - currentTime < 10000) {
+      yield put(createOutOfSyncEvent());
+    } else {
+      yield put(createReceivedPartialInitialConfigurationsEvent(configData));
+      const {data} = yield call(performOpenGet, '/configurations');
+      yield put(createReceivedInitialConfigurationsEvent({
+        ...data,
+        callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
+      }));
+      yield put(createApplicationInitializedEvent())
+    }
   } catch (e) {
+    yield put(createFailedToInitializeApplicationEvent(e));
     yield put(createFailedToGetInitialConfigurationsEvent(e));
   }
 }

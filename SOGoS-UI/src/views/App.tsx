@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {connect, DispatchProp} from "react-redux";
-import {createApplicationInitializedEvent} from "../events/ApplicationLifecycleEvents";
+import {useDispatch, useSelector} from "react-redux";
+import {createApplicationMountedEvent} from "../events/ApplicationLifecycleEvents";
 import LoggedOut from "./auth/LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
@@ -27,6 +27,8 @@ import ActivityObjectiveAssociationDashboard from "./tactical/ActivityObjectiveA
 import HiddenActivitiesDashboard from "./tactical/HiddenActivitiesDashboard";
 import {GlobalState, selectSecurityState} from "../reducers";
 import {SecurityState} from "../reducers/SecurityReducer";
+import Banner from "./components/Banner";
+import {Typography} from "@material-ui/core";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -57,53 +59,59 @@ const useStyles = makeStyles(_ => ({
   }
 }));
 
-type Props = DispatchProp & {
-  isInitialized: boolean,
-};
-const App = ({dispatch: dispetch, isInitialized}: Props) => {
-  const classes = useStyles();
-  const [mounted] = useState(true);
-  useEffect(() => {
-    dispetch(createApplicationInitializedEvent());
-  }, [dispetch, mounted]);
-  return isInitialized ? (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <div className={classes.content}>
-          <Switch>
-            <Route path={'/login'} component={LoggedOut}/>
-
-            {/*todo: make this public*/}
-            <PrivateRoute path={'/:uuid/history'} component={HistoryDashboard}/>
-
-            <PrivateRoute path={'/settings'} component={Settings}/>
-            <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'}
-                          component={ObjectiveActivityAssociationDashboard}/>
-            <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
-            <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
-            <PrivateRoute path={'/tactical/activities/rank/dashboard'} component={ActivitiesRankDashboard}/>
-            <PrivateRoute path={'/tactical/activities/hidden'} component={HiddenActivitiesDashboard}/>
-            <PrivateRoute path={'/tactical/activities/:activityId/strategy/association'}
-                          component={ActivityObjectiveAssociationDashboard}/>
-            <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
-            <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
-            <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
-            <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
-            <PrivateRoute path={'/'} exact component={Dashboard}/>
-            <Route component={() => (<h2>404</h2>)}/>
-          </Switch>
-          <ActivityTimer/>
-        </div>
-      </div>
-    </ThemeProvider>
-  ) : (<div/>);
-};
-
 const mapStateToProps = (globalState: GlobalState) => {
-  const {isInitialized}: SecurityState = selectSecurityState(globalState);
+  const {isInitialized, isOutOfSync}: SecurityState = selectSecurityState(globalState);
   return ({
-    isInitialized
+    isInitialized,
+    isOutOfSync
   });
 };
 
-export default connect(mapStateToProps)(App);
+const App = () => {
+  const classes = useStyles();
+  const [mounted] = useState(true);
+  const {isInitialized, isOutOfSync} = useSelector(mapStateToProps);
+
+  const dispetch = useDispatch();
+  useEffect(() => {
+    dispetch(createApplicationMountedEvent());
+  }, [dispetch, mounted]);
+  return isOutOfSync ?
+    <Banner>
+      <Typography>Shit ain't working</Typography>
+    </Banner> :
+    isInitialized ? (
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <div className={classes.content}>
+            <Switch>
+              <Route path={'/login'} component={LoggedOut}/>
+
+              {/*todo: make this public*/}
+              <PrivateRoute path={'/:uuid/history'} component={HistoryDashboard}/>
+
+              <PrivateRoute path={'/settings'} component={Settings}/>
+              <PrivateRoute path={'/strategy/objectives/:objectiveId/tactics/association'}
+                            component={ObjectiveActivityAssociationDashboard}/>
+              <PrivateRoute path={'/strategy/objectives/:objectiveId'} component={ObjectiveDashboard}/>
+              <PrivateRoute path={'/strategy/objectives'} component={ObjectivesDashboard}/>
+              <PrivateRoute path={'/tactical/activities/rank/dashboard'} component={ActivitiesRankDashboard}/>
+              <PrivateRoute path={'/tactical/activities/hidden'} component={HiddenActivitiesDashboard}/>
+              <PrivateRoute path={'/tactical/activities/:activityId/strategy/association'}
+                            component={ActivityObjectiveAssociationDashboard}/>
+              <PrivateRoute path={'/tactical/activities/:activityId'} component={ActivityDashboard}/>
+              <PrivateRoute path={'/tactical/activities'} component={ActivitiesDashboard}/>
+              <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
+              <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
+              <PrivateRoute path={'/'} exact component={Dashboard}/>
+              <Route component={() => (<h2>404</h2>)}/>
+            </Switch>
+            <ActivityTimer/>
+          </div>
+        </div>
+      </ThemeProvider>
+    ) : (<div/>);
+};
+
+
+export default App;

@@ -2,6 +2,7 @@ import {EXPIRED_SESSION, INITIALIZED_SECURITY, LOGGED_OFF, LOGGED_ON, RECEIVED_T
 import {tokenReceptionReducer} from "./security/TokenReducer";
 import {RECEIVED_USER} from "../events/UserEvents";
 import {TokenInformation} from "../types/SecurityTypes";
+import {TIME_IS_WACK} from "../events/ApplicationLifecycleEvents";
 
 export type SecurityState = {
   isLoggedIn: boolean,
@@ -13,6 +14,7 @@ export type SecurityState = {
   verificationKey: string,
   isExpired: boolean,
   isInitialized: boolean,
+  isOutOfSync: boolean,
 };
 
 const defaultTokenInfo = {
@@ -28,7 +30,8 @@ const INITIAL_SECURITY_STATE: SecurityState = {
   verificationKey: "",
   isLoggedIn: false,
   isExpired: false,
-  isInitialized: false
+  isInitialized: false,
+  isOutOfSync: false,
 };
 
 const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
@@ -54,6 +57,11 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
         ...state,
         isExpired: false,
         isInitialized: true,
+      };
+    case TIME_IS_WACK:
+      return {
+        ...state,
+        isOutOfSync: true
       };
     case RECEIVED_TOKENS:
       return tokenReceptionReducer(state, action.payload);
