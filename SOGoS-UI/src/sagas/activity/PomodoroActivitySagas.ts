@@ -1,22 +1,21 @@
-import {selectActivityState} from "../../reducers";
-import {put, select, take} from 'redux-saga/effects'
-import {ActivityState} from "../../reducers/ActivityReducer";
+import {call, put, take} from 'redux-saga/effects'
 import {createInitializedPomodoroEvent} from "../../events/ActivityEvents";
-import {INITIALIZED_APPLICATION} from "../../events/ApplicationLifecycleEvents";
+import {performGet} from "../APISagas";
+import {RECEIVED_USER} from "../../events/UserEvents";
 
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export function* pomodoroActivityInitializationSaga() {
-  yield take(INITIALIZED_APPLICATION);
-  const {completedPomodoro}: ActivityState = yield select(selectActivityState);
+  yield take(RECEIVED_USER);
   const meow = new Date().valueOf();
-  const todaysDay = (meow / ONE_DAY);
-  const rememberedDay = Math.floor((completedPomodoro.dateCounted / ONE_DAY));
-  if (todaysDay !== rememberedDay) {
-    yield put(createInitializedPomodoroEvent({
-      dateCounted: meow,
-      count: 0,
-    }))
-  }
+  const count = yield call(getCount);
+  yield put(createInitializedPomodoroEvent({
+    count,
+    dateCounted: meow
+  }));
+}
 
+export function* getCount() {
+  const {data} = yield call(performGet, "/activity/pomodoro/count");
+  return data ? data.count : 0
 }
