@@ -23,6 +23,7 @@ import {
   isPausedActivity,
   RECOVERY
 } from "../../types/ActivityTypes";
+import omit from 'lodash/omit';
 
 const useStyles = makeStyles(theme => ({
   pomoCount: {
@@ -154,7 +155,7 @@ const ActivityTimeBar = () => {
 
   function resumePreviousActivity(autoStart: boolean = false) {
     dispetch(startTimedActivity({
-      ...previousActivity.content,
+      ...omit(previousActivity.content, ['autoStart']),
       ...(previousActivity.content.duration ? {
         duration: pomodoroSettings.loadDuration
       } : {}),
