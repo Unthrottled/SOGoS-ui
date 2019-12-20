@@ -1,5 +1,4 @@
 export const INITIALIZED_APPLICATION: 'INITIALIZED_APPLICATION' = 'INITIALIZED_APPLICATION';
-export const MOUNTED_APPLICATION: 'MOUNTED_APPLICATION' = 'MOUNTED_APPLICATION';
 export const TIME_IS_WACK: 'TIME_IS_WACK' = 'TIME_IS_WACK';
 
 export const createApplicationInitializedEvent = () => ({
