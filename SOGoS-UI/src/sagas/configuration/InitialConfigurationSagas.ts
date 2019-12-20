@@ -20,7 +20,7 @@ export function* initialConfigurationSaga() {
     const {data: configData} = yield call(performFullOpenGet, '/config/initial.json');
     const {data: {currentTime}} = yield call(performFullOpenGet, `${configData.apiURL}/time`);
     const meow = new Date().valueOf();
-    if (meow - currentTime < 10000) {
+    if (meow - currentTime > 10000) {
       yield put(createOutOfSyncEvent());
     } else {
       yield put(createReceivedPartialInitialConfigurationsEvent(configData));
