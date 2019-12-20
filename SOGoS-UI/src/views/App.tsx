@@ -28,7 +28,9 @@ import HiddenActivitiesDashboard from "./tactical/HiddenActivitiesDashboard";
 import {GlobalState, selectSecurityState} from "../reducers";
 import {SecurityState} from "../reducers/SecurityReducer";
 import Banner from "./components/Banner";
+import ErrorIcon from '@material-ui/icons/ErrorOutline'
 import {Typography} from "@material-ui/core";
+import OutOfSync from "./components/OutOfSync";
 
 const theme = responsiveFontSizes(createMuiTheme({
   palette: {
@@ -77,9 +79,10 @@ const App = () => {
     dispetch(createApplicationMountedEvent());
   }, [dispetch, mounted]);
   return isOutOfSync ?
-    <Banner>
-      <Typography>Shit ain't working</Typography>
-    </Banner> :
+    <ThemeProvider theme={theme}>
+      <OutOfSync/>
+    </ThemeProvider>
+    :
     isInitialized ? (
       <ThemeProvider theme={theme}>
         <div className="App">
