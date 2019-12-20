@@ -9,10 +9,7 @@ import {
 import {call, put, select, take} from 'redux-saga/effects'
 import {selectConfigurationState} from "../../reducers";
 import {waitForWifi} from "../NetworkSagas";
-import {
-  createApplicationInitializedEvent,
-  createFailedToInitializeApplicationEvent, createOutOfSyncEvent
-} from "../../events/ApplicationLifecycleEvents";
+import {createOutOfSyncEvent} from "../../events/ApplicationLifecycleEvents";
 
 /**
  * Gets the configurations from the backend to know what authorization server to talk to.
@@ -23,7 +20,7 @@ export function* initialConfigurationSaga() {
     const {data: configData} = yield call(performFullOpenGet, '/config/initial.json');
     const {data: {currentTime}} = yield call(performFullOpenGet, `${configData.apiURL}/time`);
     const meow = new Date().valueOf();
-    if(meow - currentTime > 10000) {
+    if (meow - currentTime < 10000) {
       yield put(createOutOfSyncEvent());
     } else {
       yield put(createReceivedPartialInitialConfigurationsEvent(configData));
@@ -32,10 +29,8 @@ export function* initialConfigurationSaga() {
         ...data,
         callbackURI: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`
       }));
-      yield put(createApplicationInitializedEvent())
     }
   } catch (e) {
-    yield put(createFailedToInitializeApplicationEvent(e));
     yield put(createFailedToGetInitialConfigurationsEvent(e));
   }
 }

@@ -1,12 +1,12 @@
 import {all, fork, takeEvery} from 'redux-saga/effects'
 import {REQUESTED_INITIAL_CONFIGURATION, REQUESTED_OAUTH_CONFIGURATION} from "../events/ConfigurationEvents";
-import {MOUNTED_APPLICATION} from "../events/ApplicationLifecycleEvents";
+import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
 import {securityRequestSaga} from "./configuration/OAuthConfigurationSagas";
 import {authorizationServiceConfigurationSaga} from "./configuration/ConfigurationSetupSagas";
 import {initialConfigurationResponseSaga, initialConfigurationSaga} from "./configuration/InitialConfigurationSagas";
 
 function* listenToApplicationEvents() {
-  yield takeEvery(MOUNTED_APPLICATION, initialConfigurationSaga);
+  yield takeEvery(INITIALIZED_APPLICATION, initialConfigurationSaga);
 }
 
 function* listenToConfigurationRequestEvents() {

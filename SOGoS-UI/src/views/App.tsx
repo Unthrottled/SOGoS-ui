@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
-import {createApplicationMountedEvent} from "../events/ApplicationLifecycleEvents";
+import {createApplicationInitializedEvent} from "../events/ApplicationLifecycleEvents";
 import LoggedOut from "./auth/LoggedOut";
 import {ThemeProvider} from '@material-ui/styles'
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
@@ -27,9 +27,6 @@ import ActivityObjectiveAssociationDashboard from "./tactical/ActivityObjectiveA
 import HiddenActivitiesDashboard from "./tactical/HiddenActivitiesDashboard";
 import {GlobalState, selectSecurityState} from "../reducers";
 import {SecurityState} from "../reducers/SecurityReducer";
-import Banner from "./components/Banner";
-import ErrorIcon from '@material-ui/icons/ErrorOutline'
-import {Typography} from "@material-ui/core";
 import OutOfSync from "./components/OutOfSync";
 
 const theme = responsiveFontSizes(createMuiTheme({
@@ -76,7 +73,7 @@ const App = () => {
 
   const dispetch = useDispatch();
   useEffect(() => {
-    dispetch(createApplicationMountedEvent());
+    dispetch(createApplicationInitializedEvent());
   }, [dispetch, mounted]);
   return isOutOfSync ?
     <ThemeProvider theme={theme}>
