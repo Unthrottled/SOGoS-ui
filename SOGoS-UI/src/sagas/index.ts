@@ -8,11 +8,13 @@ import HistorySagas from "./HistorySagas";
 import StrategySagas from "./StrategySagas";
 import TacticalSagas from "./TacticalSagas";
 import CacheSagas from "./CacheSagas";
+import TimeSagas from "./TimeSagas";
 
 export default function* rootSaga() {
   yield all([
     SecuritySagas(),
     ConfigurationSagas(),
+    TimeSagas,
     UserSagas(),
     ActivitySagas(),
     NetworkSagas(),
