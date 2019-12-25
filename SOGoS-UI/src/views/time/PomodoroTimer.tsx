@@ -34,9 +34,7 @@ interface Props {
   startTimeInSeconds: number,
   activityId: string,
   onPause?: () => void,
-  onComplete?: () => void,
   onResume?: () => void,
-  onBreak?: () => void,
   fontSize?: string,
   pivotActivity?: (name: string, stuff: { activityID?: string }) => void,
   hidePause?: boolean
@@ -44,13 +42,10 @@ interface Props {
 
 
 export const PomodoroTimer: FC<Props> = ({
-                                           startTimeInSeconds,
+                                           startTimeInSeconds, // todo: subscribe to store.
                                            activityId,
-                                           onComplete,
                                            onPause,
                                            pivotActivity,
-                                           onBreak,
-                                           onResume,
                                            hidePause,
                                          }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -65,7 +60,7 @@ export const PomodoroTimer: FC<Props> = ({
   useEffect(() => {
     let timeout: any;
     if (timeElapsed < 1 && activityTheSame) {
-      onComplete && onComplete();
+      // onComplete && onComplete();
     } else if (!isPaused) {
       timeout = setTimeout(() => {
         setTimeElapsed(timeElapsed - 1);

@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  startTimeInSeconds: number,
+  startTimeInSeconds: number, // todo: subscribe to store
   activityId: string,
   onPause?: ()=>void,
   onResume?: ()=>void,
