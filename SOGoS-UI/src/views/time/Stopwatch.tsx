@@ -3,6 +3,8 @@ import {TimeDisplay} from "./TimeDisplay";
 import Pause from '@material-ui/icons/Pause';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import IconButton from "@material-ui/core/IconButton";
+import {useSelector} from "react-redux";
+import {selectTimeState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -16,43 +18,20 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  startTimeInSeconds: number, // todo: subscribe to store
-  activityId: string,
   onPause?: ()=>void,
   onResume?: ()=>void,
   fontSize?: string,
 }
 const Stopwatch: FC<Props> = ({
-                     startTimeInSeconds,
-                     activityId,
                      onPause,
                      fontSize,
                    }) => {
-  const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
     onPause && onPause();
-    setIsPaused(true)
   };
-  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
 
-  useEffect(() => {
-    let timeout: any;
-    if (!isPaused) {
-      timeout = setTimeout(() => {
-        setTimeElapsed(timeElapsed + 1);
-      }, 1000);
-    }
-    return () => {
-      timeout && clearTimeout(timeout)
-    }
-  });
-  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
+  const timeElapsed = useSelector(selectTimeState).timeElapsed;
 
-  const activityTheSame = rememberedActivity === activityId;
-  if (!activityTheSame) {
-    setTimeElapsed(startTimeInSeconds);
-    setRememberedActivity(activityId);
-  }
   const getPauseButton = () =>
     (<IconButton color={'inherit'}
                  onClick={pauseTimer}

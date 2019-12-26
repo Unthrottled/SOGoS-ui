@@ -174,10 +174,7 @@ const ActivityTimeBar = () => {
                                onResume={resumePreviousActivity}
                                activityId={activityId}/>
               ) :
-              <Stopwatch startTimeInSeconds={
-                getTime(currentActivity.content.workStartedWomboCombo || (new Date().valueOf()))}
-                         onPause={startPausedRecovery}
-                         activityId={activityId}/>
+              <Stopwatch onPause={startPausedRecovery}/>
           }
         </div>
         {

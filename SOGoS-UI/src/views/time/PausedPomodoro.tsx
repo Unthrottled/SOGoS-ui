@@ -117,9 +117,7 @@ const PausedPomodoro = () => {
 
         </div>
         <div className={classes.stopwatch}>
-          <Stopwatch startTimeInSeconds={getTime(antecedenceTime)}
-                     fontSize={'2em'}
-                     activityId={activityId}/>
+          <Stopwatch fontSize={'2em'} />
         </div>
         <div className={classes.stopWatch}>
           <IconButton color={'inherit'} onClick={resumePreviousActivity}>
