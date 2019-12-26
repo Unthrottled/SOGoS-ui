@@ -23,18 +23,23 @@ const getTimerTime = (stopTime: number) => Math.floor((stopTime - new Date().get
 
 
 function* commenceTimedActivity(activityContent: ActivityContent) {
-  yield put(createStartedActivityEvent(activityContent));
+  const action = createStartedActivityEvent(activityContent);
+  yield put(action);
+  yield call(setTimer, action.payload);
   yield put(createStartedTimedActivityEvent(activityContent));
 }
 
-export function* pomodoroSaga(activityThatStartedThis: Activity) {
+function* setTimer(activityThatStartedThis: Activity, addThis: number = 0) {
   const {antecedenceTime, content: {duration}} = activityThatStartedThis;
   yield put(createTimeSetEvent(
-    getTimerTime(antecedenceTime + (duration || 0)))
+    getTimerTime(antecedenceTime + (duration || 0)) + addThis)
   );
+}
+
+export function* pomodoroSaga(activityThatStartedThis: Activity) {
+  yield call(setTimer,activityThatStartedThis, 1);
 
   let shouldKeepTiming: boolean = false;
-  let managedActivity = activityThatStartedThis;
   do {
     const before = new Date().valueOf();
 
@@ -57,7 +62,7 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
     });
 
     // check to see if current activity is same because could have changed while moving to this next iteration
-    const areActivitiesSame = activitiesEqual(currentActivity, managedActivity);
+    const areActivitiesSame = activitiesEqual(currentActivity, activityThatStartedThis);
     if (areActivitiesSame) {
       if (timeElapsed > 0) {
         yield put(createTimeDecrementEvent());
@@ -81,10 +86,6 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
             autoStart: true,
             uuid: uuid(),
           };
-          managedActivity = {
-            antecedenceTime: 69,
-            content: activityContent
-          };
           yield call(commenceTimedActivity, activityContent);
         } else {
           const activityContent = {
@@ -97,13 +98,10 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
             uuid: uuid(),
             autoStart: true,
           };
-          managedActivity = {
-            antecedenceTime: 69,
-            content: activityContent
-          };
           yield call(commenceTimedActivity, activityContent);
           yield put(createCompletedPomodoroEvent())
         }
+        shouldKeepTiming = false;
       }
     } else {
       shouldKeepTiming = false
