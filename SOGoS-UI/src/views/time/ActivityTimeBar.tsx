@@ -167,12 +167,10 @@ const ActivityTimeBar = () => {
           {
             isTimer ?
               (
-                <PomodoroTimer startTimeInSeconds={getTimerTime(antecedenceTime + (duration || 0))}
-                               onPause={startPausedRecovery}
+                <PomodoroTimer onPause={startPausedRecovery}
                                pivotActivity={pivotActivity}
                                hidePause={isRecovery}
-                               onResume={resumePreviousActivity}
-                               activityId={activityId}/>
+                               onResume={resumePreviousActivity}/>
               ) :
               <Stopwatch onPause={startPausedRecovery}/>
           }

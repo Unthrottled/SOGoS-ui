@@ -7,6 +7,8 @@ import ActivitySelection from "./ActivitySelection";
 import StopWatch from '@material-ui/icons/Timer';
 import {GENERIC_ACTIVITY_NAME} from "./ActivityHub";
 import IconButton from "@material-ui/core/IconButton";
+import {useSelector} from "react-redux";
+import {selectTimeState} from "../../reducers";
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -31,8 +33,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  startTimeInSeconds: number,
-  activityId: string,
   onPause?: () => void,
   onResume?: () => void,
   fontSize?: string,
@@ -42,45 +42,22 @@ interface Props {
 
 
 export const PomodoroTimer: FC<Props> = ({
-                                           startTimeInSeconds, // todo: subscribe to store.
-                                           activityId,
                                            onPause,
                                            pivotActivity,
                                            hidePause,
                                          }) => {
-  const [isPaused, setIsPaused] = useState(false);
   const pauseTimer = () => {
     onPause && onPause();
-    setIsPaused(true)
   };
-
-  const [rememberedActivity, setRememberedActivity] = useState(activityId || '');
-  const activityTheSame = rememberedActivity === activityId;
-  const [timeElapsed, setTimeElapsed] = useState(startTimeInSeconds || 0);
-  useEffect(() => {
-    let timeout: any;
-    if (timeElapsed < 1 && activityTheSame) {
-      // onComplete && onComplete();
-    } else if (!isPaused) {
-      timeout = setTimeout(() => {
-        setTimeElapsed(timeElapsed - 1);
-      }, 1000);
-    }
-    return () => {
-      timeout && clearTimeout(timeout)
-    }
-  });
-
-  if (!activityTheSame) {
-    setTimeElapsed(startTimeInSeconds);
-    setRememberedActivity(activityId);
-  }
 
   const [selectionOpen, setSelectionOpen] = useState(false);
 
   const classes = useStyles();
   const closeSelection = () => setSelectionOpen(false);
   const openSelection = () => setSelectionOpen(true);
+
+  const timeElapsed = useSelector(selectTimeState).timeElapsed;
+
   return (
     <div className={classes.stopwatchContainer}>
       {
