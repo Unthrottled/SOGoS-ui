@@ -6,12 +6,14 @@ import {createTimeIncrementEvent, createTimeSetEvent} from "../../events/TimeEve
 
 export const getTime = (antecedenceTime: number) => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 
-// todo: on focus update time.
+
+export const extractStartTime = (activityThatStartedThis: Activity) =>
+  activityThatStartedThis.content.workStartedWomboCombo ||
+  activityThatStartedThis.antecedenceTime;
 
 export function* stopWatchSaga(activityThatStartedThis: Activity) {
   yield put(createTimeSetEvent(
-    getTime(activityThatStartedThis.content.workStartedWomboCombo ||
-    activityThatStartedThis.antecedenceTime))
+    getTime(extractStartTime(activityThatStartedThis)))
   );
 
   let shouldKeepTiming: boolean = false;
