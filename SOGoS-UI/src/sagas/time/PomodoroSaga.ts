@@ -1,10 +1,30 @@
-import {startTimedActivity} from "../../actions/ActivityActions";
-import {ActivityTimedType, ActivityType, RECOVERY} from "../../types/ActivityTypes";
-import uuid from "uuid/v4";
-import {createCompletedPomodoroEvent} from "../../events/ActivityEvents";
-import omit from "lodash/omit";
+import {select} from "redux-saga/effects";
+import {GlobalState, selectActivityState, selectTacticalState} from "../../reducers";
+import {Activity} from "../../types/ActivityTypes";
 
-export function* pomodoroSaga(){
+const extractState = (state: GlobalState) => {
+  const {currentActivity, previousActivity, shouldTime, completedPomodoro: {count}} = selectActivityState(state);
+  const {pomodoro: {settings}, activity: {activities}} = selectTacticalState(state);
+  return {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    pomodoroSettings: settings,
+    activities,
+    numberOfCompletedPomodoro: count
+  }
+};
+
+export function* pomodoroSaga(activityThatStartedThis: Activity) {
+  const {
+    shouldTime,
+    currentActivity,
+    previousActivity,
+    pomodoroSettings,
+    activities,
+    numberOfCompletedPomodoro,
+  } = yield select(extractState);
+  const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
   // const startRecovery = (autoStart: boolean = false) => {
   //   dispetch(startTimedActivity({
   //     name: RECOVERY,

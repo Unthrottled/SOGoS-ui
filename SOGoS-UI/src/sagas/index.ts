@@ -14,7 +14,7 @@ export default function* rootSaga() {
   yield all([
     SecuritySagas(),
     ConfigurationSagas(),
-    TimeSagas,
+    TimeSagas(),
     UserSagas(),
     ActivitySagas(),
     NetworkSagas(),
