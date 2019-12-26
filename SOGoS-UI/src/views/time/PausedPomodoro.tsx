@@ -5,7 +5,7 @@ import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
 import Stop from '@material-ui/icons/Stop';
 import {GlobalState, selectActivityState, selectTacticalActivityState} from "../../reducers";
 import Stopwatch from "./Stopwatch";
-import {getTime, resumeActivity} from "./ActivityTimeBar";
+import {resumeActivity} from "./ActivityTimeBar";
 import uuid from "uuid/v4";
 import IconButton from "@material-ui/core/IconButton";
 import {green} from "@material-ui/core/colors";
@@ -87,7 +87,7 @@ const PausedPomodoro = () => {
     previousActivity,
     activities,
   } = useSelector(mapStateToProps);
-  const {antecedenceTime, content: {uuid: activityId, timedType}} = currentActivity;
+  const {content: {timedType}} = currentActivity;
 
   const mappedTacticalActivities: StringDictionary<TacticalActivity> =
     numberObjectToArray(activities).reduce(dictionaryReducer, {});
@@ -117,7 +117,7 @@ const PausedPomodoro = () => {
 
         </div>
         <div className={classes.stopwatch}>
-          <Stopwatch fontSize={'2em'} />
+          <Stopwatch fontSize={'2em'}/>
         </div>
         <div className={classes.stopWatch}>
           <IconButton color={'inherit'} onClick={resumePreviousActivity}>

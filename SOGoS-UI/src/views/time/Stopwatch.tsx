@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import {TimeDisplay} from "./TimeDisplay";
 import Pause from '@material-ui/icons/Pause';
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -18,14 +18,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  onPause?: ()=>void,
-  onResume?: ()=>void,
+  onPause?: () => void,
+  onResume?: () => void,
   fontSize?: string,
 }
+
 const Stopwatch: FC<Props> = ({
-                     onPause,
-                     fontSize,
-                   }) => {
+                                onPause,
+                                fontSize,
+                              }) => {
   const pauseTimer = () => {
     onPause && onPause();
   };

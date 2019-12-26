@@ -53,7 +53,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const getTime = (antecedenceTime: number) => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
-const getTimerTime = (stopTime: number) => Math.floor((stopTime - new Date().getTime()) / 1000);
 
 export const resumeActivity = (dispetch: Dispatch<any>,
                                previousActivity: Activity,
@@ -95,7 +94,7 @@ const ActivityTimeBar = () => {
     numberOfCompletedPomodoro,
   } = useSelector(mapStateToProps);
 
-  const {antecedenceTime, content: {uuid: activityId, timedType, duration, name}} = currentActivity;
+  const {content: {timedType, name}} = currentActivity;
 
   const dispetch: Dispatch<any> = useDispatch();
   const stopActivity = () => {

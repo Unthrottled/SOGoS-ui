@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import Pause from '@material-ui/icons/Pause';
 import SwapVert from '@material-ui/icons/SwapVert';
 import {TimeDisplay} from "./TimeDisplay";
