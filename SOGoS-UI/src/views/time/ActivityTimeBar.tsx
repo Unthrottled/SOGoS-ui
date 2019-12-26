@@ -13,6 +13,7 @@ import {TomatoIcon} from "../icons/TomatoIcon";
 import {mapTacticalActivitiesToID} from "../history/PieFlavored";
 import {buildCommenceActivityContents} from "./ActivityHub";
 import {startNonTimedActivity, startTimedActivity} from "../../actions/ActivityActions";
+import omit from 'lodash/omit';
 import {
   Activity,
   ActivityTimedType,
@@ -52,7 +53,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const getTime = (antecedenceTime: number) => Math.floor((new Date().getTime() - antecedenceTime || 0) / 1000);
 
 export const resumeActivity = (dispetch: Dispatch<any>,
                                previousActivity: Activity,
@@ -92,6 +92,8 @@ const ActivityTimeBar = () => {
     currentActivity,
     activities,
     numberOfCompletedPomodoro,
+    previousActivity,
+    pomodoroSettings
   } = useSelector(mapStateToProps);
 
   const {content: {timedType, name}} = currentActivity;
@@ -126,7 +128,13 @@ const ActivityTimeBar = () => {
 
 
   const resumePreviousActivity = () => {
-    //todo resume previous activity
+    dispetch(startTimedActivity({
+      ...omit(previousActivity.content, ['autoStart']),
+      ...(previousActivity.content.duration ? {
+        duration: pomodoroSettings.loadDuration
+      } : {}),
+      uuid: uuid(),
+    }));
   };
 
   const isTimer = timedType === ActivityTimedType.TIMER;
