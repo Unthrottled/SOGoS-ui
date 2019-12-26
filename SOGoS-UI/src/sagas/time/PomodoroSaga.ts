@@ -80,9 +80,7 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
           // @ts-ignore real
           const activityContent: ActivityContent = {
             ...omit(previousActivity.content, ['autoStart']),
-            ...(previousActivity.content.duration ? {
-              duration: pomodoroSettings.loadDuration
-            } : {}),
+            duration: pomodoroSettings.loadDuration,
             autoStart: true,
             uuid: uuid(),
           };
