@@ -1,7 +1,11 @@
 import {GlobalState, selectActivityState} from "../../reducers";
 import {call, fork, race, select, take} from 'redux-saga/effects'
-import {ActivityTimedType, isPausedActivity} from "../../types/ActivityTypes";
-import {INITIALIZED_CURRENT_ACTIVITY, STARTED_TIMED_ACTIVITY} from "../../events/ActivityEvents";
+import {ActivityTimedType} from "../../types/ActivityTypes";
+import {
+  INITIALIZED_CURRENT_ACTIVITY,
+  RESUMED_TIMED_ACTIVITY,
+  STARTED_TIMED_ACTIVITY
+} from "../../events/ActivityEvents";
 import {pomodoroSaga} from "./PomodoroSaga";
 import {stopWatchSaga} from "./StopwatchSaga";
 
@@ -20,8 +24,7 @@ export function* sandsOfTimeSaga() {
     } = yield select(extractState);
     const {content: {timedType}} = currentActivity;
     const isTimer = timedType === ActivityTimedType.TIMER;
-    const isTimeBarActivity = shouldTime && !isPausedActivity(currentActivity);
-    if (isTimeBarActivity) {
+    if (shouldTime) {
       if (isTimer) {
         yield fork(pomodoroSaga, currentActivity);
       } else {
@@ -34,11 +37,15 @@ export function* sandsOfTimeSaga() {
 export function* waitForCurrentActivity() {
   const {
     firstActivity,
+    newActivity,
     userActivity
   } = yield race({
     firstActivity: take(INITIALIZED_CURRENT_ACTIVITY),
+    newActivity: take(RESUMED_TIMED_ACTIVITY),
     userActivity: take(STARTED_TIMED_ACTIVITY)
   });
 
-  return firstActivity ? firstActivity.payload : userActivity.payload
+  return firstActivity ? firstActivity.payload :
+    newActivity ? newActivity.payload :
+      userActivity.payload;
 }

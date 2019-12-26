@@ -11,17 +11,17 @@ export const getTime = (antecedenceTime: number) => Math.floor((new Date().getTi
 export function* stopWatchSaga(activityThatStartedThis: Activity) {
   yield put(createTimeSetEvent(
     getTime(activityThatStartedThis.content.workStartedWomboCombo ||
-    (new Date().valueOf())))
+    activityThatStartedThis.antecedenceTime))
   );
 
   let shouldKeepTiming: boolean = false;
   do {
     const before = new Date().valueOf();
-    yield put(createTimeIncrementEvent());
     // check to see if current activity is same because could have changed while moving to this next iteration
     const {currentActivity} = yield select(selectActivityState);
     const areActivitiesSame = activitiesEqual(currentActivity, activityThatStartedThis);
     if (areActivitiesSame) {
+      yield put(createTimeIncrementEvent());
       const after = new Date().valueOf();
       const waitFor = 1000 - (after - before);
       const {
