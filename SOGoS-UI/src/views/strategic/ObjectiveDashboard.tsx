@@ -207,7 +207,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
       iconCustomization: {
         background: skyColor,
       },
-      associatedActivities: [],
+      associatedActivities: (rememberedObjective && rememberedObjective.associatedActivities)|| [],
       categories: categoryValues.map(catVal => catVal.value),
     };
     if (!objectives[objective.id]) {
