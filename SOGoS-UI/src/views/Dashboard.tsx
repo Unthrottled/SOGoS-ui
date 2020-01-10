@@ -11,10 +11,10 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {StrategyIcon} from "./icons/StrategyIcon";
 import {TacticalIcon} from "./icons/TacticalIcon";
-import HistoryIcon from '@material-ui/icons/History';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CardContent from "@material-ui/core/CardContent";
 import {History} from "history";
+import {HistoryIcon} from "./icons/HistoryIcon";
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -51,7 +51,7 @@ const placesToGo = [
   {
     name: 'History',
     description: 'Look at how far you have come and all of your achievements!',
-    icon: <HistoryIcon style={{fontSize: '100px'}}/>,
+    icon: <HistoryIcon />,
     navigator: (history: History, guid: string) => () => history.push(`./${guid}/history/`)
   },
   {
