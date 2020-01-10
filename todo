@@ -1,11 +1,10 @@
 Immediate things need to be done:
 ----
-- API Versioning consumption
-
 Migration Steps:
 - [ ] Add New Hash Identifiers to prod
 - [ ] Deploy New API along side old API
 - [ ] Release New SOGoS UI
+  - [ ] Update initial.json to have v2 prefix
 - [ ] Fix Mobile app to be deployable to chrome store.
 - [ ] Scale down old api after a week.
 
