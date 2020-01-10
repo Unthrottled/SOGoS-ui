@@ -1,8 +1,14 @@
 Immediate things need to be done:
 ----
+- API Versioning consumption
 
---> Mobile App!
---> Serverless conversion.
+Migration Steps:
+- [ ] Add New Hash Identifiers to prod
+- [ ] Deploy New API along side old API
+- [ ] Release New SOGoS UI
+- [ ] Fix Mobile app to be deployable to chrome store.
+- [ ] Scale down old api after a week.
+
 
 Mile-Stones after MVP:
 -----
