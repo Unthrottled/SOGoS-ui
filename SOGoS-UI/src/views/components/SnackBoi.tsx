@@ -1,20 +1,18 @@
 import * as React from 'react';
 import {FC} from 'react';
-import {connect, DispatchProp} from "react-redux";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {SnackbarContent} from "@material-ui/core";
+import {connect, DispatchProp} from 'react-redux';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import {SnackbarContent} from '@material-ui/core';
 import WarningIcon from '@material-ui/icons/Warning';
 import CloseIcon from '@material-ui/icons/Close';
-import IconButton from "@material-ui/core/IconButton";
-import {amber} from "@material-ui/core/colors";
-import Snackbar from "@material-ui/core/Snackbar";
-import {GlobalState, selectMiscState} from "../../reducers";
-import {createHideNotificationEvent} from "../../events/MiscEvents";
+import IconButton from '@material-ui/core/IconButton';
+import {amber} from '@material-ui/core/colors';
+import Snackbar from '@material-ui/core/Snackbar';
+import {GlobalState, selectMiscState} from '../../reducers';
+import {createHideNotificationEvent} from '../../events/MiscEvents';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-
-  },
+  container: {},
   snackBar: {
     backgroundColor: amber[700],
   },
@@ -25,53 +23,60 @@ const useStyles = makeStyles(theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
-  }
+  },
 }));
 
 type Props = DispatchProp & {
-  shown: boolean,
-  message: string,
+  shown: boolean;
+  message: string;
 };
 
 const SnackBoi: FC<Props> = ({message, shown, dispatch}) => {
   const classes = useStyles();
   const onClose = () => {
-      dispatch(createHideNotificationEvent())
+    dispatch(createHideNotificationEvent());
   };
 
   return (
     <div className={classes.container}>
-      <Snackbar open={shown}
-                autoHideDuration={7000}
-                onClose={onClose}
-                anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}>
+      <Snackbar
+        open={shown}
+        autoHideDuration={7000}
+        onClose={onClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}>
         <SnackbarContent
           className={classes.snackBar}
           message={
             <span className={classes.message}>
-            <WarningIcon className={classes.icon}/>
+              <WarningIcon className={classes.icon} />
               {message}
-          </span>
+            </span>
           }
-          action={
-            [<IconButton key="close" aria-label="close" color="inherit" onClick={onClose}>
-              <CloseIcon className={classes.icon}/>
-            </IconButton>,]}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={onClose}>
+              <CloseIcon className={classes.icon} />
+            </IconButton>,
+          ]}
         />
       </Snackbar>
     </div>
   );
 };
 
-
-const mapStateToProps = (state : GlobalState) => {
-  const {notification: {message, shown}} = selectMiscState(state);
+const mapStateToProps = (state: GlobalState) => {
+  const {
+    notification: {message, shown},
+  } = selectMiscState(state);
   return {
     message,
-    shown
+    shown,
   };
 };
 

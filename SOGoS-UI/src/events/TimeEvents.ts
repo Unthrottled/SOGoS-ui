@@ -1,4 +1,4 @@
-import {BaseEvent, PayloadEvent} from "./Event";
+import {BaseEvent, PayloadEvent} from './Event';
 
 export const TIME_INCREMENTED: 'TIME_INCREMENTED' = 'TIME_INCREMENTED';
 export const TIME_DECREMENTED: 'TIME_DECREMENTED' = 'TIME_DECREMENTED';
@@ -13,7 +13,9 @@ export const createTimeDecrementEvent = (): BaseEvent => ({
   type: TIME_DECREMENTED,
 });
 
-export const createTimeSetEvent = (timeToSet: number): PayloadEvent<number> => ({
+export const createTimeSetEvent = (
+  timeToSet: number,
+): PayloadEvent<number> => ({
   type: TIME_SET,
   payload: timeToSet,
 });

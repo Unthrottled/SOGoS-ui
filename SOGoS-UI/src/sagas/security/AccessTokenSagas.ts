@@ -1,18 +1,30 @@
 import {call, fork, race, select, take} from 'redux-saga/effects';
-import {FAILED_TO_RECEIVE_TOKEN, RECEIVED_TOKENS} from "../../events/SecurityEvents";
-import {canRefreshToken} from "../../security/OAuth";
-import {refreshTokenWithoutReplacementSaga, refreshTokenWithReplacementSaga} from "./RefreshTokenSagas";
-import {SessionExpiredException} from "../../types/SecurityTypes";
-import {SecurityState} from "../../reducers/SecurityReducer";
-import {selectSecurityState} from "../../reducers";
-import {oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
+import {
+  FAILED_TO_RECEIVE_TOKEN,
+  RECEIVED_TOKENS,
+} from '../../events/SecurityEvents';
+import {canRefreshToken} from '../../security/OAuth';
+import {
+  refreshTokenWithoutReplacementSaga,
+  refreshTokenWithReplacementSaga,
+} from './RefreshTokenSagas';
+import {SessionExpiredException} from '../../types/SecurityTypes';
+import {SecurityState} from '../../reducers/SecurityReducer';
+import {selectSecurityState} from '../../reducers';
+import {oauthConfigurationSaga} from '../configuration/ConfigurationConvienenceSagas';
 
 export function* accessTokenWithSessionExtensionSaga() {
-  return yield call(accessTokenSagas, getOrRefreshAccessTokenWithSessionExtension);
+  return yield call(
+    accessTokenSagas,
+    getOrRefreshAccessTokenWithSessionExtension,
+  );
 }
 
 export function* accessTokenWithoutSessionExtensionSaga() {
-  return yield call(accessTokenSagas, getOrRefreshAccessTokenWithoutSessionExtension);
+  return yield call(
+    accessTokenSagas,
+    getOrRefreshAccessTokenWithoutSessionExtension,
+  );
 }
 
 export function* accessTokenSagas(getOrRefreshAccessTokenSaga: () => any) {
@@ -25,22 +37,32 @@ export function* accessTokenSagas(getOrRefreshAccessTokenSaga: () => any) {
 }
 
 export function* getOrRefreshAccessTokenWithSessionExtension() {
-  return yield call(getOrRefreshAccessToken, refreshTokenWithReplacementSaga, canRefreshToken);
+  return yield call(
+    getOrRefreshAccessToken,
+    refreshTokenWithReplacementSaga,
+    canRefreshToken,
+  );
 }
 
 export function* getOrRefreshAccessTokenWithoutSessionExtension() {
-  return yield call(getOrRefreshAccessToken, refreshTokenWithoutReplacementSaga, canRefreshToken);
+  return yield call(
+    getOrRefreshAccessToken,
+    refreshTokenWithoutReplacementSaga,
+    canRefreshToken,
+  );
 }
 
-export function* getOrRefreshAccessToken(refreshTokenSaga: (arg0: any, arg2: any) => any,
-                                         shouldTokenRefresh: (arg0: SecurityState) => boolean) {
+export function* getOrRefreshAccessToken(
+  refreshTokenSaga: (arg0: any, arg2: any) => any,
+  shouldTokenRefresh: (arg0: SecurityState) => boolean,
+) {
   const security: SecurityState = yield select(selectSecurityState);
   if (shouldTokenRefresh(security)) {
     const oauthConfiguration = yield call(oauthConfigurationSaga);
     yield fork(refreshTokenSaga, oauthConfiguration, security);
     return yield call(awaitToken);
   } else {
-    return security.accessToken
+    return security.accessToken;
   }
 }
 
@@ -51,5 +73,5 @@ export function* awaitToken() {
   });
   const {payload} = tokenReception || {};
   const {accessToken} = payload || {};
-  return accessToken
+  return accessToken;
 }

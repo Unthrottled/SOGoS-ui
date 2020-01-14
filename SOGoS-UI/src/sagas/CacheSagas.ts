@@ -1,13 +1,26 @@
-import {all, call, fork, put, select, take, takeEvery} from 'redux-saga/effects'
+import {
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+  takeEvery,
+} from 'redux-saga/effects';
 import {
   selectActivityState,
   selectPomodoroState,
   selectStrategyState,
   selectTacticalActivityState,
-  selectUserState
-} from "../reducers";
-import {CACHED_DATA, createCheckedCachesEvent, RECEIVED_USER, SYNCED_DATA} from "../events/UserEvents";
-import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
+  selectUserState,
+} from '../reducers';
+import {
+  CACHED_DATA,
+  createCheckedCachesEvent,
+  RECEIVED_USER,
+  SYNCED_DATA,
+} from '../events/UserEvents';
+import {INITIALIZED_APPLICATION} from '../events/ApplicationLifecycleEvents';
 
 export function* checkCaches() {
   yield take(INITIALIZED_APPLICATION);
@@ -22,10 +35,11 @@ export function* inspectCaches() {
     selectTacticalActivityState,
     selectPomodoroState,
     selectStrategyState,
-  ].map(stateSelector => stateSelector(globalState))
+  ]
+    .map(stateSelector => stateSelector(globalState))
     .map(state => state.cache[userGUID])
     .reduce((accum, cache) => accum || !!cache, false);
-  yield call(cachedItemsSaga, hasCachedItems)
+  yield call(cachedItemsSaga, hasCachedItems);
 }
 
 export function* cachedItemsSaga(hasCachedItems: any = true) {
@@ -38,12 +52,14 @@ export function* listenToCachingEvents() {
 }
 
 export function* fetchUserGuidSaga() {
-  const {information: {guid}} = yield select(selectUserState);
+  const {
+    information: {guid},
+  } = yield select(selectUserState);
   if (guid) {
-    return guid
+    return guid;
   } else {
     const user = yield take(RECEIVED_USER);
-    return user.guid
+    return user.guid;
   }
 }
 
@@ -53,7 +69,5 @@ function* listenToEvents() {
 }
 
 export default function* CacheSagas() {
-  yield all([
-    listenToEvents(),
-  ]);
+  yield all([listenToEvents()]);
 }

@@ -1,5 +1,5 @@
-import {all, call, fork, take, takeEvery} from "@redux-saga/core/effects";
-import {RECEIVED_USER, REQUESTED_SYNC} from "../events/UserEvents";
+import {all, call, fork, take, takeEvery} from '@redux-saga/core/effects';
+import {RECEIVED_USER, REQUESTED_SYNC} from '../events/UserEvents';
 import {
   CREATED_ACTIVITY,
   HID_ACTIVITY,
@@ -9,19 +9,29 @@ import {
   UPDATED_ACTIVITY,
   UPDATED_POMODORO_SETTINGS,
   VIEWED_ACTIVITIES,
-  VIEWED_SETTINGS
-} from "../events/TacticalEvents";
-import {FOUND_WIFI} from "../events/NetworkEvents";
-import {tacticalActivitySyncSaga} from "./tactical/TacticalActivitySyncSaga";
+  VIEWED_SETTINGS,
+} from '../events/TacticalEvents';
+import {FOUND_WIFI} from '../events/NetworkEvents';
+import {tacticalActivitySyncSaga} from './tactical/TacticalActivitySyncSaga';
 import {
   activityChangesSaga,
   activityCreationSaga,
   activityRankSaga,
-  activityTerminationSaga
-} from "./tactical/TacticalActivityCreationSagas";
-import {fetchSettings, settingsSyncSaga, updatePomodoroSaga} from "./tactical/PomodoroSettingsSagas";
-import {tacticalActivitiesFetchSaga, tacticalActivityObservationSaga} from "./tactical/TacticalActivitiesSagas";
-import {tacticalActivityHiddenSaga, tacticalActivityShownSaga} from "./tactical/TacticalActivityVisibilitySagas";
+  activityTerminationSaga,
+} from './tactical/TacticalActivityCreationSagas';
+import {
+  fetchSettings,
+  settingsSyncSaga,
+  updatePomodoroSaga,
+} from './tactical/PomodoroSettingsSagas';
+import {
+  tacticalActivitiesFetchSaga,
+  tacticalActivityObservationSaga,
+} from './tactical/TacticalActivitiesSagas';
+import {
+  tacticalActivityHiddenSaga,
+  tacticalActivityShownSaga,
+} from './tactical/TacticalActivityVisibilitySagas';
 
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
@@ -33,7 +43,7 @@ function* initializeTacticalSettings() {
 }
 
 function* watchForSettingsUpdates() {
-  yield takeEvery(UPDATED_POMODORO_SETTINGS, updatePomodoroSaga)
+  yield takeEvery(UPDATED_POMODORO_SETTINGS, updatePomodoroSaga);
 }
 
 function* tacticalActivitiesObservationInitializationSaga() {

@@ -1,15 +1,12 @@
-import {all, fork} from "redux-saga/effects";
-import {sandsOfTimeSaga} from "./time/SandsOfTimeSaga";
-import {focusSaga} from "./time/FocusSaga";
+import {all, fork} from 'redux-saga/effects';
+import {sandsOfTimeSaga} from './time/SandsOfTimeSaga';
+import {focusSaga} from './time/FocusSaga';
 
 function* startTimeSagas() {
   yield fork(sandsOfTimeSaga);
-  yield fork(focusSaga)
+  yield fork(focusSaga);
 }
 
-
 export default function* rootSaga() {
-  yield all([
-    startTimeSagas(),
-  ])
+  yield all([startTimeSagas()]);
 }

@@ -1,20 +1,26 @@
-import {EXPIRED_SESSION, INITIALIZED_SECURITY, LOGGED_OFF, LOGGED_ON, RECEIVED_TOKENS} from "../events/SecurityEvents";
-import {tokenReceptionReducer} from "./security/TokenReducer";
-import {RECEIVED_USER} from "../events/UserEvents";
-import {TokenInformation} from "../types/SecurityTypes";
-import {TIME_IS_WACK} from "../events/ApplicationLifecycleEvents";
+import {
+  EXPIRED_SESSION,
+  INITIALIZED_SECURITY,
+  LOGGED_OFF,
+  LOGGED_ON,
+  RECEIVED_TOKENS,
+} from '../events/SecurityEvents';
+import {tokenReceptionReducer} from './security/TokenReducer';
+import {RECEIVED_USER} from '../events/UserEvents';
+import {TokenInformation} from '../types/SecurityTypes';
+import {TIME_IS_WACK} from '../events/ApplicationLifecycleEvents';
 
 export type SecurityState = {
-  isLoggedIn: boolean,
-  accessToken: string,
-  accessTokenInformation: TokenInformation,
-  refreshToken: string,
-  refreshTokenInformation: TokenInformation,
-  idToken?: string,
-  verificationKey: string,
-  isExpired: boolean,
-  isInitialized: boolean,
-  isOutOfSync: boolean,
+  isLoggedIn: boolean;
+  accessToken: string;
+  accessTokenInformation: TokenInformation;
+  refreshToken: string;
+  refreshTokenInformation: TokenInformation;
+  idToken?: string;
+  verificationKey: string;
+  isExpired: boolean;
+  isInitialized: boolean;
+  isOutOfSync: boolean;
 };
 
 const defaultTokenInfo = {
@@ -23,11 +29,11 @@ const defaultTokenInfo = {
 };
 const INITIAL_SECURITY_STATE: SecurityState = {
   refreshTokenInformation: defaultTokenInfo,
-  accessToken: "",
+  accessToken: '',
   accessTokenInformation: defaultTokenInfo,
-  idToken: "",
-  refreshToken: "",
-  verificationKey: "",
+  idToken: '',
+  refreshToken: '',
+  verificationKey: '',
   isLoggedIn: false,
   isExpired: false,
   isInitialized: false,
@@ -36,12 +42,12 @@ const INITIAL_SECURITY_STATE: SecurityState = {
 
 const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
   switch (action.type) {
-    case LOGGED_ON :
+    case LOGGED_ON:
       return {
         ...state,
         isLoggedIn: true,
       };
-    case LOGGED_OFF :
+    case LOGGED_OFF:
       return {
         ...INITIAL_SECURITY_STATE,
       };
@@ -61,7 +67,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
     case TIME_IS_WACK:
       return {
         ...state,
-        isOutOfSync: true
+        isOutOfSync: true,
       };
     case RECEIVED_TOKENS:
       return tokenReceptionReducer(state, action.payload);
@@ -71,7 +77,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
         ...action.payload.security,
       };
     default:
-      return state
+      return state;
   }
 };
 

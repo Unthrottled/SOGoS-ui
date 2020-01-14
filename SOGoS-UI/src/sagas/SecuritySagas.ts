@@ -1,18 +1,25 @@
-import {all, fork, takeEvery} from 'redux-saga/effects'
-import {INITIALIZED_APPLICATION} from "../events/ApplicationLifecycleEvents";
+import {all, fork, takeEvery} from 'redux-saga/effects';
+import {INITIALIZED_APPLICATION} from '../events/ApplicationLifecycleEvents';
 import oauthInitializationSaga from './security/SecurityInitializationSaga';
-import {REQUESTED_AUTH_CHECK, REQUESTED_LOGOFF, REQUESTED_LOGON} from "../events/SecurityEvents";
-import {authorizationGrantSaga, loginSaga} from "./security/AuthorizationFlowSagas";
-import logoutSaga from "./security/LogoutSaga";
-import {oauthConfigurationSaga} from "./configuration/ConfigurationConvienenceSagas";
+import {
+  REQUESTED_AUTH_CHECK,
+  REQUESTED_LOGOFF,
+  REQUESTED_LOGON,
+} from '../events/SecurityEvents';
+import {
+  authorizationGrantSaga,
+  loginSaga,
+} from './security/AuthorizationFlowSagas';
+import logoutSaga from './security/LogoutSaga';
+import {oauthConfigurationSaga} from './configuration/ConfigurationConvienenceSagas';
 
 function* securityRequestSaga() {
   const oauthConfig = yield oauthConfigurationSaga();
-  yield oauthInitializationSaga(oauthConfig);// Log user in or refresh tokens
+  yield oauthInitializationSaga(oauthConfig); // Log user in or refresh tokens
 }
 
 function* listenToStartupEvent() {
-  yield takeEvery(INITIALIZED_APPLICATION, securityRequestSaga)
+  yield takeEvery(INITIALIZED_APPLICATION, securityRequestSaga);
 }
 
 function* listenToAppLifecycleEvents() {
@@ -33,5 +40,5 @@ export default function* rootSaga() {
     listenToAppLifecycleEvents(),
     listenToLoginEvents(),
     listenToSecurityEvents(),
-  ])
+  ]);
 }

@@ -6,10 +6,10 @@ import {
   UPDATED_CAPSTONES,
   UPDATED_FULL_FEED,
   UPDATED_HISTORY,
-  UPDATED_HISTORY_SELECTION
-} from "../events/HistoryEvents";
-import {Activity} from "../types/ActivityTypes";
-import {defaultActivity} from "./ActivityReducer";
+  UPDATED_HISTORY_SELECTION,
+} from '../events/HistoryEvents';
+import {Activity} from '../types/ActivityTypes';
+import {defaultActivity} from './ActivityReducer';
 
 export interface DateRange {
   from: number;
@@ -42,10 +42,13 @@ export const INITIAL_HISTORY_STATE: HistoryState = {
   capstone: {
     topActivity: defaultActivity,
     bottomActivity: defaultActivity,
-  }
+  },
 };
 
-const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: any): HistoryState => {
+const HistoryReducer = (
+  state: HistoryState = INITIAL_HISTORY_STATE,
+  action: any,
+): HistoryState => {
   switch (action.type) {
     case INITIALIZED_HISTORY:
     case UPDATED_HISTORY:
@@ -78,10 +81,10 @@ const HistoryReducer = (state: HistoryState = INITIAL_HISTORY_STATE, action: any
         capstone: {
           topActivity: newCapstones.afterCapstone,
           bottomActivity: newCapstones.beforeCapstone,
-        }
+        },
       };
     default:
-      return state
+      return state;
   }
 };
 

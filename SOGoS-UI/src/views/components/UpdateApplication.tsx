@@ -1,18 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState} from 'react';
 import SystemUpdate from '@material-ui/icons/SystemUpdate';
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import {makeStyles} from "@material-ui/core";
-import Zoom from "@material-ui/core/Zoom";
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import {makeStyles} from '@material-ui/core';
+import Zoom from '@material-ui/core/Zoom';
 
 const useStyles = makeStyles(theme => ({
   download: {
     // @ts-ignore real
     color: theme.palette.primary.alertColor,
-    opacity: 0.95
+    opacity: 0.95,
   },
 }));
-
 
 const UpdateApplication = () => {
   const classes = useStyles();
@@ -20,8 +19,10 @@ const UpdateApplication = () => {
   const [registration, setRegistrationState] = useState<any>(null);
   const [didUpdate, setDidUpdate] = useState(false);
   useEffect(() => {
-    // @ts-ignore real
-    window.addEventListener('sogosUpdateAvailable', (event) => setRegistrationState(event.detail));
+    window.addEventListener('sogosUpdateAvailable', event =>
+      // @ts-ignore real
+      setRegistrationState(event.detail),
+    );
   }, [componentDidMount]);
 
   const installApplication = () => {
@@ -35,12 +36,11 @@ const UpdateApplication = () => {
     <Zoom in={hasRegistration && hasUpdated}>
       <Tooltip title={'Update SOGoS!'} onClick={installApplication}>
         <IconButton id={'update-button'} className={classes.download}>
-          <SystemUpdate/>
+          <SystemUpdate />
         </IconButton>
       </Tooltip>
     </Zoom>
   );
 };
-
 
 export default UpdateApplication;

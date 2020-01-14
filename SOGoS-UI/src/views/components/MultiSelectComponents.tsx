@@ -1,11 +1,11 @@
-import Chip from "@material-ui/core/Chip";
-import clsx from "clsx";
-import CancelIcon from "@material-ui/icons/Cancel";
-import React, {FC} from "react";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
+import Chip from '@material-ui/core/Chip';
+import clsx from 'clsx';
+import CancelIcon from '@material-ui/icons/Cancel';
+import React, {FC} from 'react';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export const MultiValue = (props: any) => (
   <Chip
@@ -15,20 +15,20 @@ export const MultiValue = (props: any) => (
       [props.selectProps.classes.chipFocused]: props.isFocused,
     })}
     onDelete={props.removeProps.onClick}
-    deleteIcon={<CancelIcon  />}
+    deleteIcon={<CancelIcon />}
   />
 );
 export const NoOptionsMessage = (props: any) => (
   <Typography
     color="textSecondary"
     className={props.selectProps.classes.noOptionsMessage}
-    {...props.innerProps}
-  >
+    {...props.innerProps}>
     {props.children}
   </Typography>
 );
-const inputComponent: FC<{inputRef: any}> = ({inputRef, ...props}) =>
-  <div ref={inputRef} {...props} />;
+const inputComponent: FC<{inputRef: any}> = ({inputRef, ...props}) => (
+  <div ref={inputRef} {...props} />
+);
 export const Control = (props: any) => {
   const {
     children,
@@ -61,8 +61,7 @@ export const Option = (props: any) => (
     style={{
       fontWeight: props.isSelected ? 500 : 400,
     }}
-    {...props.innerProps}
-  >
+    {...props.innerProps}>
     {props.children}
   </MenuItem>
 );
@@ -70,23 +69,28 @@ export const Placeholder = (props: any) => (
   <Typography
     color="textSecondary"
     className={props.selectProps.classes.placeholder}
-    {...props.innerProps}
-  >
+    {...props.innerProps}>
     {props.children}
   </Typography>
 );
 export const SingleValue = (props: any) => (
-  <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+  <Typography
+    className={props.selectProps.classes.singleValue}
+    {...props.innerProps}>
     {props.children}
   </Typography>
 );
-export const ValueContainer = (props: any) =>
-  <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+export const ValueContainer = (props: any) => (
+  <div className={props.selectProps.classes.valueContainer}>
+    {props.children}
+  </div>
+);
 export const Menu = (props: any) => (
-  <Paper square
-          style={{zIndex: 69}}
-         className={props.selectProps.classes.paper}
-         {...props.innerProps}>
+  <Paper
+    square
+    style={{zIndex: 69}}
+    className={props.selectProps.classes.paper}
+    {...props.innerProps}>
     {props.children}
   </Paper>
 );

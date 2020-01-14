@@ -1,91 +1,116 @@
 import * as React from 'react';
 import {FC, useEffect} from 'react';
 import {select} from 'd3-selection';
-import {arc, pie} from 'd3'
-import {connect} from "react-redux";
-import {GlobalState, selectHistoryState, selectTacticalActivityState} from "../../reducers";
-import {numberObjectToArray, objectToKeyValueArray} from "../../miscellanous/Tools";
-import {areDifferent, getActivityIdentifier, shouldTime} from "../../miscellanous/Projection";
-import {constructColorMappings} from "./TimeLine";
-import {dictionaryReducer} from "../../reducers/StrategyReducer";
-import {TacticalActivity} from "../../types/TacticalTypes";
-import {HasId, NumberDictionary, StringDictionary} from "../../types/BaseTypes";
-import {activitiesEqual, Activity, DEFAULT_ACTIVITY, getActivityName} from "../../types/ActivityTypes";
+import {arc, pie} from 'd3';
+import {connect} from 'react-redux';
+import {
+  GlobalState,
+  selectHistoryState,
+  selectTacticalActivityState,
+} from '../../reducers';
+import {
+  numberObjectToArray,
+  objectToKeyValueArray,
+} from '../../miscellanous/Tools';
+import {
+  areDifferent,
+  getActivityIdentifier,
+  shouldTime,
+} from '../../miscellanous/Projection';
+import {constructColorMappings} from './TimeLine';
+import {dictionaryReducer} from '../../reducers/StrategyReducer';
+import {TacticalActivity} from '../../types/TacticalTypes';
+import {HasId, NumberDictionary, StringDictionary} from '../../types/BaseTypes';
+import {
+  activitiesEqual,
+  Activity,
+  DEFAULT_ACTIVITY,
+  getActivityName,
+} from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
 
-export const getMeaningFullName = (activityId: string, tacticalActivities: StringDictionary<TacticalActivity>) => {
+export const getMeaningFullName = (
+  activityId: string,
+  tacticalActivities: StringDictionary<TacticalActivity>,
+) => {
   const tacticalActivity: TacticalActivity = tacticalActivities[activityId];
-  return (tacticalActivity && tacticalActivity.name) || activityId
+  return (tacticalActivity && tacticalActivity.name) || activityId;
 };
 
 export const responsivefy = (svg: any) => {
   const container = select(svg.node().parentNode),
-    width = parseInt(svg.style("width")),
-    height = parseInt(svg.style("height")),
+    width = parseInt(svg.style('width'), 10),
+    height = parseInt(svg.style('height'), 10),
     aspect = width / height;
-  svg
-    .attr("perserveAspectRatio", "xMinYMid")
-    .call(resize);
+  svg.attr('perserveAspectRatio', 'xMinYMid').call(resize);
 
-  select(window).on("resize." + container.attr("id"), resize);
+  select(window).on('resize.' + container.attr('id'), resize);
 
   function resize() {
-    const targetWidth = parseInt(container.style("width"));
-    svg.attr("width", targetWidth);
+    const targetWidth = parseInt(container.style('width'), 10);
+    svg.attr('width', targetWidth);
     const heightBoi = Math.round(targetWidth / aspect);
-    svg.attr("height", heightBoi);
+    svg.attr('height', heightBoi);
   }
 };
 
-export const mapTacticalActivitiesToID = <T extends HasId>(tacticalActivities: NumberDictionary<T>): StringDictionary<T> =>
-  numberObjectToArray(tacticalActivities)
-    .reduce(dictionaryReducer, {});
+export const mapTacticalActivitiesToID = <T extends HasId>(
+  tacticalActivities: NumberDictionary<T>,
+): StringDictionary<T> =>
+  numberObjectToArray(tacticalActivities).reduce(dictionaryReducer, {});
 
 interface Props {
-  activityFeed: Activity[],
-  relativeToTime: number,
-  relativeFromTime: number,
-  tacticalActivities: NumberDictionary<TacticalActivity>,
-  bottomActivity: Activity,
-  archivedActivities: NumberDictionary<TacticalActivity>,
+  activityFeed: Activity[];
+  relativeToTime: number;
+  relativeFromTime: number;
+  tacticalActivities: NumberDictionary<TacticalActivity>;
+  bottomActivity: Activity;
+  archivedActivities: NumberDictionary<TacticalActivity>;
 }
 
 interface GroupedActivity {
-  activityName: string,
-  activityIdentifier: string,
-  duration: number,
-  spawn: Activity,
+  activityName: string;
+  activityIdentifier: string;
+  duration: number;
+  spawn: Activity;
 }
 interface ProjectionReduction {
-  trackedTime: number,
-  currentActivity: Activity,
-  activityBins: StringDictionary<GroupedActivity[]>
+  trackedTime: number;
+  currentActivity: Activity;
+  activityBins: StringDictionary<GroupedActivity[]>;
 }
 
 const PieFlavored: FC<Props> = ({
-                       activityFeed,
-                       relativeToTime,
-                       relativeFromTime,
-                       tacticalActivities,
-                       bottomActivity,
-                       archivedActivities,
-                     }) => {
-
-
+  activityFeed,
+  relativeToTime,
+  relativeFromTime,
+  tacticalActivities,
+  bottomActivity,
+  archivedActivities,
+}) => {
   const activityProjection: ProjectionReduction = reduceRight(
     activityFeed,
     (accum: ProjectionReduction, activity: Activity) => {
       if (accum.trackedTime < 0) {
-        accum.trackedTime = activity.antecedenceTime < relativeFromTime ? relativeFromTime : activity.antecedenceTime
+        accum.trackedTime =
+          activity.antecedenceTime < relativeFromTime
+            ? relativeFromTime
+            : activity.antecedenceTime;
       }
 
       if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
         accum.currentActivity = activity;
-      } else if (areDifferent(accum.currentActivity, activity) && shouldTime(activity)) {
+      } else if (
+        areDifferent(accum.currentActivity, activity) &&
+        shouldTime(activity)
+      ) {
         // Different Type: Create workable chunk and start next activity.
         const currentActivity = accum.currentActivity;
         accum.currentActivity = activity;
-        const adjustedAntecedenceTime = activity.antecedenceTime < relativeFromTime ? relativeFromTime : activity.antecedenceTime;
+        const adjustedAntecedenceTime =
+          activity.antecedenceTime < relativeFromTime
+            ? relativeFromTime
+            : activity.antecedenceTime;
         const duration = adjustedAntecedenceTime - accum.trackedTime;
         accum.trackedTime = activity.antecedenceTime;
         const activityName: string = getActivityName(currentActivity);
@@ -105,14 +130,16 @@ const PieFlavored: FC<Props> = ({
     {
       trackedTime: -1,
       currentActivity: DEFAULT_ACTIVITY,
-      activityBins: {}
-    }
+      activityBins: {},
+    },
   );
 
   const bins = activityProjection.activityBins;
-  const activityIdentifier = getActivityIdentifier(activityProjection.currentActivity);
+  const activityIdentifier = getActivityIdentifier(
+    activityProjection.currentActivity,
+  );
   if (!bins[activityIdentifier]) {
-    bins[activityIdentifier] = []
+    bins[activityIdentifier] = [];
   }
 
   const activityName = getActivityName(activityProjection.currentActivity);
@@ -128,15 +155,19 @@ const PieFlavored: FC<Props> = ({
 
   const bottomCapActivity: Activity = bottomActivity;
   const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
-  if (!activitiesEqual(lastActivityInScope, bottomCapActivity) && lastActivityInScope) {
+  if (
+    !activitiesEqual(lastActivityInScope, bottomCapActivity) &&
+    lastActivityInScope
+  ) {
     const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
     if (!bins[bottomActivityIdentifier]) {
-      bins[bottomActivityIdentifier] = []
+      bins[bottomActivityIdentifier] = [];
     }
     const bottomCapActivityName = getActivityName(bottomCapActivity);
-    const bottomTime = bottomCapActivity.antecedenceTime < relativeFromTime ?
-      relativeFromTime :
-      bottomCapActivity.antecedenceTime;
+    const bottomTime =
+      bottomCapActivity.antecedenceTime < relativeFromTime
+        ? relativeFromTime
+        : bottomCapActivity.antecedenceTime;
     const bottomDuration = lastActivityInScope.antecedenceTime - bottomTime;
     bins[bottomActivityIdentifier].push({
       activityName: bottomCapActivityName,
@@ -146,16 +177,20 @@ const PieFlavored: FC<Props> = ({
     });
   }
 
-
-  const pieData = reduceRight(objectToKeyValueArray(bins),
-    (accum: {name: string, value: number}[], keyValue) => {
+  const pieData = reduceRight(
+    objectToKeyValueArray(bins),
+    (accum: {name: string; value: number}[], keyValue) => {
       accum.push({
         name: keyValue.key,
-        value: keyValue.value.reduce((accum, binBoi) => accum + binBoi.duration, 0)
+        value: keyValue.value.reduce(
+          (kvAccum, binBoi) => kvAccum + binBoi.duration,
+          0,
+        ),
       });
       return accum;
-    }, []);
-
+    },
+    [],
+  );
 
   const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
 
@@ -167,9 +202,10 @@ const PieFlavored: FC<Props> = ({
 
       selection.select('svg').remove();
 
-      const pieSVG = selection.append('svg')
+      const pieSVG = selection
+        .append('svg')
         // @ts-ignore real
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr('viewBox', [-width / 2, -height / 2, width, height])
         .call(responsivefy)
         .append('g');
 
@@ -194,33 +230,44 @@ const PieFlavored: FC<Props> = ({
 
       const idToColor = constructColorMappings(mappedTacticalActivities);
 
-      pieSVG.selectAll("path")
+      pieSVG
+        .selectAll('path')
         .data(arcs)
-        .join("path")
-        .attr("fill", (d: any) => idToColor[d.data.name])
+        .join('path')
+        .attr('fill', (d: any) => idToColor[d.data.name])
         .attr('opacity', 0.7)
         .attr('cursor', 'pointer')
-        .attr("d", (d:any) => arcThing(d))
-        .append("title")
-        .text((d: any) =>
-          `${getMeaningFullName(d.data.name, mappedTacticalActivities)}: ${((d.data.value / totalTime) * 100).toFixed(2)}%`);
+        .attr('d', (d: any) => arcThing(d))
+        .append('title')
+        .text(
+          (d: any) =>
+            `${getMeaningFullName(d.data.name, mappedTacticalActivities)}: ${(
+              (d.data.value / totalTime) *
+              100
+            ).toFixed(2)}%`,
+        );
     }
   });
 
   return (
     <div>
-      <div style={{
-        maxWidth: '300px',
-        margin: 'auto',
-      }} id={'pieBoi'}>
-
-      </div>
+      <div
+        style={{
+          maxWidth: '300px',
+          margin: 'auto',
+        }}
+        id={'pieBoi'}
+      />
     </div>
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {activityFeed, selectedHistoryRange: {to, from}, capstone: {bottomActivity}} = selectHistoryState(state);
+const mapStateToProps = (state: GlobalState) => {
+  const {
+    activityFeed,
+    selectedHistoryRange: {to, from},
+    capstone: {bottomActivity},
+  } = selectHistoryState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     activityFeed,
@@ -229,6 +276,6 @@ const mapStateToProps = (state : GlobalState) => {
     tacticalActivities: activities,
     archivedActivities,
     bottomActivity,
-  }
+  };
 };
 export default connect(mapStateToProps)(PieFlavored);

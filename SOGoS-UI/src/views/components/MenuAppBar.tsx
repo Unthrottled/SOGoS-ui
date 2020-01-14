@@ -7,14 +7,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import {connect, DispatchProp} from "react-redux";
-import OfflineMode from "./OfflineMode";
-import InstallApplication from "./InstallApplication";
-import UpdateApplication from "./UpdateApplication";
-import {Link} from "react-router-dom";
-import MenuNavigation from "./MenuNavigation";
-import ManualSync from "./ManualSync";
-import {requestLogoff} from "../../events/SecurityEvents";
+import {connect, DispatchProp} from 'react-redux';
+import OfflineMode from './OfflineMode';
+import InstallApplication from './InstallApplication';
+import UpdateApplication from './UpdateApplication';
+import {Link} from 'react-router-dom';
+import MenuNavigation from './MenuNavigation';
+import ManualSync from './ManualSync';
+import {requestLogoff} from '../../events/SecurityEvents';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,16 +29,14 @@ const useStyles = makeStyles(theme => ({
   link: {
     textDecoration: 'none',
     color: 'inherit',
-  }
+  },
 }));
 
-type Props = DispatchProp & {
-
-};
+type Props = DispatchProp & {};
 
 const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<Element|null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
   const open = Boolean(anchorEl);
 
   const handleMenu: MouseEventHandler = event => {
@@ -57,21 +55,19 @@ const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <MenuNavigation/>
-          <OfflineMode/>
-          <ManualSync/>
-          <Typography variant="h6" className={classes.title}>
-          </Typography>
-          <UpdateApplication/>
-          <InstallApplication/>
+          <MenuNavigation />
+          <OfflineMode />
+          <ManualSync />
+          <Typography variant="h6" className={classes.title} />
+          <UpdateApplication />
+          <InstallApplication />
           <div>
             <IconButton
               aria-owns={open ? 'menu-appbar' : undefined}
               aria-haspopup="true"
               onClick={handleMenu}
-              color="inherit"
-            >
-              <MoreVertIcon/>
+              color="inherit">
+              <MoreVertIcon />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -85,15 +81,22 @@ const MenuAppBar: FC<Props> = ({dispatch: dispetch}) => {
                 horizontal: 'right',
               }}
               open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={() => {
-                handleClose();
-              }}><Link to={'/settings'} className={classes.link}>Settings</Link></MenuItem>
-              <MenuItem onClick={() => {
-                handleClose();
-                logUserOut();
-              }}>Logout</MenuItem>
+              onClose={handleClose}>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                }}>
+                <Link to={'/settings'} className={classes.link}>
+                  Settings
+                </Link>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  logUserOut();
+                }}>
+                Logout
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {MountainIcon, SizeType} from "./MountainIcon";
-import {Objective} from "../../types/StrategyTypes";
+import {MountainIcon, SizeType} from './MountainIcon';
+import {Objective} from '../../types/StrategyTypes';
 
 type GoalProps = {
-  objective?: Objective | null,
-  size?: SizeType,
-}
+  objective?: Objective | null;
+  size?: SizeType;
+};
 export const GoalIcon = ({objective, size}: GoalProps) => {
   const iconCustomization = (objective || {}).iconCustomization;
   const skyColor = (iconCustomization && iconCustomization.background) || {
@@ -14,7 +14,7 @@ export const GoalIcon = ({objective, size}: GoalProps) => {
   };
   return (
     <div>
-      <MountainIcon skyColor={skyColor} size={size}/>
+      <MountainIcon skyColor={skyColor} size={size} />
     </div>
   );
 };

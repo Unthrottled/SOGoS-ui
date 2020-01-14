@@ -1,8 +1,9 @@
-import {SecurityState} from "../reducers/SecurityReducer";
-import {nowInSeconds} from "@openid/appauth";
+import {SecurityState} from '../reducers/SecurityReducer';
+import {nowInSeconds} from '@openid/appauth';
 
-
-export const shouldCheckForAuthorizationGrant = (securityState: SecurityState) => {
+export const shouldCheckForAuthorizationGrant = (
+  securityState: SecurityState,
+) => {
   return !isAccessTokenValid(securityState);
 };
 
@@ -19,16 +20,26 @@ export const canRefreshToken = (securityState: SecurityState) => {
  * @returns if the access token or refresh token need to be replaced.
  */
 export const canRefreshEitherTokens = (securityState: SecurityState) => {
-  return (!isAccessTokenValid(securityState) && securityState && securityState.refreshToken) ||
-    !isRefreshTokenValid(securityState);
+  return (
+    (!isAccessTokenValid(securityState) &&
+      securityState &&
+      securityState.refreshToken) ||
+    !isRefreshTokenValid(securityState)
+  );
 };
 
 export const isAccessTokenValid = (securityState: SecurityState) => {
-  return securityState && securityState.accessTokenInformation &&
+  return (
+    securityState &&
+    securityState.accessTokenInformation &&
     securityState.accessTokenInformation.expiresAt - 5 >= nowInSeconds()
+  );
 };
 
 export const isRefreshTokenValid = (securityState: SecurityState) => {
-  return securityState && securityState.refreshTokenInformation &&
+  return (
+    securityState &&
+    securityState.refreshTokenInformation &&
     securityState.refreshTokenInformation.expiresAt - 900 >= nowInSeconds()
+  );
 };

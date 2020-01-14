@@ -1,19 +1,22 @@
-import React, {FC, useEffect, useState} from "react";
-import {connect, DispatchProp} from "react-redux";
-import LoggedInLayout from "../components/LoggedInLayout";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Slider from "@material-ui/core/Slider";
-import {Typography} from "@material-ui/core";
-import {useHistory} from "react-router-dom";
-import {createUpdatedPomodoroSettingsEvent, createViewedSettingsEvent} from "../../events/TacticalEvents";
-import {GlobalState, selectPomodoroState} from "../../reducers";
-import Container from "@material-ui/core/Container";
+import React, {FC, useEffect, useState} from 'react';
+import {connect, DispatchProp} from 'react-redux';
+import LoggedInLayout from '../components/LoggedInLayout';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Slider from '@material-ui/core/Slider';
+import {Typography} from '@material-ui/core';
+import {useHistory} from 'react-router-dom';
+import {
+  createUpdatedPomodoroSettingsEvent,
+  createViewedSettingsEvent,
+} from '../../events/TacticalEvents';
+import {GlobalState, selectPomodoroState} from '../../reducers';
+import Container from '@material-ui/core/Container';
 import SettingsIcon from '@material-ui/icons/Settings';
-import withStyles from "@material-ui/core/styles/withStyles";
-import {TomatoIcon} from "../icons/TomatoIcon";
-import {PersistActions} from "../components/PersistActions";
-import {PomodoroSettings} from "../../types/TacticalTypes";
-import {SliderProps} from "@material-ui/core/Slider/Slider";
+import withStyles from '@material-ui/core/styles/withStyles';
+import {TomatoIcon} from '../icons/TomatoIcon';
+import {PersistActions} from '../components/PersistActions';
+import {PomodoroSettings} from '../../types/TacticalTypes';
+import {SliderProps} from '@material-ui/core/Slider/Slider';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -120,7 +123,7 @@ const workMarks = [
   },
 ];
 
-const SliderBoi:React.ComponentType<SliderProps>  = withStyles({
+const SliderBoi: React.ComponentType<SliderProps> = withStyles({
   thumb: {
     height: 20,
     width: 20,
@@ -133,46 +136,63 @@ const SliderBoi:React.ComponentType<SliderProps>  = withStyles({
 })(Slider);
 
 interface Props {
-  pomodoroSettings: PomodoroSettings,
+  pomodoroSettings: PomodoroSettings;
 }
 
 const SettingsBoard: FC<DispatchProp & Props> = ({
-                                                   dispatch,
-                                                   pomodoroSettings,
-                                                 }) => {
+  dispatch,
+  pomodoroSettings,
+}) => {
   const classes = useStyles();
   useEffect(() => {
     dispatch(createViewedSettingsEvent());
   }, [dispatch]);
-  const [recoveryTime, setRecoveryTime] = useState(pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION);
+  const [recoveryTime, setRecoveryTime] = useState(
+    pomodoroSettings.shortRecoveryDuration / MINUTE_CONVERSION,
+  );
 
-  const saveRecoveryTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
-      // @ts-ignore real
+  const saveRecoveryTime: (
+    event: React.ChangeEvent<{}>,
+    value: number | number[],
+  ) => void = (_, time) => {
+    // @ts-ignore real
     setRecoveryTime(time);
   };
 
-  const [longRecoveryTime, setLongRecoveryTime] = useState(pomodoroSettings.longRecoveryDuration / MINUTE_CONVERSION);
+  const [longRecoveryTime, setLongRecoveryTime] = useState(
+    pomodoroSettings.longRecoveryDuration / MINUTE_CONVERSION,
+  );
 
-  const saveLongRecoveryTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
+  const saveLongRecoveryTime: (
+    event: React.ChangeEvent<{}>,
+    value: number | number[],
+  ) => void = (_, time) => {
     // @ts-ignore real
-    setLongRecoveryTime(time)
+    setLongRecoveryTime(time);
   };
-  const [workTime, setWorkTime] = useState(pomodoroSettings.loadDuration / MINUTE_CONVERSION);
+  const [workTime, setWorkTime] = useState(
+    pomodoroSettings.loadDuration / MINUTE_CONVERSION,
+  );
 
-  const saveWorkTime: (event: React.ChangeEvent<{}>, value: number | number[]) => void = (_, time) => {
+  const saveWorkTime: (
+    event: React.ChangeEvent<{}>,
+    value: number | number[],
+  ) => void = (_, time) => {
     // @ts-ignore real
-    setWorkTime(time)
+    setWorkTime(time);
   };
   const cycleTimeMinutes = (workTime + recoveryTime) * 4 - recoveryTime;
 
   const history = useHistory();
   const saveSettings = () => {
-    dispatch(createUpdatedPomodoroSettingsEvent({
-      loadDuration: workTime * 60000,
-      shortRecoveryDuration: recoveryTime * 60000,
-      longRecoveryDuration: longRecoveryTime * 60000,
-    }));
-    history.push('/')
+    dispatch(
+      createUpdatedPomodoroSettingsEvent({
+        loadDuration: workTime * 60000,
+        shortRecoveryDuration: recoveryTime * 60000,
+        longRecoveryDuration: longRecoveryTime * 60000,
+      }),
+    );
+    history.push('/');
   };
 
   const discardChanges = () => {
@@ -183,27 +203,30 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
     <LoggedInLayout>
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
-          <Typography component={'h1'}
-                      variant={'h2'}
-                      align={'center'}
-                      color={'textPrimary'}
-                      gutterBottom>
+          <Typography
+            component={'h1'}
+            variant={'h2'}
+            align={'center'}
+            color={'textPrimary'}
+            gutterBottom>
             Settings
           </Typography>
-          <Typography variant="h6" align="center" color="textSecondary" paragraph>
-            We all cannot be the same.
-            Therefore we thought it would be handy to allow you to adjust the experience to your preferences!
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            paragraph>
+            We all cannot be the same. Therefore we thought it would be handy to
+            allow you to adjust the experience to your preferences!
           </Typography>
-          <SettingsIcon style={{color: 'black', fontSize: '3em'}}/>
+          <SettingsIcon style={{color: 'black', fontSize: '3em'}} />
         </Container>
       </div>
       <div className={classes.container}>
         <div className={classes.cardContent}>
-          <TomatoIcon size={{width: 50, height: 50}}/>
-          <Typography gutterBottom>
-            Pomodoro Settings
-          </Typography>
-          <hr/>
+          <TomatoIcon size={{width: 50, height: 50}} />
+          <Typography gutterBottom>Pomodoro Settings</Typography>
+          <hr />
           <Typography gutterBottom color={'textSecondary'} variant={'caption'}>
             Work Duration (minutes)
           </Typography>
@@ -246,14 +269,14 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
             max={recoveryMarks[recoveryMarks.length - 1].value}
             valueLabelDisplay="auto"
           />
-          <hr/>
+          <hr />
           <div>
             <Typography>
-              Full Cycle Time (4 iterations): {cycleTimeMinutes} minutes or {(cycleTimeMinutes / 60).toFixed(2)} hours
+              Full Cycle Time (4 iterations): {cycleTimeMinutes} minutes or{' '}
+              {(cycleTimeMinutes / 60).toFixed(2)} hours
             </Typography>
           </div>
-          <PersistActions onSave={saveSettings}
-                          onCancel={discardChanges}/>
+          <PersistActions onSave={saveSettings} onCancel={discardChanges} />
         </div>
       </div>
     </LoggedInLayout>
@@ -264,7 +287,7 @@ const mapStateToProps = (state: GlobalState) => {
   const {settings} = selectPomodoroState(state);
   return {
     pomodoroSettings: settings,
-  }
+  };
 };
 
 export default connect(mapStateToProps)(SettingsBoard);

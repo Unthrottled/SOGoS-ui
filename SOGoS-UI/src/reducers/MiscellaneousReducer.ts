@@ -1,4 +1,8 @@
-import {DISMISSED_NOTIFICATION, REQUESTED_NOTIFICATION, SAVED_REDIRECT} from "../events/MiscEvents";
+import {
+  DISMISSED_NOTIFICATION,
+  REQUESTED_NOTIFICATION,
+  SAVED_REDIRECT,
+} from '../events/MiscEvents';
 
 export interface NotificationState {
   message: string;
@@ -15,19 +19,22 @@ export const INITIAL_MISC_STATE: MiscellaneousState = {
   notification: {
     message: 'We done goofed.',
     shown: false,
-    type: 'warning'
+    type: 'warning',
   },
   redirectPath: '',
 };
 
-const MiscellaneousReducer = (state: MiscellaneousState = INITIAL_MISC_STATE, action: any): MiscellaneousState => {
+const MiscellaneousReducer = (
+  state: MiscellaneousState = INITIAL_MISC_STATE,
+  action: any,
+): MiscellaneousState => {
   switch (action.type) {
     case DISMISSED_NOTIFICATION:
       return {
         ...state,
         notification: {
           ...state.notification,
-          shown: false
+          shown: false,
         },
       };
     case REQUESTED_NOTIFICATION:
@@ -36,7 +43,7 @@ const MiscellaneousReducer = (state: MiscellaneousState = INITIAL_MISC_STATE, ac
         notification: {
           message: action.payload,
           shown: true,
-          type: 'info'
+          type: 'info',
         },
       };
     case SAVED_REDIRECT:
@@ -45,7 +52,7 @@ const MiscellaneousReducer = (state: MiscellaneousState = INITIAL_MISC_STATE, ac
         redirectPath: action.payload,
       };
     default:
-      return state
+      return state;
   }
 };
 

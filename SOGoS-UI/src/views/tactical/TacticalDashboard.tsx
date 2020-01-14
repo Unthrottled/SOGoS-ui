@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import {useHistory} from 'react-router-dom';
-import LoggedInLayout from "../components/LoggedInLayout";
-import Typography from "@material-ui/core/Typography";
-import {Card, makeStyles} from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
-import Container from "@material-ui/core/Container";
-import {TacticalIcon} from "../icons/TacticalIcon";
+import LoggedInLayout from '../components/LoggedInLayout';
+import Typography from '@material-ui/core/Typography';
+import {Card, makeStyles} from '@material-ui/core';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
+import Container from '@material-ui/core/Container';
+import {TacticalIcon} from '../icons/TacticalIcon';
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   goalIcon: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const TacticalDashboard = () => {
@@ -35,31 +35,40 @@ const TacticalDashboard = () => {
     <LoggedInLayout>
       <div className={classes.headerContent}>
         <Container maxWidth={'sm'}>
-          <Typography component={'h1'}
-                      variant={'h2'}
-                      align={'center'}
-                      color={'textPrimary'}
-                      gutterBottom>
+          <Typography
+            component={'h1'}
+            variant={'h2'}
+            align={'center'}
+            color={'textPrimary'}
+            gutterBottom>
             Get Tactical
           </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
-            Those goals aren't going to accomplish themselves!
-            Figure out nitty-gritty of getting the job done.
+          <Typography
+            variant="h5"
+            align="center"
+            color="textSecondary"
+            paragraph>
+            Those goals aren't going to accomplish themselves! Figure out
+            nitty-gritty of getting the job done.
           </Typography>
-          <TacticalIcon/>
+          <TacticalIcon />
         </Container>
       </div>
       <Card className={classes.card}>
         <CardActionArea onClick={() => history.push('./activities/')}>
           <div className={classes.cardContent}>
             <div className={classes.goalIcon}>
-              <TacticalActivityIcon/>
+              <TacticalActivityIcon />
             </div>
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
                 Activity Hub
               </Typography>
-              <Typography gutterBottom variant="body2" color="textSecondary" component="p">
+              <Typography
+                gutterBottom
+                variant="body2"
+                color="textSecondary"
+                component="p">
                 The things you do are related to a goal you want to accomplish.
                 Otherwise you would not be doing it, right?
               </Typography>
@@ -70,6 +79,5 @@ const TacticalDashboard = () => {
     </LoggedInLayout>
   );
 };
-
 
 export default TacticalDashboard;

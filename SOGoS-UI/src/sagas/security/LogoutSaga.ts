@@ -1,8 +1,11 @@
 import {call, put} from 'redux-saga/effects';
-import {InitialConfig, OAuthConfig} from "../../types/ConfigurationTypes";
-import {initialConfigurationSaga, oauthConfigurationSaga} from "../configuration/ConfigurationConvienenceSagas";
-import {createLoggedOffEvent} from "../../events/SecurityEvents";
-import {activityLogoutSaga} from "../activity/LogoutActivitySaga";
+import {InitialConfig, OAuthConfig} from '../../types/ConfigurationTypes';
+import {
+  initialConfigurationSaga,
+  oauthConfigurationSaga,
+} from '../configuration/ConfigurationConvienenceSagas';
+import {createLoggedOffEvent} from '../../events/SecurityEvents';
+import {activityLogoutSaga} from '../activity/LogoutActivitySaga';
 
 export function* constructRedirectURI() {
   const {endSessionEndpoint}: OAuthConfig = yield call(oauthConfigurationSaga);
@@ -11,8 +14,8 @@ export function* constructRedirectURI() {
 }
 
 const getClientIfNecessary = (initialConfig: InitialConfig): String => {
-  if(isCognito(initialConfig)){
-    return `client_id=${initialConfig.clientID}&`
+  if (isCognito(initialConfig)) {
+    return `client_id=${initialConfig.clientID}&`;
   } else {
     return '';
   }
@@ -20,14 +23,16 @@ const getClientIfNecessary = (initialConfig: InitialConfig): String => {
 
 const getRedirectParameter = (initialConfig: InitialConfig): string => {
   const queryParameter = getQueryParameter(initialConfig);
-  return `${getClientIfNecessary(initialConfig)}${queryParameter}=${initialConfig.callbackURI}`
+  return `${getClientIfNecessary(initialConfig)}${queryParameter}=${
+    initialConfig.callbackURI
+  }`;
 };
 
 const getQueryParameter = (initialConfig: InitialConfig): string => {
   if (isOkta(initialConfig) || isKeycloak(initialConfig)) {
-    return 'redirect_uri'
+    return 'redirect_uri';
   } else {
-    return 'logout_uri'
+    return 'logout_uri';
   }
 };
 
@@ -47,7 +52,7 @@ const isCognito = (initialConfiguration: InitialConfig): boolean => {
 export function* logoffPreFlightSaga() {
   // do stuff
   yield call(activityLogoutSaga);
-  yield put(createLoggedOffEvent());// wipe state
+  yield put(createLoggedOffEvent()); // wipe state
 }
 
 export function pushRedirect(href: string) {

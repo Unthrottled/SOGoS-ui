@@ -1,17 +1,20 @@
-import React, {FC, useEffect, useState} from "react";
-import {connect, DispatchProp} from "react-redux";
-import LoggedInLayout from "../components/LoggedInLayout";
+import React, {FC, useEffect, useState} from 'react';
+import {connect, DispatchProp} from 'react-redux';
+import LoggedInLayout from '../components/LoggedInLayout';
 import clsx from 'clsx';
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Container from "@material-ui/core/Container";
-import PieFlavored from "./PieFlavored";
-import TimeLine from "./TimeLine";
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import PieFlavored from './PieFlavored';
+import TimeLine from './TimeLine';
 import moment, {Moment} from 'moment';
-import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
-import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
+import {
+  createAdjustedHistoryTimeFrame,
+  createViewedHistoryEvent,
+} from '../../events/HistoryEvents';
+import {GlobalState, selectHistoryState, selectUserState} from '../../reducers';
 import {DateRangePicker, FocusedInputShape} from 'react-dates';
-import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
-import InputLabel from "@material-ui/core/InputLabel";
+import {ONE_DAY} from '../../sagas/activity/PomodoroActivitySagas';
+import InputLabel from '@material-ui/core/InputLabel';
 import HistoryIcon from '@material-ui/icons/History';
 
 const drawerWidth = 240;
@@ -91,13 +94,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  selectedTo: number,
-  selectedFrom: number,
+  selectedTo: number;
+  selectedFrom: number;
 }
 const HistoryDashboard: FC<DispatchProp & Props> = ({
-                                                      dispatch,
-                                                      selectedTo,
-                                                      selectedFrom}) => {
+  dispatch,
+  selectedTo,
+  selectedFrom,
+}) => {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -108,15 +112,19 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
 
-  const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(null);
+  const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
+    null,
+  );
 
   const submitTimeFrame = (from: Moment, to: Moment) => {
     const fromUnix = from.valueOf();
     const toUnix = to.valueOf() + ONE_DAY - 1000;
-    dispatch(createAdjustedHistoryTimeFrame({
-      from: new Date(fromUnix).valueOf(),
-      to: new Date(toUnix).valueOf(),
-    }));
+    dispatch(
+      createAdjustedHistoryTimeFrame({
+        from: new Date(fromUnix).valueOf(),
+        to: new Date(toUnix).valueOf(),
+      }),
+    );
   };
 
   return (
@@ -129,39 +137,44 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
               startDate={meowMinusSeven}
               startDateId="steve"
               endDate={meow}
-              isOutsideRange={(date) => moment().isSameOrBefore(date, 'day')}
+              isOutsideRange={date => moment().isSameOrBefore(date, 'day')}
               endDateId="jerry"
               onDatesChange={({startDate, endDate}) =>
-                submitTimeFrame(startDate || moment(), endDate || moment())}
+                submitTimeFrame(startDate || moment(), endDate || moment())
+              }
               focusedInput={focusedInput}
               onFocusChange={setFocusedInput}
             />
           </div>
         </Container>
         <div className={classes.placeIcon}>
-          <HistoryIcon style={{fontSize: '100px'}}/>
+          <HistoryIcon style={{fontSize: '100px'}} />
         </div>
       </div>
       <main className={classes.content}>
         <div className={fixedHeightPaper}>
-          <TimeLine/>
+          <TimeLine />
         </div>
         <div className={fixedHeightPaper}>
-          <PieFlavored/>
+          <PieFlavored />
         </div>
       </main>
     </LoggedInLayout>
   );
 };
 
-const mapStateToProps = (state : GlobalState) => {
-  const {information: {fullName}} = selectUserState(state);
-  const {selectedHistoryRange: {from, to}} = selectHistoryState(state);
+const mapStateToProps = (state: GlobalState) => {
+  const {
+    information: {fullName},
+  } = selectUserState(state);
+  const {
+    selectedHistoryRange: {from, to},
+  } = selectHistoryState(state);
   return {
     fullName,
     selectedFrom: from,
-    selectedTo: to
-  }
+    selectedTo: to,
+  };
 };
 
 export default connect(mapStateToProps)(HistoryDashboard);

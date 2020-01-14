@@ -1,17 +1,17 @@
-import {all, call, fork, put, race, select, take} from 'redux-saga/effects'
+import {all, call, fork, put, race, select, take} from 'redux-saga/effects';
 import {eventChannel} from 'redux-saga';
 import {
   createFoundInternetEvent,
   createFoundWifiEvent,
   createLostInternetEvent,
   createLostWifiEvent,
-  FOUND_WIFI
-} from "../events/NetworkEvents";
-import {selectNetworkState} from "../reducers";
+  FOUND_WIFI,
+} from '../events/NetworkEvents';
+import {selectNetworkState} from '../reducers';
 import {
   FAILED_RECEPTION_INITIAL_CONFIGURATION,
-  RECEIVED_PARTIAL_INITIAL_CONFIGURATION
-} from "../events/ConfigurationEvents";
+  RECEIVED_PARTIAL_INITIAL_CONFIGURATION,
+} from '../events/ConfigurationEvents';
 
 export const createOnlineChannel = () => createNetworkChannel('online');
 export const createOfflineChannel = () => createNetworkChannel('offline');
@@ -21,7 +21,7 @@ export const createNetworkChannel = (event: string) => {
     const statusHandler = (status: any) => statusObserver(status);
     window.addEventListener(event, statusHandler);
     return () => window.removeEventListener(event, statusHandler);
-  })
+  });
 };
 
 function* onlineSaga() {
@@ -49,13 +49,13 @@ function* offlineSaga(): any {
 }
 
 export function* isOnline() {
-  const {isOnline} = yield select(selectNetworkState);
-  return isOnline
+  const {isOnline: iO} = yield select(selectNetworkState);
+  return iO;
 }
 
 export function* waitForWifi() {
-  const {isOnline} = yield select(selectNetworkState);
-  if (!isOnline) {
+  const {isOnline: iO} = yield select(selectNetworkState);
+  if (!iO) {
     yield take(FOUND_WIFI);
   }
 }
@@ -64,7 +64,7 @@ function* initialNetworkStateSaga() {
   if (navigator.onLine) {
     yield put(createFoundWifiEvent());
   } else {
-    yield put(createLostWifiEvent())
+    yield put(createLostWifiEvent());
   }
 }
 
@@ -73,7 +73,7 @@ function* initialInternetStateSaga() {
   if (hasInternet) {
     yield put(createFoundInternetEvent());
   } else {
-    yield put(createLostInternetEvent())
+    yield put(createLostInternetEvent());
   }
 }
 
@@ -94,7 +94,5 @@ function* listenToNetworkEvents() {
 }
 
 export default function* rootSaga() {
-  yield all([
-    listenToNetworkEvents(),
-  ])
+  yield all([listenToNetworkEvents()]);
 }

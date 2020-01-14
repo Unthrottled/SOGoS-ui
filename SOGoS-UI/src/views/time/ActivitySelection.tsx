@@ -1,12 +1,12 @@
 import * as React from 'react';
-import IconButton from "@material-ui/core/IconButton";
-import {Cancel, KeyboardArrowDown} from "@material-ui/icons";
-import {numberObjectToArray} from "../../miscellanous/Tools";
-import {TacticalActivityIcon} from "../icons/TacticalActivityIcon";
-import {Grow, makeStyles} from "@material-ui/core";
-import {GlobalState, selectTacticalActivityState} from "../../reducers";
-import {TacticalActivity} from "../../types/TacticalTypes";
-import {useSelector} from "react-redux";
+import IconButton from '@material-ui/core/IconButton';
+import {Cancel, KeyboardArrowDown} from '@material-ui/icons';
+import {numberObjectToArray} from '../../miscellanous/Tools';
+import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
+import {Grow, makeStyles} from '@material-ui/core';
+import {GlobalState, selectTacticalActivityState} from '../../reducers';
+import {TacticalActivity} from '../../types/TacticalTypes';
+import {useSelector} from 'react-redux';
 
 // @ts-ignore real
 const useStyles = makeStyles(theme => ({
@@ -62,13 +62,13 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '50%',
   },
   bigIcon: {
-    fontSize: "175px",
-    padding: "25px",
+    fontSize: '175px',
+    padding: '25px',
     background: theme.palette.primary.main,
     borderRadius: '50%',
   },
   bigIconTomato: {
-    padding: "30px",
+    padding: '30px',
     background: theme.palette.primary.main,
     borderRadius: '50%',
   },
@@ -81,20 +81,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type Props = {
-  open: boolean,
-  onClose: () => void,
-  onActivitySelection: (arg1: TacticalActivity) => void,
-  onGenericActivitySelection: () => void,
-  genericIcon: JSX.Element,
+  open: boolean;
+  onClose: () => void;
+  onActivitySelection: (arg1: TacticalActivity) => void;
+  onGenericActivitySelection: () => void;
+  genericIcon: JSX.Element;
 };
 
 const mapStateToProps = (state: GlobalState) => {
   const {activities} = selectTacticalActivityState(state);
   return {
-    activities
-  }
+    activities,
+  };
 };
-
 
 const ActivitySelection = (props: Props) => {
   const classes = useStyles();
@@ -107,32 +106,34 @@ const ActivitySelection = (props: Props) => {
             className={classes.cancel}
             onClick={props.onClose}
             color={'inherit'}>
-            <Cancel className={classes.cancelIcon}/>
+            <Cancel className={classes.cancelIcon} />
           </IconButton>
-          <br/>
+          <br />
           <div className={classes.activityContainer}>
-            {
-              numberObjectToArray(activities).map(activity => (
-                <div key={`tip_${activity.id}`}>
-                  <div className={classes.toolTip}>
-                    <span className={classes.toolTipInner}>{activity.name}</span>
-                    <KeyboardArrowDown style={{fontSize: '2em'}}/>
-                  </div>
-                  <IconButton color={'inherit'}
-                              className={classes.activityIcon}
-                              onClick={() => props.onActivitySelection(activity)}>
-                    <TacticalActivityIcon tacticalActivity={activity} size={{
+            {numberObjectToArray(activities).map(activity => (
+              <div key={`tip_${activity.id}`}>
+                <div className={classes.toolTip}>
+                  <span className={classes.toolTipInner}>{activity.name}</span>
+                  <KeyboardArrowDown style={{fontSize: '2em'}} />
+                </div>
+                <IconButton
+                  color={'inherit'}
+                  className={classes.activityIcon}
+                  onClick={() => props.onActivitySelection(activity)}>
+                  <TacticalActivityIcon
+                    tacticalActivity={activity}
+                    size={{
                       height: '150px',
                       width: '150px',
-                    }}/>
-                  </IconButton>
-                </div>
-              ))
-            }
+                    }}
+                  />
+                </IconButton>
+              </div>
+            ))}
           </div>
           <div className={classes.toolTip}>
             <span className={classes.toolTipInner}>Generic</span>
-            <KeyboardArrowDown style={{fontSize: '2em'}}/>
+            <KeyboardArrowDown style={{fontSize: '2em'}} />
           </div>
           <IconButton
             onClick={props.onGenericActivitySelection}

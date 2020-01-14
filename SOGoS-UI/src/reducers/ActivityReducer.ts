@@ -7,25 +7,30 @@ import {
   RESUMED_TIMED_ACTIVITY,
   STARTED_NON_TIMED_ACTIVITY,
   STARTED_TIMED_ACTIVITY,
-  SYNCED_ACTIVITIES
-} from "../events/ActivityEvents";
-import {objectToKeyValueArray} from "../miscellanous/Tools";
-import {Activity, ActivityTimedType, ActivityType, CachedActivity} from "../types/ActivityTypes";
-import {StringDictionary} from "../types/BaseTypes";
-import reduceRight from "lodash/reduceRight";
+  SYNCED_ACTIVITIES,
+} from '../events/ActivityEvents';
+import {objectToKeyValueArray} from '../miscellanous/Tools';
+import {
+  Activity,
+  ActivityTimedType,
+  ActivityType,
+  CachedActivity,
+} from '../types/ActivityTypes';
+import {StringDictionary} from '../types/BaseTypes';
+import reduceRight from 'lodash/reduceRight';
 
 export type RememberedPomodoro = {
-  dateCounted: number,
-  count: number,
-}
+  dateCounted: number;
+  count: number;
+};
 
 export type ActivityState = {
-  shouldTime: boolean,
-  currentActivity: Activity,
-  previousActivity: Activity,
-  completedPomodoro: RememberedPomodoro,
-  cache: StringDictionary<CachedActivity[]>,
-}
+  shouldTime: boolean;
+  currentActivity: Activity;
+  previousActivity: Activity;
+  completedPomodoro: RememberedPomodoro;
+  cache: StringDictionary<CachedActivity[]>;
+};
 
 export const defaultActivity = {
   antecedenceTime: 0,
@@ -36,7 +41,7 @@ export const defaultActivity = {
     type: ActivityType.PASSIVE,
     paused: false,
     autoStart: false,
-  }
+  },
 };
 export const INITIAL_ACTIVITY_STATE: ActivityState = {
   shouldTime: false,
@@ -49,15 +54,15 @@ export const INITIAL_ACTIVITY_STATE: ActivityState = {
   cache: {},
 };
 
-
-const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE,
-                         action: any): ActivityState => {
+const activityReducer = (
+  state: ActivityState = INITIAL_ACTIVITY_STATE,
+  action: any,
+): ActivityState => {
   switch (action.type) {
     case INITIALIZED_POMODORO:
       return {
         ...state,
-        completedPomodoro: action.payload
-
+        completedPomodoro: action.payload,
       };
     case COMPLETED_POMODORO:
       return {
@@ -65,22 +70,26 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE,
         completedPomodoro: {
           ...state.completedPomodoro,
           count: state.completedPomodoro.count + 1,
-        }
+        },
       };
-    case STARTED_TIMED_ACTIVITY :
-    case RESUMED_TIMED_ACTIVITY :
+    case STARTED_TIMED_ACTIVITY:
+    case RESUMED_TIMED_ACTIVITY:
       return {
         ...state,
         shouldTime: true,
-        previousActivity: state.currentActivity.antecedenceTime ? state.currentActivity : state.previousActivity,
-        currentActivity: action.payload
+        previousActivity: state.currentActivity.antecedenceTime
+          ? state.currentActivity
+          : state.previousActivity,
+        currentActivity: action.payload,
       };
     case STARTED_NON_TIMED_ACTIVITY:
     case RESUMED_NON_TIMED_ACTIVITY:
       return {
         ...state,
         shouldTime: false,
-        previousActivity: state.currentActivity.antecedenceTime ? state.currentActivity : state.previousActivity,
+        previousActivity: state.currentActivity.antecedenceTime
+          ? state.currentActivity
+          : state.previousActivity,
         currentActivity: action.payload,
       };
     case FOUND_PREVIOUS_ACTIVITY:
@@ -91,32 +100,36 @@ const activityReducer = (state: ActivityState = INITIAL_ACTIVITY_STATE,
     case CACHED_ACTIVITY: {
       const {userGUID, cachedActivity} = action.payload;
       if (state.cache[userGUID]) {
-        state.cache[userGUID].push(cachedActivity)
+        state.cache[userGUID].push(cachedActivity);
       } else {
-        state.cache[userGUID] = [cachedActivity]
+        state.cache[userGUID] = [cachedActivity];
       }
       return {
         ...state,
         cache: {
           ...state.cache,
-        }
+        },
       };
     }
     case SYNCED_ACTIVITIES: {
       return {
         ...state,
         cache: {
-          ...reduceRight(objectToKeyValueArray(state.cache)
-              .filter(keyValues => keyValues.key !== action.payload),
+          ...reduceRight(
+            objectToKeyValueArray(state.cache).filter(
+              keyValues => keyValues.key !== action.payload,
+            ),
             (accum: StringDictionary<CachedActivity[]>, keyValue) => {
               accum[keyValue.key] = keyValue.value;
-              return accum
-            }, {}),
-        }
+              return accum;
+            },
+            {},
+          ),
+        },
       };
     }
     default:
-      return state
+      return state;
   }
 };
 

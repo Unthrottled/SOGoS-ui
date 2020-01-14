@@ -5,16 +5,16 @@ import {
   DELETED_OBJECTIVE,
   FOUND_OBJECTIVES,
   SYNCED_OBJECTIVES,
-  UPDATED_OBJECTIVE
-} from "../events/StrategyEvents";
-import {objectToArray, objectToKeyValueArray} from "../miscellanous/Tools";
-import {CachedObjective, KeyResult, Objective} from "../types/StrategyTypes";
-import {HasId, StringDictionary} from "../types/BaseTypes";
+  UPDATED_OBJECTIVE,
+} from '../events/StrategyEvents';
+import {objectToArray, objectToKeyValueArray} from '../miscellanous/Tools';
+import {CachedObjective, KeyResult, Objective} from '../types/StrategyTypes';
+import {HasId, StringDictionary} from '../types/BaseTypes';
 
 export interface StrategyState {
-  objectives: StringDictionary<Objective>
-  keyResults: StringDictionary<KeyResult>,
-  cache: StringDictionary<CachedObjective[]>,
+  objectives: StringDictionary<Objective>;
+  keyResults: StringDictionary<KeyResult>;
+  cache: StringDictionary<CachedObjective[]>;
 }
 
 const INITIAL_USER_STATE: StrategyState = {
@@ -23,17 +23,22 @@ const INITIAL_USER_STATE: StrategyState = {
   cache: {},
 };
 
-export const dictionaryReducer = <T extends HasId>(accum: StringDictionary<T>, toIndex: T) => {
+export const dictionaryReducer = <T extends HasId>(
+  accum: StringDictionary<T>,
+  toIndex: T,
+) => {
   accum[toIndex.id] = toIndex;
   return accum;
 };
 
-const updateStateWithObjectives = (newObjectives: Objective[],
-                                   newKeyResults: KeyResult[],
-                                   state: StrategyState): StrategyState => {
+const updateStateWithObjectives = (
+  newObjectives: Objective[],
+  newKeyResults: KeyResult[],
+  state: StrategyState,
+): StrategyState => {
   const objectives = [
     ...objectToArray(state.objectives),
-    ...newObjectives
+    ...newObjectives,
   ].reduce(dictionaryReducer, {});
   const keyResults = [
     ...objectToArray(state.keyResults),
@@ -42,11 +47,14 @@ const updateStateWithObjectives = (newObjectives: Objective[],
   return {
     ...state,
     objectives,
-    keyResults
+    keyResults,
   };
 };
 
-const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any) => {
+const StrategyReducer = (
+  state: StrategyState = INITIAL_USER_STATE,
+  action: any,
+) => {
   switch (action.type) {
     case CREATED_OBJECTIVE:
     case UPDATED_OBJECTIVE:
@@ -57,12 +65,16 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any)
     case COMPLETED_OBJECTIVE:
       const {payload} = action;
       const deletedObjective: Objective = payload;
-      const newObjectives = objectToArray(state.objectives).filter(suspiciousObjective =>
-        suspiciousObjective.id !== deletedObjective.id);
-      const newKeyResults = objectToArray(state.keyResults).filter(keyResult =>
-        deletedObjective.keyResults
-          .filter(keyResultToRemove =>
-            keyResultToRemove.id === keyResult.id).length === 0);
+      const newObjectives = objectToArray(state.objectives).filter(
+        suspiciousObjective => suspiciousObjective.id !== deletedObjective.id,
+      );
+      const newKeyResults = objectToArray(state.keyResults).filter(
+        possibleRemovableKeyResult =>
+          deletedObjective.keyResults.filter(
+            keyResultToRemove =>
+              keyResultToRemove.id === possibleRemovableKeyResult.id,
+          ).length === 0,
+      );
       return {
         ...state,
         objectives: newObjectives.reduce(dictionaryReducer, {}),
@@ -71,8 +83,8 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any)
     case FOUND_OBJECTIVES:
       const rememberedObjectives = action.payload.reduce(dictionaryReducer, {});
       const rememberedKeyResults = action.payload
-          .flatMap((foundObjective: Objective) => foundObjective.keyResults)
-          .reduce(dictionaryReducer, {});
+        .flatMap((foundObjective: Objective) => foundObjective.keyResults)
+        .reduce(dictionaryReducer, {});
       return {
         ...state,
         objectives: rememberedObjectives,
@@ -81,15 +93,15 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any)
     case CACHED_OBJECTIVE: {
       const {userGUID, objective} = action.payload;
       if (state.cache[userGUID]) {
-        state.cache[userGUID].push(objective)
+        state.cache[userGUID].push(objective);
       } else {
-        state.cache[userGUID] = [objective]
+        state.cache[userGUID] = [objective];
       }
       return {
         ...state,
         cache: {
           ...state.cache,
-        }
+        },
       };
     }
     case SYNCED_OBJECTIVES: {
@@ -100,13 +112,13 @@ const StrategyReducer = (state: StrategyState = INITIAL_USER_STATE, action: any)
             .filter(keyValues => keyValues.key !== action.payload)
             .reduce((accum: StringDictionary<CachedObjective[]>, keyValue) => {
               accum[keyValue.key] = keyValue.value;
-              return accum
+              return accum;
             }, {}),
-        }
+        },
       };
     }
     default:
-      return state
+      return state;
   }
 };
 

@@ -1,11 +1,11 @@
-import React, {FC} from "react";
-import MenuAppBar from "./MenuAppBar";
-import SessionExpired from "../auth/SessionExpired";
-import Activity from "../time/ActivityHub";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import PausedPomodoro from "../time/PausedPomodoro";
-import SnackBoi from "./SnackBoi";
-import {Container} from "@material-ui/core";
+import React, {FC} from 'react';
+import MenuAppBar from './MenuAppBar';
+import SessionExpired from '../auth/SessionExpired';
+import Activity from '../time/ActivityHub';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import PausedPomodoro from '../time/PausedPomodoro';
+import SnackBoi from './SnackBoi';
+import {Container} from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,16 +21,14 @@ const LoggedInLayout: FC = ({children, ...otherProperties}) => {
   const classes = useStyles();
   return (
     <div {...otherProperties} className={classes.container}>
-      <MenuAppBar/>
-      <Activity/>
-      <Container className={classes.content} maxWidth={"lg"}>
-        {
-          children
-        }
+      <MenuAppBar />
+      <Activity />
+      <Container className={classes.content} maxWidth={'lg'}>
+        {children}
       </Container>
-      <PausedPomodoro/>
-      <SessionExpired/>
-      <SnackBoi/>
+      <PausedPomodoro />
+      <SessionExpired />
+      <SnackBoi />
     </div>
   );
 };

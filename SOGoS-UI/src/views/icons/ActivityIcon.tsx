@@ -1,14 +1,13 @@
 import * as React from 'react';
-import Activity from "../../images/ActivityIcon.svg";
-import ReactSVG from "react-svg";
-import {findChild, SizeType} from "./MountainIcon";
-import {ColorType} from "../../types/StrategyTypes";
-
+import Activity from '../../images/ActivityIcon.svg';
+import ReactSVG from 'react-svg';
+import {findChild, SizeType} from './MountainIcon';
+import {ColorType} from '../../types/StrategyTypes';
 
 type Props = {
-  backgroundColor?: ColorType,
-  lineColor?: ColorType,
-  size?: SizeType,
+  backgroundColor?: ColorType;
+  lineColor?: ColorType;
+  size?: SizeType;
 };
 
 const defaultSize: SizeType = {
@@ -17,33 +16,37 @@ const defaultSize: SizeType = {
 };
 
 export const defaultBackground: ColorType = {
-  hex: "#1fdb1f",
-  opacity: 1
+  hex: '#1fdb1f',
+  opacity: 1,
 };
 
 export const defaultLine: ColorType = {
-  hex: "#44932d",
-  opacity: 1
+  hex: '#44932d',
+  opacity: 1,
 };
-
 
 export const ActivityIcon = (props: Props) => {
   const {backgroundColor, lineColor, size} = props;
   const usableBackground: ColorType = {
     ...defaultBackground,
-    ...(backgroundColor || {})
+    ...(backgroundColor || {}),
   };
   const usableLine: ColorType = {
     ...defaultLine,
-    ...(lineColor || {})
+    ...(lineColor || {}),
   };
 
   const usableSize = size || defaultSize;
 
-  const alterColor = (svg: any, childID: any, usableColorType: any, modifier: any = (node: any, color: ColorType)=>{
-    node.setAttribute('fill', color.hex);
-    node.setAttribute('fill-opacity', String(color.opacity));
-  }) => {
+  const alterColor = (
+    svg: any,
+    childID: any,
+    usableColorType: any,
+    modifier: any = (node: any, color: ColorType) => {
+      node.setAttribute('fill', color.hex);
+      node.setAttribute('fill-opacity', String(color.opacity));
+    },
+  ) => {
     const background = findChild(svg, (node: any) => {
       return node.id && node.id.startsWith(childID);
     });
@@ -51,14 +54,28 @@ export const ActivityIcon = (props: Props) => {
   };
 
   return (
-      <ReactSVG src={Activity} beforeInjection={(svg) => {
-        svg.setAttribute('width', String(usableSize.width || defaultSize.width));
-        svg.setAttribute('height', String(usableSize.height || defaultSize.height));
-        alterColor(svg, 'activityLine', usableLine, (node: any, color: ColorType)=>{
-          node.setAttribute('stroke', color.hex);
-          node.setAttribute('stroke-opacity', String(color.opacity));
-        });
+    <ReactSVG
+      src={Activity}
+      beforeInjection={svg => {
+        svg.setAttribute(
+          'width',
+          String(usableSize.width || defaultSize.width),
+        );
+        svg.setAttribute(
+          'height',
+          String(usableSize.height || defaultSize.height),
+        );
+        alterColor(
+          svg,
+          'activityLine',
+          usableLine,
+          (node: any, color: ColorType) => {
+            node.setAttribute('stroke', color.hex);
+            node.setAttribute('stroke-opacity', String(color.opacity));
+          },
+        );
         alterColor(svg, 'activityBackground', usableBackground);
-      }}/>
+      }}
+    />
   );
 };

@@ -1,6 +1,11 @@
-import {call, delay, put, race, select} from "redux-saga/effects";
-import uuid from "uuid/v4";
-import {GlobalState, selectActivityState, selectTacticalState, selectTimeState} from "../../reducers";
+import {call, delay, put, race, select} from 'redux-saga/effects';
+import uuid from 'uuid/v4';
+import {
+  GlobalState,
+  selectActivityState,
+  selectTacticalState,
+  selectTimeState,
+} from '../../reducers';
 import {
   activitiesEqual,
   Activity,
@@ -8,21 +13,27 @@ import {
   ActivityTimedType,
   ActivityType,
   isActivityRecovery,
-  RECOVERY
-} from "../../types/ActivityTypes";
-import {createTimeDecrementEvent, createTimeSetEvent} from "../../events/TimeEvents";
-import {waitForCurrentActivity} from "./SandsOfTimeSaga";
+  RECOVERY,
+} from '../../types/ActivityTypes';
+import {
+  createTimeDecrementEvent,
+  createTimeSetEvent,
+} from '../../events/TimeEvents';
+import {waitForCurrentActivity} from './SandsOfTimeSaga';
 import {
   createCompletedPomodoroEvent,
   createStartedActivityEvent,
-  createStartedTimedActivityEvent
-} from "../../events/ActivityEvents";
-import omit from "lodash/omit";
-import {CURRENT_ACTIVITY_URL, handleNewActivity} from "../activity/CurrentActivitySaga";
-import {performGet} from "../APISagas";
+  createStartedTimedActivityEvent,
+} from '../../events/ActivityEvents';
+import omit from 'lodash/omit';
+import {
+  CURRENT_ACTIVITY_URL,
+  handleNewActivity,
+} from '../activity/CurrentActivitySaga';
+import {performGet} from '../APISagas';
 
-const getTimerTime = (stopTime: number) => Math.floor((stopTime - new Date().getTime()) / 1000);
-
+const getTimerTime = (stopTime: number) =>
+  Math.floor((stopTime - new Date().getTime()) / 1000);
 
 function* commenceTimedActivity(activityContent: ActivityContent) {
   const action = createStartedActivityEvent(activityContent);
@@ -32,14 +43,19 @@ function* commenceTimedActivity(activityContent: ActivityContent) {
 }
 
 function* setTimer(activityThatStartedThis: Activity, addThis: number = 0) {
-  const {antecedenceTime, content: {duration}} = activityThatStartedThis;
-  yield put(createTimeSetEvent(
-    getTimerTime(antecedenceTime + (duration || 0)) + addThis)
+  const {
+    antecedenceTime,
+    content: {duration},
+  } = activityThatStartedThis;
+  yield put(
+    createTimeSetEvent(
+      getTimerTime(antecedenceTime + (duration || 0)) + addThis,
+    ),
   );
 }
 
 export function* pomodoroSaga(activityThatStartedThis: Activity) {
-  yield call(setTimer,activityThatStartedThis, 1);
+  yield call(setTimer, activityThatStartedThis, 1);
 
   let shouldKeepTiming: boolean = false;
   do {
@@ -50,29 +66,36 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
       previousActivity,
       timeElapsed,
       pomodoroSettings,
-      numberOfCompletedPomodoro
+      numberOfCompletedPomodoro,
     } = yield select((globalState: GlobalState) => {
-      const {currentActivity, previousActivity, completedPomodoro: {count}} = selectActivityState(globalState);
-      const {pomodoro: {settings}} = selectTacticalState(globalState);
-      return ({
-        currentActivity,
-        previousActivity,
+      const {
+        currentActivity: cA,
+        previousActivity: pA,
+        completedPomodoro: {count},
+      } = selectActivityState(globalState);
+      const {
+        pomodoro: {settings},
+      } = selectTacticalState(globalState);
+      return {
+        currentActivity: cA,
+        previousActivity: pA,
         timeElapsed: selectTimeState(globalState).timeElapsed,
         pomodoroSettings: settings,
         numberOfCompletedPomodoro: count,
-      })
+      };
     });
 
     // check to see if current activity is same because could have changed while moving to this next iteration
-    const areActivitiesSame = activitiesEqual(currentActivity, activityThatStartedThis);
+    const areActivitiesSame = activitiesEqual(
+      currentActivity,
+      activityThatStartedThis,
+    );
     if (areActivitiesSame) {
       if (timeElapsed > 0) {
         yield put(createTimeDecrementEvent());
         const after = new Date().valueOf();
         const waitFor = 1000 - (after - before);
-        const {
-          newCurrentActivity,
-        } = yield race({
+        const {newCurrentActivity} = yield race({
           currentActivity: call(waitForCurrentActivity),
           timeElapsed: delay(waitFor < 0 ? 0 : waitFor),
         });
@@ -108,7 +131,7 @@ export function* pomodoroSaga(activityThatStartedThis: Activity) {
         shouldKeepTiming = false;
       }
     } else {
-      shouldKeepTiming = false
+      shouldKeepTiming = false;
     }
   } while (shouldKeepTiming);
 }
@@ -128,4 +151,3 @@ export function* checkCurrentActivity() {
     return true;
   }
 }
-

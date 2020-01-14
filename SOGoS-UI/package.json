@@ -68,7 +68,7 @@
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",
     "start-offline": "http-server -P http://localhost:8888 ./build",
-    "lint": "eslint ."
+    "lint": "eslint --ext .ts,.tsx --fix ."
   },
   "eslintConfig": {
     "extends": "react-app"
