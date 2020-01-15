@@ -22,17 +22,7 @@ Edge Cases
 - When offline and creating tasks, the task disappears on refresh.
 - You cache by guid, but the activities are just by id
     - That means that other people can see your objectives
-- What happens when you are doing timed intervals and you close the app?
 - What happens on logout when doing a timed activity?
-- No internet.
-- Resuming timed load after not using the app.
-- Failure
-
-Things To Test For Real:
----
-- Enable manual sync of data.
-    - Periodic cache sync.
-
 
 Things to think about
 -----
@@ -48,10 +38,7 @@ Things to think about
 
 Maybe:
 ----
-- Redux Persist
-    - Make sure that tokens are secure
 - Initial Loading Screen
-- Cross Device Settings Sync.
 - Better 404 handling
 
 ----

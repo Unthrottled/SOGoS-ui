@@ -8,6 +8,7 @@ export interface OAuthConfig {
 
 export interface InitialConfig {
   clientID: string;
+  appClientId: string;
   authorizationEndpoint: string;
   logoutEndpoint: string;
   userInfoEndpoint: string;
