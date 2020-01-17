@@ -5,7 +5,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import {GlobalState, selectUserState} from '../reducers';
 import {Card, Typography} from '@material-ui/core';
-import {Reach} from './icons/Reach';
+import {SOGoS} from './icons/SOGoS';
 import Grid from '@material-ui/core/Grid';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
@@ -99,7 +99,7 @@ const Dashboard = ({fullName, guid, history}: Props) => {
             to excel. Then push yourself to your limits. Knowing you can find
             your optimal recovery window, for maximum periodization.
           </Typography>
-          <Reach />
+          <SOGoS />
         </Container>
       </div>
       <main className={classes.content}>

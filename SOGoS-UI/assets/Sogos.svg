@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="470.66mm" height="510.79mm" version="1.1" viewBox="0 0 470.66 510.79" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(-3.6045 206.36)">
+  <path d="m442.79-68.664c15.301 26.501 15.301 208.89 0 235.39s-173.26 117.7-203.86 117.7c-30.601 0-188.56-91.195-203.86-117.7-15.301-26.501-15.301-208.89-1e-6 -235.39 15.301-26.501 173.26-117.7 203.86-117.7 30.601 0 188.56 91.195 203.86 117.7z" fill="#507fe0" style="paint-order:stroke fill markers"/>
+  <path d="m265.73-57.477-58.415 96.48 54.347 98.829 112.76 2.3487 58.415-96.48-54.347-98.829zm16.878 30.692 77.743 1.6195 37.47 68.137-40.274 66.518-77.743-1.619-37.469-68.137z" fill="#fca" style="paint-order:stroke fill markers"/>
+  <g transform="translate(-69.734 -2.7451)">
+   <path d="m196.48 70.753h69.24l18.861-57.285h-83.938l-4.8459 54.928z" fill="#ffe6d5"/>
+   <rect transform="matrix(.62442 -.78109 .47987 .87734 0 0)" x="149.95" y="126.36" width="163.21" height="87.832" fill="#fca" style="paint-order:stroke fill markers"/>
+   <rect transform="matrix(.62442 -.78109 .47987 .87734 0 0)" x="100.74" y="250.36" width="163.21" height="87.832" fill="#ffb380" style="paint-order:stroke fill markers"/>
+  </g>
+  <g>
+   <path d="m397.39 43.668-39.852 65.821-77.743-1.619-0.0289-0.0527-18.112 30.015 112.76 2.3487 58.415-96.48z" fill="#ffb380"/>
+   <path d="m294.55-5.0688-27.438 45.318 25.527 46.42 52.965 1.1033 16.393-27.075-43.826-0.09562-0.0858-18.538 54.808 0.11938-25.378-46.149z" fill="#ffb380" style="paint-order:stroke fill markers"/>
+   <path d="m318.08 42.064-23.535-47.132 52.965 1.1031 25.527 46.421z" fill="#fca"/>
+  </g>
+ </g>
+</svg>

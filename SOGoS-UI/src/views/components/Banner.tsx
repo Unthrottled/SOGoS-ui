@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import {Typography} from '@material-ui/core';
-import {Reach} from '../icons/Reach';
+import {SOGoS} from '../icons/SOGoS';
 
 const useStyles = makeStyles(theme => ({
   headerContent: {
@@ -62,7 +62,7 @@ const Banner: FC = ({children}) => {
                   limits of your ability. Knowing that you rest easy when you
                   really need to.
                 </Typography>
-                <Reach />
+                <SOGoS />
                 {children}
               </Container>
             </div>
