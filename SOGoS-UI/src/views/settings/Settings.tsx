@@ -219,7 +219,7 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
             We all cannot be the same. Therefore we thought it would be handy to
             allow you to adjust the experience to your preferences!
           </Typography>
-          <SettingsIcon style={{color: 'black', fontSize: '3em'}} />
+          <SettingsIcon style={{color: '#333831', fontSize: '3em'}} />
         </Container>
       </div>
       <div className={classes.container}>

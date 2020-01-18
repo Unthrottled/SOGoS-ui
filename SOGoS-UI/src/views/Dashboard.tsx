@@ -63,7 +63,7 @@ const placesToGo = [
     name: 'Settings',
     description:
       'Everybody is different. Tailor the experience to your abilities.',
-    icon: <SettingsIcon style={{fontSize: '100px'}} />,
+    icon: <SettingsIcon style={{fontSize: '100px', color: '#333831'}} />,
     navigator: (history: History, _: string) => () =>
       history.push('./settings/'),
   },

@@ -11,8 +11,8 @@ type Props = {
 };
 
 const defaultSize: SizeType = {
-  height: '100px',
-  width: '100px',
+  height: '150px',
+  width: '150px',
 };
 
 export const SOGoS = (props: Props) => {

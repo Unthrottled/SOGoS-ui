@@ -15,7 +15,7 @@ import {GlobalState, selectHistoryState, selectUserState} from '../../reducers';
 import {DateRangePicker, FocusedInputShape} from 'react-dates';
 import {ONE_DAY} from '../../sagas/activity/PomodoroActivitySagas';
 import InputLabel from '@material-ui/core/InputLabel';
-import HistoryIcon from '@material-ui/icons/History';
+import {HistoryIcon} from "../icons/HistoryIcon";
 
 const drawerWidth = 240;
 
@@ -148,7 +148,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
           </div>
         </Container>
         <div className={classes.placeIcon}>
-          <HistoryIcon style={{fontSize: '100px'}} />
+          <HistoryIcon size={{width: 100, height: 100}}/>
         </div>
       </div>
       <main className={classes.content}>

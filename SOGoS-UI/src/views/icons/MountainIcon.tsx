@@ -56,7 +56,7 @@ export const MountainIcon = (props: Props) => {
             String(usableSize.height || defaultSize.height),
           );
           const background = findChild(svg, node => {
-            return node.id && node.id.indexOf('path5680') > -1;
+            return node.id && node.id.indexOf('sky') > -1;
           });
           background.setAttribute('fill', skyColor.hex);
           background.setAttribute('fill-opacity', skyColor.opacity);

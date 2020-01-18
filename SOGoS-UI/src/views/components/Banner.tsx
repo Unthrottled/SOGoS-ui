@@ -59,8 +59,8 @@ const Banner: FC = ({children}) => {
                   color="textSecondary"
                   paragraph>
                   Find and reach your maximum potential! Push yourself to the
-                  limits of your ability. Knowing that you rest easy when you
-                  really need to.
+                  limits of your ability. Knowing that you can rest easy when
+                  you really need to.
                 </Typography>
                 <SOGoS />
                 {children}
