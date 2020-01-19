@@ -5,7 +5,7 @@ import {createApplicationInitializedEvent} from '../events/ApplicationLifecycleE
 import LoggedOut from './auth/LoggedOut';
 import {ThemeProvider} from '@material-ui/styles';
 import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
-import {amber, blue} from '@material-ui/core/colors';
+import {blue} from '@material-ui/core/colors';
 import {Route, Switch} from 'react-router-dom';
 import PrivateRoute from './auth/PrivateRoute';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -33,7 +33,7 @@ const theme = responsiveFontSizes(
   createMuiTheme({
     palette: {
       primary: {
-        ...amber,
+        main: '#f9c048',
         //@ts-ignore real
         alertColor: '#f9ff75',
       },
@@ -54,7 +54,7 @@ const useStyles = makeStyles(_ => ({
       '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
     },
     '*::-webkit-scrollbar-thumb': {
-      backgroundColor: amber['500'],
+      backgroundColor: '#f9c048',
       outline: '1px solid slategrey',
     },
   },
