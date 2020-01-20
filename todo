@@ -11,7 +11,7 @@ Migration Steps:
 - [ ] Fix Mobile app to be deployable to chrome store.
 - [ ] Scale down old api after a week.
 
-- Logout is Not Working
+- loses current activity when refreshing
 - Add TacMod Plug on Activity Start
 
 Mile-Stones after MVP:
