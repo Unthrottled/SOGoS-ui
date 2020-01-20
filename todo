@@ -1,7 +1,5 @@
 Immediate things need to be done:
 ----
-- New Icon
-
 Migration Steps:
 - [X] Add New Hash Identifiers to prod
 - [ ] Deploy New API along side old API
@@ -12,10 +10,10 @@ Migration Steps:
 - [ ] Scale down old api after a week.
 
 - loses current activity when refreshing
-- Add TacMod Plug on Activity Start
 
 Mile-Stones after MVP:
 -----
+- Add TacMod Plug on Activity Start
 - Sharable dashboard.
     - auto-sync
 - On-boarding Experience
