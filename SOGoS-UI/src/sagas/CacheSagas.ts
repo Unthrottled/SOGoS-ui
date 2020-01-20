@@ -17,13 +17,14 @@ import {
 import {
   CACHED_DATA,
   createCheckedCachesEvent,
+  createRequestedSyncEvent,
   RECEIVED_USER,
   SYNCED_DATA,
 } from '../events/UserEvents';
-import {INITIALIZED_APPLICATION} from '../events/ApplicationLifecycleEvents';
+import {INITIALIZED_SECURITY} from '../events/SecurityEvents';
 
 export function* checkCaches() {
-  yield take(INITIALIZED_APPLICATION);
+  yield take(INITIALIZED_SECURITY);
   yield call(inspectCaches);
 }
 
@@ -40,6 +41,9 @@ export function* inspectCaches() {
     .map(state => state.cache[userGUID])
     .reduce((accum, cache) => accum || !!cache, false);
   yield call(cachedItemsSaga, hasCachedItems);
+  if (hasCachedItems) {
+    yield put(createRequestedSyncEvent());
+  }
 }
 
 export function* cachedItemsSaga(hasCachedItems: any = true) {
