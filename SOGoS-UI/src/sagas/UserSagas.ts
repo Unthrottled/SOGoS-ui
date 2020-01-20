@@ -1,6 +1,6 @@
 import {all, call, put, select, takeEvery} from 'redux-saga/effects';
 import {INITIALIZED_SECURITY} from '../events/SecurityEvents';
-import {performGet} from './APISagas';
+import {performGetWithoutVerification} from './APISagas';
 import {
   createFailedToGetUserEvent,
   createReceivedUserEvent,
@@ -13,9 +13,10 @@ export function* findUserSaga() {
     yield call(requestUserSaga);
   }
 }
+
 export function* requestUserSaga() {
   try {
-    const {data: user} = yield call(performGet, '/user');
+    const {data: user} = yield call(performGetWithoutVerification, '/user');
     yield put(createReceivedUserEvent(user)); // found waldo.
   } catch (e) {
     yield put(createFailedToGetUserEvent(e));
