@@ -38,6 +38,7 @@ const suggestions = [
   {label: 'Deliberate Practice'},
   {label: 'Physical'},
   {label: 'Cognitive'},
+  {label: 'Purposeful Practice'},
   {label: 'Overhead'},
   {label: 'Pastime'},
   {label: 'Leisure'},
@@ -316,7 +317,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
           <TextField
             className={classes.textField}
             label={'What is it you do?'}
-            placeholder={'Stuff ;)'}
+            placeholder={'Oh you know, things...'}
             variant={'outlined'}
             margin={'normal'}
             {...(currentTacticalActivity
