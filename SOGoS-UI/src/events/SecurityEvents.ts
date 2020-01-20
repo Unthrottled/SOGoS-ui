@@ -8,6 +8,7 @@ export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
 export const REQUESTED_AUTH_CHECK: 'REQUESTED_AUTH_CHECK' =
   'REQUESTED_AUTH_CHECK';
 export const CHECKED_AUTH: 'CHECKED_AUTH' = 'CHECKED_AUTH';
+export const FORCED_LOGIN: 'FORCED_LOGIN' = 'FORCED_LOGIN';
 export const RECEIVED_TOKENS: 'RECEIVED_TOKENS' = 'RECEIVED_TOKENS';
 export const FAILED_TO_RECEIVE_TOKEN: 'FAILED_TO_RECEIVE_TOKEN' =
   'FAILED_TO_RECEIVE_TOKEN';
@@ -21,6 +22,10 @@ export const requestLogoff = () => ({
 
 export const createRequestLogonEvent = () => ({
   type: REQUESTED_LOGON,
+});
+
+export const createForcedLoginEvent = () => ({
+  type: FORCED_LOGIN,
 });
 
 export const createExpiredSessionEvent = () => ({

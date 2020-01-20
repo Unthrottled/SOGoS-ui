@@ -1,8 +1,4 @@
-import {call, fork, race, select, take} from 'redux-saga/effects';
-import {
-  FAILED_TO_RECEIVE_TOKEN,
-  RECEIVED_TOKENS,
-} from '../../events/SecurityEvents';
+import {call, put, select} from 'redux-saga/effects';
 import {canRefreshToken} from '../../security/OAuth';
 import {
   refreshTokenWithoutReplacementSaga,
@@ -11,7 +7,7 @@ import {
 import {SessionExpiredException} from '../../types/SecurityTypes';
 import {SecurityState} from '../../reducers/SecurityReducer';
 import {selectSecurityState} from '../../reducers';
-import {oauthConfigurationSaga} from '../configuration/ConfigurationConvienenceSagas';
+import {createForcedLoginEvent} from '../../events/SecurityEvents';
 
 export function* accessTokenWithSessionExtensionSaga() {
   return yield call(
@@ -58,20 +54,9 @@ export function* getOrRefreshAccessToken(
 ) {
   const security: SecurityState = yield select(selectSecurityState);
   if (shouldTokenRefresh(security)) {
-    const oauthConfiguration = yield call(oauthConfigurationSaga);
-    yield fork(refreshTokenSaga, oauthConfiguration, security);
-    return yield call(awaitToken);
-  } else {
-    return security.accessToken;
+    // Cannot refresh tokens, just go back to the
+    // auth server and hope for the best...
+    yield put(createForcedLoginEvent());
   }
-}
-
-export function* awaitToken() {
-  const {tokenReception} = yield race({
-    tokenReception: take(RECEIVED_TOKENS),
-    tokenFailure: take(FAILED_TO_RECEIVE_TOKEN),
-  });
-  const {payload} = tokenReception || {};
-  const {accessToken} = payload || {};
-  return accessToken;
+  return security.accessToken;
 }

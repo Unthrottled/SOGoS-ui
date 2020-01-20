@@ -1,15 +1,8 @@
-import {all, fork, takeEvery} from 'redux-saga/effects';
+import {all, call, delay, fork, takeEvery} from 'redux-saga/effects';
 import {INITIALIZED_APPLICATION} from '../events/ApplicationLifecycleEvents';
 import oauthInitializationSaga from './security/SecurityInitializationSaga';
-import {
-  REQUESTED_AUTH_CHECK,
-  REQUESTED_LOGOFF,
-  REQUESTED_LOGON,
-} from '../events/SecurityEvents';
-import {
-  authorizationGrantSaga,
-  loginSaga,
-} from './security/AuthorizationFlowSagas';
+import {FORCED_LOGIN, REQUESTED_AUTH_CHECK, REQUESTED_LOGOFF, REQUESTED_LOGON,} from '../events/SecurityEvents';
+import {authorizationGrantSaga, loginSaga,} from './security/AuthorizationFlowSagas';
 import logoutSaga from './security/LogoutSaga';
 import {oauthConfigurationSaga} from './configuration/ConfigurationConvienenceSagas';
 
@@ -31,8 +24,17 @@ function* listenToLoginEvents() {
   yield takeEvery(REQUESTED_LOGOFF, logoutSaga);
 }
 
+// Wait for all other decoupled events
+// to complete before sending user off
+// to the authorization server.
+function* waitBeforeLoggingIn() {
+  yield delay(2000);
+  yield call(loginSaga);
+}
+
 function* listenToSecurityEvents() {
   yield takeEvery(REQUESTED_AUTH_CHECK, authorizationGrantSaga);
+  yield takeEvery(FORCED_LOGIN, waitBeforeLoggingIn);
 }
 
 export default function* rootSaga() {
