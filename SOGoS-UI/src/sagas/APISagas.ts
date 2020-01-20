@@ -1,8 +1,6 @@
-import {call, select, take, put, race, delay} from 'redux-saga/effects';
+import {call, delay, race, select, take} from 'redux-saga/effects';
 import axios from 'axios';
-import {
-  accessTokenWithSessionExtensionSaga,
-} from './security/AccessTokenSagas';
+import {accessTokenWithSessionExtensionSaga,} from './security/AccessTokenSagas';
 import {selectConfigurationState} from '../reducers';
 import {ConfigurationState} from '../reducers/ConfigurationReducer';
 import {UserResponse} from '../types/UserTypes';
@@ -71,7 +69,6 @@ export function* createHeaders(
     includeVerification,
   );
 
-  console.tron(verificationStuff)
   return {
     ...options.headers,
     Authorization: `Bearer ${accessToken}`,
@@ -126,6 +123,7 @@ export function* performGet(url: string, options = {headers: {}}) {
     accessTokenWithSessionExtensionSaga,
   );
 }
+
 export function* performGetWithoutVerification(
   url: string,
   options = {headers: {}},

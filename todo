@@ -9,8 +9,6 @@ Migration Steps:
 - [ ] Fix Mobile app to be deployable to chrome store.
 - [ ] Scale down old api after a week.
 
-- loses current activity when refreshing
-
 Mile-Stones after MVP:
 -----
 - Add TacMod Plug on Activity Start
