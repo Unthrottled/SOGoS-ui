@@ -32,7 +32,7 @@ export function* stopWatchSaga(activityThatStartedThis: Activity) {
       yield put(createTimeIncrementEvent());
       const after = new Date().valueOf();
       const waitFor = 1000 - (after - before);
-      const {newCurrentActivity} = yield race({
+      const {currentActivity: newCurrentActivity} = yield race({
         currentActivity: call(waitForCurrentActivity),
         timeElapsed: delay(waitFor < 0 ? 0 : waitFor),
       });
