@@ -17,6 +17,7 @@ export interface InitialConfig {
   provider: string;
   callbackURI?: string;
   apiURL?: string;
+  stagingURL?: string;
 }
 
 export interface MiscellaneousConfig {
