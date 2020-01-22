@@ -1,6 +1,6 @@
 {
   "name": "sogos-ui",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.6.1",
