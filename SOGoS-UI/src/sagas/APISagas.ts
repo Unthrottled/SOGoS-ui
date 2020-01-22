@@ -1,8 +1,8 @@
 import {call, delay, race, select, take} from 'redux-saga/effects';
 import {buffers, END, eventChannel} from 'redux-saga';
-import oboe from "oboe";
+import oboe from 'oboe';
 import axios from 'axios';
-import {accessTokenWithSessionExtensionSaga,} from './security/AccessTokenSagas';
+import {accessTokenWithSessionExtensionSaga} from './security/AccessTokenSagas';
 import {selectConfigurationState} from '../reducers';
 import {ConfigurationState} from '../reducers/ConfigurationReducer';
 import {UserResponse} from '../types/UserTypes';
@@ -13,31 +13,43 @@ import {InitialConfig} from '../types/ConfigurationTypes';
 
 const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
 
-type ChannelParameters = { url: string, method: string, headers: any, body: any };
-export const createStreamChannel = ({url, method, headers, body}: ChannelParameters) => {
+type ChannelParameters = {url: string; method: string; headers: any; body: any};
+export const createStreamChannel = ({
+  url,
+  method,
+  headers,
+  body,
+}: ChannelParameters) => {
   return eventChannel(statusObserver => {
     const requestStream = oboe({
       url,
       method,
       headers,
       body,
-      'cached': false,
-      'withCredentials': true
-    }).done((jsonThingo: any) => {
-      statusObserver(jsonThingo);
-    }).fail((error: any) => {
-      console.log('Error streaming', error);
-      statusObserver(SHITS_BROKE_YO);
-      statusObserver(END);
-    }).on('end', () => {
-      statusObserver(END);
-    });
+      cached: false,
+      withCredentials: true,
+    })
+      .done((jsonThingo: any) => {
+        statusObserver(jsonThingo);
+      })
+      .fail((error: any) => {
+        console.log('Error streaming', error);
+        statusObserver(SHITS_BROKE_YO);
+        statusObserver(END);
+      })
+      .on('end', () => {
+        statusObserver(END);
+      });
     return () => requestStream.abort();
-  }, buffers.expanding(100))
+  }, buffers.expanding(100));
 };
 
 export function* performStreamedGet<T>(url: String, options = {headers: {}}) {
-  const headers = yield call(createHeaders, accessTokenWithSessionExtensionSaga, options);
+  const headers = yield call(
+    createHeaders,
+    accessTokenWithSessionExtensionSaga,
+    options,
+  );
   const fullURL = yield call(constructURL, url);
   const streamChannel = yield call(createStreamChannel, {
     url: fullURL,
@@ -50,14 +62,14 @@ export function* performStreamedGet<T>(url: String, options = {headers: {}}) {
   try {
     while (true) {
       const itemChunk = yield take(streamChannel);
-      if(itemChunk !== SHITS_BROKE_YO) {
+      if (itemChunk !== SHITS_BROKE_YO) {
         aggregate.unshift(itemChunk);
       } else {
         error = itemChunk;
       }
     }
   } finally {
-    if(!error){
+    if (!error) {
       return aggregate; //dis dumb
     } else {
       throw new Error('yeet');
