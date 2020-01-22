@@ -16,12 +16,12 @@ export function activityNotificationSaga({payload}: PayloadEvent<Activity>) {
       if (isActivityRecovery(payload)) {
         // eslint-disable-next-line no-undef,no-new
         new Notification('Take a Break!', {
-          icon: '/images/sogos_orange_512.png',
+          icon: '/images/sogos_512.png',
         });
       } else {
         // eslint-disable-next-line no-undef,no-new
         new Notification(`Get Back to ${getActivityName(payload)}!`, {
-          icon: '/images/sogos_orange_512.png',
+          icon: '/images/sogos_512.png',
         });
       }
       audio.play().then(__ => {});
