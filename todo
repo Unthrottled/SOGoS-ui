@@ -1,52 +1,21 @@
-Immediate things need to be done:
-----
-Migration Steps:
-- [X] Add New Hash Identifiers to prod
-- [ ] Deploy New API along side old API
-  - [ ] Test TacMod against new API
-- [ ] Release New SOGoS UI
-  - [ ] Update initial.json to have v2 prefix
-- [ ] Fix Mobile app to be deployable to chrome store.
-- [ ] Scale down old api after a week.
+- Better Statistics Dashboard
+  - Fix Time Line
+  - Weekly Projection
+  - Time spent by category
+  - Quotas
+  - Time Allocated to Objectives.
 
-Mile-Stones after MVP:
------
 - Add TacMod Plug on Activity Start
+
+- On-boarding Experience
+
 - Sharable dashboard.
     - auto-sync
-- On-boarding Experience
+
+
+- offline mode
+
 - Strategic
     - Knowing the right balance of load an recovery.
 
-Edge Cases
-----
-- When offline and creating tasks, the task disappears on refresh.
-- You cache by guid, but the activities are just by id
-    - That means that other people can see your objectives
-- What happens on logout when doing a timed activity?
-
-Things to think about
------
--PWA
-    - App does not work without wifi.
-    - Check to see when internet comes back.
-    - Tactical Settings storage
-        - offline mode
-    - Cache index html expiry (for dem sweet updates)
-    - Notify user backend is not working.
-    - Post application installation.
-    - Data Storage.
-
-Maybe:
-----
-- Initial Loading Screen
-- Better 404 handling
-
-----
-
-
-Think pad:
------
-
-- Multi-Device Usage (Dafuq happens and who is in charge?)
-
+- Smart Reminders
