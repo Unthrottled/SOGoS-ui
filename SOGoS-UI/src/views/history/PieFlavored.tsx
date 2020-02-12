@@ -28,6 +28,12 @@ import {
   getActivityName,
 } from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 
 export const getMeaningFullName = (
   activityId: string,
@@ -74,6 +80,7 @@ interface GroupedActivity {
   duration: number;
   spawn: Activity;
 }
+
 interface ProjectionReduction {
   trackedTime: number;
   currentActivity: Activity;
@@ -193,6 +200,10 @@ const PieFlavored: FC<Props> = ({
   );
 
   const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
+  const mappedTacticalActivities = {
+    ...mapTacticalActivitiesToID(tacticalActivities),
+    ...archivedActivities,
+  };
 
   useEffect(() => {
     if (activityFeed.length > 0) {
@@ -220,13 +231,8 @@ const PieFlavored: FC<Props> = ({
 
       const radius = Math.min(width, height) / 2;
       const arcThing = arc()
-        .innerRadius(radius * 0.7)
+        .innerRadius(0)
         .outerRadius(radius - 1);
-
-      const mappedTacticalActivities = {
-        ...mapTacticalActivitiesToID(tacticalActivities),
-        ...archivedActivities,
-      };
 
       const idToColor = constructColorMappings(mappedTacticalActivities);
 
@@ -249,7 +255,8 @@ const PieFlavored: FC<Props> = ({
     }
   });
 
-  console.log("pie flavored")
+  const orderedPieData = [...pieData].sort((a, b) => b.value - a.value);
+
   return (
     <div>
       <div
@@ -259,6 +266,36 @@ const PieFlavored: FC<Props> = ({
         }}
         id={'pieBoi'}
       />
+      <ExpansionPanel>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header">
+          <div style={{margin: 'auto'}}>
+            <Typography>Activity Breakdown</Typography>
+          </div>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          {orderedPieData.map(data => {
+            const activity = mappedTacticalActivities[data.name];
+            return (
+              <div>
+                <TacticalActivityIcon
+                  tacticalActivity={activity}
+                  size={{
+                    width: 24,
+                    height: 25,
+                  }}
+                />
+                <Typography>
+                  {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
+                  {(data.value / 360000).toFixed(3)} hours.
+                </Typography>
+              </div>
+            );
+          })}
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </div>
   );
 };

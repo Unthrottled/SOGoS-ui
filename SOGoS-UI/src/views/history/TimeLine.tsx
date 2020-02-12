@@ -327,7 +327,6 @@ const TimeLine: FC<Props> = ({
     tacticalActivities,
   ]);
 
-  console.log('time line');
   return (
     <div style={{height: '100%'}}>
       <div
