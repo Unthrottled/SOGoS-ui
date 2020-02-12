@@ -100,27 +100,20 @@ const WeeklyHeatMap = () => {
       });
 
     var heatmapChart = function(tsvFile: string) {
-      tsv(tsvFile, d => ({
-        // @ts-ignore
+      tsv(tsvFile, (d: any) => ({
         day: +d.day,
-        // @ts-ignore
         hour: +d.hour,
-        // @ts-ignore
         value: +d.value,
       })).then(data => {
         console.log(data);
-        var colorScale = scaleQuantile()
-          .domain([
-            0,
-            buckets - 1,
-            max(data, function(d) {
-              return d.value;
-            }),
-          ])
-          // @ts-ignore
-          .range(colors);
+        var colorScale = scaleQuantile().domain([
+          0,
+          buckets - 1,
+          max(data, function(d) {
+            return d.value;
+          }),
+        ]);
 
-        // @ts-ignore
         var cards = svg
           .selectAll('.hour')
           .data(data, (d: any) => d.day + ':' + d.hour);
@@ -159,9 +152,7 @@ const WeeklyHeatMap = () => {
         // @ts-ignore
         var legend = svg
           .selectAll('.legend')
-          .data([0].concat(colorScale.quantiles()), function(d) {
-            return d;
-          });
+          .data([0].concat(colorScale.quantiles()), d => d);
 
         legend
           .enter()
@@ -192,7 +183,6 @@ const WeeklyHeatMap = () => {
 
   return (
     <div>
-      <Typography variant={'h2'}>Weekly Heatmap</Typography>
       <div id={'heatBoi'} />
     </div>
   );
