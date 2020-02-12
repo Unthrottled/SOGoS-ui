@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {connect, DispatchProp} from 'react-redux';
+import {connect, DispatchProp, useSelector} from 'react-redux';
 import LoggedInLayout from '../components/LoggedInLayout';
 import clsx from 'clsx';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -15,12 +15,12 @@ import {GlobalState, selectHistoryState, selectUserState} from '../../reducers';
 import {DateRangePicker, FocusedInputShape} from 'react-dates';
 import {ONE_DAY} from '../../sagas/activity/PomodoroActivitySagas';
 import InputLabel from '@material-ui/core/InputLabel';
-import {HistoryIcon} from '../icons/HistoryIcon';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {HistoryIcon} from '../icons/HistoryIcon';
 
 const drawerWidth = 240;
 
@@ -120,6 +120,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
 
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
+  const dayz = Math.ceil(moment.duration(meow.diff(meowMinusSeven)).asDays().valueOf());
 
   const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
     null,
@@ -136,15 +137,22 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
     );
   };
 
+  const {
+    information: {firstName},
+  } = useSelector(selectUserState);
+
   return (
     <LoggedInLayout>
-      <ExpansionPanel style={{marginTop: '1.5em'}}>
+      <HistoryIcon size={{width: 50, height: 50}}/>
+      <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header">
           <div style={{margin: 'auto'}}>
-            <Typography>Adjust Time Frame</Typography>
+            <Typography variant={'h5'}>
+              {firstName}'s past {dayz} day{dayz > 1 ? 's' : ''}
+            </Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
