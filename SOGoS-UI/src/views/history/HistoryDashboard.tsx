@@ -15,11 +15,20 @@ import {GlobalState, selectHistoryState, selectUserState} from '../../reducers';
 import {DateRangePicker, FocusedInputShape} from 'react-dates';
 import {ONE_DAY} from '../../sagas/activity/PomodoroActivitySagas';
 import InputLabel from '@material-ui/core/InputLabel';
-import {HistoryIcon} from "../icons/HistoryIcon";
+import {HistoryIcon} from '../icons/HistoryIcon';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
   root: {
     display: 'flex',
   },
@@ -129,28 +138,35 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
 
   return (
     <LoggedInLayout>
-      <div className={classes.headerContent}>
-        <Container maxWidth={'sm'}>
-          <div className={classes.form}>
-            <InputLabel>Active Time Range</InputLabel>
-            <DateRangePicker
-              startDate={meowMinusSeven}
-              startDateId="steve"
-              endDate={meow}
-              isOutsideRange={date => moment().isSameOrBefore(date, 'day')}
-              endDateId="jerry"
-              onDatesChange={({startDate, endDate}) =>
-                submitTimeFrame(startDate || moment(), endDate || moment())
-              }
-              focusedInput={focusedInput}
-              onFocusChange={setFocusedInput}
-            />
+      <ExpansionPanel style={{marginTop: '1.5em'}}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header">
+          <div style={{margin: 'auto'}}>
+            <Typography>Adjust Time Frame</Typography>
           </div>
-        </Container>
-        <div className={classes.placeIcon}>
-          <HistoryIcon size={{width: 100, height: 100}}/>
-        </div>
-      </div>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <Container maxWidth={'sm'}>
+            <div className={classes.form}>
+              <InputLabel>Active Time Range</InputLabel>
+              <DateRangePicker
+                startDate={meowMinusSeven}
+                startDateId="steve"
+                endDate={meow}
+                isOutsideRange={date => moment().isSameOrBefore(date, 'day')}
+                endDateId="jerry"
+                onDatesChange={({startDate, endDate}) =>
+                  submitTimeFrame(startDate || moment(), endDate || moment())
+                }
+                focusedInput={focusedInput}
+                onFocusChange={setFocusedInput}
+              />
+            </div>
+          </Container>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
       <main className={classes.content}>
         <div className={fixedHeightPaper}>
           <TimeLine />
