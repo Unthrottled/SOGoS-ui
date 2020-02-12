@@ -202,8 +202,6 @@ const PieFlavored: FC<Props> = ({
     [],
   );
 
-  console.log(objectives)
-
   const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
   const mappedTacticalActivities = {
     ...mapTacticalActivitiesToID(tacticalActivities),
@@ -285,7 +283,7 @@ const PieFlavored: FC<Props> = ({
           {orderedPieData.map(data => {
             const activity = mappedTacticalActivities[data.name];
             return (
-              <div>
+              <div key={data.name}>
                 <TacticalActivityIcon
                   tacticalActivity={activity}
                   size={{
