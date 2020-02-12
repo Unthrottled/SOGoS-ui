@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import {axisTop, brushX, event} from 'd3';
@@ -11,18 +11,18 @@ import {
   selectHistoryState,
   selectTacticalActivityState,
 } from '../../reducers';
-import {useDispatch, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {objectToKeyValueArray} from '../../miscellanous/Tools';
 import {getMeaningFullName, mapTacticalActivitiesToID} from './PieFlavored';
 import {createAdjustedHistoryTimeFrame} from '../../events/HistoryEvents';
 import {blue} from '@material-ui/core/colors';
-import {StringDictionary} from '../../types/BaseTypes';
+import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {
   getActivityBackgroundColor,
   TacticalActivity,
 } from '../../types/TacticalTypes';
 import {
-  activitiesEqual,
+  activitiesEqual, Activity,
   ActivityStrategy,
   DEFAULT_ACTIVITY,
   getActivityID,
@@ -89,7 +89,16 @@ const getTimeUnit = (milliseconds: number) => {
   }
 };
 
-const mapStateToProps = (state: GlobalState) => {
+type Props = {
+  activityFeed: Activity[];
+  archivedActivities: StringDictionary<TacticalActivity>;
+  bottomActivity: Activity;
+  currentActivity: Activity;
+  relativeToTime: number;
+  tacticalActivities: NumberDictionary<TacticalActivity>;
+  relativeFromTime: number;
+};
+const mapStateToProps = (state: GlobalState): Props => {
   const {
     activityFeed,
     selectedHistoryRange: {to, from},
@@ -108,18 +117,18 @@ const mapStateToProps = (state: GlobalState) => {
   };
 };
 
-const TimeLine = () => {
+const TimeLine: FC<Props> = ({
+  activityFeed,
+  relativeToTime,
+  relativeFromTime,
+  tacticalActivities,
+  currentActivity,
+  bottomActivity,
+  archivedActivities,
+}) => {
   const classes: any = withStyles();
   const dispatch = useDispatch();
-  const {
-    activityFeed,
-    relativeToTime,
-    relativeFromTime,
-    tacticalActivities,
-    currentActivity,
-    bottomActivity,
-    archivedActivities,
-  } = useSelector(mapStateToProps);
+
   const modifiedFeed = [
     ...(currentActivity.antecedenceTime >= relativeFromTime &&
     currentActivity.antecedenceTime <= relativeToTime
@@ -176,7 +185,7 @@ const TimeLine = () => {
       };
 
       const width = 2500 - margin.left - margin.right;
-      const height = 1000 - margin.top - margin.bottom;
+      const height = 350 - margin.top - margin.bottom;
 
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
@@ -303,11 +312,22 @@ const TimeLine = () => {
       const bBoi = brushX().extent([[0, 0], [width, height]]);
       const bBoiSelection = timeSVG.append('g');
       bBoiSelection
+        .attr('id', 'bboi')
         .attr('class', 'brush')
         .call(bBoi.on('end', () => brushEnd(bBoi, bBoiSelection)));
     }
-  });
+  }, [
+    archivedActivities,
+    bins,
+    classes.timebar,
+    dispatch,
+    modifiedFeed,
+    relativeFromTime,
+    relativeToTime,
+    tacticalActivities,
+  ]);
 
+  console.log('time line');
   return (
     <div style={{height: '100%'}}>
       <div
@@ -321,4 +341,4 @@ const TimeLine = () => {
   );
 };
 
-export default TimeLine;
+export default connect(mapStateToProps)(TimeLine);

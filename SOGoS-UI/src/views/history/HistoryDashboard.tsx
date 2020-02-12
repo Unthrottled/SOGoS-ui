@@ -106,6 +106,8 @@ interface Props {
   selectedTo: number;
   selectedFrom: number;
 }
+
+// todo: do not re-render when
 const HistoryDashboard: FC<DispatchProp & Props> = ({
   dispatch,
   selectedTo,
@@ -120,7 +122,12 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
 
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
-  const dayz = Math.ceil(moment.duration(meow.diff(meowMinusSeven)).asDays().valueOf());
+  const dayz = Math.ceil(
+    moment
+      .duration(meow.diff(meowMinusSeven))
+      .asDays()
+      .valueOf(),
+  );
 
   const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
     null,
@@ -143,7 +150,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
 
   return (
     <LoggedInLayout>
-      <HistoryIcon size={{width: 50, height: 50}}/>
+      <HistoryIcon size={{width: 50, height: 50}} />
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -176,7 +183,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
         </ExpansionPanelDetails>
       </ExpansionPanel>
       <main className={classes.content}>
-        <div className={fixedHeightPaper}>
+        <div className={classes.paper}>
           <TimeLine />
         </div>
         <div className={fixedHeightPaper}>

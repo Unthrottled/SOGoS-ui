@@ -249,6 +249,7 @@ const PieFlavored: FC<Props> = ({
     }
   });
 
+  console.log("pie flavored")
   return (
     <div>
       <div
