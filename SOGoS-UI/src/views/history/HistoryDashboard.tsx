@@ -21,6 +21,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {HistoryIcon} from '../icons/HistoryIcon';
+import WeeklyHeatMap from './WeeklyHeatMap';
 
 const drawerWidth = 240;
 
@@ -75,6 +76,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    color: theme.palette.text.primary,
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.spacing(0.5),
   },
@@ -186,8 +188,11 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
         <div className={classes.paper}>
           <TimeLine />
         </div>
-        <div className={fixedHeightPaper}>
+        <div className={classes.paper}>
           <PieFlavored />
+        </div>
+        <div className={classes.paper}>
+          <WeeklyHeatMap />
         </div>
       </main>
     </LoggedInLayout>

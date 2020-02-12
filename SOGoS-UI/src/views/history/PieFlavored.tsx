@@ -5,7 +5,7 @@ import {arc, pie} from 'd3';
 import {connect} from 'react-redux';
 import {
   GlobalState,
-  selectHistoryState,
+  selectHistoryState, selectStrategyState,
   selectTacticalActivityState,
 } from '../../reducers';
 import {
@@ -34,6 +34,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
+import {Objective} from "../../types/StrategyTypes";
 
 export const getMeaningFullName = (
   activityId: string,
@@ -72,6 +73,7 @@ interface Props {
   tacticalActivities: NumberDictionary<TacticalActivity>;
   bottomActivity: Activity;
   archivedActivities: NumberDictionary<TacticalActivity>;
+  objectives: StringDictionary<Objective>;
 }
 
 interface GroupedActivity {
@@ -94,6 +96,7 @@ const PieFlavored: FC<Props> = ({
   tacticalActivities,
   bottomActivity,
   archivedActivities,
+  objectives,
 }) => {
   const activityProjection: ProjectionReduction = reduceRight(
     activityFeed,
@@ -199,6 +202,8 @@ const PieFlavored: FC<Props> = ({
     [],
   );
 
+  console.log(objectives)
+
   const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
   const mappedTacticalActivities = {
     ...mapTacticalActivitiesToID(tacticalActivities),
@@ -265,7 +270,8 @@ const PieFlavored: FC<Props> = ({
           margin: 'auto',
         }}
         id={'pieBoi'}
-      />
+      >
+      </div>
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
@@ -300,12 +306,13 @@ const PieFlavored: FC<Props> = ({
   );
 };
 
-const mapStateToProps = (state: GlobalState) => {
+const mapStateToProps = (state: GlobalState): Props => {
   const {
     activityFeed,
     selectedHistoryRange: {to, from},
     capstone: {bottomActivity},
   } = selectHistoryState(state);
+  const {objectives} = selectStrategyState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     activityFeed,
@@ -314,6 +321,7 @@ const mapStateToProps = (state: GlobalState) => {
     tacticalActivities: activities,
     archivedActivities,
     bottomActivity,
+    objectives,
   };
 };
 export default connect(mapStateToProps)(PieFlavored);
