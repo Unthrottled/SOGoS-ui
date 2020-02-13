@@ -1,22 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {interpolateInferno, max, scaleSequential, select, tsv} from 'd3';
-import {
-  GlobalState,
-  selectHistoryState,
-  selectStrategyState,
-  selectTacticalActivityState,
-} from '../../reducers';
-import {
-  activitiesEqual,
-  Activity,
-  DEFAULT_ACTIVITY,
-} from '../../types/ActivityTypes';
+import {interpolateInferno, max, scaleSequential, select} from 'd3';
+import {GlobalState, selectHistoryState, selectStrategyState, selectTacticalActivityState,} from '../../reducers';
+import {activitiesEqual, Activity, DEFAULT_ACTIVITY,} from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {TacticalActivity} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {breakIntoSteps, constructLinearProjection} from './LinearProjection';
-import {ActivityProjection} from './Projections';
 import moment from 'moment';
 
 interface Props {
@@ -62,10 +52,10 @@ const margin = {top: 50, right: 0, bottom: 100, left: 30},
   ];
 
 const WeeklyHeatMap: FC<Props> = ({
-  activityFeed,
-  bottomActivity,
-  relativeFromTime,
-}) => {
+                                    activityFeed,
+                                    bottomActivity,
+                                    relativeFromTime,
+                                  }) => {
   const [linearProjection, setLinearProjection] = useState([]);
 
   useEffect(() => {
@@ -83,7 +73,7 @@ const WeeklyHeatMap: FC<Props> = ({
       .data(days)
       .enter()
       .append('text')
-      .text(function(d) {
+      .text(function (d) {
         return d;
       })
       .attr('x', 0)
@@ -102,7 +92,7 @@ const WeeklyHeatMap: FC<Props> = ({
       .data(times)
       .enter()
       .append('text')
-      .text(function(d) {
+      .text(function (d) {
         return d;
       })
       .attr('x', (d, i) => i * gridSize)
@@ -123,25 +113,46 @@ const WeeklyHeatMap: FC<Props> = ({
       bottomActivity &&
       bottomActivity !== DEFAULT_ACTIVITY
     ) {
+      const antecedenceTime =
+        bottomActivity.antecedenceTime < relativeFromTime
+          ? relativeFromTime
+          : bottomActivity.antecedenceTime;
       const modifiedBottom: Activity = {
         ...bottomActivity,
-        antecedenceTime:
-          bottomActivity.antecedenceTime < relativeFromTime
-            ? relativeFromTime
-            : bottomActivity.antecedenceTime,
+        antecedenceTime: antecedenceTime,
       };
       modifiedFeed.push(modifiedBottom);
     }
 
     const linearProjection = constructLinearProjection(modifiedFeed);
-    const hourSteps = breakIntoSteps(linearProjection, 3600000).map(steppo => {
-      const dateTime = moment.unix(steppo.timeStamp);
+    const steppos = breakIntoSteps(linearProjection, 3600000);
+    const hourSteps = steppos.map((steppo, idx, arr) => {
+      const dateTime = moment.unix(steppo.timeStamp / 1000);
+      // if (idx > 0) {
+      //   const other = moment.unix(arr[idx - 1].timeStamp / 1000);
+      //   console.log(`
+      //   diffy ${moment.duration(dateTime.diff(other)).asHours()}
+      //   `);
+      // }
       return {
         day: dateTime.day(),
         hour: dateTime.hour(),
         value: 1,
       };
     });
+
+    if (steppos.length) {
+      // console.log(
+      //   `time between first and last ${moment
+      //     .duration(
+      //       moment
+      //         .unix(steppos[steppos.length - 1].timeStamp / 1000)
+      //         .diff(moment.unix(steppos[0].timeStamp / 1000)),
+      //     )
+      //     .asDays()}`,
+      // );
+    }
+
     const weekProjection = hourSteps.reduce((accum: any, {day, hour}) => {
       if (!accum[day]) {
         accum[day] = {};
@@ -193,7 +204,7 @@ const WeeklyHeatMap: FC<Props> = ({
 
   return (
     <div>
-      <div id={'heatBoi'} />
+      <div id={'heatBoi'}/>
     </div>
   );
 };

@@ -10,12 +10,12 @@ import {
   getActivityIdentifier,
   shouldTime,
 } from '../../miscellanous/Projection';
-import moment from 'moment';
 
 export interface LinearProjection {
   currentActivity: Activity;
   activityBins: ActivityProjection[];
 }
+
 export const constructLinearProjection = (
   modifiedFeed: Activity[],
 ): LinearProjection =>
@@ -57,23 +57,13 @@ export const breakIntoSteps = (
   linearProjection: LinearProjection,
   stepSize: number,
 ) =>
-  linearProjection.activityBins
-    .map((projection: ActivityProjection) => {
-      const startTime = moment.unix(projection.start / 1000);
-      const stopTime = moment.unix(projection.stop / 1000);
-      const dataPoints =
-        Math.floor((projection.stop - projection.start) / stepSize) + 1;
-      console.log(`
-        from ${startTime.toISOString()} to 
-        ${stopTime.toISOString()} is ${dataPoints} points. moment: ${moment
-        .duration(stopTime.diff(startTime))
-        .asHours().toFixed(4)}
-      `);
-      return Array(dataPoints)
-        .fill(0)
-        .map((_, index) => ({
-          timeStamp: projection.start + stepSize * index,
-          spawn: projection.spawn,
-        }));
-    })
-    .reduce((accum, a) => accum.concat(a), []);
+  linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
+    const steps = Math.floor((projection.stop - projection.start) / stepSize);
+    const dataPoints = (steps < 0 ? 0 : steps) + 1;
+    return Array(dataPoints)
+      .fill(0)
+      .map((_, index) => ({
+        timeStamp: projection.start + stepSize * index,
+        spawn: projection.spawn,
+      }));
+  });
