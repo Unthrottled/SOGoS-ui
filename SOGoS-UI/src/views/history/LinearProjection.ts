@@ -1,38 +1,26 @@
+import reduceRight from 'lodash/reduceRight';
 import {
   Activity,
   DEFAULT_ACTIVITY,
   getActivityName,
 } from '../../types/ActivityTypes';
-import reduceRight from 'lodash/reduceRight';
+import {ActivityProjection} from './Projections';
 import {
   areDifferent,
   getActivityIdentifier,
   shouldTime,
 } from '../../miscellanous/Projection';
-import {StringDictionary} from '../../types/BaseTypes';
-import {LinearProjection} from "./LinearProjection";
 
-export interface ActivityProjection {
-  activityName: string;
-  activityIdentifier: string;
-  start: number;
-  stop: number;
-  spawn: {
-    start: Activity;
-    stop: Activity;
-  };
-  lane?: number;
-}
-
-export interface TimelineProjection {
+export interface LinearProjection {
   currentActivity: Activity;
-  activityBins: StringDictionary<ActivityProjection[]>;
+  activityBins: ActivityProjection[];
 }
-
-export const constructProjection = (modifiedFeed: Activity[]) =>
+export const constructLinearProjection = (
+  modifiedFeed: Activity[],
+): LinearProjection =>
   reduceRight(
     modifiedFeed,
-    (accum: TimelineProjection, activity) => {
+    (accum: LinearProjection, activity) => {
       if (shouldTime(activity) && !accum.currentActivity.antecedenceTime) {
         accum.currentActivity = activity;
       } else if (
@@ -45,10 +33,7 @@ export const constructProjection = (modifiedFeed: Activity[]) =>
 
         const activityName = getActivityName(currentActivity);
         const activityIdentifier = getActivityIdentifier(currentActivity);
-        if (!accum.activityBins[activityIdentifier]) {
-          accum.activityBins[activityIdentifier] = [];
-        }
-        accum.activityBins[activityIdentifier].push({
+        accum.activityBins.push({
           activityName,
           activityIdentifier,
           start: currentActivity.antecedenceTime,
@@ -63,6 +48,23 @@ export const constructProjection = (modifiedFeed: Activity[]) =>
     },
     {
       currentActivity: DEFAULT_ACTIVITY,
-      activityBins: {},
+      activityBins: [],
     },
   );
+
+export const breakIntoSteps = (
+  linearProjection: LinearProjection,
+  stepSize: number,
+) =>
+  linearProjection.activityBins
+    .map((projection: ActivityProjection) => {
+      const dataPoints =
+        Math.floor((projection.stop - projection.start) / stepSize) + 1;
+      return Array(dataPoints)
+        .fill(0)
+        .map((_, index) => ({
+          timeStamp: projection.start + stepSize * index,
+          spawn: projection.spawn,
+        }));
+    })
+    .reduce((accum, a) => accum.concat(a), []);
