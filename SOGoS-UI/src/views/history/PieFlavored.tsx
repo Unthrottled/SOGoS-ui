@@ -293,7 +293,7 @@ const PieFlavored: FC<Props> = ({
                 />
                 <Typography>
                   {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
-                  {(data.value / 360000).toFixed(3)} hours.
+                  {(data.value / 3600000).toFixed(3)} hours.
                 </Typography>
               </div>
             );

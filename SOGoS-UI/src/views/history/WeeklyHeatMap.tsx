@@ -18,6 +18,7 @@ import {Objective} from '../../types/StrategyTypes';
 import {breakIntoSteps, constructLinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {ActivityProjection} from './Projections';
+import {MenuItem, Select} from '@material-ui/core';
 
 interface Props {
   activityFeed: Activity[];
@@ -31,7 +32,7 @@ interface Props {
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
   width = 800 - margin.left - margin.right,
-  height = 430 - margin.top - margin.bottom,
+  height = 300 - margin.top - margin.bottom,
   gridSize = Math.floor(width / 24),
   days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
   times = [
@@ -61,14 +62,18 @@ const margin = {top: 50, right: 0, bottom: 100, left: 30},
     '12p',
   ];
 
+type HourSteppo = {
+  spawn: {start: Activity; stop: Activity};
+  hour: number;
+  day: number;
+  value: number;
+};
 const WeeklyHeatMap: FC<Props> = ({
   activityFeed,
   bottomActivity,
   relativeFromTime,
 }) => {
-  const [linearProjection, setLinearProjection] = useState<
-    ActivityProjection[]
-  >([]);
+  const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
   useEffect(() => {
     const selection = select('#heatBoi');
@@ -133,16 +138,17 @@ const WeeklyHeatMap: FC<Props> = ({
     }
 
     const linearProj = constructLinearProjection(modifiedFeed);
-    setLinearProjection(linearProj.activityBins);
     const steppos = breakIntoSteps(linearProj, 3600000);
-    const hourSteps = steppos.map((steppo, idx, arr) => {
+    const hourSteps: HourSteppo[] = steppos.map((steppo, idx, arr) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
       return {
         day: dateTime.day(),
         hour: dateTime.hour(),
         value: 1,
+        spawn: steppo.spawn,
       };
     });
+    setLinearProjection(hourSteps);
 
     const weekProjection = hourSteps.reduce((accum: any, {day, hour}) => {
       if (!accum[day]) {
@@ -193,9 +199,63 @@ const WeeklyHeatMap: FC<Props> = ({
     hourHeatBoxes.select('title').text(d => d.value);
   }, [activityFeed, bottomActivity, relativeFromTime]);
 
+  const activityToSteppoCount = linearProjection.reduce(
+    (accum: StringDictionary<any>, steppo) => {
+      const proj = steppo.spawn.start.content;
+      const activityID = proj.activityID || proj.name;
+      if (!accum[activityID]) {
+        accum[activityID] = {
+          count: 0,
+          key: new Date().valueOf().toString(16),
+        };
+      }
+      const accumElement = accum[activityID];
+      accum[activityID] = {
+        ...accumElement,
+        name: proj.name,
+        count: accumElement.count + 1,
+      };
+      return accum;
+    },
+    {},
+  );
+  const activityOptions = Object.values(activityToSteppoCount).sort(
+    (a, b) => b.count - a.count,
+  );
+
+  const allActivities = 'all';
+  const [currentActivity, setCurrentActivity] = useState('');
+  useEffect(() => {
+    if (
+      !currentActivity &&
+      activityOptions.length > 0 &&
+      activityOptions[0].name &&
+      activityOptions[0].name !== allActivities
+    ) {
+      console.log('setting current activity', activityOptions[0].name);
+      setCurrentActivity(activityOptions[0].name);
+    }
+  }, [activityOptions, currentActivity]);
+  activityOptions.push({
+    name: allActivities,
+  });
+
   return (
     <div>
       <div id={'heatBoi'} />
+      <Select
+        value={currentActivity}
+        onChange={event => {
+          setCurrentActivity(event.target.value + '' || allActivities);
+        }}>
+        {activityOptions.map(value => {
+          return (
+            <MenuItem key={value.key || new Date().valueOf().toString(16)} value={value.name}>
+              {value.name}
+            </MenuItem>
+          );
+        })}
+      </Select>
     </div>
   );
 };
