@@ -162,10 +162,10 @@ const WeeklyHeatMap: FC<Props> = ({
         value: hourEntry[1],
       })),
     );
-    
+
     const colorScale = scaleSequential(interpolateInferno)
       .interpolator(interpolateInferno)
-      .domain([0, 1]);
+      .domain([0, max(steps, s => s.value) || 1]);
 
     const hourHeatBoxes = heatBoiSvg
       .selectAll('.hour')

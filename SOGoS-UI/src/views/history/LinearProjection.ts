@@ -10,6 +10,7 @@ import {
   getActivityIdentifier,
   shouldTime,
 } from '../../miscellanous/Projection';
+import moment from 'moment';
 
 export interface LinearProjection {
   currentActivity: Activity;
@@ -58,8 +59,16 @@ export const breakIntoSteps = (
 ) =>
   linearProjection.activityBins
     .map((projection: ActivityProjection) => {
+      const startTime = moment.unix(projection.start / 1000);
+      const stopTime = moment.unix(projection.stop / 1000);
       const dataPoints =
         Math.floor((projection.stop - projection.start) / stepSize) + 1;
+      console.log(`
+        from ${startTime.toISOString()} to 
+        ${stopTime.toISOString()} is ${dataPoints} points. moment: ${moment
+        .duration(stopTime.diff(startTime))
+        .asHours().toFixed(4)}
+      `);
       return Array(dataPoints)
         .fill(0)
         .map((_, index) => ({
