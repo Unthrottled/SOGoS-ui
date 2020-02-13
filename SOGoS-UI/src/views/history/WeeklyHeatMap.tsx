@@ -69,7 +69,9 @@ const WeeklyHeatMap: FC<Props> = ({
   const [linearProjection, setLinearProjection] = useState([]);
 
   useEffect(() => {
-    const heatBoiSvg = select('#heatBoi')
+    const selection = select('#heatBoi');
+    selection.select('svg').remove();
+    const heatBoiSvg = selection
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
