@@ -69,14 +69,18 @@ type HourSteppo = {
   day: number;
   value: number;
 };
+
 const WeeklyHeatMap: FC<Props> = ({
   activityFeed,
   bottomActivity,
   relativeFromTime,
 }) => {
+  const [filteredLinearProjection, setFilteredLinearProjection] = useState<
+    HourSteppo[]
+  >([]);
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
-  const allActivities = 'all';
+  const allActivities = 'Show All Activities';
   const [currentActivity, setCurrentActivity] = useState('');
 
   useEffect(() => {
@@ -142,13 +146,14 @@ const WeeklyHeatMap: FC<Props> = ({
     }
 
     const linearProj = constructLinearProjection(modifiedFeed);
-    const steppos = breakIntoSteps(linearProj, 3600000).filter(
+    const unfilteredSteppos = breakIntoSteps(linearProj, 3600000);
+    const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentActivity ||
         currentActivity === allActivities ||
         currentActivity === getActivityName(steppo.spawn.start),
     );
-    const hourSteps: HourSteppo[] = steppos.map((steppo, idx, arr) => {
+    const timeSteppoMaker = (steppo: {timeStamp: number; spawn: any}) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
       return {
         day: dateTime.day(),
@@ -156,19 +161,30 @@ const WeeklyHeatMap: FC<Props> = ({
         value: 1,
         spawn: steppo.spawn,
       };
-    });
-    setLinearProjection(hourSteps);
+    };
+    const unfilteredHourSteppo: HourSteppo[] = unfilteredSteppos.map(
+      timeSteppoMaker,
+    );
+    const filteredHourSteppo: HourSteppo[] = filterdSteppos.map(
+      timeSteppoMaker,
+    );
 
-    const weekProjection = hourSteps.reduce((accum: any, {day, hour}) => {
-      if (!accum[day]) {
-        accum[day] = {};
-      }
-      if (!accum[day][hour]) {
-        accum[day][hour] = 0;
-      }
-      accum[day][hour] += 1;
-      return accum;
-    }, {});
+    setFilteredLinearProjection(filteredLinearProjection);
+    setLinearProjection(unfilteredHourSteppo);
+
+    const weekProjection = filteredHourSteppo.reduce(
+      (accum: any, {day, hour}) => {
+        if (!accum[day]) {
+          accum[day] = {};
+        }
+        if (!accum[day][hour]) {
+          accum[day][hour] = 0;
+        }
+        accum[day][hour] += 1;
+        return accum;
+      },
+      {},
+    );
 
     const steps = Object.entries<StringDictionary<number>>(
       weekProjection,
@@ -206,7 +222,13 @@ const WeeklyHeatMap: FC<Props> = ({
       .style('fill', d => colorScale(d.value));
 
     hourHeatBoxes.select('title').text(d => d.value);
-  }, [activityFeed, bottomActivity, currentActivity, relativeFromTime]);
+  }, [
+    activityFeed,
+    bottomActivity,
+    currentActivity,
+    filteredLinearProjection,
+    relativeFromTime,
+  ]);
 
   const activityToSteppoCount = linearProjection.reduce(
     (accum: StringDictionary<any>, steppo) => {
@@ -216,7 +238,7 @@ const WeeklyHeatMap: FC<Props> = ({
       if (!accum[activityID]) {
         accum[activityID] = {
           count: 0,
-          key: new Date().valueOf().toString(16),
+          key: activityID + Math.floor(Math.random() * 50),
         };
       }
       const accumElement = accum[activityID];
@@ -233,18 +255,20 @@ const WeeklyHeatMap: FC<Props> = ({
   const activityOptions = Object.values(activityToSteppoCount).sort(
     (a, b) => b.count - a.count,
   );
+
   useEffect(() => {
     if (
       !currentActivity &&
-      activityOptions.length > 0 &&
-      activityOptions[0].name &&
-      activityOptions[0].name !== allActivities
+      activityOptions.length > 1 &&
+      activityOptions[1].name &&
+      activityOptions[1].name !== allActivities
     ) {
-      setCurrentActivity(activityOptions[0].name);
+      setCurrentActivity(activityOptions[1].name);
     }
   }, [activityOptions, currentActivity]);
-  activityOptions.push({
+  activityOptions.unshift({
     name: allActivities,
+    key: 'bestkey',
   });
 
   return (
