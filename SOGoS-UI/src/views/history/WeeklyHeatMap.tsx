@@ -11,13 +11,14 @@ import {
   activitiesEqual,
   Activity,
   DEFAULT_ACTIVITY,
+  getActivityID,
+  getActivityName,
 } from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {TacticalActivity} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {breakIntoSteps, constructLinearProjection} from './LinearProjection';
 import moment from 'moment';
-import {ActivityProjection} from './Projections';
 import {MenuItem, Select} from '@material-ui/core';
 
 interface Props {
@@ -74,6 +75,9 @@ const WeeklyHeatMap: FC<Props> = ({
   relativeFromTime,
 }) => {
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
+
+  const allActivities = 'all';
+  const [currentActivity, setCurrentActivity] = useState('');
 
   useEffect(() => {
     const selection = select('#heatBoi');
@@ -138,7 +142,12 @@ const WeeklyHeatMap: FC<Props> = ({
     }
 
     const linearProj = constructLinearProjection(modifiedFeed);
-    const steppos = breakIntoSteps(linearProj, 3600000);
+    const steppos = breakIntoSteps(linearProj, 3600000).filter(
+      steppo =>
+        !currentActivity ||
+        currentActivity === allActivities ||
+        currentActivity === getActivityName(steppo.spawn.start),
+    );
     const hourSteps: HourSteppo[] = steppos.map((steppo, idx, arr) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
       return {
@@ -197,12 +206,13 @@ const WeeklyHeatMap: FC<Props> = ({
       .style('fill', d => colorScale(d.value));
 
     hourHeatBoxes.select('title').text(d => d.value);
-  }, [activityFeed, bottomActivity, relativeFromTime]);
+  }, [activityFeed, bottomActivity, currentActivity, relativeFromTime]);
 
   const activityToSteppoCount = linearProjection.reduce(
     (accum: StringDictionary<any>, steppo) => {
-      const proj = steppo.spawn.start.content;
-      const activityID = proj.activityID || proj.name;
+      const proj = steppo.spawn.start;
+      const activityName = getActivityName(proj);
+      const activityID = getActivityID(proj) || activityName;
       if (!accum[activityID]) {
         accum[activityID] = {
           count: 0,
@@ -212,19 +222,17 @@ const WeeklyHeatMap: FC<Props> = ({
       const accumElement = accum[activityID];
       accum[activityID] = {
         ...accumElement,
-        name: proj.name,
+        name: activityName,
         count: accumElement.count + 1,
       };
       return accum;
     },
     {},
   );
+
   const activityOptions = Object.values(activityToSteppoCount).sort(
     (a, b) => b.count - a.count,
   );
-
-  const allActivities = 'all';
-  const [currentActivity, setCurrentActivity] = useState('');
   useEffect(() => {
     if (
       !currentActivity &&
@@ -232,7 +240,6 @@ const WeeklyHeatMap: FC<Props> = ({
       activityOptions[0].name &&
       activityOptions[0].name !== allActivities
     ) {
-      console.log('setting current activity', activityOptions[0].name);
       setCurrentActivity(activityOptions[0].name);
     }
   }, [activityOptions, currentActivity]);
@@ -250,7 +257,9 @@ const WeeklyHeatMap: FC<Props> = ({
         }}>
         {activityOptions.map(value => {
           return (
-            <MenuItem key={value.key || new Date().valueOf().toString(16)} value={value.name}>
+            <MenuItem
+              key={value.key || new Date().valueOf().toString(16)}
+              value={value.name}>
               {value.name}
             </MenuItem>
           );
