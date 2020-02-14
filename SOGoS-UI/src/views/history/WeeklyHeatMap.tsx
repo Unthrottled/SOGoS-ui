@@ -1,24 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {interpolateInferno, max, scaleSequential, select} from 'd3';
-import {
-  GlobalState,
-  selectHistoryState,
-  selectStrategyState,
-  selectTacticalActivityState,
-} from '../../reducers';
-import {
-  activitiesEqual,
-  Activity,
-  DEFAULT_ACTIVITY,
-  getActivityID,
-  getActivityName,
-} from '../../types/ActivityTypes';
+import {GlobalState, selectHistoryState, selectStrategyState, selectTacticalActivityState,} from '../../reducers';
+import {activitiesEqual, Activity, DEFAULT_ACTIVITY, getActivityID, getActivityName,} from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
-import {
-  getActivityBackgroundColor,
-  TacticalActivity,
-} from '../../types/TacticalTypes';
+import {getActivityBackgroundColor, TacticalActivity,} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
@@ -42,28 +28,36 @@ export const breakIntoHeatSteps = (
   stepSize: number,
 ) =>
   linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
-    const fullSteps = Math.floor(
-      (projection.stop - projection.start) / stepSize,
-    );
+    const closestFullStep = projection.start - (projection.start % stepSize);
+    const closestEndingStep = projection.stop - (projection.stop % stepSize);
+    const fullSteps = (closestEndingStep - closestFullStep) / stepSize;
 
-    const stepValues = Array(fullSteps)
+    return Array(fullSteps)
       .fill(0)
       .map((_, index) => {
-        const timeStamp = projection.start + stepSize * index;
+        const startingTimestamp = closestFullStep + stepSize * index;
+        const endingTimestamp = closestFullStep + stepSize * (index + 1);
+
+        const activityStart = projection.start + stepSize * index;
+        const activityProjectedEnd = projection.start + stepSize * (index + 1);
+        const activityEnd =
+          activityProjectedEnd > projection.stop
+            ? projection.stop
+            : activityProjectedEnd;
+
+        // todo: get differences between hour starts and hour ends
+        const startDiffy = activityStart - startingTimestamp;
+        const endingDiffy = activityEnd - endingTimestamp;
+
+        const number =
+          (endingTimestamp - startingTimestamp) / stepSize -
+          (activityEnd - activityStart) / stepSize;
         return {
-          timeStamp: timeStamp,
+          timeStamp: startingTimestamp,
           spawn: projection.spawn,
-          value: 1,
+          value: 1 - number,
         };
       });
-    const endingTimeStepStart = projection.start + stepSize * fullSteps;
-    const endingTimeStepStop = endingTimeStepStart + stepSize;
-    stepValues.push({
-      timeStamp: endingTimeStepStart,
-      spawn: projection.spawn,
-      value: 1 - (endingTimeStepStop - projection.stop) / stepSize,
-    });
-    return stepValues;
   });
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
@@ -234,7 +228,7 @@ const WeeklyHeatMap: FC<Props> = ({
       },
       {},
     );
-    
+
     console.log(weekProjection);
 
     const steps = Object.entries<StringDictionary<number>>(
