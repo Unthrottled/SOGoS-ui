@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {interpolateInferno, max, scaleSequential, select} from 'd3';
 import {
   GlobalState,
+  selectActivityState,
   selectHistoryState,
   selectStrategyState,
   selectTacticalActivityState,
@@ -15,11 +16,16 @@ import {
   getActivityName,
 } from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
-import {TacticalActivity} from '../../types/TacticalTypes';
+import {
+  getActivityBackgroundColor,
+  TacticalActivity,
+} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {breakIntoSteps, constructLinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
+import {mapTacticalActivitiesToID} from './PieFlavored';
+import {defaultBackground} from '../icons/ActivityIcon';
 
 interface Props {
   activityFeed: Activity[];
@@ -74,6 +80,8 @@ const WeeklyHeatMap: FC<Props> = ({
   activityFeed,
   bottomActivity,
   relativeFromTime,
+  tacticalActivities,
+  archivedActivities,
 }) => {
   const [filteredLinearProjection, setFilteredLinearProjection] = useState<
     HourSteppo[]
@@ -83,9 +91,11 @@ const WeeklyHeatMap: FC<Props> = ({
   const allActivities = 'Show All Activities';
   const [currentActivity, setCurrentActivity] = useState<{
     name: string;
+    key: string;
     count: number;
   }>({
     name: '',
+    key: '',
     count: 0,
   });
 
@@ -202,13 +212,24 @@ const WeeklyHeatMap: FC<Props> = ({
       })),
     );
 
+    const mappedTacticalActivities = {
+      ...mapTacticalActivitiesToID(tacticalActivities),
+      ...archivedActivities,
+    };
+
     const domain: [number, number] = [0, max(steps, s => +s.value) || 1];
     const colorScale =
       currentActivity.name === allActivities
         ? scaleSequential(interpolateInferno)
             .interpolator(interpolateInferno)
             .domain(domain)
-        : () => '#ff0009';
+        : () => {
+            const mappedTacticalActivity =
+              mappedTacticalActivities[currentActivity.key];
+            return mappedTacticalActivity
+              ? getActivityBackgroundColor(mappedTacticalActivity)
+              : defaultBackground.hex;
+          };
     const opacityScale =
       currentActivity.name === allActivities
         ? () => 1
@@ -232,10 +253,12 @@ const WeeklyHeatMap: FC<Props> = ({
       .style('fill', d => colorScale(d.value));
   }, [
     activityFeed,
+    archivedActivities,
     bottomActivity,
     currentActivity,
     filteredLinearProjection,
     relativeFromTime,
+    tacticalActivities,
   ]);
 
   const activityToSteppoCount = linearProjection.reduce(
