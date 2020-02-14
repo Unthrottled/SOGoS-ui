@@ -42,21 +42,28 @@ export const breakIntoHeatSteps = (
   stepSize: number,
 ) =>
   linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
-    const steps = Math.ceil((projection.stop - projection.start) / stepSize);
-    const dataPoints = steps;
-    const map = Array(dataPoints)
+    const fullSteps = Math.floor(
+      (projection.stop - projection.start) / stepSize,
+    );
+
+    const stepValues = Array(fullSteps)
       .fill(0)
       .map((_, index) => {
         const timeStamp = projection.start + stepSize * index;
-        //todo: only return 1 if the projection spans the step..
-        console.log(projection.stop - timeStamp);
         return {
           timeStamp: timeStamp,
           spawn: projection.spawn,
           value: 1,
         };
       });
-    return map;
+    const endingTimeStepStart = projection.start + stepSize * fullSteps;
+    const endingTimeStepStop = endingTimeStepStart + stepSize;
+    stepValues.push({
+      timeStamp: endingTimeStepStart,
+      spawn: projection.spawn,
+      value: 1 - (endingTimeStepStop - projection.stop) / stepSize,
+    });
+    return stepValues;
   });
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
@@ -215,18 +222,20 @@ const WeeklyHeatMap: FC<Props> = ({
     setLinearProjection(unfilteredHourSteppo);
 
     const weekProjection = filteredHourSteppo.reduce(
-      (accum: any, {day, hour}) => {
+      (accum: any, {day, hour, value}) => {
         if (!accum[day]) {
           accum[day] = {};
         }
         if (!accum[day][hour]) {
           accum[day][hour] = 0;
         }
-        accum[day][hour] += 1;
+        accum[day][hour] += value;
         return accum;
       },
       {},
     );
+    
+    console.log(weekProjection);
 
     const steps = Object.entries<StringDictionary<number>>(
       weekProjection,
