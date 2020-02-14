@@ -81,7 +81,13 @@ const WeeklyHeatMap: FC<Props> = ({
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
   const allActivities = 'Show All Activities';
-  const [currentActivity, setCurrentActivity] = useState('');
+  const [currentActivity, setCurrentActivity] = useState<{
+    name: string;
+    count: number;
+  }>({
+    name: '',
+    count: 0,
+  });
 
   useEffect(() => {
     const selection = select('#heatBoi');
@@ -150,8 +156,8 @@ const WeeklyHeatMap: FC<Props> = ({
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentActivity ||
-        currentActivity === allActivities ||
-        currentActivity === getActivityName(steppo.spawn.start),
+        currentActivity.name === allActivities ||
+        currentActivity.name === getActivityName(steppo.spawn.start),
     );
     const timeSteppoMaker = (steppo: {timeStamp: number; spawn: any}) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
@@ -196,9 +202,17 @@ const WeeklyHeatMap: FC<Props> = ({
       })),
     );
 
-    const colorScale = scaleSequential(interpolateInferno)
-      .interpolator(interpolateInferno)
-      .domain([0, max(steps, s => s.value) || 1]);
+    const domain: [number, number] = [0, max(steps, s => +s.value) || 1];
+    const colorScale =
+      currentActivity.name === allActivities
+        ? scaleSequential(interpolateInferno)
+            .interpolator(interpolateInferno)
+            .domain(domain)
+        : () => '#ff0009';
+    const opacityScale =
+      currentActivity.name === allActivities
+        ? () => 1
+        : scaleSequential(n => n + 1e-2).domain(domain);
 
     const hourHeatBoxes = heatBoiSvg
       .selectAll('.hour')
@@ -214,14 +228,8 @@ const WeeklyHeatMap: FC<Props> = ({
       .attr('class', 'hour bordered')
       .attr('width', gridSize)
       .attr('height', gridSize)
+      .style('opacity', d => opacityScale(d.value))
       .style('fill', d => colorScale(d.value));
-
-    hourHeatBoxes
-      .transition()
-      .duration(1000)
-      .style('fill', d => colorScale(d.value));
-
-    hourHeatBoxes.select('title').text(d => d.value);
   }, [
     activityFeed,
     bottomActivity,
@@ -238,7 +246,7 @@ const WeeklyHeatMap: FC<Props> = ({
       if (!accum[activityID]) {
         accum[activityID] = {
           count: 0,
-          key: activityID + Math.floor(Math.random() * 50),
+          key: activityID,
         };
       }
       const accumElement = accum[activityID];
@@ -258,12 +266,12 @@ const WeeklyHeatMap: FC<Props> = ({
 
   useEffect(() => {
     if (
-      !currentActivity &&
+      !currentActivity.name &&
       activityOptions.length > 1 &&
       activityOptions[1].name &&
       activityOptions[1].name !== allActivities
     ) {
-      setCurrentActivity(activityOptions[1].name);
+      setCurrentActivity(activityOptions[1]);
     }
   }, [activityOptions, currentActivity]);
   activityOptions.unshift({
@@ -275,9 +283,12 @@ const WeeklyHeatMap: FC<Props> = ({
     <div>
       <div id={'heatBoi'} />
       <Select
-        value={currentActivity}
+        value={currentActivity.name}
         onChange={event => {
-          setCurrentActivity(event.target.value + '' || allActivities);
+          const nextSelection = activityOptions.find(
+            option => option.name === event.target.value,
+          );
+          setCurrentActivity(nextSelection || activityOptions[0]);
         }}>
         {activityOptions.map(value => {
           return (
