@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {interpolateInferno, max, scaleSequential, select} from 'd3';
 import {
   GlobalState,
-  selectActivityState,
   selectHistoryState,
   selectStrategyState,
   selectTacticalActivityState,
@@ -21,11 +20,12 @@ import {
   TacticalActivity,
 } from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
-import {breakIntoSteps, constructLinearProjection} from './LinearProjection';
+import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
 import {mapTacticalActivitiesToID} from './PieFlavored';
 import {defaultBackground} from '../icons/ActivityIcon';
+import {ActivityProjection} from './Projections';
 
 interface Props {
   activityFeed: Activity[];
@@ -36,6 +36,28 @@ interface Props {
   archivedActivities: NumberDictionary<TacticalActivity>;
   objectives: StringDictionary<Objective>;
 }
+
+export const breakIntoHeatSteps = (
+  linearProjection: LinearProjection,
+  stepSize: number,
+) =>
+  linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
+    const steps = Math.ceil((projection.stop - projection.start) / stepSize);
+    const dataPoints = steps;
+    const map = Array(dataPoints)
+      .fill(0)
+      .map((_, index) => {
+        const timeStamp = projection.start + stepSize * index;
+        //todo: only return 1 if the projection spans the step..
+        console.log(projection.stop - timeStamp);
+        return {
+          timeStamp: timeStamp,
+          spawn: projection.spawn,
+          value: 1,
+        };
+      });
+    return map;
+  });
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
   width = 800 - margin.left - margin.right,
@@ -162,19 +184,23 @@ const WeeklyHeatMap: FC<Props> = ({
     }
 
     const linearProj = constructLinearProjection(modifiedFeed);
-    const unfilteredSteppos = breakIntoSteps(linearProj, 3600000);
+    const unfilteredSteppos = breakIntoHeatSteps(linearProj, 3600000);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentActivity ||
         currentActivity.name === allActivities ||
         currentActivity.name === getActivityName(steppo.spawn.start),
     );
-    const timeSteppoMaker = (steppo: {timeStamp: number; spawn: any}) => {
+    const timeSteppoMaker = (steppo: {
+      timeStamp: number;
+      value: number;
+      spawn: any;
+    }) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
       return {
         day: dateTime.day(),
         hour: dateTime.hour(),
-        value: 1,
+        value: steppo.value,
         spawn: steppo.spawn,
       };
     };
