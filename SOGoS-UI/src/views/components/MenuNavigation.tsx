@@ -61,12 +61,12 @@ const MenuNavigation: FC<Props> = () => {
   const topics: Topic[] = [
     {
       title: 'Strategy',
-      path: '/strategy/',
+      path: '/strategy/objectives/',
       icon: <StrategyIcon size={{width: '24px', height: '24px'}} />,
     },
     {
       title: 'Tactics',
-      path: '/tactical/',
+      path: '/tactical/activities/',
       icon: <TacticalIcon size={{width: '24px', height: '24px'}} />,
     },
     {

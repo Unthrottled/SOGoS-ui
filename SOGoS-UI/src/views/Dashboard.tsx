@@ -42,7 +42,7 @@ const placesToGo = [
       'What does it mean to succeed? Establish your endgame objectives here.',
     icon: <StrategyIcon />,
     navigator: (history: History, _: string) => () =>
-      history.push('./strategy/'),
+      history.push('./strategy/objectives/'),
   },
   {
     name: 'Tactics',
@@ -50,11 +50,11 @@ const placesToGo = [
       'How do you reach your endgame? Catalog activities needed to reach your goals here.',
     icon: <TacticalIcon />,
     navigator: (history: History, _: string) => () =>
-      history.push('./tactical/'),
+      history.push('./tactical/activities/'),
   },
   {
     name: 'History',
-    description: 'Look at how far you have come and all of your achievements!',
+    description: 'Take a look at how you spent your time and figure out where you can improve!',
     icon: <HistoryIcon />,
     navigator: (history: History, guid: string) => () =>
       history.push(`./${guid}/history/`),
