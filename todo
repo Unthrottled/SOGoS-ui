@@ -1,17 +1,28 @@
-- Better Statistics Dashboard
-  - Fix Time Line
-  - Weekly Projection
-  - Time spent by category
-  - Quotas
-  - Time Allocated to Objectives.
-
 - Add TacMod Plug on Activity Start
 
 - On-boarding Experience
 
+- Profile
+
 - Sharable dashboard.
     - auto-sync
+    - Profile Pic
 
+- Dashboard no work if you no have any activities.
+
+- About
+
+- Logout not working.
+
+post mvp:
+-------------------------------------
+- Better Statistics Dashboard
+  - Time spent by category
+  - Quotas
+  - Time Allocated to Objectives.
+  - Breakdown of when you
+    - Normally start an activity
+    - Average Duration of started activity
 
 - offline mode
 
