@@ -10,7 +10,6 @@ import {
   shouldTime,
 } from '../../miscellanous/Projection';
 import {StringDictionary} from '../../types/BaseTypes';
-import {LinearProjection} from "./LinearProjection";
 
 export interface ActivityProjection {
   activityName: string;

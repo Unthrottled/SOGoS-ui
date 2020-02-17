@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {interpolateInferno, max, scaleSequential, select} from 'd3';
+import {max, scaleSequential, select} from 'd3';
 import {
   GlobalState,
   selectHistoryState,
@@ -15,18 +15,14 @@ import {
   getActivityName,
 } from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
-import {
-  getActivityBackgroundColor,
-  TacticalActivity,
-} from '../../types/TacticalTypes';
+import {TacticalActivity} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
 import {mapTacticalActivitiesToID} from './PieFlavored';
-import {defaultBackground} from '../icons/ActivityIcon';
 import {ActivityProjection} from './Projections';
-import {constructColorMappings} from "./TimeLine";
+import {constructColorMappings} from './TimeLine';
 
 interface Props {
   activityFeed: Activity[];
@@ -319,7 +315,8 @@ const WeeklyHeatMap: FC<Props> = ({
 
   useEffect(() => {
     if (
-      !currentActivity.name &&
+      (!currentActivity.name ||
+        !activityOptions.find(opt => opt.name === currentActivity.name)) &&
       activityOptions.length > 1 &&
       activityOptions[0].name
     ) {

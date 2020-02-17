@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {connect, DispatchProp, useSelector} from 'react-redux';
 import LoggedInLayout from '../components/LoggedInLayout';
-import clsx from 'clsx';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import PieFlavored from './PieFlavored';
@@ -22,8 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {HistoryIcon} from '../icons/HistoryIcon';
 import WeeklyHeatMap from './WeeklyHeatMap';
-import {duration} from "@material-ui/core";
-import capitalize from "@material-ui/core/utils/capitalize";
+import capitalize from '@material-ui/core/utils/capitalize';
 
 const drawerWidth = 240;
 
@@ -118,7 +116,6 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
   selectedFrom,
 }) => {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   useEffect(() => {
     dispatch(createViewedHistoryEvent());
