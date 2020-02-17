@@ -37,10 +37,10 @@ import {Objective} from '../../types/StrategyTypes';
 import isEmpty from 'lodash/isEmpty';
 
 const suggestions = [
-  {label: 'Deliberate Practice'},
+  {label: 'Purposeful Practice'},
   {label: 'Physical'},
   {label: 'Cognitive'},
-  {label: 'Purposeful Practice'},
+  {label: 'Deliberate Practice'},
   {label: 'Overhead'},
   {label: 'Pastime'},
   {label: 'Leisure'},
