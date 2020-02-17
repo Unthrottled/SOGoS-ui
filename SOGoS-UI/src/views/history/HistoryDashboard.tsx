@@ -22,6 +22,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {HistoryIcon} from '../icons/HistoryIcon';
 import WeeklyHeatMap from './WeeklyHeatMap';
+import {duration} from "@material-ui/core";
+import capitalize from "@material-ui/core/utils/capitalize";
 
 const drawerWidth = 240;
 
@@ -124,12 +126,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
 
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
-  const dayz = Math.ceil(
-    moment
-      .duration(meow.diff(meowMinusSeven))
-      .asDays()
-      .valueOf(),
-  );
+  const timeSpan = moment.duration(meow.diff(meowMinusSeven));
 
   const [focusedInput, setFocusedInput] = useState<FocusedInputShape | null>(
     null,
@@ -160,7 +157,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
           id="panel1a-header">
           <div style={{margin: 'auto'}}>
             <Typography variant={'h5'}>
-              {firstName}'s past {dayz} day{dayz > 1 ? 's' : ''}
+              {capitalize(timeSpan.humanize())} in {firstName}'s past.
             </Typography>
           </div>
         </ExpansionPanelSummary>

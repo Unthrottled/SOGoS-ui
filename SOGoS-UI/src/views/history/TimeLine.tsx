@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {FC, useEffect} from 'react';
+import moment from 'moment';
 import {select} from 'd3-selection';
 import {scaleLinear} from 'd3-scale';
 import {axisTop, brushX, event} from 'd3';
@@ -194,6 +195,10 @@ const TimeLine: FC<Props> = ({
       const timeBegin = relativeFromTime;
       const timeEnd = relativeToTime;
 
+      const endingTime = moment.unix(timeEnd / 1000);
+      const beginningTime = moment.unix(timeBegin / 1000);
+      const timeSpanDuration = moment.duration(endingTime.diff(beginningTime));
+
       const x = scaleLinear()
         .domain([0, timeEnd - timeBegin])
         .range([0, width]);
@@ -209,18 +214,18 @@ const TimeLine: FC<Props> = ({
         .attr('height', height)
         .call(responsivefy);
 
+      const dayz = Math.round(timeSpanDuration.asDays()) > 2;
+
       const timeLabelAxis = axisTop(x).tickFormat((d, i) => {
         if (i === 0 || i === 12) {
           return '';
         }
 
-        const dateBoi = new Date(relativeFromTime + d.valueOf());
-        const trailingZero = (number: number) => (number / 10 < 1 ? 0 : '');
-        const convertToPretty = (numberDude: number) =>
-          `${trailingZero(numberDude)}${numberDude}`;
-        const hours = convertToPretty(dateBoi.getHours());
-        const minutes = convertToPretty(dateBoi.getMinutes());
-        return `${hours}:${minutes}`;
+        const dateBoi = moment.unix((relativeFromTime + d.valueOf()) / 1000);
+        if (dayz) {
+          return dateBoi.format('MM/DD');
+        }
+        return dateBoi.format('hh:mm');
       });
 
       timeSVG
