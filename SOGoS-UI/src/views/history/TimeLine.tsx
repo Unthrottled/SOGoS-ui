@@ -198,7 +198,7 @@ const TimeLine: FC<Props> = ({
         .range([0, width]);
       const y1 = scaleLinear()
         .domain([0, laneLength + 1])
-        .range([0, height]);
+        .range([0, height - margin.top - margin.bottom]);
 
       selection.select('svg').remove();
 
@@ -258,18 +258,6 @@ const TimeLine: FC<Props> = ({
       };
       const colorToActivity = constructColorMappings(mappedTacticalActivities);
 
-      timeLanes
-        .append('g')
-        .selectAll('.laneLines')
-        .data(Array(binsToArray.length + 1).fill(0))
-        .enter()
-        .append('line')
-        .attr('x1', 0)
-        .attr('y1', (d, i) => y1(i))
-        .attr('x2', width)
-        .attr('y2', (d, i) => y1(i))
-        .attr('stroke', 'lightgray');
-
       timeSVG
         .append('g')
         .selectAll('.timeBar')
@@ -283,7 +271,7 @@ const TimeLine: FC<Props> = ({
         .attr('x', d => x(d.start))
         .attr('y', (d: any) => y1(d.lane) + 10)
         .attr('width', d => x(d.stop - d.start))
-        .attr('height', () => 0.8 * y1(1))
+        .attr('height', () => y1(1))
         .append('title')
         .text(d => {
           const meaningFullName = getMeaningFullName(
