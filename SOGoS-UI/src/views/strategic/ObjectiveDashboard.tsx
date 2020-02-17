@@ -1,4 +1,5 @@
 import React, {FC, useState} from 'react';
+import isEmpty from 'lodash/isEmpty';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import AddIcon from '@material-ui/icons/Add';
@@ -23,14 +24,15 @@ import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import {PersistActions} from '../components/PersistActions';
 import {KeyResult, Objective} from '../../types/StrategyTypes';
-import {StringDictionary} from '../../types/BaseTypes';
+import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {
   createCompletedObjectiveEvent,
   createCreatedObjectiveEvent,
   createDeletedObjectiveEvent,
   createUpdatedObjectiveEvent,
 } from '../../events/StrategyEvents';
-import {GlobalState} from '../../reducers';
+import {GlobalState, selectStrategyState, selectTacticalActivityState, selectUserState} from '../../reducers';
+import {TacticalActivity} from "../../types/TacticalTypes";
 
 const suggestions = [
   {label: 'Technical'},
@@ -138,11 +140,13 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   objectives: StringDictionary<Objective>;
+  activities: NumberDictionary<TacticalActivity>;
 }
 
 const ObjectiveDashboard: FC<DispatchProp & Props> = ({
   dispatch,
   objectives,
+  activities,
 }) => {
   const classes: any = useStyles();
   const theme = useTheme();
@@ -216,7 +220,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
         (rememberedObjective && rememberedObjective.associatedActivities) || [],
       categories: categoryValues.map(catVal => catVal.value),
     };
-    if (!objectives[newObjective.id]) {
+    if (!objectives[newObjective.id] && !isEmpty(activities)) {
       dispatch(createCreatedObjectiveEvent(newObjective));
       history.push(
         `/strategy/objectives/${newObjective.id}/tactics/association`,
@@ -408,16 +412,12 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
   );
 };
 
-const mapStateToProps = (state: GlobalState) => {
-  const {
-    user: {
-      information: {fullName},
-    },
-    strategy: {objectives},
-  } = state;
+const mapStateToProps = (state: GlobalState): Props => {
+  const {objectives} = selectStrategyState(state);
+  const {activities} = selectTacticalActivityState(state);
   return {
-    fullName,
     objectives,
+    activities,
   };
 };
 

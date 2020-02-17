@@ -19,7 +19,7 @@ import {
   createUpdatedTacticalActivityEvent,
 } from '../../events/TacticalEvents';
 import {
-  GlobalState,
+  GlobalState, selectStrategyState,
   selectTacticalActivityState,
   selectUserState,
 } from '../../reducers';
@@ -33,6 +33,8 @@ import {PersistActions} from '../components/PersistActions';
 import {mapTacticalActivitiesToID} from '../history/PieFlavored';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {TacticalActivity} from '../../types/TacticalTypes';
+import {Objective} from '../../types/StrategyTypes';
+import isEmpty from 'lodash/isEmpty';
 
 const suggestions = [
   {label: 'Deliberate Practice'},
@@ -140,12 +142,14 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   activities: NumberDictionary<TacticalActivity>;
   archivedActivities: StringDictionary<TacticalActivity>;
+  objectives: StringDictionary<Objective>;
 }
 
 const ActivityDashboard: FC<DispatchProp & Props> = ({
   dispatch,
   activities,
   archivedActivities,
+  objectives,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
@@ -197,7 +201,10 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
 
       categories: categoryValues.map(catVal => catVal.value),
     };
-    if (!mappedTacticalActivities[tacticalActivity.id]) {
+    if (
+      !mappedTacticalActivities[tacticalActivity.id] &&
+      !isEmpty(objectives)
+    ) {
       dispatch(createCreatedTacticalActivityEvent(tacticalActivity));
       history.push(`/tactical/activities/${activityId}/strategy/association`);
     } else {
@@ -373,15 +380,13 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
   );
 };
 
-const mapStateToProps = (state: GlobalState) => {
-  const {
-    information: {fullName},
-  } = selectUserState(state);
+const mapStateToProps = (state: GlobalState): Props => {
   const {activities, archivedActivities} = selectTacticalActivityState(state);
+  const {objectives} = selectStrategyState(state);
   return {
-    fullName,
     activities,
     archivedActivities,
+    objectives,
   };
 };
 
