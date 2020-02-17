@@ -26,6 +26,7 @@ import {MenuItem, Select} from '@material-ui/core';
 import {mapTacticalActivitiesToID} from './PieFlavored';
 import {defaultBackground} from '../icons/ActivityIcon';
 import {ActivityProjection} from './Projections';
+import {constructColorMappings} from "./TimeLine";
 
 interface Props {
   activityFeed: Activity[];
@@ -43,7 +44,8 @@ export const breakIntoHeatSteps = (
 ) =>
   linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
     const closestFullStep = projection.start - (projection.start % stepSize);
-    const closestEndingStep = projection.stop - (projection.stop % stepSize) + stepSize;
+    const closestEndingStep =
+      projection.stop - (projection.stop % stepSize) + stepSize;
     const fullSteps = (closestEndingStep - closestFullStep) / stepSize;
 
     const fullTimeSteps = Array(fullSteps)
@@ -63,7 +65,8 @@ export const breakIntoHeatSteps = (
       const lastFullStep = fullTimeSteps[fullTimeStepsLength - 1];
       fullTimeSteps[fullTimeStepsLength - 1] = {
         ...lastFullStep,
-        value: lastFullStep.value - (closestEndingStep - projection.stop) / stepSize,
+        value:
+          lastFullStep.value - (closestEndingStep - projection.stop) / stepSize,
       };
     }
 
@@ -121,7 +124,6 @@ const WeeklyHeatMap: FC<Props> = ({
   >([]);
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
-  const allActivities = 'Show All Activities';
   const [currentActivity, setCurrentActivity] = useState<{
     name: string;
     key: string;
@@ -202,7 +204,6 @@ const WeeklyHeatMap: FC<Props> = ({
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentActivity ||
-        currentActivity.name === allActivities ||
         currentActivity.name === getActivityName(steppo.spawn.start),
     );
     const timeSteppoMaker = (steppo: {
@@ -242,8 +243,6 @@ const WeeklyHeatMap: FC<Props> = ({
       {},
     );
 
-    console.log(weekProjection);
-
     const steps = Object.entries<StringDictionary<number>>(
       weekProjection,
     ).flatMap(dayEntry =>
@@ -259,23 +258,12 @@ const WeeklyHeatMap: FC<Props> = ({
       ...archivedActivities,
     };
 
-    const domain: [number, number] = [0, max(steps, s => +s.value) || 1];
-    const colorScale =
-      currentActivity.name === allActivities
-        ? scaleSequential(interpolateInferno)
-            .interpolator(interpolateInferno)
-            .domain(domain)
-        : () => {
-            const mappedTacticalActivity =
-              mappedTacticalActivities[currentActivity.key];
-            return mappedTacticalActivity
-              ? getActivityBackgroundColor(mappedTacticalActivity)
-              : defaultBackground.hex;
-          };
-    const opacityScale =
-      currentActivity.name === allActivities
-        ? () => 1
-        : scaleSequential(n => n + 1e-2).domain(domain);
+    const almostMaxValue = max(steps, s => +s.value) || 1;
+    const maxValue = almostMaxValue < 1 ? 1 : almostMaxValue;
+    const domain: [number, number] = [0, maxValue];
+    const colorMappings = constructColorMappings(mappedTacticalActivities);
+    const colorScale = (_: number) => colorMappings[currentActivity.key];
+    const opacityScale = scaleSequential(n => n + 1e-2).domain(domain);
 
     const hourHeatBoxes = heatBoiSvg
       .selectAll('.hour')
@@ -333,16 +321,11 @@ const WeeklyHeatMap: FC<Props> = ({
     if (
       !currentActivity.name &&
       activityOptions.length > 1 &&
-      activityOptions[1].name &&
-      activityOptions[1].name !== allActivities
+      activityOptions[0].name
     ) {
-      setCurrentActivity(activityOptions[1]);
+      setCurrentActivity(activityOptions[0]);
     }
   }, [activityOptions, currentActivity]);
-  activityOptions.unshift({
-    name: allActivities,
-    key: 'bestkey',
-  });
 
   return (
     <div>
