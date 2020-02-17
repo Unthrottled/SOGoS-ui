@@ -10,6 +10,7 @@ import {
   selectConfigurationState,
   selectTacticalActivityState,
   selectTacticalState,
+  selectUserState,
 } from '../../reducers';
 import {TomatoIcon} from '../icons/TomatoIcon';
 import ActivitySelection from './ActivitySelection';
@@ -102,11 +103,16 @@ const mapStateToProps = (state: GlobalState) => {
   const {
     miscellaneous: {notificationsAllowed},
   } = selectConfigurationState(state);
-  const {activities} = selectTacticalActivityState(state);
+  const {
+    miscellaneous: {
+      onboarding: {TacModDownloaded, TacModNotified},
+    },
+  } = selectUserState(state);
   return {
     loadDuration,
     notificationsAllowed,
-    activities,
+    TacModDownloaded,
+    TacModNotified,
   };
 };
 
@@ -128,13 +134,31 @@ const ActivityHub = () => {
   const [open, setOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
 
-  const {loadDuration, notificationsAllowed} = useSelector(mapStateToProps);
+  const {
+    loadDuration,
+    notificationsAllowed,
+    TacModDownloaded,
+    TacModNotified,
+  } = useSelector(mapStateToProps);
 
   const dispetch = useDispatch();
   const commenceActivity = (name: string, supplements: any) =>
     dispetch(
       startTimedActivity(buildCommenceActivityContents(supplements, name)),
     );
+
+  const activityChosen = (
+    action:
+      | {icon: any; name: string; perform: () => void}
+      | {icon: any; name: string; perform: () => void},
+  ) => {
+    // show tacmod notification unless already downloaded
+    if (!(TacModDownloaded || TacModNotified)) {
+      console.log('Hey, use tacmod!!');
+      // dispetch TacModNotified
+    }
+    action.perform();
+  };
 
   const commenceTimedActivity = (name: string, supplements: any) => {
     if (notificationsAllowed === NOT_ASKED) {
@@ -249,8 +273,7 @@ const ActivityHub = () => {
             tooltipOpen={false}
             tooltipPlacement={'bottom'}
             onClick={() => {
-              handleClick();
-              action.perform();
+              activityChosen(action);
             }}
             title={''}
           />

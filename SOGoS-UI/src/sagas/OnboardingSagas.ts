@@ -10,6 +10,7 @@ function* initialWalkThroughSaga({payload: user}: PayloadEvent<UserResponse>) {
     // show onboarding carousel
   } else if (onboarding.TacModDownloaded) {
     // thank user for being awesome!!
+    // also disable the TacMod notification.
   }
 }
 
