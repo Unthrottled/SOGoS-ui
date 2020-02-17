@@ -43,44 +43,38 @@ export const breakIntoHeatSteps = (
 ) =>
   linearProjection.activityBins.flatMap((projection: ActivityProjection) => {
     const closestFullStep = projection.start - (projection.start % stepSize);
-    const closestEndingStep = projection.stop - (projection.stop % stepSize);
+    const closestEndingStep = projection.stop - (projection.stop % stepSize) + stepSize;
     const fullSteps = (closestEndingStep - closestFullStep) / stepSize;
-    console.log(projection);
-    console.log(fullSteps, closestEndingStep, closestFullStep);
 
-    return Array(fullSteps)
+    const fullTimeSteps = Array(fullSteps)
       .fill(0)
-      .map((_, index) => {
-        const startingTimestamp = closestFullStep + stepSize * index;
-        const endingTimestamp = closestFullStep + stepSize * (index + 1);
+      .map((_, index) => ({
+        timeStamp: closestFullStep + stepSize * index,
+        spawn: projection.spawn,
+        value: 1,
+      }));
 
-        const activityStart = projection.start + stepSize * index;
-        const activityProjectedEnd = projection.start + stepSize * (index + 1);
-        const activityEnd =
-          activityProjectedEnd > projection.stop
-            ? projection.stop
-            : activityProjectedEnd;
+    const fullTimeStepsLength = fullTimeSteps.length;
+    if (fullTimeStepsLength) {
+      fullTimeSteps[0] = {
+        ...fullTimeSteps[0],
+        value: 1 - (projection.start - closestFullStep) / stepSize,
+      };
+      const lastFullStep = fullTimeSteps[fullTimeStepsLength - 1];
+      fullTimeSteps[fullTimeStepsLength - 1] = {
+        ...lastFullStep,
+        value: lastFullStep.value - (closestEndingStep - projection.stop) / stepSize,
+      };
+    }
 
-        // todo: get differences between hour starts and hour ends
-        const startDiffy = activityStart - startingTimestamp;
-        const endingDiffy = activityEnd - endingTimestamp;
-
-        const number =
-          (endingTimestamp - startingTimestamp) / stepSize -
-          (activityEnd - activityStart) / stepSize;
-        return {
-          timeStamp: startingTimestamp,
-          spawn: projection.spawn,
-          value: 1 - number,
-        };
-      });
+    return fullTimeSteps;
   });
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
   width = 800 - margin.left - margin.right,
   height = 300 - margin.top - margin.bottom,
   gridSize = Math.floor(width / 24),
-  days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
   times = [
     '1a',
     '2a',
@@ -199,15 +193,10 @@ const WeeklyHeatMap: FC<Props> = ({
       const modifiedBottom: Activity = {
         ...bottomActivity,
         antecedenceTime: antecedenceTime,
-        content: {
-          ...bottomActivity.content,
-          name: 'yeeter',
-        },
       };
       modifiedFeed.push(modifiedBottom);
     }
 
-    console.log(modifiedFeed);
     const linearProj = constructLinearProjection(modifiedFeed);
     const unfilteredSteppos = breakIntoHeatSteps(linearProj, 3600000);
     const filterdSteppos = unfilteredSteppos.filter(
@@ -252,6 +241,8 @@ const WeeklyHeatMap: FC<Props> = ({
       },
       {},
     );
+
+    console.log(weekProjection);
 
     const steps = Object.entries<StringDictionary<number>>(
       weekProjection,
