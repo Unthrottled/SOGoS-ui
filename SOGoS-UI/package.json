@@ -36,6 +36,7 @@
     "@loopmode/cra-workbox-refresh": "^0.0.5",
     "@react-native-community/eslint-config": "^0.0.6",
     "@react-native-community/eslint-plugin": "^1.0.0",
+    "@types/aws-sdk": "^2.7.0",
     "@types/axios": "^0.14.0",
     "@types/d3": "^5.7.2",
     "@types/d3-selection": "^1.4.1",
@@ -44,7 +45,7 @@
     "@types/lodash": "^4.14.147",
     "@types/material-ui": "^0.21.7",
     "@types/moment": "^2.13.0",
-    "@types/node": "12.12.7",
+    "@types/node": "^13.7.1",
     "@types/oboe": "^2.0.28",
     "@types/react": "16.9.11",
     "@types/react-beautiful-dnd": "^11.0.3",
@@ -59,16 +60,20 @@
     "@types/redux-saga": "^0.10.5",
     "@types/redux-thunk": "^2.1.0",
     "@types/uuid": "^3.4.6",
+    "aws-sdk": "^2.619.0",
     "eslint": "^6.5.1",
+    "file-type": "^14.1.2",
     "reactotron-react-js": "^3.3.6",
     "reactotron-redux": "^3.1.2"
   },
   "scripts": {
+    "sync": "ts-node buildSrc/AssetSync.ts",
     "start": "react-scripts start",
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",
     "start-offline": "http-server -P http://localhost:8888 ./build",
-    "lint": "eslint --ext .ts,.tsx --fix ."
+    "lint": "eslint --ext .ts,.tsx --fix .",
+    "release": "yarn build && yarn sync"
   },
   "eslintConfig": {
     "extends": "react-app"
