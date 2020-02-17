@@ -249,7 +249,6 @@ const PieFlavored: FC<Props> = ({
         .join('path')
         .attr('fill', (d: any) => idToColor[d.data.name])
         .attr('opacity', 0.7)
-        .attr('cursor', 'pointer')
         .attr('d', (d: any) => arcThing(d))
         .append('title')
         .text(

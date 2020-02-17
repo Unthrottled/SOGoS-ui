@@ -21,7 +21,7 @@ import {Objective} from '../../types/StrategyTypes';
 import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
-import {mapTacticalActivitiesToID} from './PieFlavored';
+import {getMeaningFullName, mapTacticalActivitiesToID} from './PieFlavored';
 import {ActivityProjection} from './Projections';
 import {constructColorMappings} from './TimeLine';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -290,7 +290,9 @@ const WeeklyHeatMap: FC<Props> = ({
       .attr('width', gridSize)
       .attr('height', gridSize)
       .style('opacity', d => opacityScale(d.value))
-      .style('fill', d => colorScale(d.value));
+      .style('fill', d => colorScale(d.value))
+      .append('title')
+      .text((d: any) => moment.duration(d.value * 3600000).humanize());
 
     const legend = select('#legend27');
     legend.select('svg').remove();
