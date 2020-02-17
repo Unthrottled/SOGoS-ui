@@ -1,10 +1,24 @@
 import React, {FC, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {interpolateInferno, max, scaleSequential, select} from 'd3';
-import {GlobalState, selectHistoryState, selectStrategyState, selectTacticalActivityState,} from '../../reducers';
-import {activitiesEqual, Activity, DEFAULT_ACTIVITY, getActivityID, getActivityName,} from '../../types/ActivityTypes';
+import {
+  GlobalState,
+  selectHistoryState,
+  selectStrategyState,
+  selectTacticalActivityState,
+} from '../../reducers';
+import {
+  activitiesEqual,
+  Activity,
+  DEFAULT_ACTIVITY,
+  getActivityID,
+  getActivityName,
+} from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
-import {getActivityBackgroundColor, TacticalActivity,} from '../../types/TacticalTypes';
+import {
+  getActivityBackgroundColor,
+  TacticalActivity,
+} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
 import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
@@ -31,6 +45,8 @@ export const breakIntoHeatSteps = (
     const closestFullStep = projection.start - (projection.start % stepSize);
     const closestEndingStep = projection.stop - (projection.stop % stepSize);
     const fullSteps = (closestEndingStep - closestFullStep) / stepSize;
+    console.log(projection);
+    console.log(fullSteps, closestEndingStep, closestFullStep);
 
     return Array(fullSteps)
       .fill(0)
@@ -168,10 +184,13 @@ const WeeklyHeatMap: FC<Props> = ({
 
     const modifiedFeed = [...activityFeed];
 
+    const earliestActivity = activityFeed[activityFeed.length - 1];
     if (
-      !activitiesEqual(activityFeed[activityFeed.length - 1], bottomActivity) &&
+      !activitiesEqual(earliestActivity, bottomActivity) &&
       bottomActivity &&
-      bottomActivity !== DEFAULT_ACTIVITY
+      bottomActivity !== DEFAULT_ACTIVITY &&
+      (earliestActivity &&
+        earliestActivity.antecedenceTime >= bottomActivity.antecedenceTime)
     ) {
       const antecedenceTime =
         bottomActivity.antecedenceTime < relativeFromTime
@@ -180,10 +199,15 @@ const WeeklyHeatMap: FC<Props> = ({
       const modifiedBottom: Activity = {
         ...bottomActivity,
         antecedenceTime: antecedenceTime,
+        content: {
+          ...bottomActivity.content,
+          name: 'yeeter',
+        },
       };
       modifiedFeed.push(modifiedBottom);
     }
 
+    console.log(modifiedFeed);
     const linearProj = constructLinearProjection(modifiedFeed);
     const unfilteredSteppos = breakIntoHeatSteps(linearProj, 3600000);
     const filterdSteppos = unfilteredSteppos.filter(
@@ -228,8 +252,6 @@ const WeeklyHeatMap: FC<Props> = ({
       },
       {},
     );
-
-    console.log(weekProjection);
 
     const steps = Object.entries<StringDictionary<number>>(
       weekProjection,

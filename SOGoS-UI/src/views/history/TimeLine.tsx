@@ -136,10 +136,13 @@ const TimeLine: FC<Props> = ({
       : []),
     ...activityFeed,
   ];
+  const earliestActivity = modifiedFeed[modifiedFeed.length - 1];
   if (
-    !activitiesEqual(modifiedFeed[modifiedFeed.length - 1], bottomActivity) &&
+    !activitiesEqual(earliestActivity, bottomActivity) &&
     bottomActivity &&
-    bottomActivity !== DEFAULT_ACTIVITY
+    bottomActivity !== DEFAULT_ACTIVITY &&
+    (earliestActivity &&
+      earliestActivity.antecedenceTime >= bottomActivity.antecedenceTime)
   ) {
     modifiedFeed.push(bottomActivity);
   }

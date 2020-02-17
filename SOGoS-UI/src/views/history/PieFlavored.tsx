@@ -5,7 +5,8 @@ import {arc, pie} from 'd3';
 import {connect} from 'react-redux';
 import {
   GlobalState,
-  selectHistoryState, selectStrategyState,
+  selectHistoryState,
+  selectStrategyState,
   selectTacticalActivityState,
 } from '../../reducers';
 import {
@@ -34,7 +35,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
-import {Objective} from "../../types/StrategyTypes";
+import {Objective} from '../../types/StrategyTypes';
 
 export const getMeaningFullName = (
   activityId: string,
@@ -164,10 +165,12 @@ const PieFlavored: FC<Props> = ({
   });
 
   const bottomCapActivity: Activity = bottomActivity;
-  const lastActivityInScope: Activity = activityFeed[activityFeed.length - 1];
+  const earliestActivity: Activity = activityFeed[activityFeed.length - 1];
   if (
-    !activitiesEqual(lastActivityInScope, bottomCapActivity) &&
-    lastActivityInScope
+    !activitiesEqual(earliestActivity, bottomCapActivity) &&
+    earliestActivity &&
+    (earliestActivity &&
+      earliestActivity.antecedenceTime >= bottomActivity.antecedenceTime)
   ) {
     const bottomActivityIdentifier = getActivityIdentifier(bottomCapActivity);
     if (!bins[bottomActivityIdentifier]) {
@@ -178,7 +181,7 @@ const PieFlavored: FC<Props> = ({
       bottomCapActivity.antecedenceTime < relativeFromTime
         ? relativeFromTime
         : bottomCapActivity.antecedenceTime;
-    const bottomDuration = lastActivityInScope.antecedenceTime - bottomTime;
+    const bottomDuration = earliestActivity.antecedenceTime - bottomTime;
     bins[bottomActivityIdentifier].push({
       activityName: bottomCapActivityName,
       activityIdentifier: bottomActivityIdentifier,
@@ -268,8 +271,7 @@ const PieFlavored: FC<Props> = ({
           margin: 'auto',
         }}
         id={'pieBoi'}
-      >
-      </div>
+      />
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon />}
