@@ -26,7 +26,7 @@ import {ActivityProjection} from './Projections';
 import {constructColorMappings} from './TimeLine';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -294,8 +294,8 @@ const WeeklyHeatMap: FC<Props> = ({
 
     const legend = select('#legend27');
     legend.select('svg').remove();
-    const legendRange = range(0, 1, 0.1);
-    const legendWidth = (legendRange.length) * gridSize;
+    const legendRange = range(0, 1.1, 0.1);
+    const legendWidth = legendRange.length * gridSize;
     const legendSvg = legend
       .append('svg')
       .attr('width', legendWidth)
@@ -315,7 +315,7 @@ const WeeklyHeatMap: FC<Props> = ({
       .attr('class', 'hour bordered')
       .attr('width', gridSize)
       .attr('height', gridSize)
-      .style('opacity', d => opacityScale(d))
+      .style('opacity', d => d)
       .style('fill', d => colorScale(d));
 
     legendRect.exit().remove();
@@ -383,7 +383,7 @@ const WeeklyHeatMap: FC<Props> = ({
           />
         </div>
         <Select
-          style={{marginLeft: '0.5rem'}}
+          style={{margin: '0 1rem'}}
           value={currentActivity.name}
           onChange={event => {
             const nextSelection = activityOptions.find(

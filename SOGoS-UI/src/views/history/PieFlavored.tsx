@@ -36,6 +36,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Objective} from '../../types/StrategyTypes';
+import moment from 'moment';
 
 export const getMeaningFullName = (
   activityId: string,
@@ -256,7 +257,7 @@ const PieFlavored: FC<Props> = ({
             `${getMeaningFullName(d.data.name, mappedTacticalActivities)}: ${(
               (d.data.value / totalTime) *
               100
-            ).toFixed(2)}%`,
+            ).toFixed(2)}% or ${moment.duration(d.data.value).humanize()}`,
         );
     }
   });
@@ -282,24 +283,33 @@ const PieFlavored: FC<Props> = ({
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          {orderedPieData.map(data => {
-            const activity = mappedTacticalActivities[data.name];
-            return (
-              <div key={data.name}>
-                <TacticalActivityIcon
-                  tacticalActivity={activity}
-                  size={{
-                    width: 24,
-                    height: 25,
-                  }}
-                />
-                <Typography>
-                  {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
-                  {(data.value / 3600000).toFixed(3)} hours.
-                </Typography>
-              </div>
-            );
-          })}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}>
+            {orderedPieData.map(data => {
+              const activity = mappedTacticalActivities[data.name];
+              return (
+                <div key={data.name} style={{display: 'flex'}}>
+                  <div style={{marginRight: '1rem'}}>
+                    <TacticalActivityIcon
+                      tacticalActivity={activity}
+                      size={{
+                        width: 25,
+                        height: 25,
+                      }}
+                    />
+                  </div>
+                  <Typography style={{margin: 'auto 0'}}>
+                    {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
+                    <strong>{(data.value / 3600000).toFixed(3)}</strong> hours
+                    or <i>about {moment.duration(data.value).humanize()}</i>
+                  </Typography>
+                </div>
+              );
+            })}
+          </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>
