@@ -11,7 +11,7 @@ import {
   selectHistoryState,
   selectTacticalActivityState,
 } from '../../reducers';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {objectToKeyValueArray} from '../../miscellanous/Tools';
 import {getMeaningFullName, mapTacticalActivitiesToID} from './PieFlavored';
 import {createAdjustedHistoryTimeFrame} from '../../events/HistoryEvents';
@@ -22,7 +22,8 @@ import {
   TacticalActivity,
 } from '../../types/TacticalTypes';
 import {
-  activitiesEqual, Activity,
+  activitiesEqual,
+  Activity,
   ActivityStrategy,
   DEFAULT_ACTIVITY,
   getActivityID,
@@ -181,7 +182,7 @@ const TimeLine: FC<Props> = ({
 
       const laneLength = lanes.length;
       const margin = {
-        left: 15,
+        left: 20,
         right: 15,
         top: 40,
         bottom: 15,
@@ -208,10 +209,12 @@ const TimeLine: FC<Props> = ({
         .attr('height', height)
         .call(responsivefy);
 
-      const ticks = 20;
-      const steppyBoi = (timeEnd - timeBegin) / ticks;
-      const axis = axisTop(x).tickFormat((d, i) => {
-        const dateBoi = new Date(relativeFromTime + steppyBoi * i);
+      const timeLabelAxis = axisTop(x).tickFormat((d, i) => {
+        if (i === 0 || i === 12) {
+          return '';
+        }
+
+        const dateBoi = new Date(relativeFromTime + d.valueOf());
         const trailingZero = (number: number) => (number / 10 < 1 ? 0 : '');
         const convertToPretty = (numberDude: number) =>
           `${trailingZero(numberDude)}${numberDude}`;
@@ -223,7 +226,7 @@ const TimeLine: FC<Props> = ({
       timeSVG
         .append('g')
         .attr('transform', `translate(0,${margin.top})`)
-        .call(axis)
+        .call(timeLabelAxis)
         .attr('font-size', 'xx-large')
         .attr('color', 'black');
 
@@ -234,13 +237,6 @@ const TimeLine: FC<Props> = ({
         .append('rect')
         .attr('width', width)
         .attr('height', height);
-
-      const timeLanes = timeSVG
-        .append('g')
-        .attr('transform', `translate(0,${margin.top})`)
-        .attr('width', width)
-        .attr('height', height)
-        .attr('class', 'mini');
 
       const items = binsToArray.flatMap((keyValue, index) => {
         keyValue.value.forEach(activity => {
