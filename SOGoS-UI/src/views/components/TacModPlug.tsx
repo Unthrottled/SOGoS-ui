@@ -1,7 +1,10 @@
 import React, {FC} from 'react';
 // @ts-ignore
 import {AutoRotatingCarousel, Slide} from 'material-auto-rotating-carousel';
-import {blue, green, red} from '@material-ui/core/colors';
+import {green, grey, red} from '@material-ui/core/colors';
+import PlayStore from '../../images/playstore.png';
+import TacMod from '../../images/TacMod.png';
+import Tomato from '../../images/Tomato.png';
 
 interface Props {
   visible: boolean;
@@ -14,6 +17,7 @@ const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
     onDismiss();
   };
 
+  // todo: link to google play
   return (
     <AutoRotatingCarousel
       label="Got It!"
@@ -23,30 +27,32 @@ const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
       style={{position: 'absolute'}}>
       <Slide
         media={
-          <img src="http://www.icons101.com/icon_png/size_256/id_76704/Google_Settings.png" />
+          <img src={TacMod}/>
         }
         mediaBackgroundStyle={{backgroundColor: green[400]}}
         style={{backgroundColor: green[600]}}
-        title="May the force be with you"
-        subtitle="The Force is a metaphysical and ubiquitous power in the Star Wars fictional universe."
+        title="Download TacMod!"
+        subtitle="SOGoS's Tactical Module is a native mobile app that provides essential features."
       />
       <Slide
         media={
-          <img src="http://www.icons101.com/icon_png/size_256/id_79394/youtube.png" />
+          <img src={Tomato}/>
         }
         mediaBackgroundStyle={{backgroundColor: red[400]}}
         style={{backgroundColor: red[600]}}
-        title="This is a very cool feature"
-        subtitle="Just using this will blow your mind."
+        title="Enhanced Pomodoro Timer"
+        subtitle="Due to technical limitations, SOGoS is unable to notify you when your pomodoro completes when your phone is asleep. TacMod does not have that issue!"
       />
       <Slide
         media={
-          <img src="http://www.icons101.com/icon_png/size_256/id_80975/GoogleInbox.png" />
+          <div style={{cursor: 'pointer'}} onClick={() => alert('like a bauss')}>
+            <img src={PlayStore}/>
+          </div>
         }
-        mediaBackgroundStyle={{backgroundColor: blue[400]}}
-        style={{backgroundColor: blue[600]}}
-        title="Ever wanted to be popular?"
-        subtitle="Well just mix two colors and your are good to go!"
+        mediaBackgroundStyle={{backgroundColor: grey[400]}}
+        style={{backgroundColor: grey[600]}}
+        title="Available on Android!"
+        subtitle="Click the Google Play Button to download TacMod today, it's free!"
       />
     </AutoRotatingCarousel>
   );
