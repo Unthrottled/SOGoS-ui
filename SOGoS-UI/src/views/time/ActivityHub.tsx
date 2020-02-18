@@ -152,7 +152,7 @@ const ActivityHub = () => {
   const [storedAction, setStoredAction] = useState<ActionHack>({
     action: () => {},
   });
-  const [useTacMod, setUseTacMod] = useState(true);
+  const [useTacMod, setUseTacMod] = useState(false);
 
   const tacModDismissed = () => {
     setUseTacMod(false);

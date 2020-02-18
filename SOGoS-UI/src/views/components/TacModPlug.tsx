@@ -33,7 +33,7 @@ const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
         mediaBackgroundStyle={{backgroundColor: green[400]}}
         style={{backgroundColor: green[600]}}
         title="Download TacMod!"
-        subtitle="SOGoS's Tactical Module is a native mobile app that provides essential features."
+        subtitle="SOGoS's Tactical Module is a native mobile app that provides essential time tracking features."
       />
       <Slide
         media={<img src={Tomato} />}
