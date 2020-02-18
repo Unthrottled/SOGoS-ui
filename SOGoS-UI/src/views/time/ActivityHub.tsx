@@ -130,7 +130,7 @@ export const buildCommenceActivityContents = (
 });
 type ActionType = (arg1: TacticalActivity) => void;
 type Runnable = () => void;
-type ActionHack = { action: () => void };
+type ActionHack = {action: () => void};
 const ActivityHub = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -152,7 +152,7 @@ const ActivityHub = () => {
   const [storedAction, setStoredAction] = useState<ActionHack>({
     action: () => {},
   });
-  const [useTacMod, setUseTacMod] = useState(false);
+  const [useTacMod, setUseTacMod] = useState(true);
 
   const tacModDismissed = () => {
     setUseTacMod(false);
@@ -169,7 +169,6 @@ const ActivityHub = () => {
         action: action.perform,
       });
       setUseTacMod(true);
-
     } else {
       action.perform();
     }
