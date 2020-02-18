@@ -23,9 +23,19 @@ export const INITIALIZED_CURRENT_ACTIVITY = 'INITIALIZED_CURRENT_ACTIVITY';
 
 export const INITIALIZED_POMODORO = 'INITIALIZED_POMODORO';
 export const COMPLETED_POMODORO = 'COMPLETED_POMODORO';
+export const ACKNOWLEDGED_TACMOD = 'ACKNOWLEDGED_TACMOD';
+export const AFFIRMED_ACKNOWLEDGMENT = 'AFFIRMED_ACKNOWLEDGMENT';
 
 export const CAPSTONED_ACTIVITIES: 'CAPSTONED_ACTIVITIES' =
   'CAPSTONED_ACTIVITIES';
+
+export const createAcknowledgedTacModEvent = (): BaseEvent => ({
+  type: ACKNOWLEDGED_TACMOD,
+});
+export const createAffirmedTabModAcknowledgementEvent = (): BaseEvent => ({
+  type: AFFIRMED_ACKNOWLEDGMENT,
+});
+
 
 export const createCapstoneActivitesEvent = (
   oldestActivity: Activity,

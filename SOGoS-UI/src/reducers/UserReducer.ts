@@ -1,6 +1,7 @@
 import {CHECKED_CACHES, RECEIVED_USER} from '../events/UserEvents';
 import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
+import {ACKNOWLEDGED_TACMOD} from '../events/ActivityEvents';
 
 export type UserMiscellaneous = {
   hasItemsCached: boolean;
@@ -28,6 +29,17 @@ const INITIAL_USER_STATE: UserState = {
 
 const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
   switch (action.type) {
+    case ACKNOWLEDGED_TACMOD:
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          onboarding: {
+            ...state.miscellaneous.onboarding,
+            TacModNotified: true,
+          },
+        },
+      };
     case RECEIVED_USER:
       return {
         ...state,
