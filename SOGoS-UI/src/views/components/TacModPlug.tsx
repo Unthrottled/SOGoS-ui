@@ -1,64 +1,12 @@
 import React, {FC} from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import {Styles} from '@material-ui/styles/withStyles';
-import {Theme} from '@material-ui/core/styles/createMuiTheme';
+// @ts-ignore
+import {AutoRotatingCarousel, Slide} from 'material-auto-rotating-carousel';
+import {blue, green, red} from '@material-ui/core/colors';
 
 interface Props {
   visible: boolean;
   onDismiss: () => void;
 }
-
-const styles: Styles<Theme, any, any> = theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
-
-const DialogTitle = withStyles(styles)(props => {
-  // @ts-ignore
-  const {children, classes, onClose, ...other} = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles(theme => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
 
 const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
   const dismissNotification = () => {
@@ -67,33 +15,40 @@ const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
   };
 
   return (
-    <Dialog open={visible}>
-      <DialogTitle>Use TacMod!</DialogTitle>
-      <DialogContent dividers>
-        <Typography gutterBottom>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </Typography>
-        <Typography gutterBottom>
-          Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-          Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-        </Typography>
-        <Typography gutterBottom>
-          Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-          magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-          ullamcorper nulla non metus auctor fringilla.
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button
-          autoFocus
-          onClick={dismissNotification}
-          color="secondary">
-          Got It!
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <AutoRotatingCarousel
+      label="Got It!"
+      autoplay={false}
+      open={visible}
+      onStart={dismissNotification}
+      style={{position: 'absolute'}}>
+      <Slide
+        media={
+          <img src="http://www.icons101.com/icon_png/size_256/id_76704/Google_Settings.png" />
+        }
+        mediaBackgroundStyle={{backgroundColor: green[400]}}
+        style={{backgroundColor: green[600]}}
+        title="May the force be with you"
+        subtitle="The Force is a metaphysical and ubiquitous power in the Star Wars fictional universe."
+      />
+      <Slide
+        media={
+          <img src="http://www.icons101.com/icon_png/size_256/id_79394/youtube.png" />
+        }
+        mediaBackgroundStyle={{backgroundColor: red[400]}}
+        style={{backgroundColor: red[600]}}
+        title="This is a very cool feature"
+        subtitle="Just using this will blow your mind."
+      />
+      <Slide
+        media={
+          <img src="http://www.icons101.com/icon_png/size_256/id_80975/GoogleInbox.png" />
+        }
+        mediaBackgroundStyle={{backgroundColor: blue[400]}}
+        style={{backgroundColor: blue[600]}}
+        title="Ever wanted to be popular?"
+        subtitle="Well just mix two colors and your are good to go!"
+      />
+    </AutoRotatingCarousel>
   );
 };
 
