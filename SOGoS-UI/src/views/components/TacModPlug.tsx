@@ -1,47 +1,99 @@
 import React, {FC} from 'react';
-import {Grow, makeStyles} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Paper from "@material-ui/core/Paper";
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
+import {Styles} from '@material-ui/styles/withStyles';
+import {Theme} from '@material-ui/core/styles/createMuiTheme';
 
 interface Props {
   visible: boolean;
   onDismiss: () => void;
 }
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    position: 'fixed',
-    top: '25%',
-    width: '100%',
-    height: '100%',
+const styles: Styles<Theme, any, any> = theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
   },
-  paper: {
-    maxWidth: '650px',
-    margin: 'auto',
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   },
-}));
+});
+
+const DialogTitle = withStyles(styles)(props => {
+  // @ts-ignore
+  const {children, classes, onClose, ...other} = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
 
 const TacModPlug: FC<Props> = ({visible, onDismiss}) => {
-  const classes = useStyles();
   const dismissNotification = () => {
     // todo: dispetch TacModNotified
     onDismiss();
   };
 
   return (
-    <Grow in={visible}>
-      <div className={classes.container}>
-        <Paper className={classes.paper}>
-          <div>Hey use TacMod</div>
-          <Button
-            variant={'contained'}
-            color={'primary'}
-            onClick={dismissNotification}>
-            K
-          </Button>
-        </Paper>
-      </div>
-    </Grow>
+    <Dialog open={visible}>
+      <DialogTitle>Use TacMod!</DialogTitle>
+      <DialogContent dividers>
+        <Typography gutterBottom>
+          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
+          consectetur ac, vestibulum at eros.
+        </Typography>
+        <Typography gutterBottom>
+          Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+          Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+        </Typography>
+        <Typography gutterBottom>
+          Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
+          magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
+          ullamcorper nulla non metus auctor fringilla.
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          autoFocus
+          onClick={dismissNotification}
+          color="secondary">
+          Got It!
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
