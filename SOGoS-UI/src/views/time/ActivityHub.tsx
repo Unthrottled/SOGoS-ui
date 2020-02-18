@@ -20,6 +20,7 @@ import {startTimedActivity} from '../../actions/ActivityActions';
 import {NOT_ASKED} from '../../types/ConfigurationTypes';
 import {createNotificationPermissionReceivedEvent} from '../../events/ConfigurationEvents';
 import {TacticalActivity} from '../../types/TacticalTypes';
+import TacModPlug from '../components/TacModPlug';
 
 // @ts-ignore real
 const useStyles = makeStyles(theme => ({
@@ -129,6 +130,7 @@ export const buildCommenceActivityContents = (
 });
 type ActionType = (arg1: TacticalActivity) => void;
 type Runnable = () => void;
+type ActionHack = { action: () => void };
 const ActivityHub = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -147,17 +149,30 @@ const ActivityHub = () => {
       startTimedActivity(buildCommenceActivityContents(supplements, name)),
     );
 
-  const activityChosen = (
-    action:
-      | {icon: any; name: string; perform: () => void}
-      | {icon: any; name: string; perform: () => void},
-  ) => {
-    // show tacmod notification unless already downloaded
+  const [storedAction, setStoredAction] = useState<ActionHack>({
+    action: () => {},
+  });
+  const [useTacMod, setUseTacMod] = useState(false);
+
+  const tacModDismissed = () => {
+    setUseTacMod(false);
+    storedAction.action();
+  };
+
+  const activityChosen = (action: {
+    icon: any;
+    name: string;
+    perform: () => void;
+  }) => {
     if (!(TacModDownloaded || TacModNotified)) {
-      console.log('Hey, use tacmod!!');
-      // dispetch TacModNotified
+      setStoredAction({
+        action: action.perform,
+      });
+      setUseTacMod(true);
+
+    } else {
+      action.perform();
     }
-    action.perform();
   };
 
   const commenceTimedActivity = (name: string, supplements: any) => {
@@ -279,6 +294,7 @@ const ActivityHub = () => {
           />
         ))}
       </SpeedDial>
+      <TacModPlug visible={useTacMod} onDismiss={tacModDismissed} />
       <ActivitySelection
         open={strategyOpen}
         onClose={closeStrategy}
