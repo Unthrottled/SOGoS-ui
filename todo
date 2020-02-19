@@ -1,18 +1,19 @@
 - Add TacMod Plug on Activity Start
+  - Add google play link
 
 - On-boarding Experience
+
+- Logout not working.
+
+- Dashboard no work if you no have any activities.
+
+- About
 
 - Profile
 
 - Sharable dashboard.
     - auto-sync
     - Profile Pic
-
-- Dashboard no work if you no have any activities.
-
-- About
-
-- Logout not working.
 
 post mvp:
 -------------------------------------
