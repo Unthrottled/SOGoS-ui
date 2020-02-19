@@ -4,7 +4,7 @@ import {PayloadEvent} from '../events/Event';
 import {UserResponse} from '../types/UserTypes';
 import {
   ACKNOWLEDGED_TACMOD,
-  createAffirmedTabModAcknowledgementEvent,
+  createAffirmedTabModAcknowledgementEvent, createSyncedThankedForDownloadingTacModEvent, THANKED_FOR_TACMOD,
 } from '../events/ActivityEvents';
 import {performPost} from './APISagas';
 
@@ -29,10 +29,20 @@ function* tacModAffirmationSaga(_: any, attempt = 10): Generator {
     yield call(tacModAffirmationSaga, {}, attempt < 13 ? attempt + 1 : 10);
   }
 }
+function* tacModGratefulSaga(_: any, attempt = 10): Generator {
+  try {
+    yield call(performPost, '/user/onboarding/TacMod/thanked', {});
+    yield put(createSyncedThankedForDownloadingTacModEvent());
+  } catch (e) {
+    yield delay(Math.pow(2, attempt) + Math.floor(Math.random() * 1000));
+    yield call(tacModAffirmationSaga, {}, attempt < 13 ? attempt + 1 : 10);
+  }
+}
 
 function* setUpOnboardingSagas() {
   yield takeEvery(RECEIVED_USER, initialWalkThroughSaga);
   yield takeEvery(ACKNOWLEDGED_TACMOD, tacModAffirmationSaga);
+  yield takeEvery(THANKED_FOR_TACMOD, tacModGratefulSaga);
 }
 
 export default function* rootSaga() {

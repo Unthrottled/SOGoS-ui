@@ -26,6 +26,7 @@ export const COMPLETED_POMODORO = 'COMPLETED_POMODORO';
 export const ACKNOWLEDGED_TACMOD = 'ACKNOWLEDGED_TACMOD';
 export const AFFIRMED_ACKNOWLEDGMENT = 'AFFIRMED_ACKNOWLEDGMENT';
 export const THANKED_FOR_TACMOD = 'THANKED_FOR_TACMOD';
+export const SYNCED_THANKED_FOR_TACMOD = 'SYNCED_THANKED_FOR_TACMOD';
 
 export const CAPSTONED_ACTIVITIES: 'CAPSTONED_ACTIVITIES' =
   'CAPSTONED_ACTIVITIES';
@@ -35,6 +36,9 @@ export const createAcknowledgedTacModEvent = (): BaseEvent => ({
 });
 export const createThankedForDownloadingTacModEvent = (): BaseEvent => ({
   type: THANKED_FOR_TACMOD,
+});
+export const createSyncedThankedForDownloadingTacModEvent = (): BaseEvent => ({
+  type: SYNCED_THANKED_FOR_TACMOD,
 });
 export const createAffirmedTabModAcknowledgementEvent = (): BaseEvent => ({
   type: AFFIRMED_ACKNOWLEDGMENT,
