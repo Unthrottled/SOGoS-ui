@@ -109,7 +109,6 @@ interface Props {
   selectedFrom: number;
 }
 
-// todo: do not re-render when
 const HistoryDashboard: FC<DispatchProp & Props> = ({
   dispatch,
   selectedTo,

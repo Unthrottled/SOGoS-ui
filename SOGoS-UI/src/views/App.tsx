@@ -28,6 +28,7 @@ import HiddenActivitiesDashboard from './tactical/HiddenActivitiesDashboard';
 import {GlobalState, selectSecurityState} from '../reducers';
 import {SecurityState} from '../reducers/SecurityReducer';
 import OutOfSync from './components/OutOfSync';
+import TacModThankYou from "./components/TacModThankYou";
 
 const theme = responsiveFontSizes(
   createMuiTheme({
