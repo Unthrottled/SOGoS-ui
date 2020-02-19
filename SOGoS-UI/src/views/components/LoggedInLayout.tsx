@@ -7,6 +7,7 @@ import PausedPomodoro from '../time/PausedPomodoro';
 import SnackBoi from './SnackBoi';
 import {Container} from '@material-ui/core';
 import TacModThankYou from "./TacModThankYou";
+import Onboarding from "./Onboarding";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -23,7 +24,8 @@ const LoggedInLayout: FC = ({children, ...otherProperties}) => {
   return (
     <div {...otherProperties} className={classes.container}>
       <MenuAppBar />
-      <TacModThankYou/>
+      <TacModThankYou />
+      <Onboarding />
       <Activity />
       <Container className={classes.content} maxWidth={'lg'}>
         {children}
