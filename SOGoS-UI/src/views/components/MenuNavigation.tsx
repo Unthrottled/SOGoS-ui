@@ -17,6 +17,8 @@ import {GlobalState, selectUserState} from '../../reducers';
 import {useSelector} from 'react-redux';
 import HistoryIcon from '@material-ui/icons/History';
 import {SlideProps} from '@material-ui/core/Slide';
+import {ActivityIcon} from "../icons/ActivityIcon";
+import {GoalIcon} from "../icons/GoalIcon";
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -60,14 +62,14 @@ const MenuNavigation: FC<Props> = () => {
   const {guid} = useSelector(mapStateToProps);
   const topics: Topic[] = [
     {
-      title: 'Strategy',
+      title: 'Goals',
       path: '/strategy/objectives/',
-      icon: <StrategyIcon size={{width: '24px', height: '24px'}} />,
+      icon: <GoalIcon size={{width: '24px', height: '24px'}} />,
     },
     {
-      title: 'Tactics',
+      title: 'Activities',
       path: '/tactical/activities/',
-      icon: <TacticalIcon size={{width: '24px', height: '24px'}} />,
+      icon: <ActivityIcon size={{width: '24px', height: '24px'}} />,
     },
     {
       title: 'History',

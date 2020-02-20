@@ -9,12 +9,12 @@ import {SOGoS} from './icons/SOGoS';
 import Grid from '@material-ui/core/Grid';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import {RouteComponentProps, withRouter} from 'react-router-dom';
-import {StrategyIcon} from './icons/StrategyIcon';
-import {TacticalIcon} from './icons/TacticalIcon';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CardContent from '@material-ui/core/CardContent';
 import {History} from 'history';
 import {HistoryIcon} from './icons/HistoryIcon';
+import {GoalIcon} from './icons/GoalIcon';
+import {ActivityIcon} from './icons/ActivityIcon';
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -37,32 +37,29 @@ const useStyles = makeStyles(theme => ({
 
 const placesToGo = [
   {
-    name: 'Strategy',
-    description:
-      'What does it mean to succeed? Establish your endgame objectives here.',
-    icon: <StrategyIcon />,
+    name: 'Goal Setting',
+    description: 'Establish your endgame objectives.',
+    icon: <GoalIcon />,
     navigator: (history: History, _: string) => () =>
       history.push('./strategy/objectives/'),
   },
   {
-    name: 'Tactics',
-    description:
-      'How do you reach your endgame? Catalog activities needed to reach your goals here.',
-    icon: <TacticalIcon />,
+    name: 'Activity Definition',
+    description: 'Catalog activities needed to reach your goalss.',
+    icon: <ActivityIcon />,
     navigator: (history: History, _: string) => () =>
       history.push('./tactical/activities/'),
   },
   {
     name: 'History',
-    description: 'Take a look at how you spent your time and figure out where you can improve!',
+    description: 'Take a look at how you spent your time.',
     icon: <HistoryIcon />,
     navigator: (history: History, guid: string) => () =>
       history.push(`./${guid}/history/`),
   },
   {
     name: 'Settings',
-    description:
-      'Everybody is different. Tailor the experience to your abilities.',
+    description: 'Tailor the experience to your abilities.',
     icon: <SettingsIcon style={{fontSize: '100px', color: '#333831'}} />,
     navigator: (history: History, _: string) => () =>
       history.push('./settings/'),
@@ -95,9 +92,7 @@ const Dashboard = ({fullName, guid, history}: Props) => {
             align="center"
             color="textSecondary"
             paragraph>
-            Welcome{fullName ? ` ${fullName}` : ''}! Figure out where you want
-            to excel. Then push yourself to your limits. Knowing you can find
-            your optimal recovery window, for maximum periodization.
+            Welcome{fullName ? ` ${fullName}` : ''}!
           </Typography>
           <SOGoS />
         </Container>
