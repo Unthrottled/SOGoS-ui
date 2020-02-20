@@ -45,7 +45,7 @@ const placesToGo = [
   },
   {
     name: 'Activity Definition',
-    description: 'Catalog activities needed to reach your goalss.',
+    description: 'Catalog activities needed to reach your goals.',
     icon: <ActivityIcon />,
     navigator: (history: History, _: string) => () =>
       history.push('./tactical/activities/'),

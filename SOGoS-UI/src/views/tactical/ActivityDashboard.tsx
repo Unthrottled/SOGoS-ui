@@ -19,7 +19,8 @@ import {
   createUpdatedTacticalActivityEvent,
 } from '../../events/TacticalEvents';
 import {
-  GlobalState, selectStrategyState,
+  GlobalState,
+  selectStrategyState,
   selectTacticalActivityState,
   selectUserState,
 } from '../../reducers';
@@ -158,7 +159,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
     ...mapTacticalActivitiesToID(activities),
     ...archivedActivities,
   };
-  const rememberedTacticalObjective = mappedTacticalActivities[activityId];
+  const rememberedTacticalActivity = mappedTacticalActivities[activityId];
 
   const currentTacticalActivity: TacticalActivity = mappedTacticalActivities[
     activityId
@@ -283,7 +284,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
             align={'center'}
             color={'textPrimary'}
             gutterBottom>
-            Your Activity
+            {rememberedTacticalActivity ? 'Edit' : 'Create'} Activity
           </Typography>
           <Typography
             variant="h6"
@@ -353,10 +354,10 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
           <div className={classes.persistActions}>
             <PersistActions
               {...{
-                ...(rememberedTacticalObjective
+                ...(rememberedTacticalActivity
                   ? {onDelete: () => setFinnaDelete(true)}
                   : {}),
-                ...(rememberedTacticalObjective ? archiveAction : {}),
+                ...(rememberedTacticalActivity ? archiveAction : {}),
               }}
               onCancel={discardChanges}
               onSave={saveTacticalActivity}
