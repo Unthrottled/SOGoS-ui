@@ -30,6 +30,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import Typography from '@material-ui/core/Typography';
 import {blue} from '@material-ui/core/colors';
+import {GENERIC_ACTIVITY_NAME} from '../time/ActivityHub';
 import capitalize from '@material-ui/core/utils/capitalize';
 
 export const RecoveryActivity: TacticalActivity = {
@@ -144,6 +145,12 @@ type HourSteppo = {
   hour: number;
   day: number;
   value: number;
+};
+
+const sanitizeName = (activityName: string): string => {
+  return activityName === RECOVERY || activityName === GENERIC_ACTIVITY_NAME
+    ? capitalize(activityName.toLowerCase())
+    : activityName;
 };
 
 const WeeklyHeatMap: FC<Props> = ({
@@ -363,7 +370,7 @@ const WeeklyHeatMap: FC<Props> = ({
   const activityToSteppoCount = linearProjection.reduce(
     (accum: StringDictionary<any>, steppo) => {
       const proj = steppo.spawn.start;
-      const activityName = getActivityName(proj);
+      const activityName = sanitizeName(getActivityName(proj));
       const activityID = getActivityID(proj) || activityName;
       if (!accum[activityID]) {
         accum[activityID] = {
@@ -381,6 +388,8 @@ const WeeklyHeatMap: FC<Props> = ({
     },
     {},
   );
+
+  console.log(activityToSteppoCount);
 
   const activityOptions = Object.values(activityToSteppoCount).sort(
     (a, b) => b.count - a.count,
