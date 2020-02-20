@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   hubRoot: {
     position: 'absolute',
+    maxWidth: '300px',
     top: theme.spacing(7),
   },
   container: {

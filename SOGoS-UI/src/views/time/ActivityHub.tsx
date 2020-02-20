@@ -34,6 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
   hubRoot: {
     position: 'sticky',
+    maxWidth: '300px',
     top: theme.spacing(1),
     zIndex: 100,
   },
