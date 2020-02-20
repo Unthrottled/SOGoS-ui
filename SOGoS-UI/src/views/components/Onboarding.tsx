@@ -1,32 +1,24 @@
 import React, {FC} from 'react';
 // @ts-ignore
 import {AutoRotatingCarousel, Slide} from 'material-auto-rotating-carousel';
-import {
-  amber,
-  blue,
-  cyan,
-  green,
-  grey,
-  orange,
-  purple,
-  red,
-} from '@material-ui/core/colors';
+import {cyan, green, orange, purple} from '@material-ui/core/colors';
 import Confetti from '../../images/confetti.png';
 import {connect, useDispatch} from 'react-redux';
 import {createWelcomedUserEvent} from '../../events/ActivityEvents';
 import {GlobalState, selectUserState} from '../../reducers';
 import {SOGoS} from '../icons/SOGoS';
 import QuestionIcon from '@material-ui/icons/ContactSupport';
-import ChartIcon from '@material-ui/icons/InsertChart';
+import HistoryIcon from '@material-ui/icons/History';
 import {GoalIcon} from '../icons/GoalIcon';
 import {ActivityIcon} from '../icons/ActivityIcon';
 
 interface Props {
   name?: string;
+  email?: string;
   welcomed?: boolean;
 }
 
-const Onboarding: FC<Props> = ({name, welcomed}) => {
+const Onboarding: FC<Props> = ({email, name, welcomed}) => {
   const dispatch = useDispatch();
   const dismissWelcome = () => {
     dispatch(createWelcomedUserEvent());
@@ -36,7 +28,7 @@ const Onboarding: FC<Props> = ({name, welcomed}) => {
     <AutoRotatingCarousel
       label="Got It!"
       autoplay={false}
-      open={!welcomed}
+      open={!welcomed && email}
       onStart={dismissWelcome}
       style={{position: 'absolute'}}>
       <Slide
@@ -51,8 +43,8 @@ const Onboarding: FC<Props> = ({name, welcomed}) => {
         mediaBackgroundStyle={{backgroundColor: orange[400]}}
         style={{backgroundColor: orange[600]}}
         title="What am I doing?"
-        subtitle="Are you spending your time on things that give you the most value?
-        Are you unsure what to do or wanting to do too much?"
+        subtitle="Do you know if you are spending your time on things bring you the most value?
+        Are you unsure what to do? Do you want to do too much?"
       />
       <Slide
         media={<GoalIcon size={{width: 256, height: 256}} />}
@@ -74,7 +66,7 @@ const Onboarding: FC<Props> = ({name, welcomed}) => {
         Define the activities that will get you to the top of your mountains."
       />
       <Slide
-        media={<ChartIcon style={{fontSize: '256px', color: '#fff'}} />}
+        media={<HistoryIcon style={{fontSize: '256px', color: '#fff'}} />}
         mediaBackgroundStyle={{backgroundColor: purple[400]}}
         style={{backgroundColor: purple[600]}}
         title="Retrospect"
@@ -99,13 +91,14 @@ const Onboarding: FC<Props> = ({name, welcomed}) => {
 
 const mapStateToProps = (state: GlobalState): Props => {
   const {
-    information: {firstName},
+    information: {firstName, email},
     miscellaneous: {
       onboarding: {welcomed},
     },
   } = selectUserState(state);
   return {
     name: firstName,
+    email,
     welcomed,
   };
 };

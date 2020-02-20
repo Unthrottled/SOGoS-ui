@@ -28,6 +28,7 @@ export const AFFIRMED_ACKNOWLEDGMENT = 'AFFIRMED_ACKNOWLEDGMENT';
 export const THANKED_FOR_TACMOD = 'THANKED_FOR_TACMOD';
 export const SYNCED_THANKED_FOR_TACMOD = 'SYNCED_THANKED_FOR_TACMOD';
 export const USER_WELCOMED = 'USER_WELCOMED';
+export const SYNCED_USER_WELCOMED = 'SYNCED_USER_WELCOMED';
 
 export const CAPSTONED_ACTIVITIES: 'CAPSTONED_ACTIVITIES' =
   'CAPSTONED_ACTIVITIES';
@@ -37,6 +38,9 @@ export const createAcknowledgedTacModEvent = (): BaseEvent => ({
 });
 export const createWelcomedUserEvent = (): BaseEvent => ({
   type: USER_WELCOMED,
+});
+export const createSyncedUserWelcomed = (): BaseEvent => ({
+  type: SYNCED_USER_WELCOMED,
 });
 export const createThankedForDownloadingTacModEvent = (): BaseEvent => ({
   type: THANKED_FOR_TACMOD,

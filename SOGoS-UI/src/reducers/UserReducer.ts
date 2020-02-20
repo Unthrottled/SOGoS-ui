@@ -1,7 +1,7 @@
 import {CHECKED_CACHES, RECEIVED_USER} from '../events/UserEvents';
 import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
-import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD} from '../events/ActivityEvents';
+import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
 
 export type UserMiscellaneous = {
   hasItemsCached: boolean;
@@ -37,6 +37,17 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
           onboarding: {
             ...state.miscellaneous.onboarding,
             TacModNotified: true,
+          },
+        },
+      };
+    case USER_WELCOMED:
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          onboarding: {
+            ...state.miscellaneous.onboarding,
+            welcomed: true,
           },
         },
       };

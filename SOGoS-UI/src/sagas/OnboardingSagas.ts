@@ -4,7 +4,10 @@ import {PayloadEvent} from '../events/Event';
 import {UserResponse} from '../types/UserTypes';
 import {
   ACKNOWLEDGED_TACMOD,
-  createAffirmedTabModAcknowledgementEvent, createSyncedThankedForDownloadingTacModEvent, THANKED_FOR_TACMOD,
+  createAffirmedTabModAcknowledgementEvent,
+  createSyncedThankedForDownloadingTacModEvent, createSyncedUserWelcomed,
+  THANKED_FOR_TACMOD,
+  USER_WELCOMED,
 } from '../events/ActivityEvents';
 import {performPost} from './APISagas';
 
@@ -39,10 +42,21 @@ function* tacModGratefulSaga(_: any, attempt = 10): Generator {
   }
 }
 
+function* initialOnboardingSaga(_: any, attempt = 10): Generator {
+  try {
+    yield call(performPost, '/user/onboarding/welcomed', {});
+    yield put(createSyncedUserWelcomed());
+  } catch (e) {
+    yield delay(Math.pow(2, attempt) + Math.floor(Math.random() * 1000));
+    yield call(tacModAffirmationSaga, {}, attempt < 13 ? attempt + 1 : 10);
+  }
+}
+
 function* setUpOnboardingSagas() {
   yield takeEvery(RECEIVED_USER, initialWalkThroughSaga);
   yield takeEvery(ACKNOWLEDGED_TACMOD, tacModAffirmationSaga);
   yield takeEvery(THANKED_FOR_TACMOD, tacModGratefulSaga);
+  yield takeEvery(USER_WELCOMED, initialOnboardingSaga);
 }
 
 export default function* rootSaga() {
