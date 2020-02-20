@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {max, scaleSequential, select} from 'd3';
 import {
   GlobalState,
+  selectActivityState,
   selectHistoryState,
   selectStrategyState,
   selectTacticalActivityState,
@@ -14,6 +15,7 @@ import {
   DEFAULT_ACTIVITY,
   getActivityID,
   getActivityName,
+  RECOVERY,
 } from '../../types/ActivityTypes';
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {TacticalActivity} from '../../types/TacticalTypes';
@@ -21,12 +23,33 @@ import {Objective} from '../../types/StrategyTypes';
 import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
-import {getMeaningFullName, mapTacticalActivitiesToID} from './PieFlavored';
+import {mapTacticalActivitiesToID} from './PieFlavored';
 import {ActivityProjection} from './Projections';
 import {constructColorMappings} from './TimeLine';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import Typography from '@material-ui/core/Typography';
+import {blue} from '@material-ui/core/colors';
+import capitalize from '@material-ui/core/utils/capitalize';
+
+export const RecoveryActivity: TacticalActivity = {
+  id: RECOVERY,
+  antecedenceTime: 69,
+  categories: [],
+  hidden: false,
+  iconCustomization: {
+    background: {
+      hex: blue[500],
+      opacity: 1,
+    },
+    line: {
+      opacity: 1,
+      hex: '#ffffff',
+    },
+  },
+  name: 'Recovery',
+  rank: -1,
+};
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -44,6 +67,7 @@ interface Props {
   relativeFromTime: number;
   tacticalActivities: NumberDictionary<TacticalActivity>;
   bottomActivity: Activity;
+  currentActivity: Activity;
   archivedActivities: NumberDictionary<TacticalActivity>;
   objectives: StringDictionary<Objective>;
 }
@@ -125,7 +149,9 @@ type HourSteppo = {
 const WeeklyHeatMap: FC<Props> = ({
   activityFeed,
   bottomActivity,
+  currentActivity,
   relativeFromTime,
+  relativeToTime,
   tacticalActivities,
   archivedActivities,
 }) => {
@@ -134,7 +160,7 @@ const WeeklyHeatMap: FC<Props> = ({
   >([]);
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
-  const [currentActivity, setCurrentActivity] = useState<{
+  const [currentHeatMapActivity, setCurrentHeatMapActivity] = useState<{
     name: string;
     key: string;
     count: number;
@@ -213,8 +239,8 @@ const WeeklyHeatMap: FC<Props> = ({
     const unfilteredSteppos = breakIntoHeatSteps(linearProj, 3600000);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
-        !currentActivity ||
-        currentActivity.name === getActivityName(steppo.spawn.start),
+        !currentHeatMapActivity ||
+        currentHeatMapActivity.name === getActivityName(steppo.spawn.start),
     );
     const timeSteppoMaker = (steppo: {
       timeStamp: number;
@@ -263,16 +289,17 @@ const WeeklyHeatMap: FC<Props> = ({
       })),
     );
 
-    const mappedTacticalActivities = {
+    const mappedTacticalActivities: StringDictionary<TacticalActivity> = {
       ...mapTacticalActivitiesToID(tacticalActivities),
       ...archivedActivities,
+      [RECOVERY]: RecoveryActivity,
     };
 
     const almostMaxValue = max(steps, s => +s.value) || 1;
     const maxValue = almostMaxValue < 1 ? 1 : almostMaxValue;
     const domain: [number, number] = [0, maxValue];
     const colorMappings = constructColorMappings(mappedTacticalActivities);
-    const colorScale = (_: number) => colorMappings[currentActivity.key];
+    const colorScale = (_: number) => colorMappings[currentHeatMapActivity.key];
     const opacityScale = scaleSequential(n => n + 1e-2).domain(domain);
 
     const hourHeatBoxes = heatBoiSvg
@@ -326,8 +353,10 @@ const WeeklyHeatMap: FC<Props> = ({
     archivedActivities,
     bottomActivity,
     currentActivity,
+    currentHeatMapActivity,
     filteredLinearProjection,
     relativeFromTime,
+    relativeToTime,
     tacticalActivities,
   ]);
 
@@ -359,58 +388,65 @@ const WeeklyHeatMap: FC<Props> = ({
 
   useEffect(() => {
     if (
-      (!currentActivity.name ||
-        !activityOptions.find(opt => opt.name === currentActivity.name)) &&
+      (!currentHeatMapActivity.name ||
+        !activityOptions.find(
+          opt => opt.name === currentHeatMapActivity.name,
+        )) &&
       activityOptions.length > 1 &&
       activityOptions[0].name
     ) {
-      setCurrentActivity(activityOptions[0]);
+      setCurrentHeatMapActivity(activityOptions[0]);
     }
-  }, [activityOptions, currentActivity]);
-  const mappedTacticalActivities = mapTacticalActivitiesToID(
-    tacticalActivities,
-  );
+  }, [activityOptions, currentHeatMapActivity]);
+  const mappedTacticalActivities = mapTacticalActivitiesToID({
+    ...tacticalActivities,
+    [9001]: RecoveryActivity,
+  });
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <div id={'heatBoi'} />
-      <div style={{display: 'flex', justifyContent: 'center'}}>
-        <div style={{margin: 'auto 0'}}>
-          <TacticalActivityIcon
-            size={{
-              width: 50,
-              height: 50,
-            }}
-            tacticalActivity={mappedTacticalActivities[currentActivity.key]}
-          />
-        </div>
-        <Select
-          style={{margin: '0 1rem'}}
-          value={currentActivity.name}
-          onChange={event => {
-            const nextSelection = activityOptions.find(
-              option => option.name === event.target.value,
-            );
-            setCurrentActivity(nextSelection || activityOptions[0]);
-          }}>
-          {activityOptions.map(value => {
-            return (
-              <MenuItem
-                key={value.key || new Date().valueOf().toString(16)}
-                value={value.name}>
-                {value.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-        <div>
-          <div id={'legend27'} />
-          <div style={{display: 'flex'}}>
-            <Typography>less</Typography>
-            <Typography className={classes.legendLabel}>more</Typography>
+      {!!currentHeatMapActivity.name && (
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          <div style={{margin: 'auto 0'}}>
+            <TacticalActivityIcon
+              size={{
+                width: 50,
+                height: 50,
+              }}
+              tacticalActivity={
+                mappedTacticalActivities[currentHeatMapActivity.key]
+              }
+            />
+          </div>
+          <Select
+            style={{margin: '0 1rem'}}
+            value={currentHeatMapActivity.name}
+            onChange={event => {
+              const nextSelection = activityOptions.find(
+                option => option.name === event.target.value,
+              );
+              setCurrentHeatMapActivity(nextSelection || activityOptions[0]);
+            }}>
+            {activityOptions.map(value => {
+              return (
+                <MenuItem
+                  key={value.key || new Date().valueOf().toString(16)}
+                  value={value.name}>
+                  {value.name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+          <div>
+            <div id={'legend27'} />
+            <div style={{display: 'flex'}}>
+              <Typography>less</Typography>
+              <Typography className={classes.legendLabel}>more</Typography>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -421,10 +457,12 @@ const mapStateToProps = (state: GlobalState): Props => {
     selectedHistoryRange: {to, from},
     capstone: {bottomActivity},
   } = selectHistoryState(state);
+  const {currentActivity} = selectActivityState(state);
   const {objectives} = selectStrategyState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
   return {
     activityFeed,
+    currentActivity,
     relativeToTime: to,
     relativeFromTime: from,
     tacticalActivities: activities,

@@ -36,14 +36,14 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
         mediaBackgroundStyle={{backgroundColor: '#454545', whiteSpace: 'pre'}}
         style={{backgroundColor: '#333333'}}
         title={`Welcome${name ? ' ' + name : ''}!`}
-        subtitle="Let's figure out what SOGoS can do for us!"
+        subtitle="Let's figure out what SOGoS can do for you!"
       />
       <Slide
         media={<QuestionIcon style={{fontSize: '256px', color: '#fff'}} />}
         mediaBackgroundStyle={{backgroundColor: orange[400]}}
         style={{backgroundColor: orange[600]}}
-        title="What am I doing?"
-        subtitle="Do you know if you are spending your time on things bring you the most value?
+        title="What are you doing?"
+        subtitle="Are you spending pending time on things that bring you the most value?
         Are you unsure what to do? Do you want to do too much?"
       />
       <Slide

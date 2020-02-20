@@ -26,7 +26,7 @@ import {
   activitiesEqual,
   Activity,
   DEFAULT_ACTIVITY,
-  getActivityName,
+  getActivityName, RECOVERY,
 } from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -37,6 +37,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Objective} from '../../types/StrategyTypes';
 import moment from 'moment';
+import {RecoveryActivity} from "./WeeklyHeatMap";
 
 export const getMeaningFullName = (
   activityId: string,
@@ -207,9 +208,10 @@ const PieFlavored: FC<Props> = ({
   );
 
   const totalTime = pieData.reduceRight((accum, b) => accum + b.value, 0);
-  const mappedTacticalActivities = {
+  const mappedTacticalActivities: StringDictionary<TacticalActivity> = {
     ...mapTacticalActivitiesToID(tacticalActivities),
     ...archivedActivities,
+    [RECOVERY]: RecoveryActivity,
   };
 
   useEffect(() => {
