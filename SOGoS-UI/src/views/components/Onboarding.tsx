@@ -28,7 +28,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
     <AutoRotatingCarousel
       label="Got It!"
       autoplay={false}
-      open={!welcomed && email}
+      open={!welcomed && !!email}
       onStart={dismissWelcome}
       style={{position: 'absolute'}}>
       <Slide

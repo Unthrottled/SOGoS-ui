@@ -28,7 +28,7 @@ import HiddenActivitiesDashboard from './tactical/HiddenActivitiesDashboard';
 import {GlobalState, selectSecurityState} from '../reducers';
 import {SecurityState} from '../reducers/SecurityReducer';
 import OutOfSync from './components/OutOfSync';
-import TacModThankYou from "./components/TacModThankYou";
+import Banner from './components/Banner';
 
 const theme = responsiveFontSizes(
   createMuiTheme({
@@ -80,68 +80,71 @@ const App = () => {
   useEffect(() => {
     dispetch(createApplicationInitializedEvent());
   }, [dispetch, mounted]);
-  return isOutOfSync ? (
-    <ThemeProvider theme={theme}>
-      <OutOfSync />
-    </ThemeProvider>
-  ) : isInitialized ? (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <div className={classes.content}>
-          <Switch>
-            <Route path={'/login'} component={LoggedOut} />
 
-            {/*todo: make this public*/}
-            <PrivateRoute
-              path={'/:uuid/history'}
-              component={HistoryDashboard}
-            />
+  const getComponent = () => {
+    if (isOutOfSync) {
+      return <OutOfSync />;
+    } else if (!isInitialized) {
+      return <Banner />;
+    } else {
+      return (
+        <div className="App">
+          <div className={classes.content}>
+            <Switch>
+              <Route path={'/login'} component={LoggedOut} />
 
-            <PrivateRoute path={'/settings'} component={Settings} />
-            <PrivateRoute
-              path={'/strategy/objectives/:objectiveId/tactics/association'}
-              component={ObjectiveActivityAssociationDashboard}
-            />
-            <PrivateRoute
-              path={'/strategy/objectives/:objectiveId'}
-              component={ObjectiveDashboard}
-            />
-            <PrivateRoute
-              path={'/strategy/objectives'}
-              component={ObjectivesDashboard}
-            />
-            <PrivateRoute
-              path={'/tactical/activities/rank/dashboard'}
-              component={ActivitiesRankDashboard}
-            />
-            <PrivateRoute
-              path={'/tactical/activities/hidden'}
-              component={HiddenActivitiesDashboard}
-            />
-            <PrivateRoute
-              path={'/tactical/activities/:activityId/strategy/association'}
-              component={ActivityObjectiveAssociationDashboard}
-            />
-            <PrivateRoute
-              path={'/tactical/activities/:activityId'}
-              component={ActivityDashboard}
-            />
-            <PrivateRoute
-              path={'/tactical/activities'}
-              component={ActivitiesDashboard}
-            />
-            <PrivateRoute path={'/strategy'} component={StrategicDashboard} />
-            <PrivateRoute path={'/tactical'} component={TacticalDashboard} />
-            <PrivateRoute path={'/'} exact component={Dashboard} />
-            <Route component={() => <h2>404</h2>} />
-          </Switch>
-          <ActivityTimer />
+              {/*todo: make this public*/}
+              <PrivateRoute
+                path={'/:uuid/history'}
+                component={HistoryDashboard}
+              />
+
+              <PrivateRoute path={'/settings'} component={Settings} />
+              <PrivateRoute
+                path={'/strategy/objectives/:objectiveId/tactics/association'}
+                component={ObjectiveActivityAssociationDashboard}
+              />
+              <PrivateRoute
+                path={'/strategy/objectives/:objectiveId'}
+                component={ObjectiveDashboard}
+              />
+              <PrivateRoute
+                path={'/strategy/objectives'}
+                component={ObjectivesDashboard}
+              />
+              <PrivateRoute
+                path={'/tactical/activities/rank/dashboard'}
+                component={ActivitiesRankDashboard}
+              />
+              <PrivateRoute
+                path={'/tactical/activities/hidden'}
+                component={HiddenActivitiesDashboard}
+              />
+              <PrivateRoute
+                path={'/tactical/activities/:activityId/strategy/association'}
+                component={ActivityObjectiveAssociationDashboard}
+              />
+              <PrivateRoute
+                path={'/tactical/activities/:activityId'}
+                component={ActivityDashboard}
+              />
+              <PrivateRoute
+                path={'/tactical/activities'}
+                component={ActivitiesDashboard}
+              />
+              <PrivateRoute path={'/strategy'} component={StrategicDashboard} />
+              <PrivateRoute path={'/tactical'} component={TacticalDashboard} />
+              <PrivateRoute path={'/'} exact component={Dashboard} />
+              <Route component={() => <h2>404</h2>} />
+            </Switch>
+            <ActivityTimer />
+          </div>
         </div>
-      </div>
-    </ThemeProvider>
-  ) : (
-    <div />
-  );
+      );
+    }
+  };
+
+  return <ThemeProvider theme={theme}>{getComponent()}</ThemeProvider>;
 };
 
 export default App;
