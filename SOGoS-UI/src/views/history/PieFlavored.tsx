@@ -26,7 +26,8 @@ import {
   activitiesEqual,
   Activity,
   DEFAULT_ACTIVITY,
-  getActivityName, RECOVERY,
+  getActivityName,
+  RECOVERY,
 } from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -37,7 +38,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Objective} from '../../types/StrategyTypes';
 import moment from 'moment';
-import {RecoveryActivity} from "./WeeklyHeatMap";
+import {RecoveryActivity} from './WeeklyHeatMap';
 
 export const getMeaningFullName = (
   activityId: string,
@@ -90,6 +91,31 @@ interface ProjectionReduction {
   trackedTime: number;
   currentActivity: Activity;
   activityBins: StringDictionary<GroupedActivity[]>;
+}
+
+function addCurrentActivityToProjection(
+  activityProjection: ProjectionReduction,
+  relativeToTime: number,
+) {
+  const bins = activityProjection.activityBins;
+  const activityIdentifier = getActivityIdentifier(
+    activityProjection.currentActivity,
+  );
+  if (!bins[activityIdentifier]) {
+    bins[activityIdentifier] = [];
+  }
+
+  const activityName = getActivityName(activityProjection.currentActivity);
+  const meow = new Date().getTime();
+  const capTime = meow < relativeToTime ? meow : relativeToTime;
+  const duration = capTime - activityProjection.trackedTime;
+  bins[activityIdentifier].push({
+    activityName,
+    activityIdentifier,
+    duration,
+    spawn: activityProjection.currentActivity,
+  });
+  return bins;
 }
 
 const PieFlavored: FC<Props> = ({
@@ -147,24 +173,10 @@ const PieFlavored: FC<Props> = ({
     },
   );
 
-  const bins = activityProjection.activityBins;
-  const activityIdentifier = getActivityIdentifier(
-    activityProjection.currentActivity,
+  const bins = addCurrentActivityToProjection(
+    activityProjection,
+    relativeToTime,
   );
-  if (!bins[activityIdentifier]) {
-    bins[activityIdentifier] = [];
-  }
-
-  const activityName = getActivityName(activityProjection.currentActivity);
-  const meow = new Date().getTime();
-  const capTime = meow < relativeToTime ? meow : relativeToTime;
-  const duration = capTime - activityProjection.trackedTime;
-  bins[activityIdentifier].push({
-    activityName,
-    activityIdentifier,
-    duration,
-    spawn: activityProjection.currentActivity,
-  });
 
   const bottomCapActivity: Activity = bottomActivity;
   const earliestActivity: Activity = activityFeed[activityFeed.length - 1];
