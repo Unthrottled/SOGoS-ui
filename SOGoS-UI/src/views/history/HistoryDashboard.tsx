@@ -3,8 +3,6 @@ import {connect, DispatchProp, useSelector} from 'react-redux';
 import LoggedInLayout from '../components/LoggedInLayout';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
-import PieFlavored from './PieFlavored';
-import TimeLine from './TimeLine';
 import moment, {Moment} from 'moment';
 import {
   createAdjustedHistoryTimeFrame,
@@ -20,8 +18,13 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {HistoryIcon} from '../icons/HistoryIcon';
-import WeeklyHeatMap from './WeeklyHeatMap';
 import capitalize from '@material-ui/core/utils/capitalize';
+import {Activity, getActivityName} from '../../types/ActivityTypes';
+import TimeLine from './TimeLine';
+import PieFlavored from './PieFlavored';
+import WeeklyHeatMap from './WeeklyHeatMap';
+import Loader from 'react-loader-spinner';
+import {PRIMARY_THEME_COLOR} from '../App';
 
 const drawerWidth = 240;
 
@@ -107,12 +110,14 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   selectedTo: number;
   selectedFrom: number;
+  bottomActivity?: Activity;
 }
 
 const HistoryDashboard: FC<DispatchProp & Props> = ({
   dispatch,
   selectedTo,
   selectedFrom,
+  bottomActivity,
 }) => {
   const classes = useStyles();
 
@@ -177,32 +182,50 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
           </Container>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <main className={classes.content}>
-        <div className={classes.paper}>
-          <TimeLine />
+      {!!bottomActivity && !!getActivityName(bottomActivity) ? (
+        <main className={classes.content}>
+          <div className={classes.paper}>
+            <TimeLine />
+          </div>
+          <div className={classes.paper}>
+            <PieFlavored />
+          </div>
+          <div className={classes.paper}>
+            <WeeklyHeatMap />
+          </div>
+        </main>
+      ) : (
+        <div
+          style={{
+            opacity: 0.7,
+            position: 'fixed',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}>
+          <Loader
+            type={'Triangle'}
+            color={PRIMARY_THEME_COLOR}
+            height={256}
+            width={256}
+          />
         </div>
-        <div className={classes.paper}>
-          <PieFlavored />
-        </div>
-        <div className={classes.paper}>
-          <WeeklyHeatMap />
-        </div>
-      </main>
+      )}
     </LoggedInLayout>
   );
 };
 
-const mapStateToProps = (state: GlobalState) => {
-  const {
-    information: {fullName},
-  } = selectUserState(state);
+const mapStateToProps = (state: GlobalState): Props => {
   const {
     selectedHistoryRange: {from, to},
   } = selectHistoryState(state);
+  const {
+    capstone: {bottomActivity},
+  } = selectHistoryState(state);
   return {
-    fullName,
     selectedFrom: from,
     selectedTo: to,
+    bottomActivity,
   };
 };
 

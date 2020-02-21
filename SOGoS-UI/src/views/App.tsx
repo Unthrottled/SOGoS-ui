@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './App.css';
 import {useDispatch, useSelector} from 'react-redux';
 import {createApplicationInitializedEvent} from '../events/ApplicationLifecycleEvents';
@@ -30,11 +31,12 @@ import {SecurityState} from '../reducers/SecurityReducer';
 import OutOfSync from './components/OutOfSync';
 import Banner from './components/Banner';
 
+export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
   createMuiTheme({
     palette: {
       primary: {
-        main: '#f9c048',
+        main: PRIMARY_THEME_COLOR,
         //@ts-ignore real
         alertColor: '#f9ff75',
       },
@@ -55,7 +57,7 @@ const useStyles = makeStyles(_ => ({
       '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
     },
     '*::-webkit-scrollbar-thumb': {
-      backgroundColor: '#f9c048',
+      backgroundColor: PRIMARY_THEME_COLOR,
       outline: '1px solid slategrey',
     },
   },
