@@ -28,7 +28,9 @@ export interface TimelineProjection {
   activityBins: StringDictionary<ActivityProjection[]>;
 }
 
-export const constructProjection = (modifiedFeed: Activity[]) =>
+export const constructProjection = (
+  modifiedFeed: Activity[],
+): TimelineProjection =>
   reduceRight(
     modifiedFeed,
     (accum: TimelineProjection, activity) => {

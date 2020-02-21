@@ -24,8 +24,8 @@ import {constructLinearProjection, LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
 import {mapTacticalActivitiesToID} from './PieFlavored';
-import {ActivityProjection} from './Projections';
-import {constructColorMappings} from './TimeLine';
+import {ActivityProjection, constructProjection} from './Projections';
+import {addCurrentActivity, constructColorMappings} from './TimeLine';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import Typography from '@material-ui/core/Typography';
@@ -242,7 +242,31 @@ const WeeklyHeatMap: FC<Props> = ({
       modifiedFeed.push(modifiedBottom);
     }
 
-    const linearProj = constructLinearProjection(modifiedFeed);
+    const newestActivity = activityFeed[0];
+    if (
+      !activitiesEqual(newestActivity, currentActivity) &&
+      currentActivity &&
+      currentActivity !== DEFAULT_ACTIVITY &&
+      (newestActivity &&
+        newestActivity.antecedenceTime < currentActivity.antecedenceTime)
+    ) {
+      const antecedenceTime =
+        currentActivity.antecedenceTime > relativeToTime
+          ? relativeToTime - (relativeToTime % 86400000)
+          : currentActivity.antecedenceTime;
+      const modifiedTop: Activity = {
+        ...currentActivity,
+        antecedenceTime: antecedenceTime,
+      };
+      modifiedFeed.unshift(modifiedTop);
+    }
+
+    const projection = constructProjection(modifiedFeed);
+    addCurrentActivity(projection, relativeToTime);
+    const linearProj: LinearProjection = {
+      currentActivity: projection.currentActivity,
+      activityBins: Object.values(projection.activityBins).flatMap(a => a),
+    };
     const unfilteredSteppos = breakIntoHeatSteps(linearProj, 3600000);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
@@ -388,8 +412,6 @@ const WeeklyHeatMap: FC<Props> = ({
     },
     {},
   );
-
-  console.log(activityToSteppoCount);
 
   const activityOptions = Object.values(activityToSteppoCount).sort(
     (a, b) => b.count - a.count,

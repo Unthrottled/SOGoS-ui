@@ -32,7 +32,7 @@ import {
   RECOVERY,
 } from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
-import {constructProjection} from './Projections';
+import {constructProjection, TimelineProjection} from './Projections';
 
 const withStyles = makeStyles(__ => ({
   timeBar: {
@@ -119,6 +119,35 @@ const mapStateToProps = (state: GlobalState): Props => {
   };
 };
 
+export const addCurrentActivity = (
+  activityProjection: TimelineProjection,
+  relativeToTime: number,
+) => {
+  const bins = activityProjection.activityBins;
+  const activityIdentifier = getActivityIdentifier(
+    activityProjection.currentActivity,
+  );
+  if (!bins[activityIdentifier]) {
+    bins[activityIdentifier] = [];
+  }
+  const activityName = getActivityName(activityProjection.currentActivity);
+  const meow = new Date().valueOf();
+  bins[activityIdentifier].push({
+    activityName,
+    activityIdentifier,
+    start: activityProjection.currentActivity.antecedenceTime,
+    stop: relativeToTime > meow ? meow : relativeToTime,
+    spawn: {
+      start: activityProjection.currentActivity,
+      stop: {
+        ...DEFAULT_ACTIVITY,
+        antecedenceTime: meow.valueOf(),
+      },
+    },
+  });
+  return bins;
+};
+
 const TimeLine: FC<Props> = ({
   activityFeed,
   relativeToTime,
@@ -151,28 +180,7 @@ const TimeLine: FC<Props> = ({
 
   const activityProjection = constructProjection(modifiedFeed);
 
-  const bins = activityProjection.activityBins;
-  const activityIdentifier = getActivityIdentifier(
-    activityProjection.currentActivity,
-  );
-  if (!bins[activityIdentifier]) {
-    bins[activityIdentifier] = [];
-  }
-  const activityName = getActivityName(activityProjection.currentActivity);
-  const meow = new Date().valueOf();
-  bins[activityIdentifier].push({
-    activityName,
-    activityIdentifier,
-    start: activityProjection.currentActivity.antecedenceTime,
-    stop: relativeToTime > meow ? meow : relativeToTime,
-    spawn: {
-      start: activityProjection.currentActivity,
-      stop: {
-        ...DEFAULT_ACTIVITY,
-        antecedenceTime: meow.valueOf(),
-      },
-    },
-  });
+  const bins = addCurrentActivity(activityProjection, relativeToTime);
 
   useEffect(() => {
     if (modifiedFeed.length) {
