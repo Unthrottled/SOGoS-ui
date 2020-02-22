@@ -166,6 +166,22 @@ const ActivityTimeBar = () => {
     );
   };
 
+  const swapActivity = (activityName: string, supplements: any) => {
+    const meow = new Date().valueOf();
+    const duration =
+      currentActivity.content.duration || pomodoroSettings.loadDuration;
+    dispetch(
+      startTimedActivity({
+        ...supplements,
+        name: activityName,
+        type: ActivityType.ACTIVE,
+        timedType: ActivityTimedType.TIMER,
+        duration: duration - (meow - currentActivity.antecedenceTime),
+        uuid: uuid(),
+      }),
+    );
+  };
+
   const resumePreviousActivity = () => {
     dispetch(
       startTimedActivity({
@@ -223,6 +239,7 @@ const ActivityTimeBar = () => {
             <PomodoroTimer
               onPause={startPausedRecovery}
               pivotActivity={pivotActivity}
+              swapActivity={swapActivity}
               hidePause={isRecovery}
               onResume={resumePreviousActivity}
             />

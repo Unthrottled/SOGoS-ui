@@ -9,6 +9,7 @@ import {GENERIC_ACTIVITY_NAME} from './ActivityHub';
 import IconButton from '@material-ui/core/IconButton';
 import {useSelector} from 'react-redux';
 import {selectTimeState} from '../../reducers';
+import {SwapHoriz} from "@material-ui/icons";
 
 const useStyles = makeStyles(theme => ({
   stopwatchContainer: {
@@ -32,17 +33,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+type ChangeActivityCallback = (
+  name: string,
+  stuff: {activityID?: string},
+) => void;
+
 interface Props {
   onPause?: () => void;
   onResume?: () => void;
   fontSize?: string;
-  pivotActivity?: (name: string, stuff: {activityID?: string}) => void;
+  pivotActivity?: ChangeActivityCallback;
+  swapActivity?: ChangeActivityCallback;
   hidePause?: boolean;
 }
 
 export const PomodoroTimer: FC<Props> = ({
   onPause,
   pivotActivity,
+  swapActivity,
   hidePause,
 }) => {
   const pauseTimer = () => {
@@ -51,9 +59,22 @@ export const PomodoroTimer: FC<Props> = ({
 
   const [selectionOpen, setSelectionOpen] = useState(false);
 
+  const [changeActivityFunction, setChangeActivityFunction] = useState<{
+    changeActivity: ChangeActivityCallback | undefined;
+  }>({
+    changeActivity: pivotActivity || swapActivity,
+  });
+
   const classes = useStyles();
   const closeSelection = () => setSelectionOpen(false);
-  const openSelection = () => setSelectionOpen(true);
+  const openPivotSelection = () => {
+    setChangeActivityFunction({changeActivity: pivotActivity});
+    setSelectionOpen(true);
+  };
+  const openSwappoSelection = () => {
+    setChangeActivityFunction({changeActivity: swapActivity});
+    setSelectionOpen(true);
+  };
 
   const timeElapsed = useSelector(selectTimeState).timeElapsed;
 
@@ -64,7 +85,7 @@ export const PomodoroTimer: FC<Props> = ({
           color={'inherit'}
           title={'Pivot to Activity'}
           className={classes.swappo}
-          onClick={openSelection}>
+          onClick={openPivotSelection}>
           <SwapVert />
         </IconButton>
       )}
@@ -81,16 +102,30 @@ export const PomodoroTimer: FC<Props> = ({
           </IconButton>
         )}
       </div>
+      <div className={classes.actionButton}>
+        {!hidePause && (
+          <IconButton
+            title={'Swap Activity'}
+            color={'inherit'}
+            onClick={openSwappoSelection}>
+            <SwapHoriz />
+          </IconButton>
+        )}
+      </div>
+
       <ActivitySelection
         open={selectionOpen}
         onClose={closeSelection}
         onActivitySelection={activity => {
           closeSelection();
-          pivotActivity &&
-            pivotActivity(activity.name, {activityID: activity.id});
+          changeActivityFunction.changeActivity &&
+            changeActivityFunction.changeActivity(activity.name, {
+              activityID: activity.id,
+            });
         }}
         onGenericActivitySelection={() =>
-          pivotActivity && pivotActivity(GENERIC_ACTIVITY_NAME, {})
+          changeActivityFunction.changeActivity &&
+          changeActivityFunction.changeActivity(GENERIC_ACTIVITY_NAME, {})
         }
         genericIcon={<StopWatch className={classes.bigIcon} />}
       />
