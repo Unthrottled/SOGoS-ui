@@ -165,14 +165,15 @@ const ActivityHub = () => {
     name: string;
     perform: () => void;
   }) => {
-    if (!(TacModDownloaded || TacModNotified)) {
-      setStoredAction({
-        action: action.perform,
-      });
-      setUseTacMod(true);
-    } else {
+    // todo bring back when tacmod is in playstore.
+    // if (!(TacModDownloaded || TacModNotified)) {
+    //   setStoredAction({
+    //     action: action.perform,
+    //   });
+    //   setUseTacMod(true);
+    // } else {
       action.perform();
-    }
+    // }
   };
 
   const commenceTimedActivity = (name: string, supplements: any) => {
@@ -294,7 +295,8 @@ const ActivityHub = () => {
           />
         ))}
       </SpeedDial>
-      <TacModPlug visible={useTacMod} onDismiss={tacModDismissed} />
+      {/*todo: bring back when tacmod is on the playstore*/}
+      {/*<TacModPlug visible={useTacMod} onDismiss={tacModDismissed} />*/}
       <ActivitySelection
         open={strategyOpen}
         onClose={closeStrategy}
