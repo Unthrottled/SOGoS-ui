@@ -18,17 +18,8 @@ import {
   createShowTacticalActivityEvent,
   createUpdatedTacticalActivityEvent,
 } from '../../events/TacticalEvents';
-import {
-  GlobalState,
-  selectStrategyState,
-  selectTacticalActivityState,
-  selectUserState,
-} from '../../reducers';
-import {
-  ActivityIcon,
-  defaultBackground,
-  defaultLine,
-} from '../icons/ActivityIcon';
+import {GlobalState, selectStrategyState, selectTacticalActivityState,} from '../../reducers';
+import {ActivityIcon, defaultBackground, defaultLine,} from '../icons/ActivityIcon';
 import Container from '@material-ui/core/Container';
 import {PersistActions} from '../components/PersistActions';
 import {mapTacticalActivitiesToID} from '../history/PieFlavored';
@@ -147,14 +138,14 @@ interface Props {
 }
 
 const ActivityDashboard: FC<DispatchProp & Props> = ({
-  dispatch,
-  activities,
-  archivedActivities,
-  objectives,
-}) => {
+                                                       dispatch,
+                                                       activities,
+                                                       archivedActivities,
+                                                       objectives,
+                                                     }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const {activityId} = useParams<{activityId: string}>();
+  const {activityId} = useParams<{ activityId: string }>();
   const mappedTacticalActivities = {
     ...mapTacticalActivitiesToID(activities),
     ...archivedActivities,
@@ -163,7 +154,7 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
 
   const currentTacticalActivity: TacticalActivity = mappedTacticalActivities[
     activityId
-  ] || {
+    ] || {
     name: '',
     iconCustomization: {
       background: defaultBackground,
@@ -179,12 +170,12 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
   const handleTacticalNameChange = (event: any) =>
     setTacticalActivityName(event.target.value);
 
-  const [categoryValues, setMulti] = useState<{value: string; label: string}[]>(
+  const [categoryValues, setMulti] = useState<{ value: string; label: string }[]>(
     currentTacticalActivity.categories
       ? currentTacticalActivity.categories.map(catVal => ({
-          value: catVal,
-          label: catVal,
-        }))
+        value: catVal,
+        label: catVal,
+      }))
       : [],
   );
 
@@ -264,15 +255,15 @@ const ActivityDashboard: FC<DispatchProp & Props> = ({
 
   const archiveAction = currentTacticalActivity.hidden
     ? {
-        onComplete: unHideTacticalActivity,
-        completionTitle: 'Show Activity',
-        completionIcon: UnArchiveIcon,
-      }
+      onComplete: unHideTacticalActivity,
+      completionTitle: 'Show Activity',
+      completionIcon: UnArchiveIcon,
+    }
     : {
-        onComplete: hideTacticalActivity,
-        completionTitle: 'Hide Activity',
-        completionIcon: ArchiveIcon,
-      };
+      onComplete: hideTacticalActivity,
+      completionTitle: 'Hide Activity',
+      completionIcon: ArchiveIcon,
+    };
 
   return (
     <LoggedInLayout>

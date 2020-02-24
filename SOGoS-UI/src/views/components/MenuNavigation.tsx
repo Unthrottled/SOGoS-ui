@@ -11,8 +11,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
-import {StrategyIcon} from '../icons/StrategyIcon';
-import {TacticalIcon} from '../icons/TacticalIcon';
 import {GlobalState, selectUserState} from '../../reducers';
 import {useSelector} from 'react-redux';
 import HistoryIcon from '@material-ui/icons/History';
@@ -64,22 +62,22 @@ const MenuNavigation: FC<Props> = () => {
     {
       title: 'Goals',
       path: '/strategy/objectives/',
-      icon: <GoalIcon size={{width: '24px', height: '24px'}} />,
+      icon: <GoalIcon size={{width: '24px', height: '24px'}}/>,
     },
     {
       title: 'Activities',
       path: '/tactical/activities/',
-      icon: <ActivityIcon size={{width: '24px', height: '24px'}} />,
+      icon: <ActivityIcon size={{width: '24px', height: '24px'}}/>,
     },
     {
       title: 'History',
       path: `/${guid}/history/`,
-      icon: <HistoryIcon style={{fontSize: '24px'}} />,
+      icon: <HistoryIcon style={{fontSize: '24px'}}/>,
     },
     {
       title: 'Settings',
       path: '/settings',
-      icon: <SettingsIcon />,
+      icon: <SettingsIcon/>,
     },
   ];
   const classes = useStyles();
@@ -96,8 +94,8 @@ const MenuNavigation: FC<Props> = () => {
           backgroundColor:
             index % 2 === 0 ? 'rgba(10,10,10, .05)' : 'rgba(0,0,0,0)',
         }}>
-        <ListItemIcon>{topic.icon || <MailIcon />}</ListItemIcon>
-        <ListItemText primary={topic.title} />
+        <ListItemIcon>{topic.icon || <MailIcon/>}</ListItemIcon>
+        <ListItemText primary={topic.title}/>
       </ListItem>
     );
   };
@@ -106,7 +104,7 @@ const MenuNavigation: FC<Props> = () => {
     {
       title: 'Home',
       path: '/',
-      icon: <HomeIcon />,
+      icon: <HomeIcon/>,
     },
     ...topics,
   ];
@@ -146,7 +144,7 @@ const MenuNavigation: FC<Props> = () => {
         color="inherit"
         onClick={toggleDrawer(true)}
         aria-label="Menu">
-        <MenuIcon />
+        <MenuIcon/>
       </IconButton>
       <Drawer
         anchor="left"

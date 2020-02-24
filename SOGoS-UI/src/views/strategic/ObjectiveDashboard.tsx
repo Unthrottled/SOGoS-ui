@@ -31,7 +31,7 @@ import {
   createDeletedObjectiveEvent,
   createUpdatedObjectiveEvent,
 } from '../../events/StrategyEvents';
-import {GlobalState, selectStrategyState, selectTacticalActivityState, selectUserState} from '../../reducers';
+import {GlobalState, selectStrategyState, selectTacticalActivityState} from '../../reducers';
 import {TacticalActivity} from "../../types/TacticalTypes";
 
 const suggestions = [
@@ -144,13 +144,13 @@ interface Props {
 }
 
 const ObjectiveDashboard: FC<DispatchProp & Props> = ({
-  dispatch,
-  objectives,
-  activities,
-}) => {
+                                                        dispatch,
+                                                        objectives,
+                                                        activities,
+                                                      }) => {
   const classes: any = useStyles();
   const theme = useTheme();
-  const {objectiveId} = useParams<{objectiveId: string}>();
+  const {objectiveId} = useParams<{ objectiveId: string }>();
   const rememberedObjective = objectives[objectiveId];
 
   const defaultSky = {
@@ -196,12 +196,12 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
     setKeyResults(keyResults.filter(keyResult => keyResult.id !== idToRemove));
   };
 
-  const [categoryValues, setMulti] = useState<{value: string; label: string}[]>(
+  const [categoryValues, setMulti] = useState<{ value: string; label: string }[]>(
     objective.categories
       ? objective.categories.map((catVal: string) => ({
-          value: catVal,
-          label: catVal,
-        }))
+        value: catVal,
+        label: catVal,
+      }))
       : [],
   );
 
@@ -290,7 +290,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
       <div className={classes.inputContainer}>
         <div className={classes.cardContent}>
           <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-            <MountainIcon skyColor={skyColor} />
+            <MountainIcon skyColor={skyColor}/>
             <div
               style={{
                 display: 'flex-column',
@@ -337,7 +337,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
               <ListItem key={topic.id}>
                 <ListItemAvatar>
                   <Avatar className={classes.avatar}>
-                    <DoneIcon />
+                    <DoneIcon/>
                   </Avatar>
                 </ListItemAvatar>
                 <TextField
@@ -354,7 +354,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
                   onBlur={event => updateResult(topic.id, event.target.value)}
                 />
                 <IconButton onClick={() => removeKeyResult(topic.id)}>
-                  <DeleteIcon />
+                  <DeleteIcon/>
                 </IconButton>
               </ListItem>
             ))}
@@ -365,7 +365,7 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
               color={'secondary'}
               onClick={addKeyResult}
               className={classes.button}>
-              <AddIcon />
+              <AddIcon/>
               Add Key Result
             </Button>
           </div>
@@ -377,9 +377,9 @@ const ObjectiveDashboard: FC<DispatchProp & Props> = ({
                   : {}),
                 ...(rememberedObjective
                   ? {
-                      onComplete: () => setFinnaComplete(true),
-                      completionTitle: 'Complete Objective',
-                    }
+                    onComplete: () => setFinnaComplete(true),
+                    completionTitle: 'Complete Objective',
+                  }
                   : {}),
               }}
               onCancel={discardChanges}

@@ -5,13 +5,7 @@ import React, {useState} from 'react';
 import StopWatch from '@material-ui/icons/Timer';
 import uuid from 'uuid/v4';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  GlobalState,
-  selectConfigurationState,
-  selectTacticalActivityState,
-  selectTacticalState,
-  selectUserState,
-} from '../../reducers';
+import {GlobalState, selectConfigurationState, selectTacticalState, selectUserState,} from '../../reducers';
 import {TomatoIcon} from '../icons/TomatoIcon';
 import ActivitySelection from './ActivitySelection';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -20,7 +14,6 @@ import {startTimedActivity} from '../../actions/ActivityActions';
 import {NOT_ASKED} from '../../types/ConfigurationTypes';
 import {createNotificationPermissionReceivedEvent} from '../../events/ConfigurationEvents';
 import {TacticalActivity} from '../../types/TacticalTypes';
-import TacModPlug from '../components/TacModPlug';
 
 // @ts-ignore real
 const useStyles = makeStyles(theme => ({
@@ -131,7 +124,7 @@ export const buildCommenceActivityContents = (
 });
 type ActionType = (arg1: TacticalActivity) => void;
 type Runnable = () => void;
-type ActionHack = {action: () => void};
+type ActionHack = { action: () => void };
 const ActivityHub = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -151,7 +144,8 @@ const ActivityHub = () => {
     );
 
   const [storedAction, setStoredAction] = useState<ActionHack>({
-    action: () => {},
+    action: () => {
+    },
   });
   const [useTacMod, setUseTacMod] = useState(false);
 
@@ -172,7 +166,7 @@ const ActivityHub = () => {
     //   });
     //   setUseTacMod(true);
     // } else {
-      action.perform();
+    action.perform();
     // }
   };
 
@@ -213,9 +207,11 @@ const ActivityHub = () => {
 
   const handleClick = () => setOpen(!open);
 
-  const [selectedAction, setSelectedAction] = useState<ActionType>(_ => {});
+  const [selectedAction, setSelectedAction] = useState<ActionType>(_ => {
+  });
   const [selectedGenericAction, setSelectedGenericAction] = useState<Runnable>(
-    () => {},
+    () => {
+    },
   );
   const invokeGenericAction = () => {
     selectedGenericAction();
@@ -238,7 +234,7 @@ const ActivityHub = () => {
     {
       icon: (
         <div style={{marginTop: 5}}>
-          <TomatoIcon size={{width: 24, height: 24}} />
+          <TomatoIcon size={{width: 24, height: 24}}/>
         </div>
       ),
       name: 'Start Timed Task',
@@ -246,18 +242,18 @@ const ActivityHub = () => {
         baseAction(
           commenceTimedObjectiveActivity,
           <div className={classes.bigIconTomato}>
-            <TomatoIcon size={{width: 100, height: 100}} />
+            <TomatoIcon size={{width: 100, height: 100}}/>
           </div>,
           commenceGenericTimedActivity,
         ),
     },
     {
-      icon: <StopWatch />,
+      icon: <StopWatch/>,
       name: 'Start Task',
       perform: () =>
         baseAction(
           commenceObjectiveActivity,
-          <StopWatch className={classes.bigIcon} />,
+          <StopWatch className={classes.bigIcon}/>,
           commenceGenericActivity,
         ),
     },
@@ -277,7 +273,7 @@ const ActivityHub = () => {
         className={classes.speedDial}
         hidden={false}
         transitionDuration={0}
-        icon={<SpeedDialIcon />}
+        icon={<SpeedDialIcon/>}
         onClick={handleClick}
         open={open}
         direction={'right'}>

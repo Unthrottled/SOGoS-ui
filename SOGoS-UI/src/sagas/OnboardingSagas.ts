@@ -11,7 +11,7 @@ import {
 } from '../events/ActivityEvents';
 import {performPost} from './APISagas';
 
-function* initialWalkThroughSaga({payload: user}: PayloadEvent<UserResponse>) {
+function initialWalkThroughSaga({payload: user}: PayloadEvent<UserResponse>) {
   const onboarding = user.misc.onboarding;
   if (!(onboarding && onboarding.welcomed)) {
     // show onboarding carousel
