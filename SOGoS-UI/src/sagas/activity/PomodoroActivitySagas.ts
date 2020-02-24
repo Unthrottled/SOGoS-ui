@@ -2,6 +2,7 @@ import {call, put, take} from 'redux-saga/effects';
 import {createInitializedPomodoroEvent} from '../../events/ActivityEvents';
 import {performGet} from '../APISagas';
 import {RECEIVED_USER} from '../../events/UserEvents';
+import moment from 'moment';
 
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 
@@ -18,6 +19,13 @@ export function* pomodoroActivityInitializationSaga() {
 }
 
 export function* getCount() {
-  const {data} = yield call(performGet, '/activity/pomodoro/count');
-  return data ? data.count : 0;
+  const meow = moment()
+  try {
+    const {data} = yield call(performGet, `/activity/pomodoro/count?from=${
+      meow.startOf('day').unix()
+    }000&to=${meow.endOf('day').unix()}000`);
+    return data ? data.count : 0;
+  } catch (e) {
+    return 0
+  }
 }
