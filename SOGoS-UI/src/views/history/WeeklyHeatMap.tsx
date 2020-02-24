@@ -20,7 +20,7 @@ import {
 import {NumberDictionary, StringDictionary} from '../../types/BaseTypes';
 import {TacticalActivity} from '../../types/TacticalTypes';
 import {Objective} from '../../types/StrategyTypes';
-import {constructLinearProjection, LinearProjection} from './LinearProjection';
+import {LinearProjection} from './LinearProjection';
 import moment from 'moment';
 import {MenuItem, Select} from '@material-ui/core';
 import {mapTacticalActivitiesToID} from './PieFlavored';
@@ -141,7 +141,7 @@ const margin = {top: 50, right: 0, bottom: 100, left: 30},
   ];
 
 type HourSteppo = {
-  spawn: {start: Activity; stop: Activity};
+  spawn: { start: Activity; stop: Activity };
   hour: number;
   day: number;
   value: number;
@@ -154,25 +154,25 @@ const sanitizeName = (activityName: string): string => {
 };
 
 const WeeklyHeatMap: FC<Props> = ({
-  activityFeed,
-  bottomActivity,
-  currentActivity,
-  relativeFromTime,
-  relativeToTime,
-  tacticalActivities,
-  archivedActivities,
-}) => {
-  const [filteredLinearProjection, setFilteredLinearProjection] = useState<
-    HourSteppo[]
-  >([]);
+                                    activityFeed,
+                                    bottomActivity,
+                                    currentActivity,
+                                    relativeFromTime,
+                                    relativeToTime,
+                                    tacticalActivities,
+                                    archivedActivities,
+                                  }) => {
+  const [filteredLinearProjection, setFilteredLinearProjection] = useState<HourSteppo[]>([]);
   const [linearProjection, setLinearProjection] = useState<HourSteppo[]>([]);
 
   const [currentHeatMapActivity, setCurrentHeatMapActivity] = useState<{
     name: string;
+    displayName: string;
     key: string;
     count: number;
   }>({
     name: '',
+    displayName: '',
     key: '',
     count: 0,
   });
@@ -394,11 +394,12 @@ const WeeklyHeatMap: FC<Props> = ({
   const activityToSteppoCount = linearProjection.reduce(
     (accum: StringDictionary<any>, steppo) => {
       const proj = steppo.spawn.start;
-      const activityName = sanitizeName(getActivityName(proj));
+      const activityName = getActivityName(proj);
       const activityID = getActivityID(proj) || activityName;
       if (!accum[activityID]) {
         accum[activityID] = {
           count: 0,
+          displayName: sanitizeName(activityName),
           key: activityID,
         };
       }
@@ -406,7 +407,7 @@ const WeeklyHeatMap: FC<Props> = ({
       accum[activityID] = {
         ...accumElement,
         name: activityName,
-        count: accumElement.count + 1,
+        count: accumElement.count + steppo.value,
       };
       return accum;
     },
@@ -429,14 +430,15 @@ const WeeklyHeatMap: FC<Props> = ({
       setCurrentHeatMapActivity(activityOptions[0]);
     }
   }, [activityOptions, currentHeatMapActivity]);
+
   const mappedTacticalActivities = mapTacticalActivitiesToID({
     ...tacticalActivities,
-    [9001]: RecoveryActivity,
+    9001: RecoveryActivity,
   });
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div id={'heatBoi'} />
+      <div id={'heatBoi'}/>
       {!!currentHeatMapActivity.name && (
         <div style={{display: 'flex', justifyContent: 'center'}}>
           <div style={{margin: 'auto 0'}}>
@@ -452,10 +454,10 @@ const WeeklyHeatMap: FC<Props> = ({
           </div>
           <Select
             style={{margin: '0 1rem'}}
-            value={currentHeatMapActivity.name}
+            value={currentHeatMapActivity.displayName}
             onChange={event => {
               const nextSelection = activityOptions.find(
-                option => option.name === event.target.value,
+                option => option.displayName === event.target.value,
               );
               setCurrentHeatMapActivity(nextSelection || activityOptions[0]);
             }}>
@@ -463,14 +465,14 @@ const WeeklyHeatMap: FC<Props> = ({
               return (
                 <MenuItem
                   key={value.key || new Date().valueOf().toString(16)}
-                  value={value.name}>
-                  {value.name}
+                  value={value.displayName}>
+                  {value.displayName}
                 </MenuItem>
               );
             })}
           </Select>
           <div>
-            <div id={'legend27'} />
+            <div id={'legend27'}/>
             <div style={{display: 'flex'}}>
               <Typography>less</Typography>
               <Typography className={classes.legendLabel}>more</Typography>
