@@ -21,7 +21,7 @@ export function* pomodoroActivityInitializationSaga() {
 export function* getCount() {
   const meow = moment()
   try {
-    const {data} = yield call(performGet, `/activity/pomodoro/count?from=${
+    const {data} = yield call(performGet, `/activity/pomodoro/current/count?from=${
       meow.startOf('day').unix()
     }000&to=${meow.endOf('day').unix()}000`);
     return data ? data.count : 0;
