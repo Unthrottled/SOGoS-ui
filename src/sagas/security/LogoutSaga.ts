@@ -1,4 +1,4 @@
-import {call, put} from 'redux-saga/effects';
+import {call, put, select} from 'redux-saga/effects';
 import {InitialConfig, OAuthConfig} from '../../types/ConfigurationTypes';
 import {
   initialConfigurationSaga,
@@ -6,14 +6,25 @@ import {
 } from '../configuration/ConfigurationConvienenceSagas';
 import {createLoggedOffEvent} from '../../events/SecurityEvents';
 import {activityLogoutSaga} from '../activity/LogoutActivitySaga';
+import {SecurityState} from "../../reducers/SecurityReducer";
+import {selectSecurityState} from "../../reducers";
 
 export function* constructRedirectURI() {
   const {endSessionEndpoint}: OAuthConfig = yield call(oauthConfigurationSaga);
   const initialConfig = yield call(initialConfigurationSaga);
-  return `${endSessionEndpoint}?${getRedirectParameter(initialConfig)}`;
+  const {idToken}: SecurityState = yield select(selectSecurityState)
+  return `${endSessionEndpoint}?${getRedirectParameter(initialConfig, idToken || '')}`;
 }
 
-const getClientIfNecessary = (initialConfig: InitialConfig): String => {
+const getIdTokenIfNecessary = (initialConfig: InitialConfig, idToken: string): string => {
+  if (isOkta(initialConfig)) {
+    return `id_token_hint=${idToken}&`;
+  } else {
+    return '';
+  }
+};
+
+const getClientIfNecessary = (initialConfig: InitialConfig): string => {
   if (isCognito(initialConfig)) {
     return `client_id=${initialConfig.clientID}&`;
   } else {
@@ -21,17 +32,19 @@ const getClientIfNecessary = (initialConfig: InitialConfig): String => {
   }
 };
 
-const getRedirectParameter = (initialConfig: InitialConfig): string => {
+const getRedirectParameter = (initialConfig: InitialConfig, idToken: string): string => {
   const queryParameter = getQueryParameter(initialConfig);
-  return `${getClientIfNecessary(initialConfig)}${queryParameter}=${
+  return `${getClientIfNecessary(initialConfig)}${getIdTokenIfNecessary(initialConfig, idToken)}${queryParameter}=${
     initialConfig.callbackURI
   }`;
 };
 
 const getQueryParameter = (initialConfig: InitialConfig): string => {
-  if (isOkta(initialConfig) || isKeycloak(initialConfig)) {
+  if (isKeycloak(initialConfig)) {
     return 'redirect_uri';
-  } else {
+  } else if(isOkta(initialConfig)){
+    return 'post_logout_redirect_uri';
+  } else{
     return 'logout_uri';
   }
 };
