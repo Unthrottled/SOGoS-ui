@@ -1,11 +1,9 @@
-SOGoS-AI/data
-SOGoS-AI/build
-SOGoS-AI/swift-install
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# 
 
-.idea/
-
+.idea
 # dependencies
-node_modules
+/node_modules
 /.pnp
 .pnp.js
 
