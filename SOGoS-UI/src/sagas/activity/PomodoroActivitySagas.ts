@@ -1,4 +1,4 @@
-import {call, put, take} from 'redux-saga/effects';
+import {call, put} from 'redux-saga/effects';
 import {createInitializedPomodoroEvent} from '../../events/ActivityEvents';
 import {performGet} from '../APISagas';
 import moment from 'moment';
