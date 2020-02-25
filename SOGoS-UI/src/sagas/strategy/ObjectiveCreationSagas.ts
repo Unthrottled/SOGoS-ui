@@ -119,7 +119,11 @@ export function* objectiveAPIInteractionSaga(
 ) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
-    yield call(objectiveSaga, objective);
+    try {
+      yield call(objectiveSaga, objective)
+    } catch (e) {
+      yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective));
+    }
   } else {
     yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective));
   }

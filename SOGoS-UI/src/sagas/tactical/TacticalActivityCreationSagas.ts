@@ -138,7 +138,14 @@ export function* activityAPIInteractionSaga(
 ) {
   const onlineStatus = yield call(isOnline);
   if (onlineStatus) {
-    yield call(activitySaga, activity);
+    try{
+      yield call(activitySaga, activity);
+    } catch (e) {
+      yield call(
+        cacheTacticalActivitySaga,
+        cachedTacticalActivityFunction(activity),
+      )
+    }
   } else {
     yield call(
       cacheTacticalActivitySaga,
