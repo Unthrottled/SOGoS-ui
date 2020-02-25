@@ -1,8 +1,5 @@
 import {all, fork, takeEvery} from 'redux-saga/effects';
-import {
-  STARTED_ACTIVITY,
-  STARTED_TIMED_ACTIVITY,
-} from '../events/ActivityEvents';
+import {STARTED_ACTIVITY, STARTED_TIMED_ACTIVITY,} from '../events/ActivityEvents';
 import {activityLogonSaga} from './activity/LogonActivitySaga';
 import {currentActivitySaga} from './activity/CurrentActivitySaga';
 import {registerActivitySaga} from './activity/RegisterActivitySaga';
@@ -11,6 +8,7 @@ import {activitySyncSaga} from './activity/ActivitySyncSaga';
 import {activityNotificationSaga} from './activity/ActivityNotificationSaga';
 import {REQUESTED_SYNC} from '../events/UserEvents';
 import {pomodoroActivityInitializationSaga} from './activity/PomodoroActivitySagas';
+import {VIEWED_ACTIVITY_SELECTION} from "../events/TacticalEvents";
 
 function* listenToActivityEvents() {
   yield takeEvery(STARTED_ACTIVITY, registerActivitySaga);
@@ -20,6 +18,7 @@ function* listenToActivityEvents() {
   yield fork(activityLogonSaga);
   yield fork(currentActivitySaga);
   yield fork(pomodoroActivityInitializationSaga);
+  yield takeEvery(VIEWED_ACTIVITY_SELECTION, pomodoroActivityInitializationSaga);
 }
 
 export default function* rootSaga() {

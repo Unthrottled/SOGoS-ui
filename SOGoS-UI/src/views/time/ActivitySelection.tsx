@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import {Cancel, KeyboardArrowDown} from '@material-ui/icons';
 import {numberObjectToArray} from '../../miscellanous/Tools';
@@ -6,7 +7,8 @@ import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Grow, makeStyles} from '@material-ui/core';
 import {GlobalState, selectTacticalActivityState} from '../../reducers';
 import {TacticalActivity} from '../../types/TacticalTypes';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {createViewedActivitySelectionEvent} from "../../events/TacticalEvents";
 
 // @ts-ignore real
 const useStyles = makeStyles(theme => ({
@@ -99,6 +101,13 @@ const mapStateToProps = (state: GlobalState) => {
 const ActivitySelection = (props: Props) => {
   const classes = useStyles();
   const {activities} = useSelector(mapStateToProps);
+
+  const dispetch = useDispatch();
+  useEffect(() => {
+    if (props.open) {
+      dispetch(createViewedActivitySelectionEvent());
+    }
+  }, [dispetch, props.open])
   return (
     <Grow in={props.open}>
       <div className={classes.container}>
@@ -107,15 +116,15 @@ const ActivitySelection = (props: Props) => {
             className={classes.cancel}
             onClick={props.onClose}
             color={'inherit'}>
-            <Cancel className={classes.cancelIcon} />
+            <Cancel className={classes.cancelIcon}/>
           </IconButton>
-          <br />
+          <br/>
           <div className={classes.activityContainer}>
             {numberObjectToArray(activities).map(activity => (
               <div key={`tip_${activity.id}`}>
                 <div className={classes.toolTip}>
                   <span className={classes.toolTipInner}>{activity.name}</span>
-                  <KeyboardArrowDown style={{fontSize: '2em'}} />
+                  <KeyboardArrowDown style={{fontSize: '2em'}}/>
                 </div>
                 <IconButton
                   color={'inherit'}
@@ -134,7 +143,7 @@ const ActivitySelection = (props: Props) => {
           </div>
           <div className={classes.toolTip}>
             <span className={classes.toolTipInner}>Generic</span>
-            <KeyboardArrowDown style={{fontSize: '2em'}} />
+            <KeyboardArrowDown style={{fontSize: '2em'}}/>
           </div>
           <IconButton
             onClick={props.onGenericActivitySelection}
