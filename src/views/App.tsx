@@ -30,6 +30,7 @@ import {GlobalState, selectSecurityState} from '../reducers';
 import {SecurityState} from '../reducers/SecurityReducer';
 import OutOfSync from './components/OutOfSync';
 import Banner from './components/Banner';
+import About from "./About";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -94,6 +95,7 @@ const App = () => {
           <div className={classes.content}>
             <Switch>
               <Route path={'/login'} component={LoggedOut} />
+              <Route path={'/about'} component={About} />
 
               {/*todo: make this public*/}
               <PrivateRoute
