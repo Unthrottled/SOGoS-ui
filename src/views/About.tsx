@@ -3,8 +3,6 @@ import {connect} from "react-redux";
 import {GlobalState} from "../reducers";
 import {Typography} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import {SOGoS} from "./icons/SOGoS";
-import SOGoSIcon from '../images/SOGoS.svg';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface Props {

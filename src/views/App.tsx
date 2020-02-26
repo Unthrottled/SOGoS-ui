@@ -22,7 +22,7 @@ import ActivityDashboard from './tactical/ActivityDashboard';
 import ObjectiveActivityAssociationDashboard from './strategic/ObjectiveActivityAssociationDashboard';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-import HistoryDashboard from './history/HistoryDashboard';
+import HistoryDashboard from './history/PrivateHistoryDashboard';
 import ActivitiesRankDashboard from './tactical/ActivitiesRankDashboard';
 import ActivityObjectiveAssociationDashboard from './tactical/ActivityObjectiveAssociationDashboard';
 import HiddenActivitiesDashboard from './tactical/HiddenActivitiesDashboard';
@@ -31,6 +31,7 @@ import {SecurityState} from '../reducers/SecurityReducer';
 import OutOfSync from './components/OutOfSync';
 import Banner from './components/Banner';
 import About from "./About";
+import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -96,8 +97,9 @@ const App = () => {
             <Switch>
               <Route path={'/login'} component={LoggedOut} />
               <Route path={'/about'} component={About} />
+              <Route path={'/user/:uuid/history'}
+                     component={SharedHistoryDashboard}/>
 
-              {/*todo: make this public*/}
               <PrivateRoute
                 path={'/:uuid/history'}
                 component={HistoryDashboard}

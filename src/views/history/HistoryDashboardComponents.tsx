@@ -1,33 +1,34 @@
 import React, {FC, useEffect, useState} from 'react';
-import {connect, DispatchProp, useSelector} from 'react-redux';
-import LoggedInLayout from '../components/LoggedInLayout';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Container from '@material-ui/core/Container';
-import moment, {Moment} from 'moment';
-import {
-  createAdjustedHistoryTimeFrame,
-  createViewedHistoryEvent,
-} from '../../events/HistoryEvents';
-import {GlobalState, selectHistoryState, selectUserState} from '../../reducers';
-import {DateRangePicker, FocusedInputShape} from 'react-dates';
-import {ONE_DAY} from '../../sagas/activity/PomodoroActivitySagas';
-import InputLabel from '@material-ui/core/InputLabel';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {HistoryIcon} from '../icons/HistoryIcon';
-import capitalize from '@material-ui/core/utils/capitalize';
-import {Activity, getActivityName} from '../../types/ActivityTypes';
-import TimeLine from './TimeLine';
-import PieFlavored from './PieFlavored';
-import WeeklyHeatMap from './WeeklyHeatMap';
-import Loader from 'react-loader-spinner';
-import {PRIMARY_THEME_COLOR} from '../App';
+import {HistoryIcon} from "../icons/HistoryIcon";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
+import capitalize from "@material-ui/core/utils/capitalize";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import Container from "@material-ui/core/Container";
+import InputLabel from "@material-ui/core/InputLabel";
+import {DateRangePicker, FocusedInputShape} from "react-dates";
+import moment, {Moment} from "moment";
+import {Activity, getActivityName} from "../../types/ActivityTypes";
+import TimeLine from "./TimeLine";
+import PieFlavored from "./PieFlavored";
+import WeeklyHeatMap from "./WeeklyHeatMap";
+import Loader from "react-loader-spinner";
+import {PRIMARY_THEME_COLOR} from "../App";
+import {connect, DispatchProp, useSelector} from "react-redux";
+import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
+import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
+import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+
+interface Props {
+  selectedTo: number;
+  selectedFrom: number;
+  bottomActivity?: Activity;
+}
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles(theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -107,18 +108,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-interface Props {
-  selectedTo: number;
-  selectedFrom: number;
-  bottomActivity?: Activity;
-}
 
-const HistoryDashboard: FC<DispatchProp & Props> = ({
-  dispatch,
-  selectedTo,
-  selectedFrom,
-  bottomActivity,
-}) => {
+const HistoryDashboardComponents: FC<DispatchProp & Props> = (
+  {
+    dispatch,
+    selectedTo,
+    selectedFrom,
+    bottomActivity,
+  }
+) => {
   const classes = useStyles();
 
   useEffect(() => {
@@ -149,11 +147,11 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
   } = useSelector(selectUserState);
 
   return (
-    <LoggedInLayout>
-      <HistoryIcon size={{width: 50, height: 50}} />
+    <div>
+      <HistoryIcon size={{width: 50, height: 50}}/>
       <ExpansionPanel>
         <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon/>}
           aria-controls="panel1a-content"
           id="panel1a-header">
           <div style={{margin: 'auto'}}>
@@ -185,13 +183,13 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
       {!!bottomActivity && !!getActivityName(bottomActivity) ? (
         <main className={classes.content}>
           <div className={classes.paper}>
-            <TimeLine />
+            <TimeLine/>
           </div>
           <div className={classes.paper}>
-            <PieFlavored />
+            <PieFlavored/>
           </div>
           <div className={classes.paper}>
-            <WeeklyHeatMap />
+            <WeeklyHeatMap/>
           </div>
         </main>
       ) : (
@@ -211,7 +209,7 @@ const HistoryDashboard: FC<DispatchProp & Props> = ({
           />
         </div>
       )}
-    </LoggedInLayout>
+    </div>
   );
 };
 
@@ -229,4 +227,5 @@ const mapStateToProps = (state: GlobalState): Props => {
   };
 };
 
-export default connect(mapStateToProps)(HistoryDashboard);
+
+export default connect(mapStateToProps)(HistoryDashboardComponents);
