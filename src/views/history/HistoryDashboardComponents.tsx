@@ -148,7 +148,6 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
 
   return (
     <div>
-      <HistoryIcon size={{width: 50, height: 50}}/>
       <ExpansionPanel>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon/>}
