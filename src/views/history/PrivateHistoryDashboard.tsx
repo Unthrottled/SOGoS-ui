@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import LoggedInLayout from '../components/LoggedInLayout';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {Switch} from "@material-ui/core";
@@ -6,15 +6,18 @@ import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import SocialShare from "../components/SocialShare";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {GlobalState, selectUserState} from "../../reducers";
+import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 
 const PrivateHistoryDashboard: FC<Props> = ({
-                                              userIdentifier
+                                              userIdentifier,
+                                              hasShared
                                             }) => {
-  const [shared, setShared] = useState(false);
+  const shared = !!hasShared;
+  const dispatch = useDispatch();
   const toggleShare = () => {
-    setShared(!shared);
+    dispatch(createUserUpdatedSharedDashboardEvent(!shared));
   }
 
   return (
@@ -50,13 +53,21 @@ const PrivateHistoryDashboard: FC<Props> = ({
 };
 
 interface Props {
+  hasShared?: boolean;
   userIdentifier: string;
 }
 
-const mapStateToProps = (globaState: GlobalState): Props => {
-  const {information: {guid}} = selectUserState(globaState);
+const mapStateToProps = (globalState: GlobalState): Props => {
+  const {
+    information: {guid}, miscellaneous: {
+      security: {
+        hasShared
+      }
+    }
+  } = selectUserState(globalState);
   return {
-    userIdentifier: guid,
+    hasShared,
+    userIdentifier: guid
   }
 }
 

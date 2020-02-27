@@ -4,6 +4,7 @@ import {BaseEvent, PayloadEvent} from './Event';
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' =
   'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
+export const UPDATED_SHARED_DASHBOARD: 'UPDATED_SHARED_DASHBOARD' = 'UPDATED_SHARED_DASHBOARD';
 export const CHECKED_CACHES: 'CHECKED_CACHES' = 'CHECKED_CACHES';
 export const CACHED_DATA: 'CACHED_DATA' = 'CACHED_DATA';
 export const SYNCED_DATA: 'SYNCED_DATA' = 'SYNCED_DATA';
@@ -14,6 +15,13 @@ export const createReceivedUserEvent = (
 ): PayloadEvent<UserResponse> => ({
   type: RECEIVED_USER,
   payload: user,
+});
+
+export const createUserUpdatedSharedDashboardEvent = (
+  hasShared: boolean,
+): PayloadEvent<boolean> => ({
+  type: UPDATED_SHARED_DASHBOARD,
+  payload: hasShared,
 });
 
 export const createRequestedSyncEvent = (): BaseEvent => ({

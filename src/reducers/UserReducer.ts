@@ -3,9 +3,14 @@ import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
 
+export interface UserSecurity {
+  hasShared?: boolean;
+}
+
 export type UserMiscellaneous = {
   hasItemsCached: boolean;
   onboarding: UserOnBoarding;
+  security: UserSecurity;
 };
 
 export type UserState = {
@@ -24,6 +29,7 @@ const INITIAL_USER_STATE: UserState = {
   miscellaneous: {
     hasItemsCached: false,
     onboarding: {},
+    security: {}
   },
 };
 
@@ -72,6 +78,7 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
         miscellaneous: {
           ...state.miscellaneous,
           onboarding: action.payload.misc.onboarding || {},
+          security: action.payload.misc.security || {},
         },
       };
     case LOGGED_OFF: {
