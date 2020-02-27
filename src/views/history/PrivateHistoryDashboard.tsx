@@ -5,6 +5,7 @@ import {Switch} from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
+import SocialShare from "../components/SocialShare";
 
 const PrivateHistoryDashboard = () => {
   const [shared, setShared] = useState(false);
@@ -21,11 +22,13 @@ const PrivateHistoryDashboard = () => {
         <div style={{flexGrow: 1}}/>
         <div style={{display: "flex"}}>
           {
-            shared && <IconButton
+            shared &&
+            (<SocialShare project={{}} sharingUrl={'yeet'}><IconButton
               color={'primary'}
               aria-label="Menu">
               <ShareIcon/>
             </IconButton>
+            </SocialShare>)
           }
           <InputLabel style={{margin: 'auto'}}><Switch
             checked={shared}
