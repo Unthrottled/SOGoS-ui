@@ -1,4 +1,4 @@
-import {CHECKED_CACHES, RECEIVED_USER} from '../events/UserEvents';
+import {CHECKED_CACHES, RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
 import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
@@ -68,6 +68,17 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
           },
         },
       };
+    case UPDATED_SHARED_DASHBOARD:
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          security: {
+            ...state.miscellaneous.security,
+            hasShared: action.payload
+          }
+        }
+      }
     case RECEIVED_USER:
       return {
         ...state,
