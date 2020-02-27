@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import {HistoryIcon} from "../icons/HistoryIcon";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";

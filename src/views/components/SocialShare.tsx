@@ -16,11 +16,10 @@ import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 
 interface Props {
-  project: any,
   sharingUrl: string;
 }
 
-const SocialShare: FC<Props> = ({children, sharingUrl, project}) => {
+const SocialShare: FC<Props> = ({children, sharingUrl}) => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const handleClick = (event: any) => {
@@ -40,34 +39,34 @@ const SocialShare: FC<Props> = ({children, sharingUrl, project}) => {
             <Paper style={{display: 'flex', cursor: 'pointer'}} onClick={() => setOpen(false)}>
               <TwitterShareButton
                 translate
-                title={project.title + '. ' + project.exerpt}
+                title={'Something'} // todo: deez
                 url={sharingUrl}>
                 <TwitterIcon crossOrigin size={48}/>
               </TwitterShareButton>
               <LinkedinShareButton
                 translate
-                title={project.title}
-                summary={project.exerpt}
+                title={"Something"}
+                summary={"Something"}
                 url={sharingUrl}>
                 <LinkedinIcon crossOrigin size={48}/>
               </LinkedinShareButton>
               <FacebookShareButton
                 translate
-                title={project.title}
-                quote={project.exerpt}
+                title={'Something'}
+                quote={'Something'}
                 url={sharingUrl}>
                 <FacebookIcon crossOrigin size={48}/>
               </FacebookShareButton>
               <RedditShareButton
                 translate
-                title={project.title}
+                title={'Something'}
                 url={sharingUrl}>
                 <RedditIcon crossOrigin size={48}/>
               </RedditShareButton>
               <EmailShareButton
                 translate
-                subject={project.title}
-                body={project.exerpt}
+                subject={'Something'}
+                body={'Something'}
                 url={sharingUrl}>
                 <EmailIcon crossOrigin size={48}/>
               </EmailShareButton>

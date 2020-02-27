@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import LoggedInLayout from '../components/LoggedInLayout';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {Switch} from "@material-ui/core";
@@ -6,8 +6,12 @@ import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import SocialShare from "../components/SocialShare";
+import {connect} from "react-redux";
+import {GlobalState, selectUserState} from "../../reducers";
 
-const PrivateHistoryDashboard = () => {
+const PrivateHistoryDashboard: FC<Props> = ({
+                                              userIdentifier
+                                            }) => {
   const [shared, setShared] = useState(false);
   const toggleShare = () => {
     setShared(!shared);
@@ -23,7 +27,9 @@ const PrivateHistoryDashboard = () => {
         <div style={{display: "flex"}}>
           {
             shared &&
-            (<SocialShare project={{}} sharingUrl={'yeet'}><IconButton
+            (<SocialShare sharingUrl={
+              `https://sogos.unthrottled.io/user/${userIdentifier}/history`
+            }><IconButton
               color={'primary'}
               aria-label="Menu">
               <ShareIcon/>
@@ -43,4 +49,15 @@ const PrivateHistoryDashboard = () => {
   );
 };
 
-export default PrivateHistoryDashboard;
+interface Props {
+  userIdentifier: string;
+}
+
+const mapStateToProps = (globaState: GlobalState): Props => {
+  const {information: {guid}} = selectUserState(globaState);
+  return {
+    userIdentifier: guid,
+  }
+}
+
+export default connect(mapStateToProps)(PrivateHistoryDashboard);
