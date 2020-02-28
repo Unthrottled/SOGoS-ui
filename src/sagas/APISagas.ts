@@ -3,23 +3,25 @@ import {buffers, END, eventChannel} from 'redux-saga';
 import oboe from 'oboe';
 import axios from 'axios';
 import {accessTokenWithSessionExtensionSaga} from './security/AccessTokenSagas';
-import {selectConfigurationState} from '../reducers';
+import {selectConfigurationState, selectSecurityState, selectUserState} from '../reducers';
 import {ConfigurationState} from '../reducers/ConfigurationReducer';
 import {UserResponse} from '../types/UserTypes';
 import {PayloadEvent} from '../events/Event';
-import {RECEIVED_USER} from '../events/UserEvents';
+import {RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../events/UserEvents';
 import {RECEIVED_PARTIAL_INITIAL_CONFIGURATION} from '../events/ConfigurationEvents';
 import {InitialConfig} from '../types/ConfigurationTypes';
+import {SecurityState} from "../reducers/SecurityReducer";
+import {readTokenFetchSaga} from "./security/ReadTokenSagas";
 
 const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
 
-type ChannelParameters = {url: string; method: string; headers: any; body: any};
+type ChannelParameters = { url: string; method: string; headers: any; body: any };
 export const createStreamChannel = ({
-  url,
-  method,
-  headers,
-  body,
-}: ChannelParameters) => {
+                                      url,
+                                      method,
+                                      headers,
+                                      body,
+                                    }: ChannelParameters) => {
   return eventChannel(statusObserver => {
     const requestStream = oboe({
       url,
@@ -82,14 +84,19 @@ function* getAuthorizationStuff() {
     user: {
       information: {guid},
     },
-    security: {verificationKey},
+    security: {verificationKey, readOnly},
   } = yield select();
   if (guid && verificationKey) {
     return {guid, verificationKey};
+  } else if (guid && readOnly) {
+    return {guid}
   }
 
   const {userEvent, timeout} = yield race({
-    userEvent: take(RECEIVED_USER),
+    userEvent: race({
+      fullUser: take(RECEIVED_USER),
+      partialUser: take(RECEIVED_PARTIAL_USER),
+    }),
     timeout: delay(5000),
   });
 
@@ -100,13 +107,19 @@ function* getAuthorizationStuff() {
     };
   }
 
-  const {
-    payload: {
-      information: {guid: userGuid},
-      security: {verificationKey: vK},
-    },
-  }: PayloadEvent<UserResponse> = userEvent;
-  return {guid: userGuid, verificationKey: vK};
+  if(userEvent.partialUser) {
+    return {
+      guid: userEvent.partialUser.payload
+    }
+  } else {
+    const {
+      payload: {
+        information: {guid: userGuid},
+        security: {verificationKey: vK},
+      },
+    }: PayloadEvent<UserResponse> = userEvent.fullUser;
+    return {guid: userGuid, verificationKey: vK};
+  }
 }
 
 export function* getVerificationStuff(include: boolean = true) {
@@ -126,17 +139,29 @@ export function* createHeaders(
   options = {headers: {}},
   includeVerification = true,
 ) {
-  const accessToken = yield call(accessTokenSaga);
   const verificationStuff = yield call(
     getVerificationStuff,
     includeVerification,
   );
-
-  return {
+  const baseHeaders = {
     ...options.headers,
-    Authorization: `Bearer ${accessToken}`,
     ...verificationStuff,
-  };
+  }
+
+  const {readOnly}: SecurityState = yield select(selectSecurityState);
+  if (readOnly) {
+    const readToken = yield call(readTokenFetchSaga);
+    return {
+      ...baseHeaders,
+      'Read-Token': readToken
+    }
+  } else {
+    const accessToken = yield call(accessTokenSaga);
+    return {
+      ...baseHeaders,
+      Authorization: `Bearer ${accessToken}`,
+    };
+  }
 }
 
 export function* getConfig() {

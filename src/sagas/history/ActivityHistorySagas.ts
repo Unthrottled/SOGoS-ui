@@ -14,7 +14,6 @@ import {UserState} from '../../reducers/UserReducer';
 import {Activity, getActivityContent} from '../../types/ActivityTypes';
 import {PayloadEvent} from '../../events/Event';
 import {DateRange} from '../../types/HistoryTypes';
-import {UserResponse} from '../../types/UserTypes';
 import {shouldTime} from "../../miscellanous/Projection";
 import {createRequestedReadOnlyMode} from "../../events/SecurityEvents";
 
@@ -47,11 +46,7 @@ export function* archiveFetchSaga(
   }
 }
 
-export function* historyInitializationSaga({
-  payload: {
-    information: {guid},
-  },
-}: PayloadEvent<UserResponse>) {
+export function* historyInitializationSaga(guid: string) {
   const fromDate = meowMinusSeven.valueOf() - 1;
   const toDate = meow.valueOf() + 1;
   const initialHistoryFeed = yield call(

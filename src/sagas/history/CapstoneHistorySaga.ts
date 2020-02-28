@@ -10,7 +10,7 @@ import {
 import {Activity} from '../../types/ActivityTypes';
 import {reverseBinarySearch} from '../../miscellanous/Tools';
 import {UserState} from '../../reducers/UserReducer';
-import {performPost} from '../APISagas';
+import {performGet, performPost} from '../APISagas';
 import {isTimedActivity} from '../activity/CurrentActivitySaga';
 import {shouldTime} from '../../miscellanous/Projection';
 
@@ -181,7 +181,7 @@ export function* findCapstoneActivity(
   }: UserState = yield select(selectUserState);
   const beforeURL = urlBuilder(guid);
   try {
-    return yield call(performPost, beforeURL, {relativeTime});
+    return yield call(performGet, `${beforeURL}?relativeTime=${relativeTime}`);
   } catch (e) {
     return {};
   }

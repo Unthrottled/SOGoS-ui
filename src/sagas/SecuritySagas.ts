@@ -36,7 +36,7 @@ function* listenToLoginEvents() {
 // to the authorization server.
 function* waitBeforeLoggingIn() {
   yield delay(2000);
-  yield call(loginSaga);
+  // yield call(loginSaga);
 }
 
 function* listenToSecurityEvents() {

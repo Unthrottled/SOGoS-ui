@@ -49,5 +49,6 @@ export const readTokenReceptionReducer = (
 ): SecurityState => ({
   ...state,
   readToken: tokenReceptionPayload.readToken,
-  readTokenInformation: decodeAndMapToken(tokenReceptionPayload.readToken)
+  readTokenInformation: decodeAndMapToken(tokenReceptionPayload.readToken),
+  readOnly: true,
 });

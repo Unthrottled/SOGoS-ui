@@ -1,4 +1,4 @@
-import {all, call, fork, take, takeEvery} from 'redux-saga/effects';
+import {race, all, call, fork, take, takeEvery} from 'redux-saga/effects';
 import {
   ActivityUpdatePayload,
   ADJUSTED_HISTORY,
@@ -8,7 +8,7 @@ import {
   UPDATED_CAPSTONES,
   VIEWED_HISTORY, VIEWED_SHARED_HISTORY,
 } from '../events/HistoryEvents';
-import {RECEIVED_USER} from '../events/UserEvents';
+import {RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../events/UserEvents';
 import {
   firstActivityAdjustmentSaga,
   historyAdjustmentSaga,
@@ -31,18 +31,28 @@ import {PayloadEvent} from '../events/Event';
 
 export function* initializeActivityFeedSaga() {
   const {foundUser} = yield all({
-    askedForHistory: take(VIEWED_HISTORY),
-    foundUser: take(RECEIVED_USER),
+    askedForHistory: race({
+      privateHistory: take(VIEWED_HISTORY),
+      publicHistory: take(VIEWED_SHARED_HISTORY),
+    }),
+    foundUser: race({
+      fullUser: take(RECEIVED_USER),
+      partialUser: take(RECEIVED_PARTIAL_USER),
+    }),
   });
-  yield fork(historyInitializationSaga, foundUser);
+
+  const userIdentifier = foundUser.fullUser ?
+    foundUser.fullUser.payload.information.guid :
+    foundUser.partialUser.payload;
+
+  yield fork(historyInitializationSaga, userIdentifier);
   yield takeEvery(VIEWED_HISTORY, historyObservationSaga);
   yield takeEvery(ADJUSTED_HISTORY, historyAdjustmentSaga);
 }
 
 export function* historyFeedAdjustmentSaga() {
   yield all({
-    askedForHistory: take(UPDATED_CAPSTONES),
-    foundUser: take(RECEIVED_USER),
+    askedForHistory: take(UPDATED_CAPSTONES)
   });
   yield call(firstActivityAdjustmentSaga);
 }

@@ -22,6 +22,7 @@ export type SecurityState = {
   isExpired: boolean;
   isInitialized: boolean;
   isOutOfSync: boolean;
+  readOnly: boolean;
   readToken: string;
   readTokenInformation: TokenInformation;
 };
@@ -42,6 +43,7 @@ export const INITIAL_SECURITY_STATE: SecurityState = {
   isInitialized: false,
   isOutOfSync: false,
   readToken: '',
+  readOnly: false,
   readTokenInformation: defaultTokenInfo,
 };
 
@@ -82,6 +84,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
       return {
         ...state,
         ...action.payload.security,
+        readOnly: action.payload.miscellaneous.security.hasShared || false,
       };
     default:
       return state;
