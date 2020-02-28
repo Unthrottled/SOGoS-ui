@@ -83,6 +83,10 @@ export function* historyObservationSaga() {
   //todo: update history  when viewed again?
 }
 
+export function* sharedHistoryObservationSaga() {
+
+}
+
 export function* historyAdjustmentSaga({
   payload: {from, to},
 }: PayloadEvent<DateRange>) {

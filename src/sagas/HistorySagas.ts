@@ -6,14 +6,14 @@ import {
   FOUND_BEFORE_CAPSTONE,
   INITIALIZED_HISTORY,
   UPDATED_CAPSTONES,
-  VIEWED_HISTORY,
+  VIEWED_HISTORY, VIEWED_SHARED_HISTORY,
 } from '../events/HistoryEvents';
 import {RECEIVED_USER} from '../events/UserEvents';
 import {
   firstActivityAdjustmentSaga,
   historyAdjustmentSaga,
   historyInitializationSaga,
-  historyObservationSaga,
+  historyObservationSaga, sharedHistoryObservationSaga,
 } from './history/ActivityHistorySagas';
 import {
   capstoneHistorySaga,
@@ -50,6 +50,7 @@ export function* historyFeedAdjustmentSaga() {
 function* listenToActivityEvents() {
   yield fork(initializeActivityFeedSaga);
   yield fork(historyFeedAdjustmentSaga);
+  yield takeEvery(VIEWED_SHARED_HISTORY, sharedHistoryObservationSaga)
   yield takeEvery(ADJUSTED_HISTORY, historyAdjustmentCapstoneSaga);
   yield takeEvery(INITIALIZED_HISTORY, historyInitializationCapstoneSaga);
 }

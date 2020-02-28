@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -17,9 +17,10 @@ import Loader from "react-loader-spinner";
 import {PRIMARY_THEME_COLOR} from "../App";
 import {connect, DispatchProp, useSelector} from "react-redux";
 import {GlobalState, selectHistoryState, selectUserState} from "../../reducers";
-import {createAdjustedHistoryTimeFrame, createViewedHistoryEvent} from "../../events/HistoryEvents";
+import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
 import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {SOGoS} from "../icons/SOGoS";
 
 interface Props {
   selectedTo: number;
@@ -107,7 +108,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 const HistoryDashboardComponents: FC<DispatchProp & Props> = (
   {
     dispatch,
@@ -117,10 +117,6 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
   }
 ) => {
   const classes = useStyles();
-
-  useEffect(() => {
-    dispatch(createViewedHistoryEvent());
-  }, [dispatch]);
 
   const meow = moment.unix(selectedTo / 1000);
   const meowMinusSeven = moment.unix(selectedFrom / 1000);
@@ -147,49 +143,52 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
 
   return (
     <div>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon/>}
-          aria-controls="panel1a-content"
-          id="panel1a-header">
-          <div style={{margin: 'auto'}}>
-            <Typography variant={'h5'}>
-              {capitalize(timeSpan.humanize())} in {firstName}'s past.
-            </Typography>
-          </div>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Container maxWidth={'sm'}>
-            <div className={classes.form}>
-              <InputLabel>Active Time Range</InputLabel>
-              <DateRangePicker
-                startDate={meowMinusSeven}
-                startDateId="steve"
-                endDate={meow}
-                isOutsideRange={date => moment().isSameOrBefore(date, 'day')}
-                endDateId="jerry"
-                onDatesChange={({startDate, endDate}) =>
-                  submitTimeFrame(startDate || moment(), endDate || moment())
-                }
-                focusedInput={focusedInput}
-                onFocusChange={setFocusedInput}
-              />
-            </div>
-          </Container>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+
       {!!bottomActivity && !!getActivityName(bottomActivity) ? (
-        <main className={classes.content}>
-          <div className={classes.paper}>
-            <TimeLine/>
-          </div>
-          <div className={classes.paper}>
-            <PieFlavored/>
-          </div>
-          <div className={classes.paper}>
-            <WeeklyHeatMap/>
-          </div>
-        </main>
+        <>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon/>}
+              aria-controls="panel1a-content"
+              id="panel1a-header">
+              <div style={{margin: 'auto'}}>
+                <Typography variant={'h5'}>
+                  {capitalize(timeSpan.humanize())} in {firstName}'s past.
+                </Typography>
+              </div>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Container maxWidth={'sm'}>
+                <div className={classes.form}>
+                  <InputLabel>Active Time Range</InputLabel>
+                  <DateRangePicker
+                    startDate={meowMinusSeven}
+                    startDateId="steve"
+                    endDate={meow}
+                    isOutsideRange={date => moment().isSameOrBefore(date, 'day')}
+                    endDateId="jerry"
+                    onDatesChange={({startDate, endDate}) =>
+                      submitTimeFrame(startDate || moment(), endDate || moment())
+                    }
+                    focusedInput={focusedInput}
+                    onFocusChange={setFocusedInput}
+                  />
+                </div>
+              </Container>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <main className={classes.content}>
+            <div className={classes.paper}>
+              <TimeLine/>
+            </div>
+            <div className={classes.paper}>
+              <PieFlavored/>
+            </div>
+            <div className={classes.paper}>
+              <WeeklyHeatMap/>
+            </div>
+          </main>
+        </>
       ) : (
         <div
           style={{
@@ -202,9 +201,17 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
           <Loader
             type={'Triangle'}
             color={PRIMARY_THEME_COLOR}
-            height={256}
-            width={256}
-          />
+            height={320}
+            width={320}
+          >
+          </Loader>
+          <div style={{
+            position: 'absolute',
+            left: '25%',
+            top: '40%',
+          }}>
+            <SOGoS/>
+          </div>
         </div>
       )}
     </div>

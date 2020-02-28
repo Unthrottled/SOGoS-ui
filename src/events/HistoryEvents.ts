@@ -13,6 +13,7 @@ export const FOUND_AFTER_CAPSTONE: 'FOUND_AFTER_CAPSTONE' =
 export const UPDATED_CAPSTONES: 'UPDATED_CAPSTONES' = 'UPDATED_CAPSTONES';
 export const UPDATED_HISTORY: 'UPDATED_HISTORY' = 'UPDATED_HISTORY';
 export const VIEWED_HISTORY: 'VIEWED_HISTORY' = 'VIEWED_HISTORY';
+export const VIEWED_SHARED_HISTORY: 'VIEWED_SHARED_HISTORY' = 'VIEWED_SHARED_HISTORY';
 export const ADJUSTED_HISTORY: 'ADJUSTED_HISTORY' = 'ADJUSTED_HISTORY';
 
 export interface ActivityReceptionPayload {
@@ -32,6 +33,10 @@ export interface ActivityUpdatePayload {
 
 export const createViewedHistoryEvent = (): BaseEvent => ({
   type: VIEWED_HISTORY,
+});
+
+export const createViewedSharedHistoryEvent = (): BaseEvent => ({
+  type: VIEWED_SHARED_HISTORY,
 });
 
 export const createInitializedHistoryEvent = (

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import LoggedInLayout from '../components/LoggedInLayout';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {Switch} from "@material-ui/core";
@@ -9,6 +9,7 @@ import SocialShare from "../components/SocialShare";
 import {connect, useDispatch} from "react-redux";
 import {GlobalState, selectUserState} from "../../reducers";
 import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
+import {createViewedHistoryEvent} from "../../events/HistoryEvents";
 
 const PrivateHistoryDashboard: FC<Props> = ({
                                               userIdentifier,
@@ -19,6 +20,10 @@ const PrivateHistoryDashboard: FC<Props> = ({
   const toggleShare = () => {
     dispatch(createUserUpdatedSharedDashboardEvent(!shared));
   }
+
+  useEffect(() => {
+    dispatch(createViewedHistoryEvent());
+  }, [dispatch])
 
   return (
     <LoggedInLayout>
