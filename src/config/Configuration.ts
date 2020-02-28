@@ -25,7 +25,7 @@ const fetchMiddleware = (sagaMiddleware: any) => {
 
 const blackListTransform = createTransform((inboundState: any, key) => {
   if (key === 'security') {
-    return omit(inboundState, ['isInitialized', 'isOutOfSync']);
+    return omit(inboundState, ['isInitialized', 'isOutOfSync', 'readOnly']);
   } else if (key === 'misc') {
     return omit(inboundState, ['notification']);
   } else {

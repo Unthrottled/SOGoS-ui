@@ -84,7 +84,6 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
       return {
         ...state,
         ...action.payload.security,
-        readOnly: action.payload.miscellaneous.security.hasShared || false,
       };
     default:
       return state;

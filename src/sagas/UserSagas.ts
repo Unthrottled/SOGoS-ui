@@ -23,6 +23,7 @@ export function* requestUserSaga() {
     const {data: user} = yield call(performGetWithoutVerification, '/user');
     yield put(createReceivedUserEvent(user)); // found waldo.
   } catch (e) {
+    console.tron(e.message)
     yield put(createFailedToGetUserEvent(e));
   }
 }

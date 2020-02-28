@@ -81,7 +81,6 @@ export function* historyObservationSaga() {
 
 export function* sharedHistoryObservationSaga() {
   yield put(createRequestedReadOnlyMode());
-
   // todo: wait for "user" to be dispetched
 }
 
