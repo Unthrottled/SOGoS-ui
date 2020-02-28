@@ -3,9 +3,10 @@ import {
   INITIALIZED_SECURITY,
   LOGGED_OFF,
   LOGGED_ON,
+  RECEIVED_READ_TOKEN,
   RECEIVED_TOKENS,
 } from '../events/SecurityEvents';
-import {tokenReceptionReducer} from './security/TokenReducer';
+import {readTokenReceptionReducer, tokenReceptionReducer} from './security/TokenReducer';
 import {RECEIVED_USER} from '../events/UserEvents';
 import {TokenInformation} from '../types/SecurityTypes';
 import {TIME_IS_WACK} from '../events/ApplicationLifecycleEvents';
@@ -21,6 +22,8 @@ export type SecurityState = {
   isExpired: boolean;
   isInitialized: boolean;
   isOutOfSync: boolean;
+  readToken: string;
+  readTokenInformation: TokenInformation;
 };
 
 const defaultTokenInfo = {
@@ -38,6 +41,8 @@ const INITIAL_SECURITY_STATE: SecurityState = {
   isExpired: false,
   isInitialized: false,
   isOutOfSync: false,
+  readToken: '',
+  readTokenInformation: defaultTokenInfo,
 };
 
 const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
@@ -69,6 +74,8 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
         ...state,
         isOutOfSync: true,
       };
+    case RECEIVED_READ_TOKEN:
+      return readTokenReceptionReducer(state, action.payload);
     case RECEIVED_TOKENS:
       return tokenReceptionReducer(state, action.payload);
     case RECEIVED_USER:

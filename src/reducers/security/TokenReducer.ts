@@ -1,15 +1,24 @@
 import {SecurityState} from '../SecurityReducer';
 import {TokenResponse} from '@openid/appauth';
 import jwtDecode from 'jwt-decode';
+import {ReceivedReadToken} from "../../types/SecurityTypes";
+
+function mapTokenClaims(decodedToken: any) {
+  return {
+    issuedAt: decodedToken.iat,
+    expiresAt: decodedToken.exp,
+  };
+}
+
+function decodeAndMapToken(token: string) {
+  const decodedToken = jwtDecode(token);
+  return mapTokenClaims(decodedToken)
+}
 
 const getRefreshTokenInformation = (refreshToken: string | undefined) => {
   if (refreshToken) {
-    const decodedToken: any = jwtDecode(refreshToken);
     return {
-      refreshTokenInformation: {
-        issuedAt: decodedToken.iat,
-        expiresAt: decodedToken.exp,
-      },
+      refreshTokenInformation: decodeAndMapToken(refreshToken),
     };
   } else {
     return {};
@@ -33,3 +42,12 @@ export const tokenReceptionReducer = (
     idToken: tokenReceptionPayload.idToken,
   };
 };
+
+export const readTokenReceptionReducer = (
+  state: SecurityState,
+  tokenReceptionPayload: ReceivedReadToken,
+): SecurityState => ({
+  ...state,
+  readToken: tokenReceptionPayload.readToken,
+  readTokenInformation: decodeAndMapToken(tokenReceptionPayload.readToken)
+});

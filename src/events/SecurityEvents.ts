@@ -1,5 +1,7 @@
 import {TokenRequest, TokenResponse} from '@openid/appauth';
 import {OAuthConfig} from '../types/ConfigurationTypes';
+import {PayloadEvent} from "./Event";
+import {ReceivedReadToken} from "../types/SecurityTypes";
 
 export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
@@ -16,6 +18,19 @@ export const FAILED_TO_RECEIVE_TOKEN: 'FAILED_TO_RECEIVE_TOKEN' =
 export const INITIALIZED_SECURITY: 'INITIALIZED_SECURITY' =
   'INITIALIZED_SECURITY';
 export const EXPIRED_SESSION: 'EXPIRED_SESSION' = 'EXPIRED_SESSION';
+export const RECEIVED_READ_TOKEN: 'RECEIVED_READ_TOKEN' = 'RECEIVED_READ_TOKEN';
+export const FAILED_TO_RECEIVE_READ_TOKEN: 'FAILED_TO_RECEIVE_READ_TOKEN' = 'FAILED_TO_RECEIVE_READ_TOKEN';
+
+export const createReceivedReadToken = (readTokenPayload: ReceivedReadToken): PayloadEvent<ReceivedReadToken> => ({
+  type: RECEIVED_READ_TOKEN,
+  payload: readTokenPayload,
+});
+
+export const createFailedToReceiveReadToken =
+  (userIdentifier: string): PayloadEvent<string> => ({
+    type: FAILED_TO_RECEIVE_READ_TOKEN,
+    payload: userIdentifier,
+  })
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
