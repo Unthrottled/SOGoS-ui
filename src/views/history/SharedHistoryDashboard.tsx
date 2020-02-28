@@ -1,17 +1,40 @@
-import React, {useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {createViewedSharedHistoryEvent} from "../../events/HistoryEvents";
+import {GlobalState, selectUserState} from "../../reducers";
+import {UserState} from "../../reducers/UserReducer";
 
-const SharedHistoryDashboard = () => {
+interface Props {
+  hasShared?: boolean
+}
+
+const SharedHistoryDashboard: FC<Props> = ({
+  hasShared
+                                           }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(createViewedSharedHistoryEvent());
   }, [dispatch])
 
-  return (
+  return hasShared === undefined || hasShared ? (
     <HistoryDashboardComponents/>
-  );
+  ) : <div>
+    They no share
+  </div>;
 };
 
-export default SharedHistoryDashboard;
+const mapStateToProps = (state: GlobalState) => {
+  const {
+    miscellaneous: {
+      security: {
+        hasShared
+      }
+    }
+  }: UserState = selectUserState(state);
+  return {
+    hasShared
+  }
+}
+
+export default connect(mapStateToProps)(SharedHistoryDashboard);

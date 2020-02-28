@@ -1,5 +1,5 @@
 import {CHECKED_CACHES, RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
-import {LOGGED_OFF} from '../events/SecurityEvents';
+import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
 
@@ -92,6 +92,30 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
           security: action.payload.misc.security || {},
         },
       };
+    case RECEIVED_READ_TOKEN: {
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          security: {
+            ...state.miscellaneous.security,
+            hasShared: true
+          }
+        }
+      }
+    }
+    case FAILED_TO_RECEIVE_READ_TOKEN: {
+      return {
+        ...state,
+        miscellaneous: {
+          ...state.miscellaneous,
+          security: {
+            ...state.miscellaneous.security,
+            hasShared: false
+          }
+        }
+      }
+    }
     case LOGGED_OFF: {
       return INITIAL_USER_STATE;
     }
