@@ -5,6 +5,7 @@ export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' =
   'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
 export const UPDATED_SHARED_DASHBOARD: 'UPDATED_SHARED_DASHBOARD' = 'UPDATED_SHARED_DASHBOARD';
+export const SYNCED_SHARED_DASHBOARD: 'SYNCED_SHARED_DASHBOARD' = 'SYNCED_SHARED_DASHBOARD';
 export const CHECKED_CACHES: 'CHECKED_CACHES' = 'CHECKED_CACHES';
 export const CACHED_DATA: 'CACHED_DATA' = 'CACHED_DATA';
 export const SYNCED_DATA: 'SYNCED_DATA' = 'SYNCED_DATA';
@@ -21,6 +22,12 @@ export const createUserUpdatedSharedDashboardEvent = (
   hasShared: boolean,
 ): PayloadEvent<boolean> => ({
   type: UPDATED_SHARED_DASHBOARD,
+  payload: hasShared,
+});
+export const createSyncedSharedDashboardUpdateEvent = (
+  hasShared: boolean,
+): PayloadEvent<boolean> => ({
+  type: SYNCED_SHARED_DASHBOARD,
   payload: hasShared,
 });
 
