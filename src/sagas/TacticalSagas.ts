@@ -1,5 +1,5 @@
 import {all, call, fork, take, takeEvery} from '@redux-saga/core/effects';
-import {RECEIVED_USER, REQUESTED_SYNC} from '../events/UserEvents';
+import {RECEIVED_PARTIAL_USER, RECEIVED_USER, REQUESTED_SYNC} from '../events/UserEvents';
 import {
   CREATED_ACTIVITY,
   HID_ACTIVITY,
@@ -32,6 +32,7 @@ import {
   tacticalActivityHiddenSaga,
   tacticalActivityShownSaga,
 } from './tactical/TacticalActivityVisibilitySagas';
+import {race} from "redux-saga/effects";
 
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
@@ -48,7 +49,10 @@ function* watchForSettingsUpdates() {
 
 function* tacticalActivitiesObservationInitializationSaga() {
   yield takeEvery(VIEWED_ACTIVITIES, tacticalActivityObservationSaga);
-  yield take(RECEIVED_USER);
+  yield race({
+    fullUser: take(RECEIVED_USER),
+    partialUser: take(RECEIVED_PARTIAL_USER),
+  });
   yield fork(tacticalActivitiesFetchSaga);
 }
 

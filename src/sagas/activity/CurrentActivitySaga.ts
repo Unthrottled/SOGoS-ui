@@ -5,13 +5,9 @@ import {
   createResumedStartedNonTimedActivityEvent,
   createResumedStartedTimedActivityEvent,
 } from '../../events/ActivityEvents';
-import {call, delay, put, select, take} from 'redux-saga/effects';
-import {RECEIVED_USER} from '../../events/UserEvents';
-import {
-  selectActivityState,
-  selectNetworkState,
-  selectSecurityState,
-} from '../../reducers';
+import {call, delay, put, race, select, take} from 'redux-saga/effects';
+import {RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../../events/UserEvents';
+import {selectActivityState, selectNetworkState, selectSecurityState,} from '../../reducers';
 import {FOUND_WIFI} from '../../events/NetworkEvents';
 import {isOnline} from '../NetworkSagas';
 import {
@@ -98,15 +94,24 @@ export function* delayWork() {
 }
 
 export function* currentActivitySaga() {
-  yield take(RECEIVED_USER);
+  const {partialUser}  = yield race({
+    fullUser: take(RECEIVED_USER),
+    partialUser: take(RECEIVED_PARTIAL_USER),
+  });
+
   yield call(updatePreviousActivity);
   const {currentActivity, wasNew} = yield call(updateCurrentActivity);
   if (!wasNew) {
     yield put(createInitializedCurrentActivityEvent(currentActivity));
   }
-  // todo: bring back when dashboards are sharable.
-  // while (true) {
-  // yield call(updateCurrentActivity);
-  //   yield call(delayWork);
-  // }
+
+  let isReadOnly = !!partialUser;
+  if(isReadOnly) {
+    do {
+      yield call(updateCurrentActivity);
+      yield call(delayWork);
+      const {readOnly} = yield select(selectSecurityState)
+      isReadOnly = readOnly;
+    } while (isReadOnly)
+  }
 }

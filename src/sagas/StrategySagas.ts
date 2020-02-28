@@ -1,4 +1,4 @@
-import {all, fork, take, takeEvery} from 'redux-saga/effects';
+import {all, fork, race, take, takeEvery} from 'redux-saga/effects';
 import {
   COMPLETED_OBJECTIVE,
   CREATED_OBJECTIVE,
@@ -6,7 +6,7 @@ import {
   UPDATED_OBJECTIVE,
   VIEWED_OBJECTIVES,
 } from '../events/StrategyEvents';
-import {RECEIVED_USER, REQUESTED_SYNC} from '../events/UserEvents';
+import {RECEIVED_PARTIAL_USER, RECEIVED_USER, REQUESTED_SYNC} from '../events/UserEvents';
 import {
   objectiveChangesSaga,
   objectiveCompletionSaga,
@@ -21,7 +21,10 @@ import {FOUND_WIFI} from '../events/NetworkEvents';
 import {strategySyncSaga} from './strategy/StrategySyncSaga';
 
 export function* objectiveObservationInitializationSaga() {
-  yield take(RECEIVED_USER);
+  yield race({
+    fullUser: take(RECEIVED_USER),
+    partialUser: take(RECEIVED_PARTIAL_USER),
+  });
   yield fork(objectiveHistoryFetchSaga);
   yield takeEvery(VIEWED_OBJECTIVES, objectiveObservationSaga);
 }
