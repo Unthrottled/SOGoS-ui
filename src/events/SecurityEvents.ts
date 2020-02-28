@@ -5,6 +5,7 @@ export const LOGGED_ON: 'LOGGED_ON' = 'LOGGED_ON';
 export const LOGGED_OFF: 'LOGGED_OFF' = 'LOGGED_OFF';
 export const REQUESTED_LOGOFF: 'REQUESTED_LOGOFF' = 'REQUESTED_LOGOFF';
 export const REQUESTED_LOGON: 'REQUESTED_LOGON' = 'REQUESTED_LOGON';
+export const REQUESTED_READ_ONLY_MODE: 'REQUESTED_READ_ONLY_MODE' = 'REQUESTED_READ_ONLY_MODE';
 export const REQUESTED_AUTH_CHECK: 'REQUESTED_AUTH_CHECK' =
   'REQUESTED_AUTH_CHECK';
 export const CHECKED_AUTH: 'CHECKED_AUTH' = 'CHECKED_AUTH';
@@ -18,6 +19,10 @@ export const EXPIRED_SESSION: 'EXPIRED_SESSION' = 'EXPIRED_SESSION';
 
 export const requestLogoff = () => ({
   type: REQUESTED_LOGOFF,
+});
+
+export const createRequestedReadOnlyMode = () => ({
+  type: REQUESTED_READ_ONLY_MODE,
 });
 
 export const createRequestLogonEvent = () => ({

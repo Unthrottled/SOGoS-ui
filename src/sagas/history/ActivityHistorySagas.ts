@@ -16,6 +16,7 @@ import {PayloadEvent} from '../../events/Event';
 import {DateRange} from '../../types/HistoryTypes';
 import {UserResponse} from '../../types/UserTypes';
 import {shouldTime} from "../../miscellanous/Projection";
+import {createRequestedReadOnlyMode} from "../../events/SecurityEvents";
 
 export const createHistoryAPIURL = (guid: string, from: number, to: number) =>
   `/history/${guid}/feed?from=${from}&to=${to}`;
@@ -84,7 +85,9 @@ export function* historyObservationSaga() {
 }
 
 export function* sharedHistoryObservationSaga() {
+  yield put(createRequestedReadOnlyMode());
 
+  // todo: wait for "user" to be dispetched
 }
 
 export function* historyAdjustmentSaga({
