@@ -4,6 +4,8 @@ import {connect, useDispatch} from "react-redux";
 import {createViewedSharedHistoryEvent} from "../../events/HistoryEvents";
 import {GlobalState, selectUserState} from "../../reducers";
 import {UserState} from "../../reducers/UserReducer";
+import PausedPomodoro from "../time/PausedPomodoro";
+import SharedPausedPomodoro from "../time/SharedPausedPomodoro";
 
 interface Props {
   hasShared?: boolean
@@ -18,7 +20,10 @@ const SharedHistoryDashboard: FC<Props> = ({
   }, [dispatch])
 
   return hasShared === undefined || hasShared ? (
+    <>
     <HistoryDashboardComponents/>
+    <SharedPausedPomodoro />
+    </>
   ) : <div>
     They no share
   </div>;

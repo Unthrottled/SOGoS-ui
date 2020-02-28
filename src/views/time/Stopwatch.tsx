@@ -21,9 +21,10 @@ interface Props {
   onPause?: () => void;
   onResume?: () => void;
   fontSize?: string;
+  readOnly?: boolean;
 }
 
-const Stopwatch: FC<Props> = ({onPause, fontSize}) => {
+const Stopwatch: FC<Props> = ({onPause, fontSize, readOnly}) => {
   const pauseTimer = () => {
     onPause && onPause();
   };

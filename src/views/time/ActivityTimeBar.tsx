@@ -30,6 +30,7 @@ import {
   isPausedActivity,
   RECOVERY,
 } from '../../types/ActivityTypes';
+import {Typography} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   pomoCount: {
@@ -216,15 +217,22 @@ const ActivityTimeBar = () => {
     <Slide direction={'up'} in={isTimeBarActivity}>
       <div className={getTimerBarClasses()}>
         {tacticalActivity && (
-          <div className={classes.activityIcon}>
-            <TacticalActivityIcon
-              tacticalActivity={tacticalActivity}
-              size={{
-                width: '50px',
-                height: '50px',
-              }}
-            />
-          </div>
+          <>
+            <div className={classes.activityIcon}>
+              <TacticalActivityIcon
+                tacticalActivity={tacticalActivity}
+                size={{
+                  width: '50px',
+                  height: '50px',
+                }}
+              />
+            </div>
+            <Typography style={{
+              margin: 'auto 0 auto 0.5rem',
+            }}>
+              {tacticalActivity.name}
+            </Typography>
+          </>
         )}
         {!tacticalActivity && isTimer && !isRecovery && (
           <TomatoIcon
