@@ -30,7 +30,7 @@ const defaultTokenInfo = {
   issuedAt: 0,
   expiresAt: 69,
 };
-const INITIAL_SECURITY_STATE: SecurityState = {
+export const INITIAL_SECURITY_STATE: SecurityState = {
   refreshTokenInformation: defaultTokenInfo,
   accessToken: '',
   accessTokenInformation: defaultTokenInfo,

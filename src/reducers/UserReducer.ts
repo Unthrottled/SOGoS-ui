@@ -1,4 +1,4 @@
-import {CHECKED_CACHES, RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
+import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
 import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
@@ -17,7 +17,7 @@ export type UserState = {
   information: User;
   miscellaneous: UserMiscellaneous;
 };
-const INITIAL_USER_STATE: UserState = {
+export const INITIAL_USER_STATE: UserState = {
   information: {
     firstName: '',
     lastName: '',
@@ -77,6 +77,14 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
             ...state.miscellaneous.security,
             hasShared: action.payload
           }
+        }
+      }
+    case RECEIVED_PARTIAL_USER:
+      return {
+        ...state,
+        information: {
+          ...state.information,
+          guid: action.payload,
         }
       }
     case RECEIVED_USER:
