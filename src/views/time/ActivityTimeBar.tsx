@@ -9,7 +9,7 @@ import Stopwatch from './Stopwatch';
 import {blue, green} from '@material-ui/core/colors';
 import {
   GlobalState,
-  selectActivityState,
+  selectActivityState, selectSecurityState,
   selectTacticalState,
 } from '../../reducers';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
@@ -35,6 +35,7 @@ import {Typography} from "@material-ui/core";
 const useStyles = makeStyles(theme => ({
   pomoCount: {
     display: 'flex',
+    marginRight: '0.5rem',
   },
   timer: {
     position: 'fixed',
@@ -105,6 +106,9 @@ const mapStateToProps = (state: GlobalState) => {
     pomodoro: {settings},
     activity: {activities},
   } = selectTacticalState(state);
+  const {
+    readOnly
+  } = selectSecurityState(state);
   return {
     shouldTime,
     currentActivity,
@@ -112,6 +116,7 @@ const mapStateToProps = (state: GlobalState) => {
     pomodoroSettings: settings,
     activities,
     numberOfCompletedPomodoro: count,
+    readOnly,
   };
 };
 
@@ -124,6 +129,7 @@ const ActivityTimeBar = () => {
     numberOfCompletedPomodoro,
     previousActivity,
     pomodoroSettings,
+    readOnly,
   } = useSelector(mapStateToProps);
 
   const {
@@ -227,11 +233,15 @@ const ActivityTimeBar = () => {
                 }}
               />
             </div>
-            <Typography style={{
-              margin: 'auto 0 auto 0.5rem',
-            }}>
-              {tacticalActivity.name}
-            </Typography>
+            {
+              readOnly && (
+                <Typography style={{
+                  margin: 'auto 0 auto 0.5rem',
+                }}>
+                  {tacticalActivity.name}
+                </Typography>
+              )
+            }
           </>
         )}
         {!tacticalActivity && isTimer && !isRecovery && (
@@ -249,21 +259,29 @@ const ActivityTimeBar = () => {
               pivotActivity={pivotActivity}
               swapActivity={swapActivity}
               hidePause={isRecovery}
+              readOnly={readOnly}
               onResume={resumePreviousActivity}
             />
           ) : (
-            <Stopwatch onPause={startPausedRecovery} />
+            <Stopwatch onPause={startPausedRecovery} readOnly={readOnly} />
           )}
         </div>
         {isTimer && name !== RECOVERY && (
           <div className={classes.pomoCount}>
-            <div style={{marginRight: '5px'}}>{numberOfCompletedPomodoro}:</div>
+            <div style={{marginRight: '5px',}}>{numberOfCompletedPomodoro}:</div>
             <TomatoIcon size={{width: 24, height: 24}} />
           </div>
         )}
-        <div onClick={stopActivity} className={classes.close}>
-          <Close />
-        </div>
+        {
+          !readOnly ?
+            (
+              <div onClick={stopActivity} className={classes.close}>
+                <Close />
+              </div>
+            ) :
+            (<></>)
+        }
+
       </div>
     </Slide>
   ) : null;

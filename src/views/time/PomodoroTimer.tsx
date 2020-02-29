@@ -45,6 +45,7 @@ interface Props {
   pivotActivity?: ChangeActivityCallback;
   swapActivity?: ChangeActivityCallback;
   hidePause?: boolean;
+  readOnly?: boolean;
 }
 
 export const PomodoroTimer: FC<Props> = ({
@@ -52,6 +53,7 @@ export const PomodoroTimer: FC<Props> = ({
   pivotActivity,
   swapActivity,
   hidePause,
+  readOnly,
 }) => {
   const pauseTimer = () => {
     onPause && onPause();
@@ -80,7 +82,7 @@ export const PomodoroTimer: FC<Props> = ({
 
   return (
     <div className={classes.stopwatchContainer}>
-      {!hidePause && (
+      {!hidePause && !readOnly && (
         <IconButton
           color={'inherit'}
           title={'Pivot to Activity'}
@@ -89,11 +91,16 @@ export const PomodoroTimer: FC<Props> = ({
           <SwapVert />
         </IconButton>
       )}
-      <div style={{margin: 'auto'}}>
+      <div style={{
+        ...(
+          readOnly ? {marginTop: '10%', marginBottom: '10%'} :
+            {margin: 'auto'}
+        )
+      }}>
         <TimeDisplay timeElapsed={timeElapsed} />
       </div>
       <div className={classes.actionButton}>
-        {!hidePause && (
+        {!hidePause && !readOnly && (
           <IconButton
             title={'Pause Pomodoro'}
             color={'inherit'}
@@ -103,7 +110,7 @@ export const PomodoroTimer: FC<Props> = ({
         )}
       </div>
       <div className={classes.actionButton}>
-        {!hidePause && (
+        {!hidePause && !readOnly && (
           <IconButton
             title={'Swap Activity'}
             color={'inherit'}
