@@ -7,9 +7,11 @@ import {
   createSyncedSharedDashboardUpdateEvent,
   UPDATED_SHARED_DASHBOARD,
 } from '../events/UserEvents';
-import {selectSecurityState} from '../reducers';
+import {selectSecurityState, selectUserState} from '../reducers';
 import {PayloadEvent} from "../events/Event";
 import {createShowWarningNotificationEvent} from "../events/MiscEvents";
+import {UserState} from "../reducers/UserReducer";
+import omit from 'lodash/omit';
 
 export function* findUserSaga() {
   const {isLoggedIn} = yield select(selectSecurityState);
@@ -33,8 +35,9 @@ export function* sharedDashboardSaga({
                                      }: PayloadEvent<boolean>) {
   try {
     const method = hasShared ? performPost : performDelete;
-    yield call(method, '/user/share/dashboard/read', {})
-    put(createSyncedSharedDashboardUpdateEvent(hasShared))
+    const {information}: UserState = yield select(selectUserState);
+    yield call(method, '/user/share/dashboard/read', omit(information, ['guid']))
+    yield put(createSyncedSharedDashboardUpdateEvent(hasShared))
   } catch (e) {
     yield put(
       createShowWarningNotificationEvent(
