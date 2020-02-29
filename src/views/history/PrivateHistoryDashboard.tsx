@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
 import SocialShare from "../components/SocialShare";
 import {connect, useDispatch} from "react-redux";
-import {GlobalState, selectUserState} from "../../reducers";
+import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
 import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 import {createViewedHistoryEvent} from "../../events/HistoryEvents";
 
@@ -64,12 +64,13 @@ interface Props {
 
 const mapStateToProps = (globalState: GlobalState): Props => {
   const {
-    information: {guid}, miscellaneous: {
-      security: {
-        hasShared
-      }
+    hasShared
+  } = selectSecurityState(globalState);
+  const {
+    information: {
+      guid
     }
-  } = selectUserState(globalState);
+  } = selectUserState(globalState)
   return {
     hasShared,
     userIdentifier: guid

@@ -1,16 +1,11 @@
-import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
-import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
+import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../events/UserEvents';
+import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
-
-export interface UserSecurity {
-  hasShared?: boolean;
-}
 
 export type UserMiscellaneous = {
   hasItemsCached: boolean;
   onboarding: UserOnBoarding;
-  security: UserSecurity;
 };
 
 export type UserState = {
@@ -29,7 +24,6 @@ export const INITIAL_USER_STATE: UserState = {
   miscellaneous: {
     hasItemsCached: false,
     onboarding: {},
-    security: {}
   },
 };
 
@@ -68,17 +62,6 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
           },
         },
       };
-    case UPDATED_SHARED_DASHBOARD:
-      return {
-        ...state,
-        miscellaneous: {
-          ...state.miscellaneous,
-          security: {
-            ...state.miscellaneous.security,
-            hasShared: action.payload
-          }
-        }
-      }
     case RECEIVED_PARTIAL_USER:
       return {
         ...state,
@@ -97,33 +80,8 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
         miscellaneous: {
           ...state.miscellaneous,
           onboarding: action.payload.misc.onboarding || {},
-          security: action.payload.misc.security || {},
         },
       };
-    case RECEIVED_READ_TOKEN: {
-      return {
-        ...state,
-        miscellaneous: {
-          ...state.miscellaneous,
-          security: {
-            ...state.miscellaneous.security,
-            hasShared: true
-          }
-        }
-      }
-    }
-    case FAILED_TO_RECEIVE_READ_TOKEN: {
-      return {
-        ...state,
-        miscellaneous: {
-          ...state.miscellaneous,
-          security: {
-            ...state.miscellaneous.security,
-            hasShared: false
-          }
-        }
-      }
-    }
     case LOGGED_OFF: {
       return INITIAL_USER_STATE;
     }

@@ -7,7 +7,7 @@ import {
   RECEIVED_TOKENS,
 } from '../events/SecurityEvents';
 import {readTokenReceptionReducer, tokenReceptionReducer} from './security/TokenReducer';
-import {RECEIVED_USER} from '../events/UserEvents';
+import {RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
 import {TokenInformation} from '../types/SecurityTypes';
 import {TIME_IS_WACK} from '../events/ApplicationLifecycleEvents';
 
@@ -24,6 +24,7 @@ export type SecurityState = {
   isOutOfSync: boolean;
   readOnly: boolean;
   readToken: string;
+  hasShared: boolean;
   readTokenInformation: TokenInformation;
 };
 
@@ -44,6 +45,7 @@ export const INITIAL_SECURITY_STATE: SecurityState = {
   isOutOfSync: false,
   readToken: '',
   readOnly: false,
+  hasShared: false,
   readTokenInformation: defaultTokenInfo,
 };
 
@@ -76,6 +78,11 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
         ...state,
         isOutOfSync: true,
       };
+    case UPDATED_SHARED_DASHBOARD:
+      return {
+        ...state,
+        hasShared: action.payload
+      }
     case RECEIVED_READ_TOKEN:
       return readTokenReceptionReducer(state, action.payload);
     case RECEIVED_TOKENS:
