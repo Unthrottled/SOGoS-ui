@@ -3,7 +3,6 @@ import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {connect, useDispatch} from "react-redux";
 import {createViewedSharedHistoryEvent} from "../../events/HistoryEvents";
 import {GlobalState, selectSecurityState} from "../../reducers";
-import {UserState} from "../../reducers/UserReducer";
 import SharedPausedPomodoro from "../time/SharedPausedPomodoro";
 
 interface Props {

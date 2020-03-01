@@ -7,6 +7,13 @@ export type User = {
   guid: string;
 };
 
+export interface UserProfile {
+  email: string,
+  firstName: string,
+  lastName: string,
+  userName: string,
+}
+
 export interface UserOnBoarding {
   welcomed?: boolean;
   TacModNotified?: boolean;

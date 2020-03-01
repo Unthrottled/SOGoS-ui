@@ -1,9 +1,9 @@
-import {all, call, put, select, takeEvery} from 'redux-saga/effects';
-import {INITIALIZED_SECURITY} from '../events/SecurityEvents';
-import {performDelete, performGetWithoutVerification, performPost} from './APISagas';
+import {delay, all, call, put, select, takeEvery} from 'redux-saga/effects';
+import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
+import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
   createFailedToGetUserEvent,
-  createReceivedUserEvent,
+  createReceivedUserEvent, createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
   UPDATED_SHARED_DASHBOARD,
 } from '../events/UserEvents';
@@ -30,6 +30,27 @@ export function* requestUserSaga() {
   }
 }
 
+export function* userProfileSaga(_: any, attempts: number = 0): Generator {
+  try {
+    const {
+        information: {
+          guid
+        }
+    }: any = yield select(selectUserState);
+    const {data: profileInformation}: any = yield call(
+      performGet, `/user/${guid}/profile`
+    )
+    yield put(createReceivedUserProfileEvent(profileInformation));
+  } catch (e) {
+    if(attempts < 10){
+      yield delay(2000);
+      yield call(userProfileSaga, {}, attempts + 1)
+    } else {
+      // error!
+    }
+  }
+}
+
 export function* sharedDashboardSaga({
                                        payload: hasShared
                                      }: PayloadEvent<boolean>) {
@@ -49,7 +70,8 @@ export function* sharedDashboardSaga({
 
 function* listenToSecurityEvents() {
   yield takeEvery(INITIALIZED_SECURITY, findUserSaga);
-  yield takeEvery(UPDATED_SHARED_DASHBOARD, sharedDashboardSaga)
+  yield takeEvery(UPDATED_SHARED_DASHBOARD, sharedDashboardSaga);
+  yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga)
 }
 
 export default function* rootSaga() {

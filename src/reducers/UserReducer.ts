@@ -1,4 +1,4 @@
-import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../events/UserEvents';
+import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER, RECEIVED_USER_PROFILE} from '../events/UserEvents';
 import {LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
@@ -62,6 +62,14 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
           },
         },
       };
+    case RECEIVED_USER_PROFILE:
+      return {
+        ...state,
+        information: {
+          ...state.information,
+          ...action.payload,
+        }
+      }
     case RECEIVED_PARTIAL_USER:
       return {
         ...state,

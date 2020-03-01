@@ -1,9 +1,10 @@
-import {UserResponse} from '../types/UserTypes';
+import {UserProfile, UserResponse} from '../types/UserTypes';
 import {BaseEvent, PayloadEvent} from './Event';
 
 export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' =
   'FAILED_REQUESTED_USER';
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
+export const RECEIVED_USER_PROFILE: 'RECEIVED_USER_PROFILE' = 'RECEIVED_USER_PROFILE';
 export const RECEIVED_PARTIAL_USER: 'RECEIVED_PARTIAL_USER' = 'RECEIVED_PARTIAL_USER';
 export const UPDATED_SHARED_DASHBOARD: 'UPDATED_SHARED_DASHBOARD' = 'UPDATED_SHARED_DASHBOARD';
 export const SYNCED_SHARED_DASHBOARD: 'SYNCED_SHARED_DASHBOARD' = 'SYNCED_SHARED_DASHBOARD';
@@ -24,6 +25,13 @@ export const createReceivedPartialUserEvent = (
 ): PayloadEvent<string> => ({
   type: RECEIVED_PARTIAL_USER,
   payload: userIdentifier,
+});
+
+export const createReceivedUserProfileEvent = (
+  userProfile: UserProfile,
+): PayloadEvent<UserProfile> => ({
+  type: RECEIVED_USER_PROFILE,
+  payload: userProfile,
 });
 
 export const createUserUpdatedSharedDashboardEvent = (
