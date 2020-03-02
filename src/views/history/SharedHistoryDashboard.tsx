@@ -10,6 +10,7 @@ import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {grey} from "@material-ui/core/colors";
 import Container from "@material-ui/core/Container";
+import {HistoryIcon} from "../icons/HistoryIcon";
 
 interface Props {
   hasShared?: boolean;
@@ -27,9 +28,9 @@ const useStyles = makeStyles(theme => ({
 
 const SharedHistoryDashboard: FC<Props> = ({
                                              hasShared,
-  fullName,
-  firstName,
-  lastName,
+                                             fullName,
+                                             firstName,
+                                             lastName,
                                            }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -39,7 +40,7 @@ const SharedHistoryDashboard: FC<Props> = ({
   const classes = useStyles();
 
   const userName = fullName ||
-    `${firstName}${lastName ? ' '+lastName : ''}`
+    `${firstName}${lastName ? ' ' + lastName : ''}`
 
   return hasShared === undefined || hasShared ? (
     <div className={classes.container}>
@@ -68,18 +69,24 @@ const SharedHistoryDashboard: FC<Props> = ({
       </div>
       <HistoryDashboardComponents>
         <div style={{textAlign: "left", padding: '0.5rem 1rem'}}>
-          <Typography variant={"h5"} gutterBottom>
+          <Typography variant={"h5"} style={{display: 'flex'}} gutterBottom>
             Activity Dashboard
+            <span style={{marginLeft: '0.5rem'}}>
+              <HistoryIcon size={{
+                width: '25px',
+                height: '25px'
+              }}/>
+            </span>
           </Typography>
           <Container maxWidth={"sm"} style={{marginLeft: 0}}>
             <Typography style={{
               color: grey[700]
-            }} >
+            }}>
               {userName} wanted to show you what what they care about the most.
             </Typography>
             <Typography style={{
               color: grey[700]
-            }} >
+            }}>
               Below is how they have spent their time towards accomplishing their goals.
             </Typography>
           </Container>
