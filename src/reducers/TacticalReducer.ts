@@ -15,7 +15,7 @@ import {
 import {objectToKeyValueArray} from '../miscellanous/Tools';
 import TacticalActivityReducer from './TacticalActivityReducer';
 import {NumberDictionary, StringDictionary} from '../types/BaseTypes';
-import {LOGGED_OFF} from '../events/SecurityEvents';
+import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF} from '../events/SecurityEvents';
 
 export interface PomodoroState {
   settings: PomodoroSettings;
@@ -51,6 +51,7 @@ const TacticalReducer = (
   const updatedState = TacticalActivityReducer(state, action);
   switch (action.type) {
     case LOGGED_OFF:
+    case FAILED_TO_RECEIVE_READ_TOKEN:
       return {
         pomodoro: {
           ...INITIAL_TACTICAL_STATE.pomodoro,

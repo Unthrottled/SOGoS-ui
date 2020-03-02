@@ -10,12 +10,13 @@ import {connect, useDispatch} from "react-redux";
 import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
 import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 import {createViewedHistoryEvent} from "../../events/HistoryEvents";
+import {SharedStatus} from "../../reducers/SecurityReducer";
 
 const PrivateHistoryDashboard: FC<Props> = ({
                                               userIdentifier,
                                               hasShared
                                             }) => {
-  const shared = !!hasShared;
+  const shared = hasShared;
   const dispatch = useDispatch();
   const toggleShare = () => {
     dispatch(createUserUpdatedSharedDashboardEvent(!shared));
@@ -72,7 +73,7 @@ const mapStateToProps = (globalState: GlobalState): Props => {
     }
   } = selectUserState(globalState)
   return {
-    hasShared,
+    hasShared: hasShared === SharedStatus.SHARED,
     userIdentifier: guid
   }
 }

@@ -62,7 +62,7 @@ export function* sharedDashboardSaga({
   } catch (e) {
     yield put(
       createShowWarningNotificationEvent(
-        `Unable to get ${hasShared ? '' : 'un'}share your dashboard! Try again later, please.`,
+        `Unable to ${hasShared ? '' : 'un'}share your dashboard! Try again later, please.`,
       ),
     )
   }

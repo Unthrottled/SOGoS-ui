@@ -3,14 +3,14 @@ import {buffers, END, eventChannel} from 'redux-saga';
 import oboe from 'oboe';
 import axios from 'axios';
 import {accessTokenWithSessionExtensionSaga} from './security/AccessTokenSagas';
-import {selectConfigurationState, selectSecurityState, selectUserState} from '../reducers';
+import {selectConfigurationState, selectSecurityState} from '../reducers';
 import {ConfigurationState} from '../reducers/ConfigurationReducer';
 import {UserResponse} from '../types/UserTypes';
 import {PayloadEvent} from '../events/Event';
 import {RECEIVED_PARTIAL_USER, RECEIVED_USER} from '../events/UserEvents';
 import {RECEIVED_PARTIAL_INITIAL_CONFIGURATION} from '../events/ConfigurationEvents';
 import {InitialConfig} from '../types/ConfigurationTypes';
-import {SecurityState} from "../reducers/SecurityReducer";
+import {SecurityState, SharedStatus} from "../reducers/SecurityReducer";
 import {readTokenFetchSaga} from "./security/ReadTokenSagas";
 
 const SHITS_BROKE_YO: string = "SHIT'S BROKE YO";
@@ -148,14 +148,14 @@ export function* createHeaders(
     ...verificationStuff,
   }
 
-  const {readOnly}: SecurityState = yield select(selectSecurityState);
+  const {readOnly, hasShared, isLoggedIn}: SecurityState = yield select(selectSecurityState);
   if (readOnly) {
     const readToken = yield call(readTokenFetchSaga);
     return {
       ...baseHeaders,
       'Read-Token': readToken
     }
-  } else {
+  } else if(hasShared !== SharedStatus.NOT_SHARED || isLoggedIn) {
     const accessToken = yield call(accessTokenSaga);
     return {
       ...baseHeaders,

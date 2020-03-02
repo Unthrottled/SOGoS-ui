@@ -15,7 +15,7 @@ const SharedHistoryDashboard: FC<Props> = ({
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(createViewedSharedHistoryEvent());
-  }, [dispatch])
+  }, [dispatch]);
 
   return hasShared === undefined || hasShared ? (
     <>

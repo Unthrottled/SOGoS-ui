@@ -1,5 +1,6 @@
 import {
   EXPIRED_SESSION,
+  FAILED_TO_RECEIVE_READ_TOKEN,
   INITIALIZED_SECURITY,
   LOGGED_OFF,
   LOGGED_ON,
@@ -10,6 +11,10 @@ import {readTokenReceptionReducer, tokenReceptionReducer} from './security/Token
 import {RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
 import {TokenInformation} from '../types/SecurityTypes';
 import {TIME_IS_WACK} from '../events/ApplicationLifecycleEvents';
+
+export enum SharedStatus {
+  UNKNOWN, NOT_SHARED, SHARED
+}
 
 export type SecurityState = {
   isLoggedIn: boolean;
@@ -24,7 +29,7 @@ export type SecurityState = {
   isOutOfSync: boolean;
   readOnly: boolean;
   readToken: string;
-  hasShared: boolean;
+  hasShared: SharedStatus;
   readTokenInformation: TokenInformation;
 };
 
@@ -45,7 +50,7 @@ export const INITIAL_SECURITY_STATE: SecurityState = {
   isOutOfSync: false,
   readToken: '',
   readOnly: false,
-  hasShared: false,
+  hasShared: SharedStatus.UNKNOWN,
   readTokenInformation: defaultTokenInfo,
 };
 
@@ -60,6 +65,11 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
       return {
         ...INITIAL_SECURITY_STATE,
       };
+    case FAILED_TO_RECEIVE_READ_TOKEN:
+      return {
+        ...state,
+        hasShared: SharedStatus.NOT_SHARED
+      }
     case EXPIRED_SESSION:
       delete state.refreshToken;
       delete state.refreshTokenInformation;
@@ -81,7 +91,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
     case UPDATED_SHARED_DASHBOARD:
       return {
         ...state,
-        hasShared: action.payload
+        hasShared: action.payload ? SharedStatus.SHARED : SharedStatus.NOT_SHARED
       }
     case RECEIVED_READ_TOKEN:
       return readTokenReceptionReducer(state, action.payload);
@@ -91,6 +101,9 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
       return {
         ...state,
         ...action.payload.security,
+        hasShared: action.payload.security ?
+          action.payload.security.hasShared ? SharedStatus.SHARED :
+            SharedStatus.NOT_SHARED : SharedStatus.UNKNOWN,
       };
     default:
       return state;

@@ -1,13 +1,12 @@
-import {race, take, fork, call, delay, put, select} from 'redux-saga/effects';
+import {call, delay, fork, put, race, select, take} from 'redux-saga/effects';
 import {performOpenGet} from "../APISagas";
 import {
   createFailedToReceiveReadToken,
-  createReceivedReadToken, FAILED_TO_RECEIVE_READ_TOKEN, INITIALIZED_SECURITY,
+  createReceivedReadToken,
+  FAILED_TO_RECEIVE_READ_TOKEN,
   RECEIVED_READ_TOKEN
 } from "../../events/SecurityEvents";
-import {createReceivedPartialUserEvent, createReceivedUserEvent} from "../../events/UserEvents";
-import {INITIAL_USER_STATE} from "../../reducers/UserReducer";
-import {INITIAL_SECURITY_STATE} from "../../reducers/SecurityReducer";
+import {createReceivedPartialUserEvent} from "../../events/UserEvents";
 
 export function* readOnlySaga() {
   const {location: {pathname}}: any = yield select(state => state.router);
@@ -21,7 +20,7 @@ export function* readOnlySaga() {
     notHasReadToken: take(FAILED_TO_RECEIVE_READ_TOKEN),
   });
 
-  if(hasReadToken) {
+  if (hasReadToken) {
     yield put(createReceivedPartialUserEvent(userIdentifier))
   }
 }

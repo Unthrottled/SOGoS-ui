@@ -10,7 +10,7 @@ import {
 import {objectToArray, objectToKeyValueArray} from '../miscellanous/Tools';
 import {CachedObjective, KeyResult, Objective} from '../types/StrategyTypes';
 import {HasId, StringDictionary} from '../types/BaseTypes';
-import {LOGGED_OFF} from '../events/SecurityEvents';
+import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF} from '../events/SecurityEvents';
 
 export interface StrategyState {
   objectives: StringDictionary<Objective>;
@@ -58,6 +58,7 @@ const StrategyReducer = (
 ) => {
   switch (action.type) {
     case LOGGED_OFF:
+    case FAILED_TO_RECEIVE_READ_TOKEN:
       return {
         ...INITIAL_STRATEGY_STATE,
         cache: state.cache,

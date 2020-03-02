@@ -1,4 +1,4 @@
-import {SecurityState} from '../SecurityReducer';
+import {SecurityState, SharedStatus} from '../SecurityReducer';
 import {TokenResponse} from '@openid/appauth';
 import jwtDecode from 'jwt-decode';
 import {ReceivedReadToken} from "../../types/SecurityTypes";
@@ -51,4 +51,5 @@ export const readTokenReceptionReducer = (
   readToken: tokenReceptionPayload.readToken,
   readTokenInformation: decodeAndMapToken(tokenReceptionPayload.readToken),
   readOnly: true,
+  hasShared: SharedStatus.SHARED,
 });
