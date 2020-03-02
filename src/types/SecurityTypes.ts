@@ -5,6 +5,7 @@ export type ReceivedReadToken = {
 
 export interface TokenInformation {
   expiresAt: number; //epoch second
+  expiresHuman: string;
   issuedAt: number; //epoch second
 }
 

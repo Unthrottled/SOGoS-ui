@@ -7,6 +7,7 @@ function mapTokenClaims(decodedToken: any) {
   return {
     issuedAt: decodedToken.iat,
     expiresAt: decodedToken.exp,
+    expiresHuman: new Date(decodedToken.exp * 1000 || 0).toISOString(),
   };
 }
 
@@ -29,13 +30,14 @@ export const tokenReceptionReducer = (
   state: SecurityState,
   tokenReceptionPayload: TokenResponse,
 ): SecurityState => {
+  const expiresAt = tokenReceptionPayload.issuedAt + (tokenReceptionPayload.expiresIn || 0);
   return {
     ...state,
     accessToken: tokenReceptionPayload.accessToken,
     accessTokenInformation: {
       issuedAt: tokenReceptionPayload.issuedAt,
-      expiresAt:
-        tokenReceptionPayload.issuedAt + (tokenReceptionPayload.expiresIn || 0),
+      expiresAt: expiresAt,
+      expiresHuman: new Date(expiresAt * 1000).toISOString(),
     },
     ...getRefreshTokenInformation(tokenReceptionPayload.refreshToken),
     refreshToken: tokenReceptionPayload.refreshToken || state.refreshToken,

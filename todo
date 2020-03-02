@@ -1,10 +1,10 @@
-- token not refreshing
+- no cached if 403
 
 - Profile
 
 - Sharable dashboard.
       - name and stuff
-    - no cached if 403
+      - not shared
 
 - About
 

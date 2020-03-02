@@ -36,6 +36,7 @@ export type SecurityState = {
 const defaultTokenInfo = {
   issuedAt: 0,
   expiresAt: 69,
+  expiresHuman: '69',
 };
 export const INITIAL_SECURITY_STATE: SecurityState = {
   refreshTokenInformation: defaultTokenInfo,
