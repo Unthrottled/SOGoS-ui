@@ -21,6 +21,7 @@ import {createAdjustedHistoryTimeFrame} from "../../events/HistoryEvents";
 import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
+import {Paper} from "@material-ui/core";
 
 interface Props {
   selectedTo: number;
@@ -114,6 +115,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
     selectedTo,
     selectedFrom,
     bottomActivity,
+  children,
   }
 ) => {
   const classes = useStyles();
@@ -143,9 +145,9 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
 
   return (
     <div>
-
       {!!bottomActivity && !!getActivityName(bottomActivity) ? (
-        <>
+        <Paper>
+          {children}
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon/>}
@@ -188,7 +190,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
               <WeeklyHeatMap/>
             </div>
           </main>
-        </>
+        </Paper>
       ) : (
         <div
           style={{
