@@ -10,6 +10,7 @@ import {selectUserState} from '../../reducers';
 import {createCachedDataEvent} from '../../events/UserEvents';
 import {PayloadEvent} from '../../events/Event';
 import {EventTypes} from '../../types/EventTypes';
+import {isNotUnAuthorized} from "../activity/RegisterActivitySaga";
 
 export function* objectiveCreationSaga({payload}: PayloadEvent<Objective>) {
   yield call(
@@ -122,7 +123,9 @@ export function* objectiveAPIInteractionSaga(
     try {
       yield call(objectiveSaga, objective)
     } catch (e) {
-      yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective));
+      if(isNotUnAuthorized(e)){
+        yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective));
+      }
     }
   } else {
     yield call(cacheObjectiveSaga, cachedObjectiveFunction(objective));
@@ -141,7 +144,9 @@ export function* objectiveUploadSaga(
     yield call(apiAction, urlFunction(objective), objective);
     yield put(createSyncedObjectiveEvent(objective));
   } catch (e) {
-    yield call(cacheObjectiveSaga, cachingFunction(objective));
+    if(isNotUnAuthorized(e)){
+      yield call(cacheObjectiveSaga, cachingFunction(objective));
+    }
   }
 }
 

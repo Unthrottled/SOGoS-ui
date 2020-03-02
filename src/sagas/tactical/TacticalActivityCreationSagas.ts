@@ -17,6 +17,7 @@ import {BULK_ACTIVITY_UPLOAD_URL} from './TacticalActivitySyncSaga';
 import {removalReRankSaga} from './TacticalActivityVisibilitySagas';
 import {PayloadEvent} from '../../events/Event';
 import {EventTypes} from '../../types/EventTypes';
+import {isNotUnAuthorized} from "../activity/RegisterActivitySaga";
 
 export function* activityCreationSaga({
   payload,
@@ -169,7 +170,9 @@ export function* activityUploadSaga(
     yield call(apiAction, urlFunction(activity), activity);
     yield put(createSyncedTacticalActivityEvent(activity));
   } catch (e) {
-    yield call(cacheTacticalActivitySaga, cachingFunction(activity));
+    if(isNotUnAuthorized(e)){
+      yield call(cacheTacticalActivitySaga, cachingFunction(activity));
+    }
   }
 }
 

@@ -17,6 +17,7 @@ import {delayWork} from '../activity/CurrentActivitySaga';
 import {createShowWarningNotificationEvent} from '../../events/MiscEvents';
 import {PomodoroSettings} from '../../types/TacticalTypes';
 import {PayloadEvent} from '../../events/Event';
+import {isNotUnAuthorized} from "../activity/RegisterActivitySaga";
 
 export const POMODORO_API = '/tactical/pomodoro/settings';
 
@@ -88,6 +89,8 @@ export function* settingsUploadSaga(settings: PomodoroSettings) {
         settings,
       }),
     );
-    yield call(settingsCacheSaga, settings);
+    if(isNotUnAuthorized(error)){
+      yield call(settingsCacheSaga, settings);
+    }
   }
 }

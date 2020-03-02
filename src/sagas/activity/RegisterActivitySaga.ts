@@ -24,6 +24,10 @@ export function* registerActivitySaga(action: PayloadEvent<Activity>) {
 
 export const ACTIVITY_URL = '/activity';
 
+export function isNotUnAuthorized(error: any) {
+  return !error.message || error.message.indexOf('403') < 0;
+}
+
 export function* activityUploadSaga(activity: Activity) {
   try {
     yield call(performPost, ACTIVITY_URL, activity);
@@ -35,7 +39,9 @@ export function* activityUploadSaga(activity: Activity) {
         activity,
       }),
     );
-    yield call(activityCacheSaga, activity);
+    if(isNotUnAuthorized(error)) {
+      yield call(activityCacheSaga, activity);
+    }
   }
 }
 
