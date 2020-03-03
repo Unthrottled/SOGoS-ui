@@ -13,7 +13,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import StrategicDashboard from './strategic/StrategicDashboard';
 import ObjectivesDashboard from './strategic/ObjectivesDashboard';
 import ObjectiveDashboard from './strategic/ObjectiveDashboard';
-import Settings from './settings/Settings';
+import PomodoroSettingsBoard from './settings/PomodoroSettings';
 import ActivityTimer from './time/ActivityTimeBar';
 import Dashboard from './Dashboard';
 import TacticalDashboard from './tactical/TacticalDashboard';
@@ -32,6 +32,7 @@ import OutOfSync from './components/OutOfSync';
 import Banner from './components/Banner';
 import About from "./About";
 import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
+import SettingsDashboard from "./settings/SettingsDashboard";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -87,16 +88,16 @@ const App = () => {
 
   const getComponent = () => {
     if (isOutOfSync) {
-      return <OutOfSync />;
+      return <OutOfSync/>;
     } else if (!isInitialized) {
-      return <Banner />;
+      return <Banner/>;
     } else {
       return (
         <div className="App">
           <div className={classes.content}>
             <Switch>
-              <Route path={'/login'} component={LoggedOut} />
-              <Route path={'/about'} component={About} />
+              <Route path={'/login'} component={LoggedOut}/>
+              <Route path={'/about'} component={About}/>
               <Route path={'/user/:uuid/history'}
                      component={SharedHistoryDashboard}/>
 
@@ -105,7 +106,8 @@ const App = () => {
                 component={HistoryDashboard}
               />
 
-              <PrivateRoute path={'/settings'} component={Settings} />
+              <PrivateRoute path={'/settings/pomodoro'} component={PomodoroSettingsBoard}/>
+              <PrivateRoute path={'/settings'} component={SettingsDashboard}/>
               <PrivateRoute
                 path={'/strategy/objectives/:objectiveId/tactics/association'}
                 component={ObjectiveActivityAssociationDashboard}
@@ -138,12 +140,12 @@ const App = () => {
                 path={'/tactical/activities'}
                 component={ActivitiesDashboard}
               />
-              <PrivateRoute path={'/strategy'} component={StrategicDashboard} />
-              <PrivateRoute path={'/tactical'} component={TacticalDashboard} />
-              <PrivateRoute path={'/'} exact component={Dashboard} />
-              <Route component={() => <h2>404</h2>} />
+              <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
+              <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
+              <PrivateRoute path={'/'} exact component={Dashboard}/>
+              <Route component={() => <h2>404</h2>}/>
             </Switch>
-            <ActivityTimer />
+            <ActivityTimer/>
           </div>
         </div>
       );

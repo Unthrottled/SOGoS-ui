@@ -76,7 +76,7 @@ const MenuNavigation: FC<Props> = () => {
     },
     {
       title: 'Settings',
-      path: '/settings',
+      path: '/settings/',
       icon: <SettingsIcon/>,
     },
   ];

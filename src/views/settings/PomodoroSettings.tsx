@@ -17,6 +17,7 @@ import {TomatoIcon} from '../icons/TomatoIcon';
 import {PersistActions} from '../components/PersistActions';
 import {PomodoroSettings} from '../../types/TacticalTypes';
 import {SliderProps} from '@material-ui/core/Slider/Slider';
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -139,7 +140,7 @@ interface Props {
   pomodoroSettings: PomodoroSettings;
 }
 
-const SettingsBoard: FC<DispatchProp & Props> = ({
+const PomodoroSettingsBoard: FC<DispatchProp & Props> = ({
   dispatch,
   pomodoroSettings,
 }) => {
@@ -192,11 +193,11 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
         longRecoveryDuration: longRecoveryTime * 60000,
       }),
     );
-    history.push('/');
+    history.push('../');
   };
 
   const discardChanges = () => {
-    history.push('/');
+    history.push('../');
   };
 
   return (
@@ -209,15 +210,16 @@ const SettingsBoard: FC<DispatchProp & Props> = ({
             align={'center'}
             color={'textPrimary'}
             gutterBottom>
-            Settings
+            Pomodoro Settings
           </Typography>
           <Typography
             variant="h6"
             align="center"
             color="textSecondary"
             paragraph>
-            We all cannot be the same. Therefore we thought it would be handy to
-            allow you to adjust the experience to your preferences!
+            What is a pomodoro? Great question, I am glad you asked! <Link href={
+              "https://en.wikipedia.org/wiki/Pomodoro_Technique"
+          } target={'_blank'}>Here is a link for you!</Link>
           </Typography>
           <SettingsIcon style={{color: '#333831', fontSize: '3em'}} />
         </Container>
@@ -290,4 +292,4 @@ const mapStateToProps = (state: GlobalState) => {
   };
 };
 
-export default connect(mapStateToProps)(SettingsBoard);
+export default connect(mapStateToProps)(PomodoroSettingsBoard);
