@@ -10,6 +10,7 @@ import AvatarIcon from "@material-ui/icons/Person";
 import CloudIcon from "@material-ui/icons/CloudUpload";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
+import AvatarComponent from "./AvatarComponent";
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -76,6 +77,7 @@ const ProfileDashboard = () => {
             <div className={classes.goalIcon}>
               <Avatar className={classes.avatar} src={localUrl}/>
             </div>
+            <AvatarComponent/>
           </div>
       </Card>
     </LoggedInLayout>
