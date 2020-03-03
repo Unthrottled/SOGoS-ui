@@ -68,13 +68,10 @@ const ProfileDashboard = () => {
                 Avatar
               </Typography>
               <AvatarComponent onImageSelect={uploadCroppedImage}/>
-              <IconButton>
-                <CloudIcon/>
-              </IconButton>
+                <div className={classes.goalIcon}>
+                  <Avatar className={classes.avatar} src={localUrl}/>
+                </div>
             </CardContent>
-            <div className={classes.goalIcon}>
-              <Avatar className={classes.avatar} src={localUrl}/>
-            </div>
           </div>
       </Card>
     </LoggedInLayout>

@@ -4,7 +4,8 @@ import 'react-image-crop/dist/ReactCrop.css';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Avatar} from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
-import CheckIcon from "@material-ui/icons/Check";
+import CloudIcon from "@material-ui/icons/CloudUpload";
+import CancelIcon from "@material-ui/icons/Close";
 
 interface Props {
   onImageSelect: (image: string) => void;
@@ -67,9 +68,11 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(11),
     height: theme.spacing(11),
   },
+  cancel:{
+    margin: `auto 0 auto ${theme.spacing(2)}px`
+  },
   save: {
-    margin: 'auto',
-    left: theme.spacing(2),
+    margin: `auto 0 auto ${theme.spacing(2)}px`,
   }}))
 
 const initialCrop: Crop = {
@@ -127,11 +130,19 @@ const AvatarComponent: FC<Props> = ({
     }
   }
 
-  const completeCrop = () => {
-    onImageSelect(croppedImageUrl);
+  function cleanUp() {
     setSourceImageUrl(null);
     setCroppedImageUrl(null);
     setImageCropSettings(initialCrop);
+  }
+
+  const completeCrop = () => {
+    onImageSelect(croppedImageUrl);
+    cleanUp();
+  }
+
+  const cancelCrop = () =>{
+    cleanUp();
   }
 
   const classes = useStyles();
@@ -160,7 +171,13 @@ const AvatarComponent: FC<Props> = ({
                 color={'primary'}
                 className={classes.save}
                 onClick={completeCrop}>
-                <CheckIcon />
+                <CloudIcon />
+              </Fab>
+              <Fab
+                color={"secondary"}
+                className={classes.cancel}
+                onClick={cancelCrop}>
+                <CancelIcon />
               </Fab>
             </div>
           )}
