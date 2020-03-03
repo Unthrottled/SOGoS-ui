@@ -1,10 +1,13 @@
-import {delay, all, call, put, select, takeEvery} from 'redux-saga/effects';
+import {all, call, delay, put, select, takeEvery} from 'redux-saga/effects';
 import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
   createFailedToGetUserEvent,
-  createReceivedUserEvent, createReceivedUserProfileEvent,
+  createReceivedUserEvent,
+  createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
+  createUploadedAvatarEvent,
+  SELECTED_AVATAR,
   UPDATED_SHARED_DASHBOARD,
 } from '../events/UserEvents';
 import {selectSecurityState, selectUserState} from '../reducers';
@@ -12,6 +15,7 @@ import {PayloadEvent} from "../events/Event";
 import {createShowWarningNotificationEvent} from "../events/MiscEvents";
 import {UserState} from "../reducers/UserReducer";
 import omit from 'lodash/omit';
+import {isNotUnAuthorized} from "./activity/RegisterActivitySaga";
 
 export function* findUserSaga() {
   const {isLoggedIn} = yield select(selectSecurityState);
@@ -33,16 +37,16 @@ export function* requestUserSaga() {
 export function* userProfileSaga(_: any, attempts: number = 0): Generator {
   try {
     const {
-        information: {
-          guid
-        }
+      information: {
+        guid
+      }
     }: any = yield select(selectUserState);
     const {data: profileInformation}: any = yield call(
       performGet, `/user/${guid}/profile`
     )
     yield put(createReceivedUserProfileEvent(profileInformation));
   } catch (e) {
-    if(attempts < 10){
+    if (attempts < 10) {
       yield delay(2000);
       yield call(userProfileSaga, {}, attempts + 1)
     } else {
@@ -68,10 +72,40 @@ export function* sharedDashboardSaga({
   }
 }
 
+export function* presignedAvatarUrlSaga() {
+  // const {data} = yield call(performGet, '/users/avatar/upload')
+  // return data;
+  return 'i am presigned url';
+}
+
+export function* uploadAvatarSaga(
+  presignedUrl: string,
+  avatarBlobUrl: string,
+) {
+  // compress image
+  // then upload
+}
+
+export function* userAvatarUploadSaga({
+                                 payload
+                               }: PayloadEvent<string>) {
+  try {
+    const presignedUrl = yield call(presignedAvatarUrlSaga);
+    yield call(uploadAvatarSaga, presignedUrl, payload);
+    yield delay(3000);
+    yield put(createUploadedAvatarEvent(payload));
+  } catch (e) {
+    if (isNotUnAuthorized(e)) {
+      yield put(createShowWarningNotificationEvent("Unable to upload your avatar! Try again later please!"));
+    }
+  }
+}
+
 function* listenToSecurityEvents() {
   yield takeEvery(INITIALIZED_SECURITY, findUserSaga);
   yield takeEvery(UPDATED_SHARED_DASHBOARD, sharedDashboardSaga);
-  yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga)
+  yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga);
+  yield takeEvery(SELECTED_AVATAR, userAvatarUploadSaga);
 }
 
 export default function* rootSaga() {
