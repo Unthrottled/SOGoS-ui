@@ -6,6 +6,9 @@ export const FAILED_REQUESTED_USER: 'FAILED_REQUESTED_USER' =
 export const RECEIVED_USER: 'RECEIVED_USER' = 'RECEIVED_USER';
 export const RECEIVED_USER_PROFILE: 'RECEIVED_USER_PROFILE' = 'RECEIVED_USER_PROFILE';
 export const RECEIVED_PARTIAL_USER: 'RECEIVED_PARTIAL_USER' = 'RECEIVED_PARTIAL_USER';
+export const SELECTED_AVATAR: 'SELECTED_AVATAR' = 'SELECTED_AVATAR';
+export const UPLOADED_AVATAR: 'UPLOADED_AVATAR' = 'UPLOADED_AVATAR';
+export const FAILED_TO_UPLOAD_AVATAR: 'FAILED_TO_UPLOAD_AVATAR' = 'FAILED_TO_UPLOAD_AVATAR';
 export const UPDATED_SHARED_DASHBOARD: 'UPDATED_SHARED_DASHBOARD' = 'UPDATED_SHARED_DASHBOARD';
 export const SYNCED_SHARED_DASHBOARD: 'SYNCED_SHARED_DASHBOARD' = 'SYNCED_SHARED_DASHBOARD';
 export const CHECKED_CACHES: 'CHECKED_CACHES' = 'CHECKED_CACHES';
@@ -32,6 +35,26 @@ export const createReceivedUserProfileEvent = (
 ): PayloadEvent<UserProfile> => ({
   type: RECEIVED_USER_PROFILE,
   payload: userProfile,
+});
+
+export const createUploadAvatarEvent = (
+  avatarUrl: string,
+): PayloadEvent<string> => ({
+  type: SELECTED_AVATAR,
+  payload: avatarUrl,
+});
+
+export const createUploadedAvatarEvent = (
+  avatarUrl: string,
+): PayloadEvent<string> => ({
+  type: UPLOADED_AVATAR,
+  payload: avatarUrl,
+});
+export const createFailedToUploadAvatarEvent = (
+  avatarUrl: string,
+): PayloadEvent<string> => ({
+  type: FAILED_TO_UPLOAD_AVATAR,
+  payload: avatarUrl,
 });
 
 export const createUserUpdatedSharedDashboardEvent = (

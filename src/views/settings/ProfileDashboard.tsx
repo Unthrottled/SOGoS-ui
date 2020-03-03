@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import LoggedInLayout from '../components/LoggedInLayout';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +10,10 @@ import Avatar from "@material-ui/core/Avatar";
 import AvatarComponent from "./AvatarComponent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {green} from "@material-ui/core/colors";
+import {connect, useDispatch} from "react-redux";
+import {createUploadAvatarEvent} from "../../events/UserEvents";
+import {GlobalState, selectMiscState} from "../../reducers";
+import {UploadStatus} from "../../reducers/MiscellaneousReducer";
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -39,18 +43,26 @@ const useStyles = makeStyles(theme => ({
     color: green[500],
     position: 'absolute',
     top: 0,
-    left: '25%',
+    left: '24.5%',
     zIndex: 1,
   },
 }));
 
-const ProfileDashboard = () => {
+interface Props {
+  uploadStatus: UploadStatus
+}
+
+const ProfileDashboard: FC<Props> = ({
+                            uploadStatus
+                          }) => {
   const history = useHistory();
   const classes = useStyles();
 
   const [localUrl, setLocalUrl] = useState();
 
+  const dispetch = useDispatch();
   const uploadCroppedImage = (avatarUrl: string) => {
+    dispetch(createUploadAvatarEvent(avatarUrl));
     setLocalUrl(avatarUrl)
   }
 
@@ -79,7 +91,10 @@ const ProfileDashboard = () => {
             <div className={classes.avatarContainer}>
               <div>
                 <Avatar className={classes.avatar} src={localUrl}/>
-                <CircularProgress size={159} className={classes.avatarProgress}/>
+                {
+                  uploadStatus === UploadStatus.UPLOADING &&
+                  <CircularProgress size={159} className={classes.avatarProgress}/>
+                }
               </div>
             </div>
           </CardContent>
@@ -89,4 +104,15 @@ const ProfileDashboard = () => {
   );
 };
 
-export default ProfileDashboard;
+const mapStateToProps = (globalState: GlobalState): Props => {
+  const {
+    avatarUpload: {
+      uploadStatus
+    }
+  } = selectMiscState(globalState);
+  return {
+    uploadStatus
+  }
+}
+
+export default connect(mapStateToProps)(ProfileDashboard);

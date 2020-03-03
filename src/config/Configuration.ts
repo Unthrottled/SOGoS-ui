@@ -27,7 +27,7 @@ const blackListTransform = createTransform((inboundState: any, key) => {
   if (key === 'security') {
     return omit(inboundState, ['isInitialized', 'isOutOfSync', 'readOnly', 'readToken']);
   } else if (key === 'misc') {
-    return omit(inboundState, ['notification']);
+    return omit(inboundState, ['notification', 'avatarUpload',]);
   } else {
     return inboundState;
   }
