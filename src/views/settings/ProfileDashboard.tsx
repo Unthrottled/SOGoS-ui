@@ -4,13 +4,12 @@ import LoggedInLayout from '../components/LoggedInLayout';
 import Typography from '@material-ui/core/Typography';
 import {Card, makeStyles} from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import Container from '@material-ui/core/Container';
 import AvatarIcon from "@material-ui/icons/Person";
-import CloudIcon from "@material-ui/icons/CloudUpload";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import AvatarComponent from "./AvatarComponent";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -27,13 +26,22 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
   },
-  goalIcon: {
+  avatarContainer: {
     padding: theme.spacing(2),
+    position: 'relative',
   },
   avatar: {
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-  }
+    width: 128,
+    height: 128,
+    margin: 'auto'
+  },
+  avatarProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: 0,
+    left: '25%',
+    zIndex: 1,
+  },
 }));
 
 const ProfileDashboard = () => {
@@ -62,17 +70,20 @@ const ProfileDashboard = () => {
         </Container>
       </div>
       <Card className={classes.card}>
-          <div className={classes.cardContent}>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Avatar
-              </Typography>
-              <AvatarComponent onImageSelect={uploadCroppedImage}/>
-                <div className={classes.goalIcon}>
-                  <Avatar className={classes.avatar} src={localUrl}/>
-                </div>
-            </CardContent>
-          </div>
+        <div className={classes.cardContent}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              Avatar
+            </Typography>
+            <AvatarComponent onImageSelect={uploadCroppedImage}/>
+            <div className={classes.avatarContainer}>
+              <div>
+                <Avatar className={classes.avatar} src={localUrl}/>
+                <CircularProgress size={159} className={classes.avatarProgress}/>
+              </div>
+            </div>
+          </CardContent>
+        </div>
       </Card>
     </LoggedInLayout>
   );
