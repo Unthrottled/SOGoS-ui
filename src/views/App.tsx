@@ -33,6 +33,7 @@ import Banner from './components/Banner';
 import About from "./About";
 import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
 import SettingsDashboard from "./settings/SettingsDashboard";
+import ProfileDashboard from "./settings/ProfileDashboard";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -107,6 +108,7 @@ const App = () => {
               />
 
               <PrivateRoute path={'/settings/pomodoro'} component={PomodoroSettingsBoard}/>
+              <PrivateRoute path={'/settings/profile'} component={ProfileDashboard}/>
               <PrivateRoute path={'/settings'} component={SettingsDashboard}/>
               <PrivateRoute
                 path={'/strategy/objectives/:objectiveId/tactics/association'}

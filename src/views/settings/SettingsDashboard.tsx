@@ -5,9 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import {Card, makeStyles} from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import Container from '@material-ui/core/Container';
-import {TacticalIcon} from '../icons/TacticalIcon';
 import SettingsIcon from "@material-ui/icons/Settings";
 import AvatarIcon from "@material-ui/icons/Person";
 import {TomatoIcon} from "../icons/TomatoIcon";
@@ -47,14 +45,14 @@ const SettingsDashboard = () => {
             gutterBottom>
             Settings
           </Typography>
-          <SettingsIcon style={{color: '#333831', fontSize: '6rem'}} />
+          <SettingsIcon style={{color: '#333831', fontSize: '6rem'}}/>
         </Container>
       </div>
       <Card className={classes.card}>
         <CardActionArea onClick={() => history.push('./profile/')}>
           <div className={classes.cardContent}>
             <div className={classes.goalIcon}>
-              <AvatarIcon style={{color: '#333831', fontSize: '6rem'}} />
+              <AvatarIcon style={{color: '#333831', fontSize: '6rem'}}/>
             </div>
             <CardContent>
               <Typography gutterBottom variant="h5" component="h2">
