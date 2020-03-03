@@ -42,10 +42,8 @@ const ProfileDashboard = () => {
 
   const [localUrl, setLocalUrl] = useState();
 
-  const imageSelected = (e: any) => {
-    setLocalUrl(URL.createObjectURL(
-      e.target.files?.[0]
-    ))
+  const uploadCroppedImage = (avatarUrl: string) => {
+    setLocalUrl(avatarUrl)
   }
 
   return (
@@ -69,7 +67,7 @@ const ProfileDashboard = () => {
               <Typography gutterBottom variant="h5" component="h2">
                 Avatar
               </Typography>
-              <input type={'file'} onChange={imageSelected}/>
+              <AvatarComponent onImageSelect={uploadCroppedImage}/>
               <IconButton>
                 <CloudIcon/>
               </IconButton>
@@ -77,7 +75,6 @@ const ProfileDashboard = () => {
             <div className={classes.goalIcon}>
               <Avatar className={classes.avatar} src={localUrl}/>
             </div>
-            <AvatarComponent/>
           </div>
       </Card>
     </LoggedInLayout>
