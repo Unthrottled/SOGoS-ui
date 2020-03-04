@@ -9,7 +9,7 @@ import {
 import {createReceivedPartialUserEvent} from "../../events/UserEvents";
 
 export function* readOnlySaga() {
-  const {location: {pathname}}: any = yield select(state => state.router);
+  const pathname = window.location.pathname
   const userIdentifier = pathname.substring('/user/'.length, pathname.indexOf('/history'))
   yield fork(attemptToGetReadOnlyToken, userIdentifier);
 
