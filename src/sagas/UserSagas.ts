@@ -4,11 +4,14 @@ import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvent
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
   createDownloadedAvatarEvent,
-  createFailedToGetUserEvent, createFailedToUploadAvatarEvent,
+  createFailedToGetUserEvent,
+  createFailedToUploadAvatarEvent,
   createReceivedUserEvent,
   createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
-  createUploadedAvatarEvent, RECEIVED_USER,
+  createUploadedAvatarEvent,
+  RECEIVED_USER,
+  RECEIVED_USER_PROFILE,
   SELECTED_AVATAR,
   UPDATED_SHARED_DASHBOARD,
 } from '../events/UserEvents';
@@ -94,8 +97,8 @@ export function* uploadAvatarSaga(
 }
 
 export function* userAvatarUploadSaga({
-                                 payload
-                               }: PayloadEvent<string>) {
+                                        payload
+                                      }: PayloadEvent<string>) {
   try {
     const presignedUrl = yield call(presignedAvatarUrlSaga);
     yield call(uploadAvatarSaga, presignedUrl, payload);
@@ -110,12 +113,13 @@ export function* userAvatarUploadSaga({
 }
 
 function* userAvatarDownloadSaga({
-  payload
-                                 }: PayloadEvent<UserResponse>) {
-  if(payload.information && 
-    payload.information.avatar) {
+                                   payload
+                                 }: PayloadEvent<UserResponse & User>) {
+  const avatar = (payload.information &&
+    payload.information.avatar) || payload.avatar
+  if (avatar) {
     try {
-      const thing = yield call(axios.get, payload.information.avatar, {
+      const thing = yield call(axios.get, avatar, {
         responseType: 'blob',
       })
       const blobbo: Blob = thing.data;
@@ -135,6 +139,7 @@ function* listenToSecurityEvents() {
   yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga);
   yield takeEvery(SELECTED_AVATAR, userAvatarUploadSaga);
   yield takeEvery(RECEIVED_USER, userAvatarDownloadSaga);
+  yield takeEvery(RECEIVED_USER_PROFILE, userAvatarDownloadSaga);
 }
 
 export default function* rootSaga() {
