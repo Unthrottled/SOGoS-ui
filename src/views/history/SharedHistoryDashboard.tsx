@@ -17,12 +17,17 @@ interface Props {
   fullName?: string;
   firstName?: string;
   lastName?: string;
+  localAvatar?: string;
 }
 
 const useStyles = makeStyles(theme => ({
   container: {
     margin: '1.5rem',
     marginBottom: '5rem',
+  },
+  avatar: {
+    width: 96,
+    height: 96,
   }
 }))
 
@@ -31,6 +36,7 @@ const SharedHistoryDashboard: FC<Props> = ({
                                              fullName,
                                              firstName,
                                              lastName,
+                                             localAvatar,
                                            }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -65,7 +71,7 @@ const SharedHistoryDashboard: FC<Props> = ({
           </div>
         </div>
         <span style={{flexGrow: 1}}/>
-        <Avatar/>
+        {localAvatar && <Avatar className={classes.avatar} src={localAvatar}/>}
       </div>
       <HistoryDashboardComponents>
         <div style={{textAlign: "left", padding: '0.5rem 1rem'}}>
@@ -107,7 +113,8 @@ const mapStateToProps = (state: GlobalState): Props => {
     information: {
       fullName,
       firstName,
-      lastName
+      lastName,
+      localAvatar,
     }
   } = selectUserState(state)
   return {
@@ -115,6 +122,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     fullName,
     firstName,
     lastName,
+    localAvatar,
   }
 }
 
