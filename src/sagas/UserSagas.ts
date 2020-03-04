@@ -3,11 +3,12 @@ import axios from 'axios';
 import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
-  createFailedToGetUserEvent,
+  createDownloadedAvatarEvent,
+  createFailedToGetUserEvent, createFailedToUploadAvatarEvent,
   createReceivedUserEvent,
   createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
-  createUploadedAvatarEvent,
+  createUploadedAvatarEvent, RECEIVED_USER,
   SELECTED_AVATAR,
   UPDATED_SHARED_DASHBOARD,
 } from '../events/UserEvents';
@@ -17,7 +18,7 @@ import {createShowWarningNotificationEvent} from "../events/MiscEvents";
 import {UserState} from "../reducers/UserReducer";
 import omit from 'lodash/omit';
 import {isNotUnAuthorized} from "./activity/RegisterActivitySaga";
-import {stringify} from "querystring";
+import {User, UserResponse} from "../types/UserTypes";
 
 export function* findUserSaga() {
   const {isLoggedIn} = yield select(selectSecurityState);
@@ -31,7 +32,6 @@ export function* requestUserSaga() {
     const {data: user} = yield call(performGetWithoutVerification, '/user');
     yield put(createReceivedUserEvent(user)); // found waldo.
   } catch (e) {
-    console.tron(e.message)
     yield put(createFailedToGetUserEvent(e));
   }
 }
@@ -103,7 +103,21 @@ export function* userAvatarUploadSaga({
   } catch (e) {
     if (isNotUnAuthorized(e)) {
       yield put(createShowWarningNotificationEvent("Unable to upload your avatar! Try again later please!"));
+      yield put(createFailedToUploadAvatarEvent(payload))
     }
+  }
+}
+
+function* userAvatarDownloadSaga({
+  payload
+                                 }: PayloadEvent<UserResponse>) {
+  if(payload.information && 
+    payload.information.avatar) {
+    const thing = yield call(axios.get, payload.information.avatar, {
+      responseType: 'blob',
+    })
+    const localAvatar = URL.createObjectURL(thing.data);
+    yield put(createDownloadedAvatarEvent(localAvatar))
   }
 }
 
@@ -112,6 +126,7 @@ function* listenToSecurityEvents() {
   yield takeEvery(UPDATED_SHARED_DASHBOARD, sharedDashboardSaga);
   yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga);
   yield takeEvery(SELECTED_AVATAR, userAvatarUploadSaga);
+  yield takeEvery(RECEIVED_USER, userAvatarDownloadSaga);
 }
 
 export default function* rootSaga() {

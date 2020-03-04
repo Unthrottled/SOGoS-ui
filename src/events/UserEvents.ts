@@ -8,6 +8,7 @@ export const RECEIVED_USER_PROFILE: 'RECEIVED_USER_PROFILE' = 'RECEIVED_USER_PRO
 export const RECEIVED_PARTIAL_USER: 'RECEIVED_PARTIAL_USER' = 'RECEIVED_PARTIAL_USER';
 export const SELECTED_AVATAR: 'SELECTED_AVATAR' = 'SELECTED_AVATAR';
 export const UPLOADED_AVATAR: 'UPLOADED_AVATAR' = 'UPLOADED_AVATAR';
+export const DOWNLOADED_AVATAR: 'DOWNLOADED_AVATAR' = 'DOWNLOADED_AVATAR';
 export const FAILED_TO_UPLOAD_AVATAR: 'FAILED_TO_UPLOAD_AVATAR' = 'FAILED_TO_UPLOAD_AVATAR';
 export const UPDATED_SHARED_DASHBOARD: 'UPDATED_SHARED_DASHBOARD' = 'UPDATED_SHARED_DASHBOARD';
 export const SYNCED_SHARED_DASHBOARD: 'SYNCED_SHARED_DASHBOARD' = 'SYNCED_SHARED_DASHBOARD';
@@ -50,6 +51,14 @@ export const createUploadedAvatarEvent = (
   type: UPLOADED_AVATAR,
   payload: avatarUrl,
 });
+
+export const createDownloadedAvatarEvent = (
+  avatarUrl: string,
+): PayloadEvent<string> => ({
+  type: DOWNLOADED_AVATAR,
+  payload: avatarUrl,
+});
+
 export const createFailedToUploadAvatarEvent = (
   avatarUrl: string,
 ): PayloadEvent<string> => ({

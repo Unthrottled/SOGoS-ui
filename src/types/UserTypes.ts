@@ -5,6 +5,7 @@ export type User = {
   lastName: string;
   email: string;
   guid: string;
+  avatar?: string;
 };
 
 export interface UserProfile {

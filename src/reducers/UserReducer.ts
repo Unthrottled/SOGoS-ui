@@ -1,4 +1,10 @@
-import {CHECKED_CACHES, RECEIVED_PARTIAL_USER, RECEIVED_USER, RECEIVED_USER_PROFILE} from '../events/UserEvents';
+import {
+  CHECKED_CACHES,
+  DOWNLOADED_AVATAR,
+  RECEIVED_PARTIAL_USER,
+  RECEIVED_USER,
+  RECEIVED_USER_PROFILE
+} from '../events/UserEvents';
 import {FAILED_TO_RECEIVE_READ_TOKEN, LOGGED_OFF} from '../events/SecurityEvents';
 import {User, UserOnBoarding} from '../types/UserTypes';
 import {ACKNOWLEDGED_TACMOD, THANKED_FOR_TACMOD, USER_WELCOMED} from '../events/ActivityEvents';
@@ -88,6 +94,14 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
         miscellaneous: {
           ...state.miscellaneous,
           onboarding: action.payload.misc.onboarding || {},
+        },
+      };
+    case DOWNLOADED_AVATAR:
+      return {
+        ...state,
+        information: {
+          ...state.information,
+          avatar: action.payload,
         },
       };
     case LOGGED_OFF:
