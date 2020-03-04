@@ -100,6 +100,7 @@ export function* userAvatarUploadSaga({
     const presignedUrl = yield call(presignedAvatarUrlSaga);
     yield call(uploadAvatarSaga, presignedUrl, payload);
     yield put(createUploadedAvatarEvent(payload));
+    yield put(createDownloadedAvatarEvent(payload));
   } catch (e) {
     if (isNotUnAuthorized(e)) {
       yield put(createShowWarningNotificationEvent("Unable to upload your avatar! Try again later please!"));
@@ -113,11 +114,18 @@ function* userAvatarDownloadSaga({
                                  }: PayloadEvent<UserResponse>) {
   if(payload.information && 
     payload.information.avatar) {
-    const thing = yield call(axios.get, payload.information.avatar, {
-      responseType: 'blob',
-    })
-    const localAvatar = URL.createObjectURL(thing.data);
-    yield put(createDownloadedAvatarEvent(localAvatar))
+    try {
+      const thing = yield call(axios.get, payload.information.avatar, {
+        responseType: 'blob',
+      })
+      const blobbo: Blob = thing.data;
+      if (blobbo.size > 0) {
+        const localAvatar = URL.createObjectURL(blobbo);
+        yield put(createDownloadedAvatarEvent(localAvatar))
+      }
+    } catch (e) {
+
+    }
   }
 }
 

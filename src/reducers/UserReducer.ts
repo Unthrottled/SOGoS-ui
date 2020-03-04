@@ -101,7 +101,7 @@ const userReducer = (state: UserState = INITIAL_USER_STATE, action: any) => {
         ...state,
         information: {
           ...state.information,
-          avatar: action.payload,
+          localAvatar: action.payload,
         },
       };
     case LOGGED_OFF:

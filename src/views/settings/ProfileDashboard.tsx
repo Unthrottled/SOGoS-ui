@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import LoggedInLayout from '../components/LoggedInLayout';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {green} from "@material-ui/core/colors";
 import {connect, useDispatch} from "react-redux";
 import {createUploadAvatarEvent} from "../../events/UserEvents";
-import {GlobalState, selectMiscState} from "../../reducers";
+import {GlobalState, selectMiscState, selectUserState} from "../../reducers";
 import {UploadStatus} from "../../reducers/MiscellaneousReducer";
 
 const useStyles = makeStyles(theme => ({
@@ -49,16 +49,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-  uploadStatus: UploadStatus
+  uploadStatus?: UploadStatus;
+  localAvatar?: string;
 }
 
 const ProfileDashboard: FC<Props> = ({
-                            uploadStatus
-                          }) => {
+                                       uploadStatus,
+                                       localAvatar,
+                                     }) => {
   const history = useHistory();
   const classes = useStyles();
 
   const [localUrl, setLocalUrl] = useState();
+  useEffect(()=>{
+    setLocalUrl(localAvatar);
+  }, [localAvatar])
 
   const dispetch = useDispatch();
   const uploadCroppedImage = (avatarUrl: string) => {
@@ -110,8 +115,14 @@ const mapStateToProps = (globalState: GlobalState): Props => {
       uploadStatus
     }
   } = selectMiscState(globalState);
+  const {
+    information: {
+      localAvatar
+    }
+  } = selectUserState(globalState)
   return {
-    uploadStatus
+    uploadStatus,
+    localAvatar,
   }
 }
 
