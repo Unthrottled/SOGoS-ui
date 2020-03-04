@@ -1,4 +1,5 @@
 import {all, call, delay, put, select, takeEvery} from 'redux-saga/effects';
+import axios from 'axios';
 import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
@@ -16,6 +17,7 @@ import {createShowWarningNotificationEvent} from "../events/MiscEvents";
 import {UserState} from "../reducers/UserReducer";
 import omit from 'lodash/omit';
 import {isNotUnAuthorized} from "./activity/RegisterActivitySaga";
+import {stringify} from "querystring";
 
 export function* findUserSaga() {
   const {isLoggedIn} = yield select(selectSecurityState);
@@ -73,16 +75,20 @@ export function* sharedDashboardSaga({
 }
 
 export function* presignedAvatarUrlSaga() {
-  // const {data} = yield call(performGet, '/users/avatar/upload')
-  // return data;
-  return 'i am presigned url';
+  const {data} = yield call(performPost, '/user/profile/avatar/create', {})
+  return data;
 }
+
 
 export function* uploadAvatarSaga(
   presignedUrl: string,
   avatarBlobUrl: string,
 ) {
-  // compress image
+  const thing = yield call(axios.get, avatarBlobUrl)
+  console.log(thing);
+  yield call(axios.put, presignedUrl, thing.data, {
+    headers: thing.headers
+  })
   // then upload
 }
 
@@ -92,7 +98,7 @@ export function* userAvatarUploadSaga({
   try {
     const presignedUrl = yield call(presignedAvatarUrlSaga);
     yield call(uploadAvatarSaga, presignedUrl, payload);
-    yield delay(3000);
+    // yield delay(3000);
     yield put(createUploadedAvatarEvent(payload));
   } catch (e) {
     if (isNotUnAuthorized(e)) {
