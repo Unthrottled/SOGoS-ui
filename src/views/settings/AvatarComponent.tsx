@@ -10,7 +10,7 @@ import CancelIcon from "@material-ui/icons/Close";
 interface Props {
   onImageSelect: (image: string) => void;
 }
-
+const imageSize = 256;
 const cropImage = (
   sourceImage: any,
   cropToApply: Crop,
@@ -19,8 +19,8 @@ const cropImage = (
   const canvas: any = document.createElement('canvas');
   const scaleX = sourceImage.naturalWidth / sourceImage.width;
   const scaleY = sourceImage.naturalHeight / sourceImage.height;
-  canvas.width = cropToApply.width;
-  canvas.height = cropToApply.height;
+  canvas.width = imageSize;
+  canvas.height = imageSize;
   const ctx: any = canvas.getContext('2d');
 
   ctx.drawImage(
@@ -31,8 +31,8 @@ const cropImage = (
     cropToApply.height!! * scaleY,
     0,
     0,
-    cropToApply.width!!,
-    cropToApply.height!!
+    imageSize,
+    imageSize
   );
 
   return new Promise<string>((resolve, reject) => {

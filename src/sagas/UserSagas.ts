@@ -84,12 +84,13 @@ export function* uploadAvatarSaga(
   presignedUrl: string,
   avatarBlobUrl: string,
 ) {
-  const thing = yield call(axios.get, avatarBlobUrl)
-  console.log(thing);
-  yield call(axios.put, presignedUrl, thing.data, {
-    headers: thing.headers
+  const thing = yield call(axios.get, avatarBlobUrl, {
+    responseType: 'blob',
   })
-  // then upload
+  yield call(axios.put, presignedUrl, thing.data, {
+    headers: omit(thing.headers, ['content-length']),
+  })
+  yield call(performPost, '/user/profile/avatar/uploaded', {})
 }
 
 export function* userAvatarUploadSaga({
@@ -98,7 +99,6 @@ export function* userAvatarUploadSaga({
   try {
     const presignedUrl = yield call(presignedAvatarUrlSaga);
     yield call(uploadAvatarSaga, presignedUrl, payload);
-    // yield delay(3000);
     yield put(createUploadedAvatarEvent(payload));
   } catch (e) {
     if (isNotUnAuthorized(e)) {
