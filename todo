@@ -1,9 +1,6 @@
 - Sharable dashboard.
-      - name and stuff
       - do not attempt to start activity when read only
-      - not shared
       - log when viewed
-      - revoke when token expires and sharing is not enabled.
 
 - About
 

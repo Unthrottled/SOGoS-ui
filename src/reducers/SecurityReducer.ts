@@ -11,6 +11,7 @@ import {readTokenReceptionReducer, tokenReceptionReducer} from './security/Token
 import {RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
 import {TokenInformation} from '../types/SecurityTypes';
 import {TIME_IS_WACK} from '../events/ApplicationLifecycleEvents';
+import omit from 'lodash/omit';
 
 export enum SharedStatus {
   UNKNOWN, NOT_SHARED, SHARED
@@ -68,7 +69,7 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
       };
     case FAILED_TO_RECEIVE_READ_TOKEN:
       return {
-        ...state,
+        ...omit(state, ['readToken']),
         hasShared: SharedStatus.NOT_SHARED
       }
     case EXPIRED_SESSION:

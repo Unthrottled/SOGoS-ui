@@ -10,6 +10,7 @@ import {
 } from '../events/HistoryEvents';
 import {Activity} from '../types/ActivityTypes';
 import {defaultActivity} from './ActivityReducer';
+import {FAILED_TO_RECEIVE_READ_TOKEN} from "../events/SecurityEvents";
 
 export interface DateRange {
   from: number;
@@ -50,6 +51,8 @@ const HistoryReducer = (
   action: any,
 ): HistoryState => {
   switch (action.type) {
+    case FAILED_TO_RECEIVE_READ_TOKEN:
+      return INITIAL_HISTORY_STATE;
     case INITIALIZED_HISTORY:
     case UPDATED_HISTORY:
       const payload: ActivityUpdatePayload = action.payload;
