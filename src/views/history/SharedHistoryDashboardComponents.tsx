@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {connect} from "react-redux";
-import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
+import {GlobalState, selectActivityState, selectSecurityState, selectUserState} from "../../reducers";
 import SharedPausedPomodoro from "../time/SharedPausedPomodoro";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
@@ -12,6 +12,8 @@ import Container from "@material-ui/core/Container";
 import {HistoryIcon} from "../icons/HistoryIcon";
 import PersonIcon from "@material-ui/icons/Person";
 import MailIcon from "@material-ui/icons/Mail";
+import Badge from "@material-ui/core/Badge";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 interface Props {
   hasShared?: boolean;
@@ -20,7 +22,37 @@ interface Props {
   lastName?: string;
   localAvatar?: string;
   email?: string;
+  shouldTime?: boolean;
 }
+
+const StyledBadge = withStyles(theme => ({
+  badge: {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: '$ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}))(Badge);
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -40,6 +72,7 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
                                                        lastName,
                                                        localAvatar,
                                                        email,
+                                                       shouldTime,
                                                      }) => {
   const classes = useStyles();
 
@@ -77,17 +110,26 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
               display: "flex",
               alignItems: 'center'
             }}>
-              <span style={{flexGrow: 1}} /><span style={{marginRight: '0.5rem'}}>{userName}</span><PersonIcon />
+              <span style={{flexGrow: 1}}/><span style={{marginRight: '0.5rem'}}>{userName}</span><PersonIcon/>
             </Typography>
             <Typography style={{
               color: grey[700],
               display: "flex",
               alignItems: 'center'
             }}>
-              <span style={{flexGrow: 1}} /><span style={{marginRight: '0.5rem'}} >{email}</span><MailIcon/>
+              <span style={{flexGrow: 1}}/><span style={{marginRight: '0.5rem'}}>{email}</span><MailIcon/>
             </Typography>
           </div>
-          <Avatar className={classes.avatar} src={localAvatar}/>
+          <StyledBadge
+            overlap="circle"
+            invisible={!shouldTime}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+          >
+            <Avatar className={classes.avatar} src={localAvatar}/>
+          </StyledBadge>
         </div>
         }
       </div>
@@ -128,6 +170,9 @@ const mapStateToProps = (state: GlobalState): Props => {
     readToken
   } = selectSecurityState(state);
   const {
+    shouldTime
+  } = selectActivityState(state);
+  const {
     information: {
       fullName,
       firstName,
@@ -143,6 +188,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     lastName,
     email,
     localAvatar,
+    shouldTime,
   }
 }
 
