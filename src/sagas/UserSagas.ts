@@ -9,7 +9,7 @@ import {
   createReceivedUserEvent,
   createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
-  createUploadedAvatarEvent,
+  createUploadedAvatarEvent, RECEIVED_PARTIAL_USER,
   RECEIVED_USER,
   RECEIVED_USER_PROFILE,
   SELECTED_AVATAR,
@@ -136,7 +136,7 @@ function* userAvatarDownloadSaga({
 function* listenToSecurityEvents() {
   yield takeEvery(INITIALIZED_SECURITY, findUserSaga);
   yield takeEvery(UPDATED_SHARED_DASHBOARD, sharedDashboardSaga);
-  yield takeEvery(RECEIVED_READ_TOKEN, userProfileSaga);
+  yield takeEvery(RECEIVED_PARTIAL_USER, userProfileSaga);
   yield takeEvery(SELECTED_AVATAR, userAvatarUploadSaga);
   yield takeEvery(RECEIVED_USER, userAvatarDownloadSaga);
   yield takeEvery(RECEIVED_USER_PROFILE, userAvatarDownloadSaga);
