@@ -1,7 +1,6 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
-import {connect, useDispatch} from "react-redux";
-import {createViewedSharedHistoryEvent} from "../../events/HistoryEvents";
+import {connect} from "react-redux";
 import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
 import SharedPausedPomodoro from "../time/SharedPausedPomodoro";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -11,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import {grey} from "@material-ui/core/colors";
 import Container from "@material-ui/core/Container";
 import {HistoryIcon} from "../icons/HistoryIcon";
+import PersonIcon from "@material-ui/icons/Person";
+import MailIcon from "@material-ui/icons/Mail";
 
 interface Props {
   hasShared?: boolean;
@@ -18,6 +19,7 @@ interface Props {
   firstName?: string;
   lastName?: string;
   localAvatar?: string;
+  email?: string;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -32,12 +34,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SharedHistoryDashboardComponents: FC<Props> = ({
-                                             hasShared,
-                                             fullName,
-                                             firstName,
-                                             lastName,
-                                             localAvatar,
-                                           }) => {
+                                                       hasShared,
+                                                       fullName,
+                                                       firstName,
+                                                       lastName,
+                                                       localAvatar,
+                                                       email,
+                                                     }) => {
   const classes = useStyles();
 
   const userName = fullName ||
@@ -66,7 +69,27 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
           </div>
         </div>
         <span style={{flexGrow: 1}}/>
-        {localAvatar && <Avatar className={classes.avatar} src={localAvatar}/>}
+        {localAvatar &&
+        <div style={{display: "flex"}}>
+          <div style={{margin: 'auto 1rem', textAlign: 'right'}}>
+            <Typography style={{
+              color: grey[700],
+              display: "flex",
+              alignItems: 'center'
+            }}>
+              <span style={{flexGrow: 1}} /><span style={{marginRight: '0.5rem'}}>{userName}</span><PersonIcon />
+            </Typography>
+            <Typography style={{
+              color: grey[700],
+              display: "flex",
+              alignItems: 'center'
+            }}>
+              <span style={{flexGrow: 1}} /><span style={{marginRight: '0.5rem'}} >{email}</span><MailIcon/>
+            </Typography>
+          </div>
+          <Avatar className={classes.avatar} src={localAvatar}/>
+        </div>
+        }
       </div>
       <HistoryDashboardComponents>
         <div style={{textAlign: "left", padding: '0.5rem 1rem'}}>
@@ -109,6 +132,7 @@ const mapStateToProps = (state: GlobalState): Props => {
       fullName,
       firstName,
       lastName,
+      email,
       localAvatar,
     }
   } = selectUserState(state)
@@ -117,6 +141,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     fullName,
     firstName,
     lastName,
+    email,
     localAvatar,
   }
 }
