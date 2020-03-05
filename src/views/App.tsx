@@ -34,6 +34,8 @@ import About from "./About";
 import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
 import SettingsDashboard from "./settings/SettingsDashboard";
 import ProfileDashboard from "./settings/ProfileDashboard";
+import SharedHistoryDashboardComponents from "./history/SharedHistoryDashboardComponents";
+import PrivateSharedHistoryDashboard from "./history/PrivateSharedHistoryDashboard";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -102,6 +104,10 @@ const App = () => {
               <Route path={'/user/:uuid/history'}
                      component={SharedHistoryDashboard}/>
 
+              <PrivateRoute
+                path={'/:uuid/history/shared'}
+                component={PrivateSharedHistoryDashboard}
+              />
               <PrivateRoute
                 path={'/:uuid/history'}
                 component={HistoryDashboard}

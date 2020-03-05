@@ -167,7 +167,8 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
 
 const mapStateToProps = (state: GlobalState): Props => {
   const {
-    readToken
+    readToken,
+    isLoggedIn
   } = selectSecurityState(state);
   const {
     shouldTime
@@ -182,7 +183,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     }
   } = selectUserState(state)
   return {
-    hasShared: !!readToken,
+    hasShared: !!readToken || isLoggedIn,
     fullName,
     firstName,
     lastName,

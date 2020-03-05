@@ -5,12 +5,14 @@ import {Switch} from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
+import ViewIcon from "@material-ui/icons/Visibility";
 import SocialShare from "../components/SocialShare";
 import {connect, useDispatch} from "react-redux";
 import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
 import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 import {createViewedHistoryEvent} from "../../events/HistoryEvents";
 import {SharedStatus} from "../../reducers/SecurityReducer";
+import { useHistory } from 'react-router-dom';
 
 const PrivateHistoryDashboard: FC<Props> = ({
                                               userIdentifier,
@@ -20,6 +22,11 @@ const PrivateHistoryDashboard: FC<Props> = ({
   const dispatch = useDispatch();
   const toggleShare = () => {
     dispatch(createUserUpdatedSharedDashboardEvent(!shared));
+  }
+
+  const history = useHistory();
+  const navigateToSharedHistory = () => {
+    history.push('./shared')
   }
 
   useEffect(() => {
@@ -36,14 +43,22 @@ const PrivateHistoryDashboard: FC<Props> = ({
         <div style={{display: "flex"}}>
           {
             shared &&
-            (<SocialShare sharingUrl={
-              `https://sogos.unthrottled.io/user/${userIdentifier}/history`
-            }><IconButton
-              color={'primary'}
-              aria-label="Menu">
-              <ShareIcon/>
-            </IconButton>
-            </SocialShare>)
+            (<div style={{display: 'flex'}}>
+                <IconButton title={'View Shared Dashboard'}
+                onClick={navigateToSharedHistory}>
+                  <ViewIcon/>
+                </IconButton>
+                <SocialShare sharingUrl={
+                  `https://sogos.unthrottled.io/user/${userIdentifier}/history`
+                }><IconButton
+                  title={'Share your dashboard!'}
+                  color={'primary'}
+                  aria-label="Menu">
+                  <ShareIcon/>
+                </IconButton>
+                </SocialShare>
+              </div>
+            )
           }
           <InputLabel style={{margin: 'auto'}}><Switch
             checked={shared}
