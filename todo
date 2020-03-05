@@ -1,7 +1,3 @@
-- Sharable dashboard.
-      - do not attempt to start activity when read only
-      - log when viewed
-
 - About
 
 - Add TacMod Plug on Activity Start

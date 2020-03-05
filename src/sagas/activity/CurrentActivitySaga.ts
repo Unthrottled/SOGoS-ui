@@ -78,7 +78,7 @@ export function* handleError(
   }
 }
 
-export const CURRENT_ACTIVITY_POLL_RATE = 1000;
+export const CURRENT_ACTIVITY_POLL_RATE = 5000;
 
 export function* delayWork() {
   const globalState = yield select();
