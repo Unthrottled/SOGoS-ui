@@ -12,7 +12,6 @@ const SharedHistoryDashboard: FC = () => {
   return (
     <SharedHistoryDashboardComponents/>
   )
-
 };
 
 export default SharedHistoryDashboard;

@@ -14,6 +14,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import MailIcon from "@material-ui/icons/Mail";
 import Badge from "@material-ui/core/Badge";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Banner from "../components/Banner";
 
 interface Props {
   hasShared?: boolean;
@@ -160,9 +161,11 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
       </HistoryDashboardComponents>
       <SharedPausedPomodoro/>
     </div>
-  ) : <div>
-    They no share
-  </div>;
+  ) : <Banner hideExcerpt>
+    <Typography variant={'h5'} color="textSecondary">
+      This user has elected to not share their Activity Dashboard at this time.
+    </Typography>
+  </Banner>;
 };
 
 const mapStateToProps = (state: GlobalState): Props => {

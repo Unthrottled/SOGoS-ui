@@ -13,7 +13,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Banner: FC = ({children}) => {
+interface Props {
+  hideExcerpt?: boolean
+}
+
+const Banner: FC<Props> = ({
+                             children,
+                             hideExcerpt,
+                           }) => {
   const {headerContent} = useStyles();
 
   return (
@@ -53,16 +60,19 @@ const Banner: FC = ({children}) => {
                   gutterBottom>
                   Strategic Orchestration and Governance System
                 </Typography>
-                <Typography
-                  variant="h5"
-                  align="center"
-                  color="textSecondary"
-                  paragraph>
-                  Find and reach your maximum potential! Push yourself to the
-                  limits of your ability. Knowing that you can rest easy when
-                  you really need to.
-                </Typography>
-                <SOGoS />
+                {
+                  !hideExcerpt &&
+                  <Typography
+                    variant="h5"
+                    align="center"
+                    color="textSecondary"
+                    paragraph>
+                    Find and reach your maximum potential! Push yourself to the
+                    limits of your ability. Knowing that you can rest easy when
+                    you really need to.
+                  </Typography>
+                }
+                <SOGoS/>
                 {children}
               </Container>
             </div>
