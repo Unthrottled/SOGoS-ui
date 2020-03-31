@@ -1,4 +1,4 @@
-import {call, delay, fork, put, race, select, take} from 'redux-saga/effects';
+import {call, delay, fork, put, race, take} from 'redux-saga/effects';
 import {performOpenGet} from "../APISagas";
 import {
   createFailedToReceiveReadToken,

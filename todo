@@ -1,15 +1,22 @@
-- About
+- change to using gravatar for avatar.
+- Crashes when starting activity and viewing dashboard
+- TacMod
+  - Fix APP
+  - Add TacMod Plug on Activity Start
+    - Add google play link onboarding
+- sogos home
+  - not shared, shared dashboard
+- shorter sharing lynx
+- Better Statistics Dashboard
+  - Time Allocated to Objectives.
 
-- Add TacMod Plug on Activity Start
-  - Add google play link
+- About
 
 post mvp:
 -------------------------------------
-- shorter sharing lynx
 - Better Statistics Dashboard
   - Time spent by category
   - Quotas
-  - Time Allocated to Objectives.
   - Breakdown of when you
     - Normally start an activity
     - Average Duration of started activity

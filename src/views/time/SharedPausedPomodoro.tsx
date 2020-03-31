@@ -60,7 +60,6 @@ const SharedPausedPomodoro = () => {
   const {
     shouldTime,
     currentActivity,
-    previousActivity,
     activities,
   } = useSelector(mapStateToProps);
   const {

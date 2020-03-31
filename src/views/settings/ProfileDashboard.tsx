@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
 import LoggedInLayout from '../components/LoggedInLayout';
 import Typography from '@material-ui/core/Typography';
 import {Card, makeStyles} from '@material-ui/core';
@@ -57,11 +56,10 @@ const ProfileDashboard: FC<Props> = ({
                                        uploadStatus,
                                        localAvatar,
                                      }) => {
-  const history = useHistory();
   const classes = useStyles();
 
   const [localUrl, setLocalUrl] = useState();
-  useEffect(()=>{
+  useEffect(() => {
     setLocalUrl(localAvatar);
   }, [localAvatar])
 

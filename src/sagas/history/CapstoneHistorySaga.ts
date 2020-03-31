@@ -10,7 +10,7 @@ import {
 import {Activity} from '../../types/ActivityTypes';
 import {reverseBinarySearch} from '../../miscellanous/Tools';
 import {UserState} from '../../reducers/UserReducer';
-import {performGet, performPost} from '../APISagas';
+import {performGet} from '../APISagas';
 import {isTimedActivity} from '../activity/CurrentActivitySaga';
 import {shouldTime} from '../../miscellanous/Projection';
 

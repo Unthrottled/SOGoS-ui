@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const About: FC<Props> = ({}) => {
+const About: FC<Props> = () => {
   const {headerContent} = useStyles();
 
   return (
@@ -41,8 +41,7 @@ const About: FC<Props> = ({}) => {
             <div className={headerContent}>
               <Container
                 maxWidth={'sm'}
-                style={{
-                }}>
+                style={{}}>
                 <Typography
                   component={'h1'}
                   variant={'h4'}

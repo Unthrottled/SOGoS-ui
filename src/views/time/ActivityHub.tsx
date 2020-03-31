@@ -133,8 +133,8 @@ const ActivityHub = () => {
   const {
     loadDuration,
     notificationsAllowed,
-    TacModDownloaded,
-    TacModNotified,
+    // TacModDownloaded,
+    // TacModNotified,
   } = useSelector(mapStateToProps);
 
   const dispetch = useDispatch();
@@ -143,16 +143,16 @@ const ActivityHub = () => {
       startTimedActivity(buildCommenceActivityContents(supplements, name)),
     );
 
-  const [storedAction, setStoredAction] = useState<ActionHack>({
-    action: () => {
-    },
-  });
-  const [useTacMod, setUseTacMod] = useState(false);
-
-  const tacModDismissed = () => {
-    setUseTacMod(false);
-    storedAction.action();
-  };
+  // const [storedAction, setStoredAction] = useState<ActionHack>({
+  //   action: () => {
+  //   },
+  // });
+  // const [useTacMod, setUseTacMod] = useState(false);
+  //
+  // const tacModDismissed = () => {
+  //   setUseTacMod(false);
+  //   storedAction.action();
+  // };
 
   const activityChosen = (action: {
     icon: any;

@@ -1,6 +1,6 @@
 import {all, call, delay, put, select, takeEvery} from 'redux-saga/effects';
 import axios from 'axios';
-import {INITIALIZED_SECURITY, RECEIVED_READ_TOKEN} from '../events/SecurityEvents';
+import {INITIALIZED_SECURITY} from '../events/SecurityEvents';
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
 import {
   createDownloadedAvatarEvent,
@@ -9,7 +9,8 @@ import {
   createReceivedUserEvent,
   createReceivedUserProfileEvent,
   createSyncedSharedDashboardUpdateEvent,
-  createUploadedAvatarEvent, RECEIVED_PARTIAL_USER,
+  createUploadedAvatarEvent,
+  RECEIVED_PARTIAL_USER,
   RECEIVED_USER,
   RECEIVED_USER_PROFILE,
   SELECTED_AVATAR,

@@ -120,6 +120,7 @@ const AvatarComponent: FC<Props> = ({
     if (!croppedImageUrl && imageElementReference) {
       performCrop(currentImageCropSettings);
     }
+  // eslint-disable-next-line
   }, [croppedImageUrl, imageElementReference])
 
   const createCrop = (finalCrop: Crop) => {
