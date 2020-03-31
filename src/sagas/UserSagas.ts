@@ -1,4 +1,5 @@
 import {all, call, delay, put, select, takeEvery} from 'redux-saga/effects';
+import md5 from 'md5';
 import axios from 'axios';
 import {INITIALIZED_SECURITY} from '../events/SecurityEvents';
 import {performDelete, performGet, performGetWithoutVerification, performPost} from './APISagas';
@@ -113,11 +114,17 @@ export function* userAvatarUploadSaga({
   }
 }
 
+function buildGravatarURL(payload: UserResponse & User) {
+  const email = md5(payload.information.email.trim().toLowerCase());
+  return `https://www.gravatar.com/avatar/${email}.jpg?s=256`;
+}
+
 function* userAvatarDownloadSaga({
                                    payload
                                  }: PayloadEvent<UserResponse & User>) {
   const avatar = (payload.information &&
-    payload.information.avatar) || payload.avatar
+    payload.information.avatar) || payload.avatar || buildGravatarURL(payload);
+  console.tron(avatar)
   if (avatar) {
     try {
       const thing = yield call(axios.get, avatar, {

@@ -13,6 +13,7 @@ import {connect, useDispatch} from "react-redux";
 import {createUploadAvatarEvent} from "../../events/UserEvents";
 import {GlobalState, selectMiscState, selectUserState} from "../../reducers";
 import {UploadStatus} from "../../reducers/MiscellaneousReducer";
+import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles(theme => ({
   cardContent: {
@@ -89,6 +90,11 @@ const ProfileDashboard: FC<Props> = ({
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Avatar
+            </Typography>
+            <Typography>
+              For your convenience, we try to use your &nbsp;
+              <Link target={'_blank'} href={'https://en.gravatar.com/support/what-is-gravatar/'}>Gravatar</Link>
+              &nbsp; profile image. However, you can upload your own here!
             </Typography>
             <AvatarComponent onImageSelect={uploadCroppedImage}/>
             <div className={classes.avatarContainer}>
