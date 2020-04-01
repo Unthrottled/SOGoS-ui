@@ -16,6 +16,7 @@ export const CHECKED_CACHES: 'CHECKED_CACHES' = 'CHECKED_CACHES';
 export const CACHED_DATA: 'CACHED_DATA' = 'CACHED_DATA';
 export const SYNCED_DATA: 'SYNCED_DATA' = 'SYNCED_DATA';
 export const REQUESTED_SYNC: 'REQUESTED_SYNC' = 'REQUESTED_SYNC';
+export const LANDED_ON_SHARE: 'LANDED_ON_SHARE' = 'LANDED_ON_SHARE';
 
 export const createReceivedUserEvent = (
   user: UserResponse,
@@ -103,4 +104,11 @@ export const createFailedToGetUserEvent = (
 ): PayloadEvent<Error> => ({
   type: FAILED_REQUESTED_USER,
   payload: error,
+});
+
+export const createLandedOnSharedBridgeEvent = (
+  shareId: string,
+): PayloadEvent<string> => ({
+  type: LANDED_ON_SHARE,
+  payload: shareId
 });

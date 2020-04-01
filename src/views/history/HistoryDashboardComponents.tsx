@@ -109,6 +109,32 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+export const LoadingIndicator = () => (
+  <div
+    style={{
+      opacity: 0.7,
+      position: 'fixed',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+    }}>
+    <Loader
+      type={'Triangle'}
+      color={PRIMARY_THEME_COLOR}
+      height={320}
+      width={320}
+    >
+    </Loader>
+    <div style={{
+      position: 'absolute',
+      left: '25%',
+      top: '40%',
+    }}>
+      <SOGoS/>
+    </div>
+  </div>
+)
+
 const HistoryDashboardComponents: FC<DispatchProp & Props> = (
   {
     dispatch,
@@ -192,29 +218,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
           </main>
         </Paper>
       ) : (
-        <div
-          style={{
-            opacity: 0.7,
-            position: 'fixed',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}>
-          <Loader
-            type={'Triangle'}
-            color={PRIMARY_THEME_COLOR}
-            height={320}
-            width={320}
-          >
-          </Loader>
-          <div style={{
-            position: 'absolute',
-            left: '25%',
-            top: '40%',
-          }}>
-            <SOGoS/>
-          </div>
-        </div>
+        <LoadingIndicator/>
       )}
     </div>
   );
