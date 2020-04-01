@@ -4,6 +4,7 @@ import {GlobalState} from "../reducers";
 import {Typography} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {SOGoSSharedLogo} from "./history/SharedHistoryDashboardComponents";
 
 interface Props {
 
@@ -23,16 +24,14 @@ const About: FC<Props> = () => {
   const {headerContent} = useStyles();
 
   return (
-    <div style={{height: '100%',}}>
+    <div style={{
+      height: '100%',
+      margin: '1.5rem',
+      marginBottom: '5rem',
+    }}>
+      <SOGoSSharedLogo/>
       <div
-        style={{
-          display: 'block',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          height: '100%',
-          width: '100%',
-        }}>
+        style={{}}>
         <div
           style={{
             verticalAlign: 'middle',

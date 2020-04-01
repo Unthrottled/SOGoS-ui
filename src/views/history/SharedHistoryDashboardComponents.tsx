@@ -64,7 +64,28 @@ const useStyles = makeStyles(theme => ({
     width: 96,
     height: 96,
   }
-}))
+}));
+
+export const SOGoSSharedLogo =
+  () => (<div style={{display: "flex"}}>
+  <SOGoS size={{
+    width: '100px',
+    height: '100px',
+  }}/>
+  <div style={{textAlign: 'left', marginLeft: '0.5rem'}}>
+    <Typography style={{
+      fontSize: '3rem',
+      color: grey[700]
+    }}>
+      SOGoS
+    </Typography>
+    <Typography variant={"subtitle1"} style={{
+      color: grey[500]
+    }}>
+      Strategic Orchestration and Governance System
+    </Typography>
+  </div>
+</div>)
 
 const SharedHistoryDashboardComponents: FC<Props> = ({
                                                        hasShared,
@@ -83,25 +104,7 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
   return hasShared === undefined || hasShared ? (
     <div className={classes.container}>
       <div style={{display: "flex", marginBottom: '1rem'}}>
-        <div style={{display: "flex"}}>
-          <SOGoS size={{
-            width: '100px',
-            height: '100px',
-          }}/>
-          <div style={{textAlign: 'left', marginLeft: '0.5rem'}}>
-            <Typography style={{
-              fontSize: '3rem',
-              color: grey[700]
-            }}>
-              SOGoS
-            </Typography>
-            <Typography variant={"subtitle1"} style={{
-              color: grey[500]
-            }}>
-              Strategic Orchestration and Governance System
-            </Typography>
-          </div>
-        </div>
+        <SOGoSSharedLogo/>
         <span style={{flexGrow: 1}}/>
         {localAvatar &&
         <div style={{display: "flex"}}>
