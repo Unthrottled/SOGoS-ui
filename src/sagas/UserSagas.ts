@@ -124,7 +124,6 @@ function* userAvatarDownloadSaga({
                                  }: PayloadEvent<UserResponse & User>) {
   const avatar = (payload.information &&
     payload.information.avatar) || payload.avatar || buildGravatarURL(payload);
-  console.tron(avatar)
   if (avatar) {
     try {
       const thing = yield call(axios.get, avatar, {

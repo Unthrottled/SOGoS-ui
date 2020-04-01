@@ -124,6 +124,7 @@ const workMarks = [
   },
 ];
 
+// @ts-ignore
 const SliderBoi: React.ComponentType<SliderProps> = withStyles({
   thumb: {
     height: 20,

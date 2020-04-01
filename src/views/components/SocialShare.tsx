@@ -41,34 +41,34 @@ const SocialShare: FC<Props> = ({children, sharingUrl}) => {
                 translate
                 title={'Something'} // todo: deez
                 url={sharingUrl}>
-                <TwitterIcon crossOrigin size={48}/>
+                <TwitterIcon path={'yeet'} crossOrigin size={48}/>
               </TwitterShareButton>
               <LinkedinShareButton
                 translate
                 title={"Something"}
                 summary={"Something"}
                 url={sharingUrl}>
-                <LinkedinIcon crossOrigin size={48}/>
+                <LinkedinIcon path={'yeet'} crossOrigin size={48}/>
               </LinkedinShareButton>
               <FacebookShareButton
                 translate
                 title={'Something'}
                 quote={'Something'}
                 url={sharingUrl}>
-                <FacebookIcon crossOrigin size={48}/>
+                <FacebookIcon path={'yeet'} crossOrigin size={48}/>
               </FacebookShareButton>
               <RedditShareButton
                 translate
                 title={'Something'}
                 url={sharingUrl}>
-                <RedditIcon crossOrigin size={48}/>
+                <RedditIcon path={'yeet'} crossOrigin size={48}/>
               </RedditShareButton>
               <EmailShareButton
                 translate
                 subject={'Something'}
                 body={'Something'}
                 url={sharingUrl}>
-                <EmailIcon crossOrigin size={48}/>
+                <EmailIcon path={'yeet'} crossOrigin size={48}/>
               </EmailShareButton>
             </Paper>
           </Fade>
