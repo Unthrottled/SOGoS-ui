@@ -35,7 +35,6 @@ import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
 import SettingsDashboard from "./settings/SettingsDashboard";
 import ProfileDashboard from "./settings/ProfileDashboard";
 import PrivateSharedHistoryDashboard from "./history/PrivateSharedHistoryDashboard";
-import ShareLandingComponent from "./components/ShareLandingComponent";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -101,8 +100,7 @@ const App = () => {
             <Switch>
               <Route path={'/login'} component={LoggedOut}/>
               <Route path={'/about'} component={About}/>
-              <Route path={'/s/:shareId'} component={ShareLandingComponent} />
-              <Route path={'/user/:uuid/history'}
+              <Route path={'/dashboard/:shareId'}
                      component={SharedHistoryDashboard}/>
 
               <PrivateRoute

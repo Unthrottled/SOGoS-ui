@@ -10,8 +10,8 @@ import {createReceivedPartialUserEvent} from "../../events/UserEvents";
 
 export function* readOnlySaga() {
   const pathname = window.location.pathname
-  const userIdentifier = pathname.substring('/user/'.length, pathname.indexOf('/history'))
-  yield fork(attemptToGetReadOnlyToken, userIdentifier);
+  const bridgeCode = pathname.substring('/dashboard/'.length)
+  yield fork(attemptToGetReadOnlyToken, bridgeCode);
 
   const {
     hasReadToken,
@@ -21,26 +21,26 @@ export function* readOnlySaga() {
   });
 
   if (hasReadToken) {
-    yield put(createReceivedPartialUserEvent(userIdentifier))
+    yield put(createReceivedPartialUserEvent(hasReadToken.payload.userIdentifier))
   }
 }
 
-export function* attemptToGetReadOnlyToken(userIdentifier: string, attempt: number = 1): Generator {
+export function* attemptToGetReadOnlyToken(bridgeCode: string, attempt: number = 1): Generator {
   try {
     const readOnlyTokenPayload: any = yield call(
       performOpenGet,
-      `/user/${userIdentifier}/view/token`
+      `/user/${bridgeCode}/view/token`
     )
     yield put(createReceivedReadToken({
-      userIdentifier,
+      userIdentifier: readOnlyTokenPayload.data.userIdentifier,
       readToken: readOnlyTokenPayload.data.readToken
     }))
   } catch (e) {
     if ((!e.message || e.message.indexOf('403') < 0) && attempt < 5) {
       yield delay(2000);
-      yield call(attemptToGetReadOnlyToken, userIdentifier, attempt + 1)
+      yield call(attemptToGetReadOnlyToken, bridgeCode, attempt + 1)
     } else {
-      yield put(createFailedToReceiveReadToken(userIdentifier))
+      yield put(createFailedToReceiveReadToken(bridgeCode))
     }
   }
 }
