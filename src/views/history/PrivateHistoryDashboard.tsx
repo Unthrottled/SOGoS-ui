@@ -8,11 +8,11 @@ import ShareIcon from "@material-ui/icons/Share";
 import ViewIcon from "@material-ui/icons/Visibility";
 import SocialShare from "../components/SocialShare";
 import {connect, useDispatch} from "react-redux";
-import {GlobalState, selectSecurityState, selectUserState} from "../../reducers";
+import {GlobalState, selectSecurityState} from "../../reducers";
 import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 import {createViewedHistoryEvent} from "../../events/HistoryEvents";
 import {SharedStatus} from "../../reducers/SecurityReducer";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 const PrivateHistoryDashboard: FC<Props> = ({
                                               shareCode,
@@ -45,7 +45,7 @@ const PrivateHistoryDashboard: FC<Props> = ({
             shared &&
             (<div style={{display: 'flex'}}>
                 <IconButton title={'View Shared Dashboard'}
-                onClick={navigateToSharedHistory}>
+                            onClick={navigateToSharedHistory}>
                   <ViewIcon/>
                 </IconButton>
                 <SocialShare sharingUrl={
