@@ -1,6 +1,4 @@
 - Sharing
-  - shorter sharing lynx
-    - do not force login
   - messages
 - Better Statistics Dashboard
   - Time Allocated to Objectives.
@@ -11,6 +9,11 @@
 - sogos home
   - not shared, shared dashboard
 - About page fill out.
+- Dashboard Crashes
+  - New User
+  - Create Activity
+  - Start Activity
+  - go to dashboard
 
 post mvp:
 -------------------------------------

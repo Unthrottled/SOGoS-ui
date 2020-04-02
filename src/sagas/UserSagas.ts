@@ -70,6 +70,7 @@ export function* sharedDashboardSaga({
     const {information}: UserState = yield select(selectUserState);
     yield call(method, '/user/share/dashboard/read', omit(information, ['guid']))
     yield put(createSyncedSharedDashboardUpdateEvent(hasShared))
+    yield call(requestUserSaga);
   } catch (e) {
     yield put(
       createShowWarningNotificationEvent(

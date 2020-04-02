@@ -15,7 +15,7 @@ import {SharedStatus} from "../../reducers/SecurityReducer";
 import { useHistory } from 'react-router-dom';
 
 const PrivateHistoryDashboard: FC<Props> = ({
-                                              userIdentifier,
+                                              shareCode,
                                               hasShared
                                             }) => {
   const shared = hasShared;
@@ -49,7 +49,7 @@ const PrivateHistoryDashboard: FC<Props> = ({
                   <ViewIcon/>
                 </IconButton>
                 <SocialShare sharingUrl={
-                  `https://sogos.unthrottled.io/user/${userIdentifier}/history`
+                  `https://sogos.unthrottled.io/dashboard/${shareCode}`
                 }><IconButton
                   title={'Share your dashboard!'}
                   color={'primary'}
@@ -75,21 +75,17 @@ const PrivateHistoryDashboard: FC<Props> = ({
 
 interface Props {
   hasShared?: boolean;
-  userIdentifier: string;
+  shareCode?: string;
 }
 
 const mapStateToProps = (globalState: GlobalState): Props => {
   const {
-    hasShared
+    hasShared,
+    shareCode
   } = selectSecurityState(globalState);
-  const {
-    information: {
-      guid
-    }
-  } = selectUserState(globalState)
   return {
     hasShared: hasShared === SharedStatus.SHARED,
-    userIdentifier: guid
+    shareCode
   }
 }
 

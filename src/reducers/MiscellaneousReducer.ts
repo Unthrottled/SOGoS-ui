@@ -5,10 +5,14 @@ import {
 } from '../events/MiscEvents';
 import {FAILED_TO_UPLOAD_AVATAR, SELECTED_AVATAR, UPLOADED_AVATAR} from "../events/UserEvents";
 
+export enum NotificationType {
+  WARNING, INFO, UNKNOWN
+}
+
 export interface NotificationState {
   message: string;
   shown: boolean;
-  type: string;
+  type: NotificationType;
 }
 
 
@@ -29,7 +33,7 @@ export const INITIAL_MISC_STATE: MiscellaneousState = {
   notification: {
     message: 'We done goofed.',
     shown: false,
-    type: 'warning',
+    type: NotificationType.WARNING,
   },
   avatarUpload: {
     uploadStatus: UploadStatus.NOT_STARTED
@@ -78,9 +82,9 @@ const MiscellaneousReducer = (
       return {
         ...state,
         notification: {
-          message: action.payload,
+          message: action.payload.message,
           shown: true,
-          type: 'info',
+          type: action.payload.type,
         },
       };
     case SAVED_REDIRECT:

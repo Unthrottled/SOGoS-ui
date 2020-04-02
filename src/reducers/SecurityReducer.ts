@@ -31,6 +31,7 @@ export type SecurityState = {
   readOnly: boolean;
   readToken: string;
   hasShared: SharedStatus;
+  shareCode?: string;
   readTokenInformation: TokenInformation;
 };
 
