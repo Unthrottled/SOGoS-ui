@@ -1,17 +1,14 @@
-- Better Statistics Dashboard
-  - Time Allocated to Objectives.
 - TacMod
   - Fix APP
   - Add TacMod Plug on Activity Start
     - Add google play link onboarding
+- Better Statistics Dashboard
+  - Daily Heat Map
+  - Time Allocated to Objectives.
 - sogos home
   - not shared, shared dashboard
 - About page fill out.
-- Dashboard Crashes
-  - New User
-  - Create Activity
-  - Start Activity
-  - go to dashboard
+- Login page forces you to idp (don't do dat)
 
 post mvp:
 -------------------------------------

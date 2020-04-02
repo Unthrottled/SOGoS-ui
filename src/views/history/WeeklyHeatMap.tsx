@@ -83,7 +83,9 @@ export const breakIntoHeatSteps = (
       projection.stop - (projection.stop % stepSize) + stepSize;
     const fullSteps = (closestEndingStep - closestFullStep) / stepSize;
 
-    const fullTimeSteps = Array(fullSteps)
+    // todo: is this right?
+    const safeSteps = fullSteps < 0 ? 0: fullSteps
+    const fullTimeSteps = Array(Math.floor(safeSteps))
       .fill(0)
       .map((_, index) => ({
         timeStamp: closestFullStep + stepSize * index,
