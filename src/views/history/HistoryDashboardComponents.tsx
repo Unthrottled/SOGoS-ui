@@ -22,6 +22,7 @@ import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
 import {Paper} from "@material-ui/core";
+import DailyHeatMap from "./DailyHeatMap";
 
 interface Props {
   selectedTo: number;
@@ -211,6 +212,9 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
             </div>
             <div className={classes.paper}>
               <PieFlavored/>
+            </div>
+            <div className={classes.paper}>
+              <DailyHeatMap/>
             </div>
             <div className={classes.paper}>
               <WeeklyHeatMap/>
