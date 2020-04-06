@@ -33,6 +33,7 @@ import {
   tacticalActivityShownSaga,
 } from './tactical/TacticalActivityVisibilitySagas';
 import {race} from "redux-saga/effects";
+import {RECEIVED_READ_TOKEN} from "../events/SecurityEvents";
 
 function* initializeTacticalSettings() {
   yield take(RECEIVED_USER);
@@ -41,6 +42,11 @@ function* initializeTacticalSettings() {
   yield takeEvery(FOUND_WIFI, settingsSyncSaga);
   yield takeEvery(REQUESTED_SYNC, settingsSyncSaga);
   yield takeEvery(VIEWED_SETTINGS, fetchSettings);
+}
+
+function* initializeReadTacticalSettings() {
+  yield take(RECEIVED_READ_TOKEN);
+  yield call(fetchSettings);
 }
 
 function* watchForSettingsUpdates() {
@@ -57,6 +63,7 @@ function* tacticalActivitiesObservationInitializationSaga() {
 }
 
 function* listenForTacticalEvents() {
+  yield fork(initializeReadTacticalSettings);
   yield fork(tacticalActivitiesObservationInitializationSaga);
   yield takeEvery(FOUND_WIFI, tacticalActivitySyncSaga);
   yield takeEvery(RECEIVED_USER, tacticalActivitySyncSaga);
