@@ -53,7 +53,7 @@ export function* getOrRefreshAccessToken(
   shouldTokenRefresh: (arg0: SecurityState) => boolean,
 ) {
   const security: SecurityState = yield select(selectSecurityState);
-  if (shouldTokenRefresh(security) && security.isInitialized) {
+  if (shouldTokenRefresh(security) && security.isInitialized && security.isLoggedIn) {
     // Cannot refresh tokens, just go back to the
     // auth server and hope for the best...
     yield put(createForcedLoginEvent());
