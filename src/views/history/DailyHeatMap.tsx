@@ -2,6 +2,11 @@ import React, {FC, useEffect, useState} from 'react';
 import range from 'lodash/range';
 import {connect} from 'react-redux';
 import {max, scaleSequential, select} from 'd3';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import {
   GlobalState,
   selectActivityState,
@@ -55,6 +60,7 @@ export const RecoveryActivity: TacticalActivity = {
 const useStyles = makeStyles(theme => ({
   container: {
     borderTop: 'solid 1px rgba(0,0,0, .15)',
+    paddingTop: '2rem',
   },
   legendLabel: {
     flexGrow: 1,
@@ -439,11 +445,31 @@ Duration: ${!d.value ? 'N/A' : duration}`;
     9001: RecoveryActivity,
   });
   const classes = useStyles();
+  const changeChart = (e: any) => {
+    console.log(e.target.value);
+  }
   return (
     <div className={classes.container}>
       {!!currentHeatMapActivity.name && (
         <div style={{display: 'flex', justifyContent: 'center'}}>
-          <div style={{margin: 'auto 0'}}>
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Activity by: </FormLabel>
+            <RadioGroup row aria-label="position" name="position" onChange={changeChart} defaultValue="hour">
+              <FormControlLabel
+                value="minute"
+                control={<Radio color="primary" />}
+                label="Minute"
+                labelPlacement="start"
+              />
+              <FormControlLabel
+                value="hour"
+                control={<Radio color="primary" />}
+                label="Hour"
+                labelPlacement="start"
+              />
+            </RadioGroup>
+          </FormControl>
+          <div style={{margin: 'auto 0 auto 1rem'}}>
             <TacticalActivityIcon
               size={{
                 width: 50,
