@@ -163,7 +163,7 @@ const sanitizeName = (activityName: string): string => {
     : activityName;
 };
 
-const DailyHeatMap: FC<Props> = ({
+const HeatMap: FC<Props> = ({
                                     activityFeed,
                                     bottomActivity,
                                     currentActivity,
@@ -576,4 +576,4 @@ const mapStateToProps = (state: GlobalState): Props => {
   };
 };
 
-export default connect(mapStateToProps)(DailyHeatMap);
+export default connect(mapStateToProps)(HeatMap);

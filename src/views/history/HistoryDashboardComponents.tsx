@@ -21,7 +21,7 @@ import {ONE_DAY} from "../../sagas/activity/PomodoroActivitySagas";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
 import {Paper} from "@material-ui/core";
-import DailyHeatMap from "./DailyHeatMap";
+import DailyHeatMap from "./HeatMap";
 
 interface Props {
   selectedTo: number;

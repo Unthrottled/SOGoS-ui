@@ -38,7 +38,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Objective} from '../../types/StrategyTypes';
 import moment from 'moment';
-import {RecoveryActivity} from './DailyHeatMap';
+import {RecoveryActivity} from './HeatMap';
 
 export const getMeaningFullName = (
   activityId: string,
