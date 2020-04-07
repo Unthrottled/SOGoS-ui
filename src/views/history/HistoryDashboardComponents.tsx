@@ -12,7 +12,6 @@ import moment, {Moment} from "moment";
 import {Activity, getActivityName} from "../../types/ActivityTypes";
 import TimeLine from "./TimeLine";
 import PieFlavored from "./PieFlavored";
-import WeeklyHeatMap from "./WeeklyHeatMap";
 import Loader from "react-loader-spinner";
 import {PRIMARY_THEME_COLOR} from "../App";
 import {connect, DispatchProp, useSelector} from "react-redux";
@@ -215,9 +214,6 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
             </div>
             <div className={classes.paper}>
               <DailyHeatMap/>
-            </div>
-            <div className={classes.paper}>
-              <WeeklyHeatMap/>
             </div>
           </main>
         </Paper>
