@@ -289,15 +289,31 @@ const DailyHeatMap: FC<Props> = ({
       {},
     );
 
-    const steps = Object.entries<StringDictionary<number>>(
+    const completeTaskProjection = Object.entries<StringDictionary<number>>(
       weekProjection,
     ).flatMap(dayEntry =>
       Object.entries(dayEntry[1]).map(hourEntry => ({
-        day: +dayEntry[0] + 1,
-        hour: +hourEntry[0] + 1,
+        day: +dayEntry[0],
+        hour: +hourEntry[0],
         value: hourEntry[1],
       })),
     );
+
+    const completeGrid = [];
+    for (let i = 0, j = 0; i < 60 * 24; i++) {
+      const actualTimeOnTask = completeTaskProjection[j];
+      if(actualTimeOnTask && (((actualTimeOnTask.day) * 24) + actualTimeOnTask.hour) === i){
+        completeGrid.push(actualTimeOnTask);
+        j++;
+      } else {
+        completeGrid.push({
+          day: Math.floor(i / 24),
+          hour: i % 24,
+          value: 0,
+        })
+      }
+    }
+    const steps = completeGrid;
 
     const mappedTacticalActivities: StringDictionary<TacticalActivity> = {
       ...mapTacticalActivitiesToID(tacticalActivities),
@@ -326,6 +342,7 @@ const DailyHeatMap: FC<Props> = ({
       .attr('class', 'hour bordered')
       .attr('width', gridSize)
       .attr('height', gridSize)
+      .attr('stroke', d => d.value === 0 ? '#eeeeee55' : '#00000000')
       .style('fill', d => {
         const opacity = Math.round(opacityScale(d.value) * 100) - 1;
         return `${colorScale(d.value)}${opacity <= 16 ? 0 : ''}${opacity.toString(16)}`;
@@ -333,9 +350,9 @@ const DailyHeatMap: FC<Props> = ({
       .append('title')
       .text((d: any) => {
         const duration = moment.duration(d.value * 60000).humanize()
-        const currentTime = moment.unix((((d.day - 1) * 24) + d.hour - 1) * 60).utc();
+        const currentTime = moment.unix((((d.day) * 24) + d.hour) * 60).utc();
         return `Time of day: ${currentTime.format('HH:mm')}
-Duration: ${duration}`;
+Duration: ${!d.value ? 'N/A' : duration}`;
       });
 
     const legend = select('#legend69');
