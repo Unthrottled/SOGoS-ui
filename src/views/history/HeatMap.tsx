@@ -381,13 +381,19 @@ const HeatMap: FC<Props> = ({
     hourHeatBoxes
       .enter()
       .append('rect')
-      .attr('x', d => (d.hour - 1) * gridSize)
-      .attr('y', d => (d.day - 1) * gridSize)
+      .attr('x', d => (d.hour - sillyAdditionThing) * gridSize)
+      .attr('y', d => (d.day - sillyAdditionThing) * gridSize)
       .attr('rx', 4)
       .attr('ry', 4)
       .attr('class', 'hour bordered')
       .attr('width', gridSize)
       .attr('height', gridSize)
+      .on("mouseover", function() {
+        select(this).classed("hover", true);
+      })
+      .on("mouseout", function() {
+        select(this).classed("hover", false);
+      })
       .attr('stroke', d => d.value === 0 ? '#eeeeee55' : '#00000000')
       .style('fill', d => {
         const opacity = Math.round((opacityScale(d.value) - 0.01) * 255) || 1;

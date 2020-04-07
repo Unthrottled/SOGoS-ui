@@ -3,7 +3,9 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
+rect.hover {
+  stroke: #bbbbbb !important;
+}
 html {
   box-sizing: border-box;
 }
