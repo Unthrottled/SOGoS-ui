@@ -8,27 +8,15 @@ import {
   selectHistoryState,
   selectStrategyState,
   selectTacticalActivityState,
+  selectUserState,
 } from '../../reducers';
-import {
-  numberObjectToArray,
-  objectToKeyValueArray,
-} from '../../miscellanous/Tools';
-import {
-  areDifferent,
-  getActivityIdentifier,
-  shouldTime,
-} from '../../miscellanous/Projection';
+import {numberObjectToArray, objectToKeyValueArray,} from '../../miscellanous/Tools';
+import {areDifferent, getActivityIdentifier, shouldTime,} from '../../miscellanous/Projection';
 import {constructColorMappings} from './TimeLine';
 import {dictionaryReducer} from '../../reducers/StrategyReducer';
 import {TacticalActivity} from '../../types/TacticalTypes';
 import {HasId, NumberDictionary, StringDictionary} from '../../types/BaseTypes';
-import {
-  activitiesEqual,
-  Activity,
-  DEFAULT_ACTIVITY,
-  getActivityName,
-  RECOVERY,
-} from '../../types/ActivityTypes';
+import {activitiesEqual, Activity, DEFAULT_ACTIVITY, getActivityName, RECOVERY,} from '../../types/ActivityTypes';
 import reduceRight from 'lodash/reduceRight';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -39,6 +27,7 @@ import {TacticalActivityIcon} from '../icons/TacticalActivityIcon';
 import {Objective} from '../../types/StrategyTypes';
 import moment from 'moment';
 import {RecoveryActivity} from './HeatMap';
+import capitalize from "@material-ui/core/utils/capitalize";
 
 export const getMeaningFullName = (
   activityId: string,
@@ -78,6 +67,7 @@ interface Props {
   bottomActivity: Activity;
   archivedActivities: NumberDictionary<TacticalActivity>;
   objectives: StringDictionary<Objective>;
+  firstName: string;
 }
 
 interface GroupedActivity {
@@ -118,15 +108,39 @@ function addCurrentActivityToProjection(
   return bins;
 }
 
+function createActivity(mappedTacticalActivities: StringDictionary<TacticalActivity>) {
+  return (data: any) => {
+    const activity = mappedTacticalActivities[data.name];
+    return (
+      <div key={data.name} style={{display: 'flex'}}>
+        <div style={{marginRight: '1rem'}}>
+          <TacticalActivityIcon
+            tacticalActivity={activity}
+            size={{
+              width: 25,
+              height: 25,
+            }}
+          />
+        </div>
+        <Typography style={{margin: 'auto 0'}}>
+          {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
+          <strong>{(data.value / 3600000).toFixed(3)}</strong> hours
+          or <i>about {moment.duration(data.value).humanize()}</i>
+        </Typography>
+      </div>
+    );
+  };
+}
+
 const PieFlavored: FC<Props> = ({
-  activityFeed,
-  relativeToTime,
-  relativeFromTime,
-  tacticalActivities,
-  bottomActivity,
-  archivedActivities,
-  objectives,
-}) => {
+                                  activityFeed,
+                                  relativeToTime,
+                                  relativeFromTime,
+                                  tacticalActivities,
+                                  bottomActivity,
+                                  archivedActivities,
+                                  firstName,
+                                }) => {
   const activityProjection: ProjectionReduction = reduceRight(
     activityFeed,
     (accum: ProjectionReduction, activity: Activity) => {
@@ -206,7 +220,7 @@ const PieFlavored: FC<Props> = ({
 
   const pieData = reduceRight(
     objectToKeyValueArray(bins),
-    (accum: {name: string; value: number}[], keyValue) => {
+    (accum: { name: string; value: number }[], keyValue) => {
       accum.push({
         name: keyValue.key,
         value: keyValue.value.reduce(
@@ -279,20 +293,35 @@ const PieFlavored: FC<Props> = ({
 
   return (
     <div>
-      <div
-        style={{
-          maxWidth: '300px',
-          margin: 'auto',
-        }}
-        id={'pieBoi'}
-      />
+      <div style={{display: 'flex'}}>
+        <div style={{margin: '1rem 0 0 1rem'}}>
+          <hr style={{opacity: 0.4}}/>
+          <Typography variant={'h6'} gutterBottom={true}>
+            {capitalize(firstName)}'s Top 5 Activities
+          </Typography>
+          <hr style={{opacity: 0.4}}/>
+          <div>
+            {orderedPieData.slice(0, 5).map(createActivity(mappedTacticalActivities))}
+          </div>
+        </div>
+        <div
+          style={{
+            maxWidth: '350px',
+            minHeight: '350px',
+            margin: 'auto',
+          }}
+          id={'pieBoi'}
+        >
+          <div style={{width: '300px', marginTop: '-2rem'}}>Hi!</div>
+        </div>
+      </div>
       <ExpansionPanel>
         <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon/>}
           aria-controls="panel1a-content"
           id="panel1a-header">
           <div style={{margin: 'auto'}}>
-            <Typography>Activity Breakdown</Typography>
+            <Typography>Full Activity Breakdown</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
@@ -301,27 +330,7 @@ const PieFlavored: FC<Props> = ({
               display: 'flex',
               flexDirection: 'column',
             }}>
-            {orderedPieData.map(data => {
-              const activity = mappedTacticalActivities[data.name];
-              return (
-                <div key={data.name} style={{display: 'flex'}}>
-                  <div style={{marginRight: '1rem'}}>
-                    <TacticalActivityIcon
-                      tacticalActivity={activity}
-                      size={{
-                        width: 25,
-                        height: 25,
-                      }}
-                    />
-                  </div>
-                  <Typography style={{margin: 'auto 0'}}>
-                    {getMeaningFullName(data.name, mappedTacticalActivities)}:{' '}
-                    <strong>{(data.value / 3600000).toFixed(3)}</strong> hours
-                    or <i>about {moment.duration(data.value).humanize()}</i>
-                  </Typography>
-                </div>
-              );
-            })}
+            {orderedPieData.map(createActivity(mappedTacticalActivities))}
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
@@ -337,6 +346,10 @@ const mapStateToProps = (state: GlobalState): Props => {
   } = selectHistoryState(state);
   const {objectives} = selectStrategyState(state);
   const {activities, archivedActivities} = selectTacticalActivityState(state);
+  const {
+    information: {firstName},
+  } = selectUserState(state);
+
   return {
     activityFeed,
     relativeToTime: to,
@@ -345,6 +358,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     archivedActivities,
     bottomActivity,
     objectives,
+    firstName,
   };
 };
 export default connect(mapStateToProps)(PieFlavored);
