@@ -326,15 +326,16 @@ const DailyHeatMap: FC<Props> = ({
       .attr('class', 'hour bordered')
       .attr('width', gridSize)
       .attr('height', gridSize)
-      .style('opacity', d => opacityScale(d.value))
-      .style('fill', d => colorScale(d.value))
+      .style('fill', d => {
+        const opacity = Math.round(opacityScale(d.value) * 100) - 1;
+        return `${colorScale(d.value)}${opacity <= 16 ? 0 : ''}${opacity.toString(16)}`;
+      })
       .append('title')
       .text((d: any) => {
         const duration = moment.duration(d.value * 60000).humanize()
-        const currentTime = moment.unix(d.day * d.hour * 60);
-        return `
-        ${currentTime.format('hh:mm')}
-        ${duration}`;
+        const currentTime = moment.unix((((d.day - 1) * 24) + d.hour - 1) * 60).utc();
+        return `Time of day: ${currentTime.format('HH:mm')}
+Duration: ${duration}`;
       });
 
     const legend = select('#legend69');
