@@ -116,12 +116,39 @@ export const breakIntoHeatSteps = (
     return fullTimeSteps;
   });
 
+const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  weekTimes = [
+    '1a',
+    '2a',
+    '3a',
+    '4a',
+    '5a',
+    '6a',
+    '7a',
+    '8a',
+    '9a',
+    '10a',
+    '11a',
+    '12a',
+    '1p',
+    '2p',
+    '3p',
+    '4p',
+    '5p',
+    '6p',
+    '7p',
+    '8p',
+    '9p',
+    '10p',
+    '11p',
+    '12p',
+  ];
+
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
   width = 800 - margin.left - margin.right,
   gridSize = Math.floor(width / 24),
-  height = (gridSize * 63) - margin.top - margin.bottom,
-  days = Array(60).fill(0).map((_, i)=> ''),
-  times = Array(24).fill(0).map((_,i)=>'');
+  minuteRow = Array(60).fill(0).map((_, i)=> ''),
+  minuteColumn = Array(24).fill(0).map((_,i)=>'');
 
 type HourSteppo = {
   spawn: { start: Activity; stop: Activity };
@@ -160,9 +187,16 @@ const DailyHeatMap: FC<Props> = ({
     count: 0,
   });
 
+  const [heatMapType, setHeatMapType] = useState('hour');
+
   useEffect(() => {
     const selection = select('#dayHeatBoi');
     selection.select('svg').remove();
+
+    const isHour = heatMapType==='hour';
+    const rows = isHour ? weekDays : minuteRow;
+    const height = (gridSize * (rows.length + 3)) - margin.top - margin.bottom;
+
     const heatBoiSvg = selection
       .append('svg')
       .attr('width', width + margin.left + margin.right)
@@ -170,9 +204,10 @@ const DailyHeatMap: FC<Props> = ({
       .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+
     heatBoiSvg
       .selectAll('.dayLabel')
-      .data(days)
+      .data(rows)
       .enter()
       .append('text')
       .text(d => d)
@@ -189,7 +224,7 @@ const DailyHeatMap: FC<Props> = ({
 
     heatBoiSvg
       .selectAll('.timeLabel')
-      .data(times)
+      .data(isHour ? weekTimes : minuteColumn)
       .enter()
       .append('text')
       .text(d => d)
@@ -250,7 +285,7 @@ const DailyHeatMap: FC<Props> = ({
       currentActivity: projection.currentActivity,
       activityBins: Object.values(projection.activityBins).flatMap(a => a),
     };
-    const unfilteredSteppos = breakIntoHeatSteps(linearProj, 60000);
+    const unfilteredSteppos = breakIntoHeatSteps(linearProj,  isHour?3600000:60000);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentHeatMapActivity ||
@@ -264,9 +299,8 @@ const DailyHeatMap: FC<Props> = ({
       const dateTime = moment.unix(steppo.timeStamp / 1000);
       const absTime = (dateTime.hour() * 60) + (dateTime.minutes())
       return {
-        day: Math.floor(absTime / 24),
-        hour: absTime % 24,
-        fullValue: absTime,
+        day: isHour ? dateTime.day() : Math.floor(absTime / 24),
+        hour: isHour ? dateTime.hour() : absTime % 24,
         value: steppo.value,
         spawn: steppo.spawn,
       };
@@ -295,31 +329,37 @@ const DailyHeatMap: FC<Props> = ({
       {},
     );
 
+    // for the labels and such
+    const sillyAdditionThing = isHour ? 1 : 0;
+
     const completeTaskProjection = Object.entries<StringDictionary<number>>(
       weekProjection,
     ).flatMap(dayEntry =>
       Object.entries(dayEntry[1]).map(hourEntry => ({
-        day: +dayEntry[0],
-        hour: +hourEntry[0],
+        day: +dayEntry[0] + sillyAdditionThing,
+        hour: +hourEntry[0] + sillyAdditionThing,
         value: hourEntry[1],
       })),
     );
 
-    const completeGrid = [];
-    for (let i = 0, j = 0; i < 60 * 24; i++) {
-      const actualTimeOnTask = completeTaskProjection[j];
-      if(actualTimeOnTask && (((actualTimeOnTask.day) * 24) + actualTimeOnTask.hour) === i){
-        completeGrid.push(actualTimeOnTask);
-        j++;
-      } else {
-        completeGrid.push({
-          day: Math.floor(i / 24),
-          hour: i % 24,
-          value: 0,
-        })
-      }
-    }
-    const steps = completeGrid;
+    // const completeGrid = [];
+    // const numberOfGrids = isHour ? 7 * 24 : 60 * 24;
+    // for (let i = 0, j = 0; i < numberOfGrids; i++) {
+    //   const actualTimeOnTask = completeTaskProjection[j];
+    //   if(actualTimeOnTask && (((actualTimeOnTask.day) * 24) + actualTimeOnTask.hour) === i){
+    //     completeGrid.push(actualTimeOnTask);
+    //     j++;
+    //   } else {
+    //     completeGrid.push({
+    //       day: Math.floor(i / 24) + sillyAdditionThing,
+    //       hour: i % 24 + sillyAdditionThing,
+    //       value: 0,
+    //     })
+    //   }
+    // }
+    // const steps = completeGrid;
+
+    const steps = completeTaskProjection
 
     const mappedTacticalActivities: StringDictionary<TacticalActivity> = {
       ...mapTacticalActivitiesToID(tacticalActivities),
@@ -350,7 +390,7 @@ const DailyHeatMap: FC<Props> = ({
       .attr('height', gridSize)
       .attr('stroke', d => d.value === 0 ? '#eeeeee55' : '#00000000')
       .style('fill', d => {
-        const opacity = Math.round(opacityScale(d.value) * 100) - 1;
+        const opacity = Math.round((opacityScale(d.value) - 0.01) * 255);
         return `${colorScale(d.value)}${opacity <= 16 ? 0 : ''}${opacity.toString(16)}`;
       })
       .append('title')
@@ -398,6 +438,7 @@ Duration: ${!d.value ? 'N/A' : duration}`;
     relativeFromTime,
     relativeToTime,
     tacticalActivities,
+    heatMapType,
   ]);
 
   const activityToSteppoCount = linearProjection.reduce(
@@ -446,7 +487,7 @@ Duration: ${!d.value ? 'N/A' : duration}`;
   });
   const classes = useStyles();
   const changeChart = (e: any) => {
-    console.log(e.target.value);
+    setHeatMapType(e.target.value);
   }
   return (
     <div className={classes.container}>
