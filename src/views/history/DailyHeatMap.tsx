@@ -285,7 +285,8 @@ const DailyHeatMap: FC<Props> = ({
       currentActivity: projection.currentActivity,
       activityBins: Object.values(projection.activityBins).flatMap(a => a),
     };
-    const unfilteredSteppos = breakIntoHeatSteps(linearProj,  isHour?3600000:60000);
+    const multiplier = isHour ? 3600000 : 60000; // Hello everybody! My name is Multiplier.
+    const unfilteredSteppos = breakIntoHeatSteps(linearProj,  multiplier);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentHeatMapActivity ||
@@ -342,24 +343,23 @@ const DailyHeatMap: FC<Props> = ({
       })),
     );
 
-    // const completeGrid = [];
-    // const numberOfGrids = isHour ? 7 * 24 : 60 * 24;
-    // for (let i = 0, j = 0; i < numberOfGrids; i++) {
-    //   const actualTimeOnTask = completeTaskProjection[j];
-    //   if(actualTimeOnTask && (((actualTimeOnTask.day) * 24) + actualTimeOnTask.hour) === i){
-    //     completeGrid.push(actualTimeOnTask);
-    //     j++;
-    //   } else {
-    //     completeGrid.push({
-    //       day: Math.floor(i / 24) + sillyAdditionThing,
-    //       hour: i % 24 + sillyAdditionThing,
-    //       value: 0,
-    //     })
-    //   }
-    // }
-    // const steps = completeGrid;
-
-    const steps = completeTaskProjection
+    const completeGrid = [];
+    const numberOfGrids = isHour ? 7 * 24 : 60 * 24;
+    for (let i = 0, j = 0; i < numberOfGrids; i++) {
+      const actualTimeOnTask = completeTaskProjection[j];
+      if(actualTimeOnTask && (((actualTimeOnTask.day - sillyAdditionThing) * 24) +
+        actualTimeOnTask.hour - sillyAdditionThing) === i){
+        completeGrid.push(actualTimeOnTask);
+        j++;
+      } else {
+        completeGrid.push({
+          day: Math.floor(i / 24) + sillyAdditionThing,
+          hour: i % 24 + sillyAdditionThing,
+          value: 0,
+        })
+      }
+    }
+    const steps = completeGrid;
 
     const mappedTacticalActivities: StringDictionary<TacticalActivity> = {
       ...mapTacticalActivitiesToID(tacticalActivities),
@@ -390,14 +390,15 @@ const DailyHeatMap: FC<Props> = ({
       .attr('height', gridSize)
       .attr('stroke', d => d.value === 0 ? '#eeeeee55' : '#00000000')
       .style('fill', d => {
-        const opacity = Math.round((opacityScale(d.value) - 0.01) * 255);
-        return `${colorScale(d.value)}${opacity <= 16 ? 0 : ''}${opacity.toString(16)}`;
+        const opacity = Math.round((opacityScale(d.value) - 0.01) * 255) || 1;
+        return `${colorScale(d.value)}${opacity < 16 ? 0 : ''}${opacity.toString(16)}`;
       })
       .append('title')
       .text((d: any) => {
-        const duration = moment.duration(d.value * 60000).humanize()
+        const duration = moment.duration(d.value * multiplier).humanize()
         const currentTime = moment.unix((((d.day) * 24) + d.hour) * 60).utc();
-        return `Time of day: ${currentTime.format('HH:mm')}
+        const timeOfDay = `Time of day: ${currentTime.format('HH:mm')}`;
+        return `${isHour ? '' : timeOfDay}
 Duration: ${!d.value ? 'N/A' : duration}`;
       });
 

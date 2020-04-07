@@ -45,7 +45,7 @@ export const constructColorMappings = (
   tacticalActivities: StringDictionary<TacticalActivity>,
 ): StringDictionary<string> => {
   const defaultColors: StringDictionary<string> = {};
-  defaultColors[ActivityStrategy.GENERIC] = 'lime';
+  defaultColors[ActivityStrategy.GENERIC] = '#36FF35';
   defaultColors[RECOVERY] = blue[500];
   return {
     ...reduceRight(
