@@ -112,35 +112,10 @@ export const breakIntoHeatSteps = (
 
 const margin = {top: 50, right: 0, bottom: 100, left: 30},
   width = 800 - margin.left - margin.right,
-  height = 300 - margin.top - margin.bottom,
   gridSize = Math.floor(width / 24),
-  days = ['0-4', '4-8', '8-12', '12-16', '16-20', '20-24'],
-  times = [
-    '1a',
-    '2a',
-    '3a',
-    '4a',
-    '5a',
-    '6a',
-    '7a',
-    '8a',
-    '9a',
-    '10a',
-    '11a',
-    '12a',
-    '1p',
-    '2p',
-    '3p',
-    '4p',
-    '5p',
-    '6p',
-    '7p',
-    '8p',
-    '9p',
-    '10p',
-    '11p',
-    '12p',
-  ];
+  height = (gridSize * 63) - margin.top - margin.bottom,
+  days = Array(60).fill(0).map((_, i)=> ''),
+  times = Array(24).fill(0).map((_,i)=>'');
 
 type HourSteppo = {
   spawn: { start: Activity; stop: Activity };
@@ -269,7 +244,7 @@ const DailyHeatMap: FC<Props> = ({
       currentActivity: projection.currentActivity,
       activityBins: Object.values(projection.activityBins).flatMap(a => a),
     };
-    const unfilteredSteppos = breakIntoHeatSteps(linearProj, 600000);
+    const unfilteredSteppos = breakIntoHeatSteps(linearProj, 60000);
     const filterdSteppos = unfilteredSteppos.filter(
       steppo =>
         !currentHeatMapActivity ||
@@ -281,10 +256,11 @@ const DailyHeatMap: FC<Props> = ({
       spawn: any;
     }) => {
       const dateTime = moment.unix(steppo.timeStamp / 1000);
-      const absTime = (dateTime.hour() * 6) + (dateTime.minutes() / 10)
+      const absTime = (dateTime.hour() * 60) + (dateTime.minutes())
       return {
         day: Math.floor(absTime / 24),
         hour: absTime % 24,
+        fullValue: absTime,
         value: steppo.value,
         spawn: steppo.spawn,
       };
@@ -295,8 +271,6 @@ const DailyHeatMap: FC<Props> = ({
     const filteredHourSteppo: HourSteppo[] = filterdSteppos.map(
       timeSteppoMaker,
     );
-    
-    console.log(filteredHourSteppo);
 
     setFilteredLinearProjection(filteredLinearProjection);
     setLinearProjection(unfilteredHourSteppo);
@@ -355,7 +329,13 @@ const DailyHeatMap: FC<Props> = ({
       .style('opacity', d => opacityScale(d.value))
       .style('fill', d => colorScale(d.value))
       .append('title')
-      .text((d: any) => moment.duration(d.value * 3600000).humanize());
+      .text((d: any) => {
+        const duration = moment.duration(d.value * 60000).humanize()
+        const currentTime = moment.unix(d.day * d.hour * 60);
+        return `
+        ${currentTime.format('hh:mm')}
+        ${duration}`;
+      });
 
     const legend = select('#legend69');
     legend.select('svg').remove();
@@ -443,7 +423,6 @@ const DailyHeatMap: FC<Props> = ({
   const classes = useStyles();
   return (
     <div className={classes.container}>
-      <div id={'dayHeatBoi'}/>
       {!!currentHeatMapActivity.name && (
         <div style={{display: 'flex', justifyContent: 'center'}}>
           <div style={{margin: 'auto 0'}}>
@@ -485,6 +464,7 @@ const DailyHeatMap: FC<Props> = ({
           </div>
         </div>
       )}
+      <div id={'dayHeatBoi'}/>
     </div>
   );
 };
