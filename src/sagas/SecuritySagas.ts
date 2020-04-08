@@ -8,7 +8,7 @@ import {
   REQUESTED_LOGON,
   REQUESTED_READ_ONLY_MODE,
 } from '../events/SecurityEvents';
-import {authorizationGrantSaga, loginSaga,} from './security/AuthorizationFlowSagas';
+import {authorizationGrantSaga, loginSaga, requestedLoginSaga,} from './security/AuthorizationFlowSagas';
 import logoutSaga from './security/LogoutSaga';
 import {oauthConfigurationSaga} from './configuration/ConfigurationConvienenceSagas';
 import {readOnlyLocationSaga, readOnlySaga} from "./security/ReadOnlySaga";
@@ -27,7 +27,7 @@ function* listenToAppLifecycleEvents() {
 }
 
 function* listenToLoginEvents() {
-  yield takeEvery(REQUESTED_LOGON, loginSaga);
+  yield takeEvery(REQUESTED_LOGON, requestedLoginSaga);
   yield takeEvery(REQUESTED_LOGOFF, logoutSaga);
 }
 

@@ -10,7 +10,7 @@ import {
 import {push} from 'connected-react-router';
 import {NodeCrypto} from '@openid/appauth/built/node_support/';
 import {
-  createCheckedAuthorizationEvent,
+  createCheckedAuthorizationEvent, createLoggedOffEvent,
   createLoggedOnAction,
   FAILED_TO_RECEIVE_TOKEN,
   RECEIVED_TOKENS,
@@ -31,6 +31,11 @@ import {selectMiscState} from '../../reducers';
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);
   yield put(createCheckedAuthorizationEvent());
+}
+
+export function* requestedLoginSaga() {
+  yield put(createLoggedOffEvent()); // wipe state
+  yield call(loginSaga)
 }
 
 export function* loginSaga() {
