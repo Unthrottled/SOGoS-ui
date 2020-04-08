@@ -1,10 +1,10 @@
 import {
   CACHED_ACTIVITY,
   COMPLETED_POMODORO,
-  FOUND_PREVIOUS_ACTIVITY,
+  FOUND_PREVIOUS_ACTIVITY, HIDE_TIMER,
   INITIALIZED_POMODORO,
   RESUMED_NON_TIMED_ACTIVITY,
-  RESUMED_TIMED_ACTIVITY,
+  RESUMED_TIMED_ACTIVITY, SHOW_TIMER,
   STARTED_NON_TIMED_ACTIVITY,
   STARTED_TIMED_ACTIVITY,
   SYNCED_ACTIVITIES,
@@ -99,6 +99,16 @@ const activityReducer = (
           : state.previousActivity,
         currentActivity: action.payload,
       };
+    case HIDE_TIMER:
+      return {
+        ...state,
+        shouldTime: false,
+      }
+    case SHOW_TIMER:
+      return {
+        ...state,
+        shouldTime: true,
+      }
     case FOUND_PREVIOUS_ACTIVITY:
       return {
         ...state,

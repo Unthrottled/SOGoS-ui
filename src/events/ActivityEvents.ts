@@ -30,8 +30,17 @@ export const SYNCED_THANKED_FOR_TACMOD = 'SYNCED_THANKED_FOR_TACMOD';
 export const USER_WELCOMED = 'USER_WELCOMED';
 export const SYNCED_USER_WELCOMED = 'SYNCED_USER_WELCOMED';
 
+export const HIDE_TIMER = 'HIDE_TIMER';
+export const SHOW_TIMER = 'SHOW_TIMER';
 export const CAPSTONED_ACTIVITIES: 'CAPSTONED_ACTIVITIES' =
   'CAPSTONED_ACTIVITIES';
+
+export const createHideTimerEvent = (): BaseEvent => ({
+  type: HIDE_TIMER,
+});
+export const createShowTimerEvent = (): BaseEvent => ({
+  type: SHOW_TIMER,
+});
 
 export const createAcknowledgedTacModEvent = (): BaseEvent => ({
   type: ACKNOWLEDGED_TACMOD,

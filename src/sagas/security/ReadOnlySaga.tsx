@@ -1,4 +1,4 @@
-import {call, delay, fork, put, race, take} from 'redux-saga/effects';
+import {call, delay, fork, put, race, select, take} from 'redux-saga/effects';
 import {performOpenGet} from "../APISagas";
 import {
   createFailedToReceiveReadToken,
@@ -7,6 +7,21 @@ import {
   RECEIVED_READ_TOKEN
 } from "../../events/SecurityEvents";
 import {createReceivedPartialUserEvent} from "../../events/UserEvents";
+import {PayloadEvent} from "../../events/Event";
+import {SecurityState} from "../../reducers/SecurityReducer";
+import {selectSecurityState} from "../../reducers";
+import {createHideTimerEvent, createShowTimerEvent} from "../../events/ActivityEvents";
+
+export function* readOnlyLocationSaga({payload: locationStuff}: PayloadEvent<any>) {
+  const {readOnly}: SecurityState = yield select(selectSecurityState);
+  if(readOnly) {
+    if(locationStuff.location.pathname.startsWith('/dashboard')) {
+      yield put(createShowTimerEvent());
+    } else {
+      yield put(createHideTimerEvent());
+    }
+  }
+}
 
 export function* readOnlySaga() {
   const pathname = window.location.pathname

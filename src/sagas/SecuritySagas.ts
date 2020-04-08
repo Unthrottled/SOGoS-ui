@@ -11,7 +11,7 @@ import {
 import {authorizationGrantSaga, loginSaga,} from './security/AuthorizationFlowSagas';
 import logoutSaga from './security/LogoutSaga';
 import {oauthConfigurationSaga} from './configuration/ConfigurationConvienenceSagas';
-import {readOnlySaga} from "./security/ReadOnlySaga";
+import {readOnlyLocationSaga, readOnlySaga} from "./security/ReadOnlySaga";
 
 function* securityRequestSaga() {
   const oauthConfig = yield oauthConfigurationSaga();
@@ -43,6 +43,7 @@ function* listenToSecurityEvents() {
   yield takeEvery(REQUESTED_AUTH_CHECK, authorizationGrantSaga);
   yield takeEvery(FORCED_LOGIN, waitBeforeLoggingIn);
   yield takeEvery(REQUESTED_READ_ONLY_MODE, readOnlySaga);
+  yield takeEvery('@@router/LOCATION_CHANGE', readOnlyLocationSaga);
 }
 
 export default function* rootSaga() {
