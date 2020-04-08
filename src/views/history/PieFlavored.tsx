@@ -312,7 +312,7 @@ const PieFlavored: FC<Props> = ({
           }}
           id={'pieBoi'}
         >
-          <div style={{width: '300px', marginTop: '-2rem'}}>Hi!</div>
+          <div style={{width: '300px', marginTop: '-1.5rem', opacity: 0}}>Hi!</div>
         </div>
       </div>
       <ExpansionPanel>
