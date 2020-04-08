@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {GlobalState, selectActivityState, selectSecurityState, selectUserState} from "../../reducers";
 import SharedPausedPomodoro from "../time/SharedPausedPomodoro";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -15,6 +15,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import Badge from "@material-ui/core/Badge";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Banner from "../components/Banner";
+import {push} from "connected-react-router";
 
 interface Props {
   hasShared?: boolean;
@@ -66,26 +67,33 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const SOGoSSharedLogo =
-  () => (<div style={{display: "flex"}}>
-  <SOGoS size={{
-    width: '100px',
-    height: '100px',
-  }}/>
-  <div style={{textAlign: 'left', marginLeft: '0.5rem'}}>
-    <Typography style={{
-      fontSize: '3rem',
-      color: grey[700]
-    }}>
-      SOGoS
-    </Typography>
-    <Typography variant={"subtitle1"} style={{
-      color: grey[500]
-    }}>
-      Strategic Orchestration and Governance System
-    </Typography>
-  </div>
-</div>)
+export const SOGoSSharedLogo = () => {
+  const dispatch = useDispatch();
+  const goHome = () => {
+    dispatch(push('/login'))
+  }
+  return (<div style={{display: "flex"}} onClick={goHome}>
+    <SOGoS size={{
+      width: '100px',
+      height: '100px',
+    }} styles={{cursor:'pointer'}}/>
+    <div style={{textAlign: 'left', marginLeft: '0.5rem'}}>
+      <Typography style={{
+        fontSize: '3rem',
+        color: grey[700],
+        cursor: 'pointer',
+      }}>
+        SOGoS
+      </Typography>
+      <Typography variant={"subtitle1"} style={{
+        color: grey[500],
+        cursor: 'pointer',
+      }}>
+        Strategic Orchestration and Governance System
+      </Typography>
+    </div>
+  </div>);
+}
 
 const SharedHistoryDashboardComponents: FC<Props> = ({
                                                        hasShared,

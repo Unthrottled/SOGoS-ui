@@ -8,6 +8,7 @@ type Props = {
   backgroundColor?: ColorType;
   lineColor?: ColorType;
   size?: SizeType;
+  styles?: any
 };
 
 const defaultSize: SizeType = {
@@ -16,10 +17,10 @@ const defaultSize: SizeType = {
 };
 
 export const SOGoS = (props: Props) => {
-  const {size} = props;
+  const {size, styles} = props;
   const usableSize = size || defaultSize;
   return (
-    <div>
+    <div style={styles}>
       <ReactSVG
         src={SOGoSIcon}
         beforeInjection={svg => {
