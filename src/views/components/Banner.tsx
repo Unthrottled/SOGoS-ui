@@ -3,6 +3,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import {Typography} from '@material-ui/core';
 import {SOGoS} from '../icons/SOGoS';
+import {useDispatch} from "react-redux";
+import {push} from "connected-react-router";
 
 const useStyles = makeStyles(theme => ({
   headerContent: {
@@ -11,18 +13,40 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
   },
+  headerContentWithHover: {
+    borderRadius: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6, 0, 6),
+    marginBottom: theme.spacing(1),
+    '&:hover': {
+      boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+      backgroundColor: '#fafafa'
+    },
+  },
 }));
 
 interface Props {
-  hideExcerpt?: boolean
+  hideExcerpt?: boolean;
+  navigateable?: boolean;
 }
 
 const Banner: FC<Props> = ({
                              children,
                              hideExcerpt,
+                             navigateable
                            }) => {
-  const {headerContent} = useStyles();
+  const {headerContent, headerContentWithHover} = useStyles();
 
+  const containerProps = navigateable ? {
+    cursor: 'pointer',
+  } : {};
+
+  const dispetch = useDispatch();
+  const navigateMaybe = () => {
+    if (navigateable) {
+      dispetch(push("/login"));
+    }
+  }
   return (
     <div style={{height: '100%'}}>
       <div
@@ -40,7 +64,10 @@ const Banner: FC<Props> = ({
             verticalAlign: 'middle',
           }}>
           <Container maxWidth={'lg'}>
-            <div className={headerContent}>
+            <div className={navigateable ? headerContentWithHover: headerContent}
+                 style={containerProps}
+                 onClick={navigateMaybe}
+            >
               <Container
                 maxWidth={'sm'}
                 style={{

@@ -172,7 +172,7 @@ const SharedHistoryDashboardComponents: FC<Props> = ({
       </HistoryDashboardComponents>
       <SharedPausedPomodoro/>
     </div>
-  ) : <Banner hideExcerpt>
+  ) : <Banner navigateable hideExcerpt>
     <Typography variant={'h5'} color="textSecondary">
       This user has elected to not share their Activity Dashboard at this time.
     </Typography>
