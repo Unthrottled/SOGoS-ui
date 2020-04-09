@@ -1,6 +1,6 @@
 import {
   ActivityReceptionPayload,
-  ActivityUpdatePayload,
+  ActivityUpdatePayload, ADJUSTED_HISTORY,
   CapstoneActivityUpdatePayload,
   INITIALIZED_HISTORY,
   UPDATED_CAPSTONES,
@@ -28,6 +28,7 @@ export interface HistoryState {
   fullFeed: Activity[];
   fullHistoryRange: DateRange;
   capstone: CapstoneState;
+  loading: boolean;
 }
 
 const DEFAULT_RANGE: DateRange = {
@@ -44,6 +45,7 @@ export const INITIAL_HISTORY_STATE: HistoryState = {
     topActivity: defaultActivity,
     bottomActivity: defaultActivity,
   },
+  loading: false,
 };
 
 const HistoryReducer = (
@@ -77,10 +79,16 @@ const HistoryReducer = (
         selectedHistoryRange: newSelectionPayload.between,
         activityFeed: newSelectionPayload.activities,
       };
+    case ADJUSTED_HISTORY:
+      return {
+        ...state,
+        loading: true,
+      };
     case UPDATED_CAPSTONES:
       const newCapstones: CapstoneActivityUpdatePayload = action.payload;
       return {
         ...state,
+        loading: false,
         capstone: {
           topActivity: newCapstones.afterCapstone,
           bottomActivity: newCapstones.beforeCapstone,

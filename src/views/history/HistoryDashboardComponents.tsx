@@ -22,11 +22,13 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
 import {Paper} from "@material-ui/core";
 import DailyHeatMap from "./HeatMap";
+import Grow from "@material-ui/core/Grow";
 
 interface Props {
   selectedTo: number;
   selectedFrom: number;
   bottomActivity?: Activity;
+  loading: boolean;
 }
 
 const drawerWidth = 240;
@@ -116,6 +118,7 @@ export const LoadingIndicator = () => (
       position: 'fixed',
       left: '50%',
       top: '50%',
+      zIndex: 90000,
       transform: 'translate(-50%, -50%)',
     }}>
     <Loader
@@ -141,6 +144,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
     selectedTo,
     selectedFrom,
     bottomActivity,
+    loading,
   children,
   }
 ) => {
@@ -174,6 +178,11 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
       {!!bottomActivity && !!getActivityName(bottomActivity) ? (
         <Paper>
           {children}
+          {
+            loading && (
+                <LoadingIndicator/>
+            )
+          }
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon/>}
@@ -227,6 +236,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
 const mapStateToProps = (state: GlobalState): Props => {
   const {
     selectedHistoryRange: {from, to},
+    loading,
   } = selectHistoryState(state);
   const {
     capstone: {bottomActivity},
@@ -235,6 +245,7 @@ const mapStateToProps = (state: GlobalState): Props => {
     selectedFrom: from,
     selectedTo: to,
     bottomActivity,
+    loading,
   };
 };
 
