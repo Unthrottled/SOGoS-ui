@@ -481,7 +481,7 @@ Duration: ${!d.value ? 'N/A' : duration}`;
         !activityOptions.find(
           opt => opt.name === currentHeatMapActivity.name,
         )) &&
-      activityOptions.length > 1 &&
+      activityOptions.length > 0 &&
       activityOptions[0].name
     ) {
       setCurrentHeatMapActivity(activityOptions[0]);

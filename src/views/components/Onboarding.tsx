@@ -26,7 +26,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
 
   return (
     <AutoRotatingCarousel
-      label="Got It!"
+      label="Start using SOGoS!"
       autoplay={false}
       open={!welcomed && !!email}
       onStart={dismissWelcome}

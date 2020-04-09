@@ -306,7 +306,7 @@ const ActivitiesDashboard: FC<DispatchProp & Props> = ({
                   moveItems: moveItems,
                   classes: classes,
                 })}
-                ;{provided.placeholder}
+                {provided.placeholder}
               </div>
             )}
           </Droppable>

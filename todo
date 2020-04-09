@@ -3,9 +3,9 @@
   - Add TacMod Plug on Activity Start
     - Add google play link onboarding
 ------
+- app breaks on highlighting activity outside range.
 - sogos home
   - not shared, shared dashboard
-- Loading indicator on date range change.
 - About page fill out.
 
 post mvp:
