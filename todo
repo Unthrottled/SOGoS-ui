@@ -3,13 +3,13 @@
   - Add TacMod Plug on Activity Start
     - Add google play link onboarding
 ------
-- app breaks on highlighting activity outside range.
-- sogos home
-  - not shared, shared dashboard
 - About page fill out.
+- 404 page
+- Cognito
 
 post mvp:
 -------------------------------------
+- app breaks on highlighting activity outside range.
 - Better Statistics Dashboard
   - Time spent by category
   - Quotas

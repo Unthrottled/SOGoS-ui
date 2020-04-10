@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
-import {Typography} from '@material-ui/core';
+import {Typography, Link} from '@material-ui/core';
 import {SOGoS} from '../icons/SOGoS';
 import {useDispatch} from "react-redux";
 import {push} from "connected-react-router";
@@ -47,6 +47,10 @@ const Banner: FC<Props> = ({
       dispetch(push("/login"));
     }
   }
+
+  const navigateToAbout = () => {
+    dispetch(push(('/about')));
+  }
   return (
     <div style={{height: '100%'}}>
       <div
@@ -89,15 +93,24 @@ const Banner: FC<Props> = ({
                 </Typography>
                 {
                   !hideExcerpt &&
-                  <Typography
-                    variant="h5"
-                    align="center"
-                    color="textSecondary"
-                    paragraph>
-                    Find and reach your maximum potential! Push yourself to the
-                    limits of your ability. Knowing that you can rest easy when
-                    you really need to.
-                  </Typography>
+                  <>
+                    <Typography
+                      variant="h5"
+                      align="center"
+                      color="textSecondary"
+                      paragraph>
+                      Find out where your maximum potential lies. Then push yourself to the
+                      limits of your ability. Knowing that you can rest easy when
+                      you really need to.
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      align="center"
+                      color="textSecondary"
+                      paragraph>
+                      Read more about <Link onClick={navigateToAbout}>what SOGoS can do for you!</Link>
+                    </Typography>
+                  </>
                 }
                 <SOGoS/>
                 {children}
