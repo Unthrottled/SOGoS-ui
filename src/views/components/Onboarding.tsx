@@ -43,7 +43,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
         mediaBackgroundStyle={{backgroundColor: orange[400]}}
         style={{backgroundColor: orange[600]}}
         title="What are you doing?"
-        subtitle="Are you spending pending time on things that bring you the most value?
+        subtitle="Are you spending time on things that bring you the most value?
         Are you unsure what to do? Do you want to do too much?"
       />
       <Slide
