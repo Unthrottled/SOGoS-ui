@@ -10,6 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import MailIcon from '@material-ui/icons/Mail';
 import SettingsIcon from '@material-ui/icons/Settings';
+import QuestionIcon from '@material-ui/icons/QuestionAnswer';
 import HomeIcon from '@material-ui/icons/Home';
 import {GlobalState, selectUserState} from '../../reducers';
 import {useSelector} from 'react-redux';
@@ -78,6 +79,10 @@ const MenuNavigation: FC<Props> = () => {
       title: 'Settings',
       path: '/settings/',
       icon: <SettingsIcon/>,
+    }, {
+      title: 'About',
+      path: '/about',
+      icon: <QuestionIcon/>,
     },
   ];
   const classes = useStyles();
