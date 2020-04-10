@@ -11,6 +11,7 @@ import QuestionIcon from '@material-ui/icons/ContactSupport';
 import HistoryIcon from '@material-ui/icons/History';
 import {GoalIcon} from '../icons/GoalIcon';
 import {ActivityIcon} from '../icons/ActivityIcon';
+import {Typography} from "@material-ui/core";
 
 interface Props {
   name?: string;
@@ -42,7 +43,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
         media={<QuestionIcon style={{fontSize: '256px', color: '#fff'}} />}
         mediaBackgroundStyle={{backgroundColor: orange[400]}}
         style={{backgroundColor: orange[600]}}
-        title="What are you doing?"
+        title="What are you doing with your time?"
         subtitle="Are you spending time on things that bring you the most value?
         Are you unsure what to do? Do you want to do too much?"
       />

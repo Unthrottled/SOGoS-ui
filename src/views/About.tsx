@@ -12,6 +12,8 @@ import HistoryIcon from "@material-ui/icons/History";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import {green, orange, purple} from "@material-ui/core/colors";
+import {SOGoS} from "./icons/SOGoS";
 
 interface Props {
 
@@ -40,53 +42,89 @@ const About: FC<Props> = () => {
       <div
         style={{}}>
         <div
-          style={{
-          }}>
+          style={{}}>
           <Container maxWidth={'lg'}>
             <div className={headerContent}>
               <Container
                 maxWidth={'sm'}
                 style={{}}>
-                <Typography
-                  color={'textPrimary'}
-                  gutterBottom>
-                  Let's figure out what SOGoS can do for you, by asking a few questions.
-                </Typography>
                 <Card style={{display: 'flex', textAlign: 'left', marginBottom: '1rem'}}>
                   <CardMedia style={{
-                    margin: 'auto'
+                    backgroundColor: '#454545',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                   }}>
-                    <div style={{padding: '1rem'}}>
-                      <QuestionIcon style={{fontSize: '64px', color: '#00000055'}}/>
+                    <div style={{padding: '2rem 1rem'}}>
+                      <SOGoS size={{width: 64, height: 64}}/>
                     </div>
                   </CardMedia>
-                  <CardContent>
+                  <CardContent style={{
+                    backgroundColor: '#333333',
+                    color: "#fff",
+                    display:'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}>
+                    <Typography gutterBottom variant="h5">
+                      What's in it for you?
+                    </Typography>
                     <Typography
-                      color={'textPrimary'}
+                      color={'inherit'}
+                      gutterBottom>
+                      Let us answer that question by asking more questions! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card style={{display: 'flex', textAlign: 'left', marginBottom: '1rem'}}>
+                  <CardMedia style={{
+                    backgroundColor: orange[400],
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}>
+                    <div style={{padding: '1rem'}}>
+                      <QuestionIcon style={{fontSize: '64px', color: '#fff'}}/>
+                    </div>
+                  </CardMedia>
+                  <CardContent style={{
+                    backgroundColor: orange[600],
+                    color: "#fff"
+                  }}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      What are you doing with your time?
+                    </Typography>
+                    <Typography
+                      color={'inherit'}
                       gutterBottom>
                       <ul>
-                        <li>What are you doing?</li>
-                        <li>Are you spending time on things that bring you the most value?</li>
+                        <li>Are you spending it on things that bring you the most value?</li>
                         <li>Are you unsure what to do?</li>
-                        <li>Do you want to do too much?</li>
+                        <li>Do you want to do too many things?</li>
                       </ul>
                     </Typography>
                   </CardContent>
                 </Card>
                 <Card style={{display: 'flex', textAlign: 'left', marginBottom: '1rem'}}>
                   <CardMedia style={{
-                    margin: 'auto'
+                    backgroundColor: '#728eda',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                   }}>
                     <div style={{padding: '1rem'}}>
                       <GoalIcon size={{width: 64, height: 64}}/>
                     </div>
                   </CardMedia>
-                  <CardContent>
+                  <CardContent style={{
+                    color: '#fff',
+                    backgroundColor: '#5f7dcb'
+                  }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       Figure out what is important!
                     </Typography>
                     <Typography
-                      color={'textPrimary'}
+                      color={'inherit'}
                       gutterBottom>
                       Find goals that are difficult to accomplish.
                       Dig deep and shoot for the moon. Don't sandbag yourself, strive for
@@ -96,18 +134,24 @@ const About: FC<Props> = () => {
                 </Card>
                 <Card style={{display: 'flex', textAlign: 'left', marginBottom: '1rem'}}>
                   <CardMedia style={{
-                    margin: 'auto'
+                    backgroundColor: green[400],
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                   }}>
                     <div style={{padding: '1rem'}}>
                       <ActivityIcon size={{width: 64, height: 64}}/>
                     </div>
                   </CardMedia>
-                  <CardContent>
+                  <CardContent style={{
+                    color: '#fff',
+                    backgroundColor: green[600],
+                  }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       Take Action!
                     </Typography>
                     <Typography
-                      color={'textPrimary'}
+                      color={'inherit'}
                       gutterBottom>
                       Goals are just wishful thoughts and happy daydreams without execution.
                       Define the activities that will get you to the top of your mountains.
@@ -116,18 +160,24 @@ const About: FC<Props> = () => {
                 </Card>
                 <Card style={{display: 'flex', textAlign: 'left', marginBottom: '1rem'}}>
                   <CardMedia style={{
-                    margin: 'auto'
+                    backgroundColor: purple[400],
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                   }}>
                     <div style={{padding: '1rem'}}>
-                      <HistoryIcon style={{fontSize: '64px', color: '#00000055'}}/>
+                      <HistoryIcon style={{fontSize: '64px', color: '#fff'}}/>
                     </div>
                   </CardMedia>
-                  <CardContent>
+                  <CardContent style={{
+                    backgroundColor: purple[600],
+                    color: '#fff',
+                  }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       Retrospect on activities of the past.
                     </Typography>
                     <Typography
-                      color={'textPrimary'}
+                      color={'inherit'}
                       gutterBottom>
                       Use the data of your past to drive what you do today.
                       Figure out where you can optimize your efforts.
