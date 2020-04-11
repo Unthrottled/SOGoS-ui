@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
 import {TransitionProps} from '@material-ui/core/transitions';
 
-const Transition: React.ComponentType<TransitionProps> = React.forwardRef(
+export const Transition: React.ComponentType<TransitionProps> = React.forwardRef(
   function Transition(props, ref) {
     // @ts-ignore
     return <Slide direction="up" ref={ref} {...props} />;

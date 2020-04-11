@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import LoggedInLayout from '../components/LoggedInLayout';
 import HistoryDashboardComponents from "./HistoryDashboardComponents";
 import {Switch} from "@material-ui/core";
@@ -13,6 +13,14 @@ import {createUserUpdatedSharedDashboardEvent} from "../../events/UserEvents";
 import {createViewedHistoryEvent} from "../../events/HistoryEvents";
 import {SharedStatus} from "../../reducers/SecurityReducer";
 import {useHistory} from 'react-router-dom';
+import Badge from "@material-ui/core/Badge";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import { Transition } from '../components/PopupModal';
 
 const PrivateHistoryDashboard: FC<Props> = ({
                                               shareCode,
@@ -27,6 +35,15 @@ const PrivateHistoryDashboard: FC<Props> = ({
   const history = useHistory();
   const navigateToSharedHistory = () => {
     history.push('./shared')
+  }
+
+  const [helpOpen, setHelpOpen] = useState(false);
+  const closeHelp = () => {
+    setHelpOpen(false)
+  }
+
+  const openHelp = () => {
+    setHelpOpen(true);
   }
 
   useEffect(() => {
@@ -60,16 +77,43 @@ const PrivateHistoryDashboard: FC<Props> = ({
               </div>
             )
           }
-          <InputLabel style={{margin: 'auto'}}><Switch
-            checked={shared}
-            onChange={toggleShare}
-            color={'primary'}
-          />Enable Sharing</InputLabel>
+          <Badge badgeContent={'?'}
+                 style={{'cursor': 'pointer'}}
+                 color={'primary'} onClick={openHelp}>
+            <InputLabel style={{margin: 'auto'}}><Switch
+              checked={shared}
+              onChange={toggleShare}
+              color={'primary'}
+            />Enable Sharing</InputLabel>
+          </Badge>
         </div>
 
       </div>
       <HistoryDashboardComponents/>
-    </LoggedInLayout>
+      <Dialog
+        open={helpOpen}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={closeHelp}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description">
+        <DialogTitle id="alert-dialog-slide-title">What is the Sharable Dashboard?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            The sharable dashboard is a way to share your activity data with others.
+            They will only be able to see your data if you let them.
+            When you disable sharing your data is locked away.
+
+            I made a great effort to ensure all our data is safe.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeHelp}>
+            Okay!
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </LoggedInLayout>
   );
 };
 
