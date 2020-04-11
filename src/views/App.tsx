@@ -35,6 +35,7 @@ import SharedHistoryDashboard from "./history/SharedHistoryDashboard";
 import SettingsDashboard from "./settings/SettingsDashboard";
 import ProfileDashboard from "./settings/ProfileDashboard";
 import PrivateSharedHistoryDashboard from "./history/PrivateSharedHistoryDashboard";
+import Typography from "@material-ui/core/Typography";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -150,7 +151,13 @@ const App = () => {
               <PrivateRoute path={'/strategy'} component={StrategicDashboard}/>
               <PrivateRoute path={'/tactical'} component={TacticalDashboard}/>
               <PrivateRoute path={'/'} exact component={Dashboard}/>
-              <Route component={() => <h2>404</h2>}/>
+              <Route component={() => (
+                <Banner navigateable hideExcerpt>
+                  <Typography variant={'h5'} color="textSecondary">
+                    The page you are looking for does not exist, sorry!
+                  </Typography>
+                </Banner>
+              )}/>
             </Switch>
             <ActivityTimer/>
           </div>
