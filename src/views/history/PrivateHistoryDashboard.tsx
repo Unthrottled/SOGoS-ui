@@ -77,14 +77,14 @@ const PrivateHistoryDashboard: FC<Props> = ({
               </div>
             )
           }
+          <InputLabel style={{margin: 'auto'}}><Switch
+            checked={shared}
+            onChange={toggleShare}
+            color={'primary'}
+          />Enable Sharing</InputLabel>
           <Badge badgeContent={'?'}
                  style={{'cursor': 'pointer'}}
                  color={'primary'} onClick={openHelp}>
-            <InputLabel style={{margin: 'auto'}}><Switch
-              checked={shared}
-              onChange={toggleShare}
-              color={'primary'}
-            />Enable Sharing</InputLabel>
           </Badge>
         </div>
 
