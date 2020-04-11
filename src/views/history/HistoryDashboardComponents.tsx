@@ -22,7 +22,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoS} from "../icons/SOGoS";
 import {Paper} from "@material-ui/core";
 import DailyHeatMap from "./HeatMap";
-import Grow from "@material-ui/core/Grow";
 
 interface Props {
   selectedTo: number;
@@ -145,7 +144,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
     selectedFrom,
     bottomActivity,
     loading,
-  children,
+    children,
   }
 ) => {
   const classes = useStyles();
@@ -180,7 +179,7 @@ const HistoryDashboardComponents: FC<DispatchProp & Props> = (
           {children}
           {
             loading && (
-                <LoadingIndicator/>
+              <LoadingIndicator/>
             )
           }
           <ExpansionPanel>

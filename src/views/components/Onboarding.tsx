@@ -11,7 +11,6 @@ import QuestionIcon from '@material-ui/icons/ContactSupport';
 import HistoryIcon from '@material-ui/icons/History';
 import {GoalIcon} from '../icons/GoalIcon';
 import {ActivityIcon} from '../icons/ActivityIcon';
-import {Typography} from "@material-ui/core";
 
 interface Props {
   name?: string;
@@ -33,14 +32,14 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
       onStart={dismissWelcome}
       style={{position: 'absolute'}}>
       <Slide
-        media={<SOGoS size={{width: 256, height: 256}} />}
+        media={<SOGoS size={{width: 256, height: 256}}/>}
         mediaBackgroundStyle={{backgroundColor: '#454545', whiteSpace: 'pre'}}
         style={{backgroundColor: '#333333'}}
         title={`Welcome${name ? ' ' + name : ''}!`}
         subtitle="Let's figure out what SOGoS can do for you!"
       />
       <Slide
-        media={<QuestionIcon style={{fontSize: '256px', color: '#fff'}} />}
+        media={<QuestionIcon style={{fontSize: '256px', color: '#fff'}}/>}
         mediaBackgroundStyle={{backgroundColor: orange[400]}}
         style={{backgroundColor: orange[600]}}
         title="What are you doing with your time?"
@@ -48,7 +47,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
         Are you unsure what to do? Do you want to do too much?"
       />
       <Slide
-        media={<GoalIcon size={{width: 256, height: 256}} />}
+        media={<GoalIcon size={{width: 256, height: 256}}/>}
         mediaBackgroundStyle={{backgroundColor: '#728eda'}}
         style={{backgroundColor: '#5f7dcb'}}
         title="Figure out what is important!"
@@ -59,7 +58,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
           "
       />
       <Slide
-        media={<ActivityIcon size={{width: 256, height: 256}} />}
+        media={<ActivityIcon size={{width: 256, height: 256}}/>}
         mediaBackgroundStyle={{backgroundColor: green[400]}}
         style={{backgroundColor: green[600]}}
         title="Take Action!"
@@ -67,7 +66,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
         Define the activities that will get you to the top of your mountains."
       />
       <Slide
-        media={<HistoryIcon style={{fontSize: '256px', color: '#fff'}} />}
+        media={<HistoryIcon style={{fontSize: '256px', color: '#fff'}}/>}
         mediaBackgroundStyle={{backgroundColor: purple[400]}}
         style={{backgroundColor: purple[600]}}
         title="Retrospect"
@@ -77,7 +76,7 @@ const Onboarding: FC<Props> = ({email, name, welcomed}) => {
          "
       />
       <Slide
-        media={<img alt={'confetti'} src={Confetti} />}
+        media={<img alt={'confetti'} src={Confetti}/>}
         mediaBackgroundStyle={{backgroundColor: cyan[400]}}
         style={{backgroundColor: cyan[600]}}
         title="That's it!"
