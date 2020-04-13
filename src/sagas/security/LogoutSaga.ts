@@ -35,7 +35,7 @@ const getClientIfNecessary = (initialConfig: InitialConfig): string => {
 const getRedirectParameter = (initialConfig: InitialConfig, idToken: string): string => {
   const queryParameter = getQueryParameter(initialConfig);
   return `${getClientIfNecessary(initialConfig)}${getIdTokenIfNecessary(initialConfig, idToken)}${queryParameter}=${
-    initialConfig.callbackURI
+    encodeURI(initialConfig.callbackURI||'')
   }`;
 };
 
@@ -57,7 +57,6 @@ const isOkta = (initialConfiguration: InitialConfig): boolean => {
   return initialConfiguration && initialConfiguration.provider === 'OKTA';
 };
 
-// Thanks Obama.
 const isCognito = (initialConfiguration: InitialConfig): boolean => {
   return initialConfiguration && initialConfiguration.provider === 'COGNITO';
 };

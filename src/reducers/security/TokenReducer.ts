@@ -1,7 +1,7 @@
-import {SecurityState, SharedStatus} from '../SecurityReducer';
+import {INITIAL_SECURITY_STATE, SecurityState, SharedStatus} from '../SecurityReducer';
 import {TokenResponse} from '@openid/appauth';
 import jwtDecode from 'jwt-decode';
-import {ReceivedReadToken} from "../../types/SecurityTypes";
+import {ReceivedReadToken, TokenInformation} from "../../types/SecurityTypes";
 
 function mapTokenClaims(decodedToken: any) {
   return {
@@ -16,11 +16,18 @@ function decodeAndMapToken(token: string) {
   return mapTokenClaims(decodedToken)
 }
 
-// todo: verify that refresh token might come back?
+function parseRefreshToken(refreshToken: string): TokenInformation {
+  try {
+    return decodeAndMapToken(refreshToken);
+  } catch (e) {
+    return INITIAL_SECURITY_STATE.refreshTokenInformation;
+  }
+}
+
 const getRefreshTokenInformation = (refreshToken: string | undefined) => {
   if (refreshToken) {
     return {
-      // refreshTokenInformation: decodeAndMapToken(refreshToken),
+      refreshTokenInformation:  parseRefreshToken(refreshToken),
     };
   } else {
     return {};
@@ -31,15 +38,11 @@ export const tokenReceptionReducer = (
   state: SecurityState,
   tokenReceptionPayload: TokenResponse,
 ): SecurityState => {
-  const expiresAt = tokenReceptionPayload.issuedAt + (tokenReceptionPayload.expiresIn || 0);
+  const accessToken = tokenReceptionPayload.idToken || tokenReceptionPayload.accessToken;
   return {
     ...state,
-    accessToken: tokenReceptionPayload.idToken || tokenReceptionPayload.accessToken,
-    accessTokenInformation: {
-      issuedAt: tokenReceptionPayload.issuedAt,
-      expiresAt: expiresAt,
-      expiresHuman: new Date(expiresAt * 1000).toISOString(),
-    },
+    accessToken,
+    accessTokenInformation: parseRefreshToken(accessToken),
     ...getRefreshTokenInformation(tokenReceptionPayload.refreshToken),
     refreshToken: tokenReceptionPayload.refreshToken || state.refreshToken,
     idToken: tokenReceptionPayload.idToken,
