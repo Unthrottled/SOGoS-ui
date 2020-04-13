@@ -23,7 +23,7 @@ export function* initialConfigurationSaga() {
     );
     const {
       data: {currentTime},
-    } = yield call(performFullOpenGet, `${configData.apiURL}/time`);
+    } = yield call(performFullOpenGet, `${configData.apiURL}/time?_=${new Date().valueOf().toString(32)}`);
     const meow = new Date().valueOf();
     if (meow - currentTime > 10000) {
       yield put(createOutOfSyncEvent());

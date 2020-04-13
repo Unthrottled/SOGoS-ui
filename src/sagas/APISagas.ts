@@ -242,7 +242,7 @@ export function* performOpenGet(url: string, options = {headers: {}}) {
   return yield call(axios.get, fullURL, options);
 }
 
-export function* performFullOpenGet(fullURL: string, options = {headers: {}}) {
+export function* performFullOpenGet(fullURL: string, options: any = {headers: {}}) {
   return yield call(axios.get, fullURL, options);
 }
 
