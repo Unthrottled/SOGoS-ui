@@ -61,7 +61,6 @@ export function* refreshTokenRequestSaga(securityState: SecurityState) {
     client_id: initialConfigurations.clientID,
     redirect_uri: initialConfigurations.callbackURI,
     grant_type: GRANT_TYPE_REFRESH_TOKEN,
-    refresh_token: securityState.accessToken, // todo: this is wrong on purpose
-    // refresh_token: securityState.refreshToken
+    refresh_token: securityState.refreshToken
   });
 }

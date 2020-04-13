@@ -16,10 +16,11 @@ function decodeAndMapToken(token: string) {
   return mapTokenClaims(decodedToken)
 }
 
+// todo: verify that refresh token might come back?
 const getRefreshTokenInformation = (refreshToken: string | undefined) => {
   if (refreshToken) {
     return {
-      refreshTokenInformation: decodeAndMapToken(refreshToken),
+      // refreshTokenInformation: decodeAndMapToken(refreshToken),
     };
   } else {
     return {};
@@ -33,7 +34,7 @@ export const tokenReceptionReducer = (
   const expiresAt = tokenReceptionPayload.issuedAt + (tokenReceptionPayload.expiresIn || 0);
   return {
     ...state,
-    accessToken: tokenReceptionPayload.accessToken,
+    accessToken: tokenReceptionPayload.idToken || tokenReceptionPayload.accessToken,
     accessTokenInformation: {
       issuedAt: tokenReceptionPayload.issuedAt,
       expiresAt: expiresAt,
