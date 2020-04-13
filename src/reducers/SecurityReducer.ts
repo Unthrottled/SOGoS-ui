@@ -24,6 +24,7 @@ export type SecurityState = {
   refreshToken: string;
   refreshTokenInformation: TokenInformation;
   idToken?: string;
+  realAccessToken: string;
   verificationKey: string;
   isExpired: boolean;
   isInitialized: boolean;
@@ -48,6 +49,7 @@ export const INITIAL_SECURITY_STATE: SecurityState = {
   refreshToken: '',
   verificationKey: '',
   isLoggedIn: false,
+  realAccessToken: '',
   isExpired: false,
   isInitialized: false,
   isOutOfSync: false,

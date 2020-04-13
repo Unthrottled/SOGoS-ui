@@ -46,6 +46,7 @@ export const tokenReceptionReducer = (
     ...getRefreshTokenInformation(tokenReceptionPayload.refreshToken),
     refreshToken: tokenReceptionPayload.refreshToken || state.refreshToken,
     idToken: tokenReceptionPayload.idToken,
+    realAccessToken: tokenReceptionPayload.accessToken
   };
 };
 
