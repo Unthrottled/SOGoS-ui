@@ -80,19 +80,19 @@ export function* sharedDashboardSaga({
   }
 }
 
-export function* presignedAvatarUrlSaga() {
-  const {data} = yield call(performPost, '/user/profile/avatar/create', {})
+export function* presignedAvatarUrlSaga(contentLength: number) {
+  const {data} = yield call(performPost, '/user/profile/avatar/create', {contentLength})
   return data;
 }
 
 
 export function* uploadAvatarSaga(
-  presignedUrl: string,
   avatarBlobUrl: string,
 ) {
   const thing = yield call(axios.get, avatarBlobUrl, {
     responseType: 'blob',
   })
+  const presignedUrl = yield call(presignedAvatarUrlSaga, parseInt(thing.headers['content-length']));
   yield call(axios.put, presignedUrl, thing.data, {
     headers: omit(thing.headers, ['content-length']),
   })
@@ -103,8 +103,7 @@ export function* userAvatarUploadSaga({
                                         payload
                                       }: PayloadEvent<string>) {
   try {
-    const presignedUrl = yield call(presignedAvatarUrlSaga);
-    yield call(uploadAvatarSaga, presignedUrl, payload);
+    yield call(uploadAvatarSaga, payload);
     yield put(createUploadedAvatarEvent(payload));
     yield put(createDownloadedAvatarEvent(payload));
   } catch (e) {
