@@ -124,21 +124,30 @@ function buildGravatarURL(payload: UserResponse & User) {
 function* userAvatarDownloadSaga({
                                    payload
                                  }: PayloadEvent<UserResponse & User>) {
+  const gravatar = buildGravatarURL(payload);
   const avatar = (payload.information &&
-    payload.information.avatar) || payload.avatar || buildGravatarURL(payload);
+    payload.information.avatar) || payload.avatar || gravatar;
   if (avatar) {
     try {
-      const thing = yield call(axios.get, avatar, {
-        responseType: 'blob',
-      })
-      const blobbo: Blob = thing.data;
-      if (blobbo.size > 0) {
-        const localAvatar = URL.createObjectURL(blobbo);
-        yield put(createDownloadedAvatarEvent(localAvatar))
-      }
+      yield call(attemptToDownloadAvatar, avatar)
+      return
+    } catch (e) {}
+    try{
+      yield call(attemptToDownloadAvatar, gravatar)
     } catch (e) {
 
     }
+  }
+}
+
+function * attemptToDownloadAvatar(avatarUrl: string) {
+  const thing = yield call(axios.get, avatarUrl, {
+    responseType: 'blob',
+  })
+  const blobbo: Blob = thing.data;
+  if (blobbo.size > 0) {
+    const localAvatar = URL.createObjectURL(blobbo);
+    yield put(createDownloadedAvatarEvent(localAvatar))
   }
 }
 
