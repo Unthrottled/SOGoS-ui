@@ -1,4 +1,4 @@
-import {call, put, select} from 'redux-saga/effects';
+import {call, put, select, delay, fork} from 'redux-saga/effects';
 import {InitialConfig, OAuthConfig} from '../../types/ConfigurationTypes';
 import {
   initialConfigurationSaga,
@@ -72,8 +72,17 @@ export function pushRedirect(href: string) {
   return Promise.resolve();
 }
 
-export default function* logoutSaga() {
-  yield call(logoffPreFlightSaga);
+/**
+ * How do I wait for redux persist?
+ * Don't want it storing state.
+ * So i just wait....
+ */
+export function* redirecto(){
+  yield delay(100);
   const href = yield call(constructRedirectURI);
   yield call(pushRedirect, href);
+}
+export default function* logoutSaga() {
+  yield call(logoffPreFlightSaga);
+  yield fork(redirecto);
 }
