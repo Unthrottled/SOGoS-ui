@@ -116,8 +116,9 @@ export function* userAvatarUploadSaga({
 }
 
 function buildGravatarURL(payload: UserResponse & User) {
-  const email = md5(payload.information.email.trim().toLowerCase());
-  return `https://www.gravatar.com/avatar/${email}.jpg?s=256`;
+  const resolvedEmail = (payload.information && payload.information.email) || payload.email;
+  const hashedEmail = md5(resolvedEmail.trim().toLowerCase());
+  return `https://www.gravatar.com/avatar/${hashedEmail}.jpg?s=256`;
 }
 
 function* userAvatarDownloadSaga({
