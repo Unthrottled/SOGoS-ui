@@ -68,7 +68,7 @@ export function* sharedDashboardSaga({
   try {
     const method = hasShared ? performPost : performDelete;
     const {information}: UserState = yield select(selectUserState);
-    yield call(method, '/user/share/dashboard/read', omit(information, ['guid']))
+    yield call(method, '/user/share/dashboard/read', omit(information, ['guid', 'localAvatar']))
     yield put(createSyncedSharedDashboardUpdateEvent(hasShared))
     yield call(requestUserSaga);
   } catch (e) {
