@@ -5,12 +5,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Button from '@material-ui/core/Button';
 import {Typography} from '@material-ui/core';
 import {useHistory} from 'react-router-dom';
-import {createRequestLogonEvent} from '../../events/SecurityEvents';
-import {
-  GlobalState,
-  selectNetworkState,
-  selectSecurityState,
-} from '../../reducers';
+import {GlobalState, selectNetworkState, selectSecurityState,} from '../../reducers';
 import Banner from '../components/Banner';
 import {push} from "connected-react-router";
 
@@ -66,7 +61,7 @@ const LoggedOut = () => {
         </Button>
       ) : (
         <div>
-          <hr />
+          <hr/>
           <div
             style={{
               color: 'black',

@@ -7,7 +7,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
-import {createRequestLogonEvent} from '../../events/SecurityEvents';
 import {GlobalState} from '../../reducers';
 import {TransitionProps} from '@material-ui/core/transitions';
 import {push} from "connected-react-router";
