@@ -2,17 +2,12 @@ import CloudOff from '@material-ui/icons/CloudOff';
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Button from '@material-ui/core/Button';
 import {Typography} from '@material-ui/core';
 import {useHistory} from 'react-router-dom';
 import {createRequestLogonEvent} from '../../events/SecurityEvents';
-import {
-  GlobalState,
-  selectNetworkState,
-  selectSecurityState,
-} from '../../reducers';
+import {GlobalState, selectNetworkState, selectSecurityState,} from '../../reducers';
 import Banner from '../components/Banner';
-import {push} from "connected-react-router";
+import {AmazonLoginButton, GoogleLoginButton} from "react-social-login-buttons";
 
 const useStyles = makeStyles(_ => ({
   root: {
@@ -38,12 +33,12 @@ const mapStateToProps = (state: GlobalState) => {
   };
 };
 
-const LoggedOut = () => {
+const LoginProviders = () => {
   const {root, label} = useStyles();
   const dispetch = useDispatch();
   const {isOnline, isLoggedIn} = useSelector(mapStateToProps);
-  const logUserIn = (): void => {
-    dispetch(push("/login/providers"));
+  const logUserIn = (identityProvider: string): void => {
+    dispetch(createRequestLogonEvent(identityProvider));
   };
   const history = useHistory();
 
@@ -54,19 +49,19 @@ const LoggedOut = () => {
   }, [history, isLoggedIn]);
 
   return (
-    <Banner>
+    <Banner hideExcerpt>
       {isOnline ? (
-        <Button
-          classes={{
-            root,
-            label,
-          }}
-          onClick={() => logUserIn()}>
-          Start using SOGoS!
-        </Button>
+        <div style={{
+          margin: '2rem auto 0 auto',
+          width: '300px',
+          justifyContent: 'center',
+        }}>
+          <GoogleLoginButton align={"center"} onClick={() => logUserIn("Google")}/>
+          <AmazonLoginButton align={"center"} onClick={() => logUserIn("LoginWithAmazon")}/>
+        </div>
       ) : (
         <div>
-          <hr />
+          <hr/>
           <div
             style={{
               color: 'black',
@@ -98,4 +93,4 @@ const LoggedOut = () => {
     </Banner>
   );
 };
-export default LoggedOut;
+export default LoginProviders;

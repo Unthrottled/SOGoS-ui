@@ -26,7 +26,8 @@ import {oauthConfigurationSaga} from '../configuration/ConfigurationConvienenceS
 import {OAuthConfig} from '../../types/ConfigurationTypes';
 import {createSaveRedirect} from '../../events/MiscEvents';
 import {MiscellaneousState} from '../../reducers/MiscellaneousReducer';
-import {selectMiscState} from '../../reducers';
+import {selectMiscState, selectSecurityState} from '../../reducers';
+import {SecurityState} from "../../reducers/SecurityReducer";
 
 export function* authorizationGrantSaga() {
   yield call(performAuthorizationGrantFlowSaga, false);
@@ -96,6 +97,8 @@ export function* performAuthorizationGrantFlowSaga(
     const {payload: initialConfigurations} = yield take(
       FOUND_INITIAL_CONFIGURATION,
     );
+    const { identityProvider}: SecurityState = yield select(selectSecurityState);
+    const resolvedIdp = identityProvider || ''
     yield put(createSaveRedirect(window.location.pathname));
     const authorizationRequest = new AuthorizationRequest(
       {
@@ -103,6 +106,9 @@ export function* performAuthorizationGrantFlowSaga(
         redirect_uri: initialConfigurations.callbackURI,
         scope,
         response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
+        extras: {
+          identity_provider: resolvedIdp,
+        }
       },
       new NodeCrypto(),
     );

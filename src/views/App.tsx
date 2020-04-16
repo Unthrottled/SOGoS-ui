@@ -36,6 +36,7 @@ import SettingsDashboard from "./settings/SettingsDashboard";
 import ProfileDashboard from "./settings/ProfileDashboard";
 import PrivateSharedHistoryDashboard from "./history/PrivateSharedHistoryDashboard";
 import Typography from "@material-ui/core/Typography";
+import LoginProviders from "./auth/LoginProviders";
 
 export const PRIMARY_THEME_COLOR = '#f9c048';
 const theme = responsiveFontSizes(
@@ -99,6 +100,7 @@ const App = () => {
         <div className="App">
           <div className={classes.content}>
             <Switch>
+              <Route path={'/login/providers'} component={LoginProviders}/>
               <Route path={'/login'} component={LoggedOut}/>
               <Route path={'/about'} component={About}/>
               <Route path={'/dashboard/:shareId'}

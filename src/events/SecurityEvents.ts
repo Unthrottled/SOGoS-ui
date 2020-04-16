@@ -40,8 +40,9 @@ export const createRequestedReadOnlyMode = () => ({
   type: REQUESTED_READ_ONLY_MODE,
 });
 
-export const createRequestLogonEvent = () => ({
+export const createRequestLogonEvent = (identityProvider: string): PayloadEvent<string> => ({
   type: REQUESTED_LOGON,
+  payload: identityProvider,
 });
 
 export const createForcedLoginEvent = () => ({

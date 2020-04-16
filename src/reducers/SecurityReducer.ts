@@ -5,7 +5,7 @@ import {
   LOGGED_OFF,
   LOGGED_ON,
   RECEIVED_READ_TOKEN,
-  RECEIVED_TOKENS,
+  RECEIVED_TOKENS, REQUESTED_LOGON,
 } from '../events/SecurityEvents';
 import {readTokenReceptionReducer, tokenReceptionReducer} from './security/TokenReducer';
 import {RECEIVED_USER, UPDATED_SHARED_DASHBOARD} from '../events/UserEvents';
@@ -33,6 +33,7 @@ export type SecurityState = {
   readToken: string;
   hasShared: SharedStatus;
   shareCode?: string;
+  identityProvider?: string;
   readTokenInformation: TokenInformation;
 };
 
@@ -69,12 +70,19 @@ const securityReducer = (state = INITIAL_SECURITY_STATE, action: any) => {
     case LOGGED_OFF:
       return {
         ...INITIAL_SECURITY_STATE,
+        identityProvider: state.identityProvider
       };
     case FAILED_TO_RECEIVE_READ_TOKEN:
       return {
         ...omit(state, ['readToken']),
         hasShared: SharedStatus.NOT_SHARED
       }
+    case REQUESTED_LOGON: {
+      return {
+        ...state,
+        identityProvider: action.payload,
+      }
+    }
     case EXPIRED_SESSION:
       delete state.refreshToken;
       delete state.refreshTokenInformation;

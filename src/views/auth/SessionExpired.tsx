@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import {createRequestLogonEvent} from '../../events/SecurityEvents';
 import {GlobalState} from '../../reducers';
 import {TransitionProps} from '@material-ui/core/transitions';
+import {push} from "connected-react-router";
 
 const Transition: React.ComponentType<TransitionProps> = React.forwardRef(
   function Transition(props, ref) {
@@ -22,7 +23,7 @@ type Props = DispatchProp & {
 };
 const SessionExpired = ({isExpired, dispatch: dispetch}: Props) => {
   const goToLogin = (): void => {
-    dispetch(dispetch(createRequestLogonEvent()));
+    dispetch(push("/login/providers"));
   };
   return (
     <Dialog
