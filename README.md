@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://raw.githubusercontent.com/Unthrottled/SOGoS-ui/readme/assets/Sogos.png" alt="Sogos"/>
-    <h2>SOGoS</h2>
-    <h6>Strategic Orchestration and Governance System</h6>
+    <h1>SOGoS</h1>
+    <h5>Strategic Orchestration and Governance System</h5>
 </div>
 
 ---  
