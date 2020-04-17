@@ -4,8 +4,6 @@
     - Add google play link onboarding
 ------
 
-- Cognito
-
 post mvp:
 -------------------------------------
 - app breaks on highlighting activity outside range.
