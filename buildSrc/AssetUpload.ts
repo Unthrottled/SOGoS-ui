@@ -32,6 +32,27 @@ const uploadUnsyncedAssets = (
           return { mime: "application/xml" };
         }
 
+        if (!fileType && (filePath.endsWith(".map") || filePath.endsWith(".txt") )) {
+          return { mime: "text/plain" };
+        }
+
+        if (!fileType && filePath.endsWith(".css")) {
+          return { mime: "text/css" };
+        }
+
+        if (!fileType && filePath.endsWith(".html")) {
+          return { mime: "text/html" };
+        }
+
+        if (!fileType && filePath.endsWith(".json")) {
+          return { mime: "application/json" };
+        }
+
+
+        if (!fileType && filePath.endsWith(".js")) {
+          return { mime: "application/javascript" };
+        }
+
         if(!fileType){
           throw Error(`File ${filePath} does not have a type!!`);
         }
@@ -57,7 +78,7 @@ const uploadUnsyncedAssets = (
               ACL: "public-read",
               ContentType: fileType?.mime
             },
-            err => {
+            (err: any) => {
               if (err) {
                 console.warn(
                   `Unable to upload ${next} to s3 for raisins ${err}`
@@ -184,3 +205,7 @@ Promise.all(scanDirectories())
         console.log("Asset sync complete!");
       });
   });
+
+export function yeet() {
+
+}

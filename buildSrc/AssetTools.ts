@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
-import crypto from "crypto";
-import aws from "aws-sdk";
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+const aws = require("aws-sdk");
 
 export const rootDirectory =
   path.join(__dirname, '..');
