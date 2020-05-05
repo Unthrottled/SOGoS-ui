@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {connect} from "react-redux";
-import {GlobalState} from "../reducers";
+import {connect, useDispatch, useSelector} from "react-redux";
+import {GlobalState, selectNetworkState, selectSecurityState} from "../reducers";
 import {Typography} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -14,11 +14,15 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import {green, orange, purple} from "@material-ui/core/colors";
 import {SOGoS} from "./icons/SOGoS";
+import Button from "@material-ui/core/Button";
+import {push} from "connected-react-router";
+import {themeStyles} from "./auth/LoggedOut";
 
 interface Props {
 
 }
 
+// @ts-ignore real
 const useStyles = makeStyles(theme => ({
   headerContent: {
     borderRadius: theme.spacing(1),
@@ -26,11 +30,25 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(6, 0, 6),
     marginBottom: theme.spacing(1),
   },
+  ...themeStyles,
 }));
 
+const mapStateToProps = (state: GlobalState) => {
+  const {isOnline} = selectNetworkState(state);
+  const {isLoggedIn} = selectSecurityState(state);
+  return {
+    isOnline,
+    isLoggedIn,
+  };
+};
 
 const About: FC<Props> = () => {
-  const {headerContent} = useStyles();
+  const {headerContent, root, label} = useStyles();
+  const {isOnline, isLoggedIn} = useSelector(mapStateToProps);
+  const dispetch = useDispatch();
+  const logUserIn = (): void => {
+    dispetch(push("/login/providers"));
+  };
 
   return (
     <div style={{
@@ -185,6 +203,21 @@ const About: FC<Props> = () => {
                     </Typography>
                   </CardContent>
                 </Card>
+                <div>
+                  {
+                    !isLoggedIn && isOnline ?
+                    <Button
+                      classes={{
+                        root,
+                        label,
+                      }}
+                      style={{marginTop: '2em'}}
+                      onClick={() => logUserIn()}>
+                      Start using SOGoS!
+                    </Button> :
+                    (<></>)
+                  }
+                </div>
               </Container>
             </div>
           </Container>
@@ -193,9 +226,5 @@ const About: FC<Props> = () => {
     </div>
   );
 };
-
-export const mapStateToProps = (globalState: GlobalState): Props => {
-  return {}
-}
 
 export default connect(mapStateToProps)(About);

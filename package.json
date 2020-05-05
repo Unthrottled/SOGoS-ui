@@ -1,6 +1,6 @@
 {
   "name": "sogos-ui",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.6.1",
@@ -80,7 +80,7 @@
     "reactotron-redux": "^3.1.2"
   },
   "scripts": {
-    "sync": "ts-node buildSrc/AssetSync.ts",
+    "sync": "ts-node buildSrc/AssetUpload.ts",
     "start": "react-scripts start",
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",
