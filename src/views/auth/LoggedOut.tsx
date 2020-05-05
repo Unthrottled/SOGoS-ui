@@ -9,7 +9,7 @@ import {GlobalState, selectNetworkState, selectSecurityState,} from '../../reduc
 import Banner from '../components/Banner';
 import {push} from "connected-react-router";
 
-const useStyles = makeStyles(_ => ({
+export const themeStyles = {
   root: {
     background: 'linear-gradient(45deg, #e49d2c 30%, #e0be5f 90%)',
     borderRadius: 3,
@@ -22,7 +22,9 @@ const useStyles = makeStyles(_ => ({
   label: {
     textTransform: 'capitalize',
   },
-}));
+};
+// @ts-ignore real
+const useStyles = makeStyles(_ => themeStyles);
 
 const mapStateToProps = (state: GlobalState) => {
   const {isOnline} = selectNetworkState(state);
