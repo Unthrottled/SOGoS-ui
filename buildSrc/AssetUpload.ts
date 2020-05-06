@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import FileType from "file-type";
 import {
-  assetDirectories,
+  assetDirectories, assetDirectory,
   BUCKET_NAME,
   buildS3Client,
   createChecksum,
@@ -15,7 +15,7 @@ import {
 const syncedAssets: StringDictionary<string> = getSyncedAssets();
 
 function buildKey(filePath: string): string {
-  return filePath.substr(rootDirectory.length + 1);
+  return filePath.substr(assetDirectory.length + 1);
 }
 
 const s3 = buildS3Client();

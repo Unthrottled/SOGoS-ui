@@ -6,6 +6,9 @@ const aws = require("aws-sdk");
 export const rootDirectory =
   path.join(__dirname, '..');
 
+export const assetDirectory =
+  path.resolve(__dirname, '..', 'build');
+
 export const assetDirectories = [
   'build'
 ];

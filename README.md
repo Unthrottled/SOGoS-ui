@@ -6,9 +6,13 @@
 
 ---  
 
-## What is SOGoS
+## What is SOGoS?
 
-SOGoS is a suite of tools that enable you to effectively manage your most precious non-renewable resource, time.
+SOGoS is a suite of tools which show you how you spend your time.
+
+![Dashboard](assets/dashboard.png)
+
+Which enables you to make more deliberate decisions on what you really should be doing at the moment. 
 
 You can read more about what SOGoS can do for you here:
 
@@ -16,8 +20,6 @@ You can read more about what SOGoS can do for you here:
 
 
 ## Want to see what I am up to?
-
-SOGoS has a built in sharable data dashboard that shows others how you have spent your time tracked using SOGoS.
 
 You can find my dashboard here:
 
