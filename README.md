@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://raw.githubusercontent.com/Unthrottled/SOGoS-ui/readme/assets/Sogos.png" alt="Sogos"/>
+    <img src="https://raw.githubusercontent.com/Unthrottled/SOGoS-ui/master/assets/Sogos.png" alt="Sogos"/>
     <h1>SOGoS</h1>
     <h5>Strategic Orchestration and Governance System</h5>
 </div>
