@@ -80,7 +80,7 @@
     "reactotron-redux": "^3.1.2"
   },
   "scripts": {
-    "sync": "ts-node buildSrc/AssetUpload.ts",
+    "sync": "ts-node --project buildSrc/tsconfig.json buildSrc/AssetUpload.ts",
     "start": "react-scripts start",
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",

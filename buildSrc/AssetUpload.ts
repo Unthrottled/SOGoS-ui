@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import FileType from "file-type";
 import {
-  assetDirectories,
+  assetDirectories, assetDirectory,
   BUCKET_NAME,
   buildS3Client,
   createChecksum,
@@ -15,7 +15,7 @@ import {
 const syncedAssets: StringDictionary<string> = getSyncedAssets();
 
 function buildKey(filePath: string): string {
-  return filePath.substr(rootDirectory.length + 1);
+  return filePath.substr(assetDirectory.length + 1);
 }
 
 const s3 = buildS3Client();
@@ -30,6 +30,27 @@ const uploadUnsyncedAssets = (
       .then(fileType => {
         if (!fileType && filePath.endsWith(".xml")) {
           return { mime: "application/xml" };
+        }
+
+        if (!fileType && (filePath.endsWith(".map") || filePath.endsWith(".txt") )) {
+          return { mime: "text/plain" };
+        }
+
+        if (!fileType && filePath.endsWith(".css")) {
+          return { mime: "text/css" };
+        }
+
+        if (!fileType && filePath.endsWith(".html")) {
+          return { mime: "text/html" };
+        }
+
+        if (!fileType && filePath.endsWith(".json")) {
+          return { mime: "application/json" };
+        }
+
+
+        if (!fileType && filePath.endsWith(".js")) {
+          return { mime: "application/javascript" };
         }
 
         if(!fileType){
@@ -57,7 +78,7 @@ const uploadUnsyncedAssets = (
               ACL: "public-read",
               ContentType: fileType?.mime
             },
-            err => {
+            (err: any) => {
               if (err) {
                 console.warn(
                   `Unable to upload ${next} to s3 for raisins ${err}`
@@ -184,3 +205,7 @@ Promise.all(scanDirectories())
         console.log("Asset sync complete!");
       });
   });
+
+export function yeet() {
+
+}
