@@ -18,7 +18,6 @@ You can read more about what SOGoS can do for you here:
 
 [https://sogos.unthrottled.io/about](https://sogos.unthrottled.io/about)
 
-
 ## Want to see what I am up to?
 
 You can find my dashboard here:
