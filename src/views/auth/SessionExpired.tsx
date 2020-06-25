@@ -9,7 +9,7 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import {GlobalState} from '../../reducers';
 import {TransitionProps} from '@material-ui/core/transitions';
-import {push} from "connected-react-router";
+import {requestLogoff} from "../../events/SecurityEvents";
 
 const Transition: React.ComponentType<TransitionProps> = React.forwardRef(
   function Transition(props, ref) {
@@ -22,7 +22,7 @@ type Props = DispatchProp & {
 };
 const SessionExpired = ({isExpired, dispatch: dispetch}: Props) => {
   const goToLogin = (): void => {
-    dispetch(push("/login/providers"));
+    dispetch(requestLogoff())
   };
   return (
     <Dialog
