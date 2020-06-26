@@ -1,6 +1,6 @@
 {
   "name": "sogos-ui",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.6.1",
@@ -82,10 +82,12 @@
   "scripts": {
     "sync": "ts-node --project buildSrc/tsconfig.json buildSrc/AssetUpload.ts",
     "start": "react-scripts start",
+    "prebuild": "rm -rf build",
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",
     "start-offline": "http-server -P http://localhost:8888 ./build",
     "lint": "eslint --ext .ts,.tsx --fix .",
+    "prerelease": "ts-node --project buildSrc/tsconfig.json buildSrc/PreRelease.ts",
     "release": "yarn build && yarn sync"
   },
   "eslintConfig": {

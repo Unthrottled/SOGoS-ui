@@ -206,6 +206,3 @@ Promise.all(scanDirectories())
       });
   });
 
-export function yeet() {
-
-}
