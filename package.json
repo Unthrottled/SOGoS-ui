@@ -82,6 +82,7 @@
   "scripts": {
     "sync": "ts-node --project buildSrc/tsconfig.json buildSrc/AssetUpload.ts",
     "start": "react-scripts start",
+    "prebuild": "rm -rf build",
     "build": "react-scripts build && inject-workbox-refresh",
     "test": "react-scripts test --coverage",
     "start-offline": "http-server -P http://localhost:8888 ./build",
