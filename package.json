@@ -86,6 +86,7 @@
     "test": "react-scripts test --coverage",
     "start-offline": "http-server -P http://localhost:8888 ./build",
     "lint": "eslint --ext .ts,.tsx --fix .",
+    "prerelease": "ts-node --project buildSrc/tsconfig.json buildSrc/PreRelease.ts",
     "release": "yarn build && yarn sync"
   },
   "eslintConfig": {
