@@ -1,17 +1,17 @@
 {
-  "asset-manifest.json": "2f3957947c50510f7be64ea0079ec6f9",
-  "config/initial.json": "4cc21026a699bbfe3e4cb150b6eb1e7d",
+  "asset-manifest.json": "1ae51ffe3528b18f84c6c123704f1a5f",
+  "config/initial.json": "72c5ffe6ea7c39629319475974176d56",
   "images/sogos_144.png": "25c8087377933e80cd5de68c3e9491cd",
   "images/sogos_152.png": "2e04dbd92a7763f4bfd6711f4eaa488a",
   "images/sogos_192.png": "82725f8fb770726ed41d1e316d1b8913",
   "images/sogos_512.png": "e95a906b2f46daf6dfdfd428dadfd56d",
   "index.css": "8b4a4b51f9713cf9279ac7bec1313c6e",
-  "index.html": "6412fe24cf3aafc7782106ba3699daf7",
+  "index.html": "63aa89b5f10037b01d7581ab0f1d5d64",
   "manifest.json": "b71bf20c9e1e4f03d0888e8017d5ac24",
   "notification.mp3": "d561e5438b6f7f934fe8d276ff6dfdb1",
   "precache-manifest.b50f700fd2246a780503bbe38544ab71.js": "b50f700fd2246a780503bbe38544ab71",
   "robots.txt": "3ad0652bd17ff826a31fa29366021cfd",
-  "service-worker.js": "c201e90a6b41a6edad5fe8665573f24b",
+  "service-worker.js": "2044071a730610ad83501cc531966325",
   "sogos.ico": "21d9f77dcb0b7cc02e76e67dffb40bb6",
   "static/css/2.54e0a455.chunk.css": "d71845a8e4a20669c680b48b34da0028",
   "static/css/2.54e0a455.chunk.css.map": "46c33ac20772828c79eb9ba96cc088c4",
@@ -30,5 +30,10 @@
   "static/media/StrategyIcon.41ea979b.svg": "41ea979bdac8cfbeca9e27617f9d51ed",
   "static/media/TacticalIcon.aba4d737.svg": "aba4d737e6817e1d909fb770a4c919d2",
   "static/media/Tomato.274cb36f.svg": "274cb36f98e2ba78a8fc6c4429949416",
-  "static/media/confetti.b9e3f374.png": "b9e3f37474697a6401286121c1b1c78d"
+  "static/media/confetti.b9e3f374.png": "b9e3f37474697a6401286121c1b1c78d",
+  "precache-manifest.03d6f5d23d392d467e85d1e8c8e0c16f.js": "03d6f5d23d392d467e85d1e8c8e0c16f",
+  "static/js/2.a02842f1.chunk.js": "7d9e395fd4030f94c9def095c92470de",
+  "static/js/2.a02842f1.chunk.js.map": "aee101862d886b7c68714ef20eb82a37",
+  "static/js/main.a6b9a3a4.chunk.js": "4613233856b1223a0e5c5fa7eb7c1939",
+  "static/js/main.a6b9a3a4.chunk.js.map": "653618c494338d0021d52edfd5657f47"
 }
