@@ -1,13 +1,6 @@
-import CloudOff from '@material-ui/icons/CloudOff';
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Button from '@material-ui/core/Button';
-import {Typography} from '@material-ui/core';
-import {useHistory} from 'react-router-dom';
-import {GlobalState, selectNetworkState, selectSecurityState,} from '../../reducers';
+import React from 'react';
+import {Link, Typography} from '@material-ui/core';
 import Banner from '../components/Banner';
-import {push} from "connected-react-router";
 
 export const themeStyles = {
   root: {
@@ -23,75 +16,16 @@ export const themeStyles = {
     textTransform: 'capitalize',
   },
 };
-// @ts-ignore real
-const useStyles = makeStyles(_ => themeStyles);
-
-const mapStateToProps = (state: GlobalState) => {
-  const {isOnline} = selectNetworkState(state);
-  const {isLoggedIn} = selectSecurityState(state);
-  return {
-    isOnline,
-    isLoggedIn,
-  };
-};
 
 const LoggedOut = () => {
-  const {root, label} = useStyles();
-  const dispetch = useDispatch();
-  const {isOnline, isLoggedIn} = useSelector(mapStateToProps);
-  const logUserIn = (): void => {
-    dispetch(push("/login/providers"));
-  };
-  const history = useHistory();
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      history.push('/');
-    }
-  }, [history, isLoggedIn]);
-
   return (
     <Banner>
-      {isOnline ? (
-        <Button
-          classes={{
-            root,
-            label,
-          }}
-          onClick={() => logUserIn()}>
-          Start using SOGoS!
-        </Button>
-      ) : (
-        <div>
-          <hr/>
-          <div
-            style={{
-              color: 'black',
-              display: 'flex',
-            }}>
-            <CloudOff
-              style={{
-                fontSize: '10rem',
-              }}
-            />
-            <div>
-              <Typography variant={'h4'} align="center" paragraph>
-                Internet is needed to login!
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph>
-                After that, you are free to use the SOGoS offline
-                <span aria-label={'cool emoji'} role={'img'}>
-                  &#128526;
-                </span>
-              </Typography>
-            </div>
-          </div>
-        </div>
-      )}
+      <Typography variant={'h5'} color="textSecondary">
+        SOGos has fulfilled its purpose and has been sunset.
+      </Typography>
+      <Typography variant={'h5'} color="textSecondary">
+        For more information <Link href={'https://youtu.be/dQw4w9WgXcQ'}>follow this link.</Link>
+      </Typography>
     </Banner>
   );
 };

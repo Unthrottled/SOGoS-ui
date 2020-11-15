@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
-import {connect, useDispatch, useSelector} from "react-redux";
-import {GlobalState, selectNetworkState, selectSecurityState} from "../reducers";
-import {Typography} from "@material-ui/core";
+import {connect} from "react-redux";
+import {Link, Typography} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {SOGoSSharedLogo} from "./history/SharedHistoryDashboardComponents";
@@ -14,8 +13,6 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import {green, orange, purple} from "@material-ui/core/colors";
 import {SOGoS} from "./icons/SOGoS";
-import Button from "@material-ui/core/Button";
-import {push} from "connected-react-router";
 import {themeStyles} from "./auth/LoggedOut";
 
 interface Props {
@@ -33,22 +30,8 @@ const useStyles = makeStyles(theme => ({
   ...themeStyles,
 }));
 
-const mapStateToProps = (state: GlobalState) => {
-  const {isOnline} = selectNetworkState(state);
-  const {isLoggedIn} = selectSecurityState(state);
-  return {
-    isOnline,
-    isLoggedIn,
-  };
-};
-
 const About: FC<Props> = () => {
-  const {headerContent, root, label} = useStyles();
-  const {isOnline, isLoggedIn} = useSelector(mapStateToProps);
-  const dispetch = useDispatch();
-  const logUserIn = (): void => {
-    dispetch(push("/login/providers"));
-  };
+  const {headerContent} = useStyles();
 
   return (
     <div style={{
@@ -80,7 +63,7 @@ const About: FC<Props> = () => {
                   <CardContent style={{
                     backgroundColor: '#333333',
                     color: "#fff",
-                    display:'flex',
+                    display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                   }}>
@@ -90,7 +73,8 @@ const About: FC<Props> = () => {
                     <Typography
                       color={'inherit'}
                       gutterBottom>
-                      Let us answer that question by asking more questions! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      Let us answer that question by asking more
+                      questions! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </Typography>
                   </CardContent>
                 </Card>
@@ -204,19 +188,12 @@ const About: FC<Props> = () => {
                   </CardContent>
                 </Card>
                 <div>
-                  {
-                    !isLoggedIn && isOnline ?
-                    <Button
-                      classes={{
-                        root,
-                        label,
-                      }}
-                      style={{marginTop: '2em'}}
-                      onClick={() => logUserIn()}>
-                      Start using SOGoS!
-                    </Button> :
-                    (<></>)
-                  }
+                  <Typography variant={'h5'} color="textSecondary">
+                    SOGos has fulfilled its purpose and has been sunset.
+                  </Typography>
+                  <Typography variant={'h5'} color="textSecondary">
+                    For more information <Link href={'https://youtu.be/dQw4w9WgXcQ'}>follow this link.</Link>
+                  </Typography>
                 </div>
               </Container>
             </div>
@@ -227,4 +204,4 @@ const About: FC<Props> = () => {
   );
 };
 
-export default connect(mapStateToProps)(About);
+export default connect()(About);
